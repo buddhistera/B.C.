@@ -1,15 +1,1 @@
-{
-  "name": "Buddhist Era Calendar",
-  "short_name": "BuddhistEra",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#fffff0",
-  "theme_color": "#003399",
-  "icons": [
-    {
-      "src": "icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+
