@@ -1,1 +1,24 @@
+const CACHE_NAME = 'buddhist-era-v1';
+const assets = [
+  './',
+  './index.html', // ඔබේ ප්‍රධාන HTML ගොනුවේ නම මෙතැනට යොදන්න
+];
+
+// ගොනු Cache කිරීම
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(assets);
+    })
+  );
+});
+
+// Offline අවස්ථාවේදී Cache එකෙන් දත්ත ලබා දීම
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(res => {
+      return res || fetch(e.request);
+    })
+  );
+});
 
