@@ -593,4 +593,633 @@
             vasTitle: "About Vas Season", contactTitle: "Contact & Downloads", poyaSuffix: " Poya",
             vas1: "Entering Hera-vas", vas2: "Pavāraṇā (Hera-vas)", vas3: "Entering Pasu-vas", vas4: "Pavāraṇā (Pasu-vas)",
             animals: ["Sappa","Assa","Aja","Kapi","Kukkuṭa","Sona","Sūkara","Musika","Usabha","Vyaggha","Sasa","Nāga"],
-            seasons: { Hemanta: "Hemanta", Gimhana: "Gimhāna"
+            seasons: { Hemanta: "Hemanta", Gimhana: "Gimhāna", Vassana: "Vassāna", ReHemanta: "Late Hemanta" },
+            paksha: { Kanha: "Kaṇha pakkhe", Sukka: "Sukka pakkhe" },
+            week: ["Ravivāraṃ","Candavāraṃ","Bhummavāraṃ","Budhavāraṃ","Guruvāraṃ","Sukkavāraṃ","Soravāraṃ"],
+            paliTemplate: (a, s, m, p, t, w) => `Ayaṃ\n${a} saṃvacchare\n${s} utu asmiṃ utumhi\n${m} māsassa\n${p}\n${t}\n${w}\nidanti daṭṭhabbaṃ.`
+        }
+    };
+
+    const defaultPoyaList = [
+        {d: "2026-01-03", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māgha"}, {d: "2026-01-18", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+        {d: "2026-02-02", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Phagguna"}, {d: "2026-02-16", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+        {d: "2026-03-03", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Citta"}, {d: "2026-03-18", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"},
+        {d: "2026-04-02", t: "පසළොස්වක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"}, {d: "2026-04-16", t: "අමාවක", r: "ගිම්හාන", m: "අධිවේසාඛ", me: "Adhivesākha"},
+        {d: "2026-05-01", t: "පසළොස්වක", r: "ගිම්හාන", m: "අධිවේසාඛ", me: "Adhivesākha"}, {d: "2026-05-16", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"},
+        {d: "2026-05-31", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"}, {d: "2026-06-14", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"},
+        {d: "2026-06-29", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"}, {d: "2026-07-14", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"},
+        {d: "2026-07-29", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"}, {d: "2026-08-13", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Sāvana"},
+        {d: "2026-08-28", t: "පසළොස්වක", r: "වස්සාන", m: "සාවන", me: "Sāvana"}, {d: "2026-09-11", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"},
+        {d: "2026-09-26", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"}, {d: "2026-10-11", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"},
+        {d: "2026-10-26", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"}, {d: "2026-11-09", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Kattika"},
+        {d: "2026-11-24", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Kattika"}, {d: "2026-12-09", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+        {d: "2026-12-24", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+        {d: "2027-01-07", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"}, {d: "2027-01-22", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"},
+        {d: "2027-02-06", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Phussa"}, {d: "2027-02-21", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Phussa"},
+        {d: "2027-03-07", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phussa"}, {d: "2027-03-22", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phussa"},
+        {d: "2027-04-06", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Phussa"}, {d: "2027-04-21", t: "පසළොස්වක", r: "ගිම්හාන", m: "චිත්ත", me: "Phussa"},
+        {d: "2027-05-05", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Phussa"}, {d: "2027-05-20", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Phussa"},
+        {d: "2027-06-04", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Phussa"}, {d: "2027-06-19", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Phussa"},
+        {d: "2027-07-03", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Phussa"}, {d: "2027-07-18", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Phussa"},
+        {d: "2027-08-02", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Phussa"}, {d: "2027-08-17", t: "පසළොස්වක", r: "වස්සාන", m: "සාවන", me: "Phussa"},
+        {d: "2027-08-31", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Phussa"}, {d: "2027-09-15", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Phussa"},
+        {d: "2027-09-30", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Phussa"}, {d: "2027-10-15", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Phussa"},
+        {d: "2027-10-29", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Phussa"}, {d: "2027-11-13", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Phussa"},
+        {d: "2027-11-28", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Phussa"}, {d: "2027-12-13", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝසිර", me: "Phussa"},
+	{d: "2027-12-27", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"}, {d: "2028-01-11", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"},
+    {d: "2028-01-26", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+    {d: "2028-02-10", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+    {d: "2028-02-24", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+    {d: "2028-03-10", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+    {d: "2028-03-25", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"},
+    {d: "2028-04-09", t: "පසළොස්වක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"},
+    {d: "2028-04-23", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"},
+    {d: "2028-05-08", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"},
+    {d: "2028-05-23", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"},
+    {d: "2028-06-07", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"},
+    {d: "2028-06-21", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"},
+    {d: "2028-07-06", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"},
+    {d: "2028-07-21", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Sāvana"},
+    {d: "2028-08-05", t: "පසළොස්වක", r: "වස්සාන", m: "සාවන", me: "Sāvana"},
+    {d: "2028-08-19", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"},
+    {d: "2028-09-03", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"},
+    {d: "2028-09-18", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"},
+    {d: "2028-10-03", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"},
+    {d: "2028-10-17", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Kattika"},
+    {d: "2028-11-01", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Kattika"},
+    {d: "2028-11-16", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+    {d: "2028-12-01", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+    {d: "2028-12-15", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"},
+    {d: "2028-12-30", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"}, {d: "2029-01-14", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+        {d: "2029-01-29", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Phagguna"}, {d: "2029-02-12", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+        {d: "2029-02-27", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Citta"}, {d: "2029-03-14", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"},
+        {d: "2029-03-29", t: "පසළොස්වක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"}, {d: "2029-04-12", t: "අමාවක", r: "ගිම්හාන", m: "අධිවේසාඛ", me: "Adhivesākha"},
+        {d: "2029-04-27", t: "පසළොස්වක", r: "ගිම්හාන", m: "අධිවේසාඛ", me: "Adhivesākha"}, {d: "2029-05-12", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"},
+        {d: "2029-05-27", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"}, {d: "2029-06-10", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"},
+        {d: "2029-06-25", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"}, {d: "2029-07-10", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"},
+        {d: "2029-07-25", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"}, {d: "2029-08-09", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Sāvana"},
+        {d: "2029-08-24", t: "පසළොස්වක", r: "වස්සාන", m: "සාවන", me: "Sāvana"}, {d: "2029-09-07", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"},
+        {d: "2029-09-22", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"}, {d: "2029-10-07", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"},
+        {d: "2029-10-22", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"}, {d: "2029-11-05", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Kattika"},
+        {d: "2029-11-20", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Kattika"}, {d: "2029-12-05", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+        {d: "2029-12-20", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+    {d: "2030-01-03", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māgha"},
+    {d: "2030-01-18", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māgha"},
+    {d: "2030-02-02", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Phagguna"},
+    {d: "2030-02-17", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Phagguna"},
+    {d: "2030-03-03", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Citta"},
+    {d: "2030-03-18", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Citta"},
+    {d: "2030-04-02", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Vesākha"},
+    {d: "2030-04-17", t: "පසළොස්වක", r: "ගිම්හාන", m: "චිත්ත", me: "Vesākha"},
+    {d: "2030-05-01", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Jeṭṭha"},
+    {d: "2030-05-16", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Jeṭṭha"},
+    {d: "2030-05-31", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Āsāḷha"},
+    {d: "2030-06-15", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Āsāḷha"},
+    {d: "2030-06-29", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Sāvana"},
+    {d: "2030-07-14", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Sāvana"},
+    {d: "2030-07-29", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Poṭṭhapāda"},
+    {d: "2030-08-13", t: "පසළොස්වක", r: "වස්සාන", m: "සාවන", me: "Poṭṭhapāda"},
+    {d: "2030-08-27", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Assayuja"},
+    {d: "2030-09-11", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Assayuja"},
+    {d: "2030-09-26", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Kattika"},
+    {d: "2030-10-11", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Kattika"},
+    {d: "2030-10-25", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Māghasira"},
+    {d: "2030-11-09", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Māghasira"},
+    {d: "2030-11-24", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Phussa"},
+    {d: "2030-12-09", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝසිර", me: "Phussa"},
+    {d: "2030-12-23", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"},
+    {d: "2031-01-07", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+    {d: "2031-01-22", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+    {d: "2031-02-06", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+    {d: "2031-02-20", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+    {d: "2031-03-07", t: "පසළොස්වක", r: "හේමන්ත", m: "චිත්ත", me: "Citta"},
+    {d: "2031-03-22", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"},
+    {d: "2031-04-06", t: "පසළොස්වක", r: "ගිම්හාන", m: "අධිවේසාඛ", me: "Vesākha"},
+    {d: "2031-04-20", t: "අමාවක", r: "ගිම්හාන", m: "අධිවේසාඛ", me: "Vesākha"},
+    {d: "2031-05-05", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Jeṭṭha"},
+    {d: "2031-05-20", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Jeṭṭha"},
+    {d: "2031-06-04", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Āsāḷha"},
+    {d: "2031-06-18", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Āsāḷha"},
+    {d: "2031-07-03", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Sāvana"},
+    {d: "2031-07-18", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Sāvana"},
+    {d: "2031-08-02", t: "පසළොස්වක", r: "ගිම්හාන", m: "සාවන", me: "Poṭṭhapāda"},
+    {d: "2031-08-17", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Poṭṭhapāda"},
+    {d: "2031-09-01", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Assayuja"},
+    {d: "2031-09-15", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Assayuja"},
+    {d: "2031-09-30", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Kattika"},
+    {d: "2031-10-15", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Kattika"},
+    {d: "2031-10-30", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Māghasira"},
+    {d: "2031-11-13", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Māghasira"},
+    {d: "2031-11-28", t: "පසළොස්වක", r: "වස්සාන", m: "මාඝසිර", me: "Phussa"},
+    {d: "2031-12-13", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Phussa"}, 
+    {d: "2031-12-28", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"}, 
+    {d: "2032-01-11", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māgha"},
+        {d: "2032-01-26", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Phagguna"}, {d: "2032-02-10", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Phagguna"},
+        {d: "2032-02-25", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Citta"}, {d: "2032-03-10", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Citta"},
+        {d: "2032-03-25", t: "පසළොස්වක", r: "හේමන්ත", m: "චිත්ත", me: "Citta"}, {d: "2032-04-09", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Adhivesākha"},
+        {d: "2032-04-24", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Adhivesākha"}, {d: "2032-05-08", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"},
+        {d: "2032-05-23", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Vesākha"}, {d: "2032-06-07", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"},
+        {d: "2032-06-22", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Jeṭṭha"}, {d: "2032-07-07", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"},
+        {d: "2032-07-22", t: "පසළොස්වක", r: "ගිම්හාන", m: "සාවන", me: "Āsāḷha"}, {d: "2032-08-06", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Sāvana"},
+        {d: "2032-08-21", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Sāvana"}, {d: "2032-09-04", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"},
+        {d: "2032-09-19", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Poṭṭhapāda"}, {d: "2032-10-04", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"},
+        {d: "2032-10-19", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Assayuja"}, {d: "2032-11-02", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Kattika"},
+        {d: "2032-11-17", t: "පසළොස්වක", r: "වස්සාන", m: "මාඝසිර", me: "Kattika"}, {d: "2032-12-02", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+        {d: "2032-12-17", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māghasira"}, {d: "2032-12-31", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māghasira"},
+    {d: "2033-01-15", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+    {d: "2033-01-30", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+    {d: "2033-02-14", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+    {d: "2033-02-28", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+    {d: "2033-03-15", t: "පසළොස්වක", r: "හේමන්ත", m: "චිත්ත", me: "Citta"},
+    {d: "2033-03-30", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"},
+    {d: "2033-04-14", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"},
+    {d: "2033-04-28", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"},
+    {d: "2033-05-13", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"},
+    {d: "2033-05-28", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"},
+    {d: "2033-06-12", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"},
+    {d: "2033-06-26", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"},
+    {d: "2033-07-11", t: "පසළොස්වක", r: "ගිම්හාන", m: "සාවන", me: "Sāvana"},
+    {d: "2033-07-26", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Sāvana"},
+    {d: "2033-08-10", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"},
+    {d: "2033-08-24", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"},
+    {d: "2033-09-08", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"},
+    {d: "2033-09-23", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"},
+    {d: "2033-10-08", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Kattika"},
+    {d: "2033-10-22", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Kattika"},
+    {d: "2033-11-06", t: "පසළොස්වක", r: "වස්සාන", m: "මාඝසිර", me: "Māghasira"},
+    {d: "2033-11-21", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+    {d: "2033-12-06", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"},
+    {d: "2033-12-20", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"},
+    {d: "2034-01-04", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Phussa"},
+    {d: "2034-01-19", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Māgha"},
+    {d: "2034-02-03", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+    {d: "2034-02-17", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Phagguna"},
+    {d: "2034-03-04", t: "පසළොස්වක", r: "හේමන්ත", m: "චිත්ත", me: "Citta"},
+    {d: "2034-03-19", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Citta"},
+    {d: "2034-04-03", t: "පසළොස්වක", r: "ගිම්හාන", m: "අධිවේසාඛ", me: "Vesākha"},
+    {d: "2034-04-17", t: "අමාවක", r: "ගිම්හාන", m: "අධිවේසාඛ", me: "Vesākha"},
+    {d: "2034-05-02", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Jeṭṭha"},
+    {d: "2034-05-17", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Jeṭṭha"},
+    {d: "2034-06-01", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Āsāḷha"},
+    {d: "2034-06-15", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Āsāḷha"},
+    {d: "2034-06-30", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Sāvana"},
+    {d: "2034-07-15", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Sāvana"},
+    {d: "2034-07-30", t: "පසළොස්වක", r: "ගිම්හාන", m: "සාවන", me: "Poṭṭhapāda"},
+    {d: "2034-08-14", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Poṭṭhapāda"},
+    {d: "2034-08-29", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Assayuja"},
+    {d: "2034-09-12", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Assayuja"},
+    {d: "2034-09-27", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Kattika"},
+    {d: "2034-10-12", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Kattika"},
+    {d: "2034-10-27", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Māghasira"},
+    {d: "2034-11-10", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Māghasira"},
+    {d: "2034-11-25", t: "පසළොස්වක", r: "වස්සාන", m: "මාඝසිර", me: "Phussa"},
+    {d: "2034-12-10", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Phussa"}, 
+    {d: "2034-12-25", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Phussa"}, 
+    {d: "2035-01-08", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māgha"},
+        {d: "2035-01-23", t: "පසළොස්වක", r: "හේමන්ත", m: "මාඝ", me: "Phagguna"}, {d: "2035-02-07", t: "අමාවක", r: "හේමන්ත", m: "මාඝ", me: "Phagguna"},
+        {d: "2035-02-22", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Citta"}, {d: "2035-03-08", t: "අමාවක", r: "හේමන්ත", m: "ඵග්ගුන", me: "Citta"},
+        {d: "2035-03-23", t: "පසළොස්වක", r: "හේමන්ත", m: "චිත්ත", me: "Citta"}, {d: "2035-04-07", t: "අමාවක", r: "ගිම්හාන", m: "චිත්ත", me: "Adhivesākha"},
+        {d: "2035-04-22", t: "පසළොස්වක", r: "ගිම්හාන", m: "වේසාඛ", me: "Adhivesākha"}, {d: "2035-05-06", t: "අමාවක", r: "ගිම්හාන", m: "වේසාඛ", me: "Vesākha"},
+        {d: "2035-05-21", t: "පසළොස්වක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Vesākha"}, {d: "2035-06-05", t: "අමාවක", r: "ගිම්හාන", m: "ජෙට්ඨ", me: "Jeṭṭha"},
+        {d: "2035-06-20", t: "පසළොස්වක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Jeṭṭha"}, {d: "2035-07-05", t: "අමාවක", r: "ගිම්හාන", m: "ආසාළ්හ", me: "Āsāḷha"},
+        {d: "2035-07-20", t: "පසළොස්වක", r: "ගිම්හාන", m: "සාවන", me: "Āsāḷha"}, {d: "2035-08-04", t: "අමාවක", r: "වස්සාන", m: "සාවන", me: "Sāvana"},
+        {d: "2035-08-19", t: "පසළොස්වක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Sāvana"}, {d: "2035-09-02", t: "අමාවක", r: "වස්සාන", m: "පොට්ඨපාද", me: "Poṭṭhapāda"},
+        {d: "2035-09-17", t: "පසළොස්වක", r: "වස්සාන", m: "අස්සයුජ", me: "Poṭṭhapāda"}, {d: "2035-10-02", t: "අමාවක", r: "වස්සාන", m: "අස්සයුජ", me: "Assayuja"},
+        {d: "2035-10-17", t: "පසළොස්වක", r: "වස්සාන", m: "කත්තික", me: "Assayuja"}, {d: "2035-10-31", t: "අමාවක", r: "වස්සාන", m: "කත්තික", me: "Kattika"},
+        {d: "2035-11-15", t: "පසළොස්වක", r: "වස්සාන", m: "මාඝසිර", me: "Kattika"}, {d: "2035-11-30", t: "අමාවක", r: "හේමන්ත", m: "මාඝසිර", me: "Māghasira"},
+        {d: "2035-12-15", t: "පසළොස්වක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māghasira"}, {d: "2035-12-29", t: "අමාවක", r: "හේමන්ත", m: "ඵුස්ස", me: "Māghasira"} 
+    ];
+
+    let poyaList = JSON.parse(localStorage.getItem('savedPoyaList')) || defaultPoyaList;
+    const vesakDates = { 2025: "2025-05-12", 2026: "2026-05-31", 2027: "2027-05-20", 2028: "2028-05-08",2029: "2029-05-27",
+ 2030: "2030-05-16", 2031: "2031-05-05", 2032: "2032-05-23", 2033: "2033-05-13", 2034: "2034-05-02", 2035: "2035-05-21", 2036: "2036-05-10", 2037: "2037-05-29",
+ 2038: "2038-05-18", 2039: "2039-05-07", 2040: "2040-05-25"  };
+    const tithiPaliS = ["","පඨමං","දුතියං","තතියං","චතුත්ථං","පඤ්චමං","ඡට්ඨමං","සත්තමං","අට්ඨමං","නවමං","දසමං","එකාදසමං","ද්වාදසමං","තෙරසමං","චුද්දසමං","පණ්ණරසමං"];
+    const tithiPaliE = ["","Paṭhamaṃ","Dutiyaṃ","Tatiyaṃ","Catutthaṃ","Pañcamaṃ","Chaṭṭhamaṃ","Sattamaṃ","Aṭṭhamaṃ","Navamaṃ","Dasamaṃ","Ekādasamaṃ","Dvādasamaṃ","Terasamaṃ","Cuddasamaṃ","Paṇṇarasamaṃ"];
+
+    function toggleMenu() {
+        const d = document.getElementById("myDropdown");
+        d.style.display = (d.style.display === "block") ? "none" : "block";
+    }
+
+   
+    window.onclick = function(event) {
+        if (!event.target.matches('.menu-dots')) {
+            document.getElementById("myDropdown").style.display = "none";
+        }
+    }
+
+    function toggleLanguage() {
+        currentLang = (currentLang === 'si') ? 'en' : 'si';
+        localStorage.setItem('appLang', currentLang);
+        updateUI();
+        calculateAll();
+    }
+
+    function updateUI() {
+        const t = i18n[currentLang];
+        document.getElementById('ui-title').innerHTML = t.title + `<div class="menu-dots" onclick="toggleMenu()">&#8942;</div>`;
+        document.getElementById('ui-label-date').innerText = t.dateLabel;
+        document.getElementById('ui-menu-poya').innerText = t.poyaMenu;
+        document.getElementById('ui-menu-vas').innerText = t.vasMenu;
+        document.getElementById('ui-menu-contact').innerText = t.contactMenu;
+        document.getElementById('ui-poya-title').innerText = t.poyaTitle;
+        document.getElementById('ui-vas-title').innerText = t.vasTitle;
+        document.getElementById('ui-contact-title').innerText = t.contactTitle;
+        document.getElementById('ui-label-atikkanta').innerText = t.atikkanta;
+        document.getElementById('ui-label-avasittha').innerText = t.avasittha;
+    }
+       // Modal පාලනය
+    function openPoyaModal() { document.getElementById("poyaModal").style.display = "flex"; }
+    function openVasModal() { document.getElementById("vasModal").style.display = "flex"; }
+    function openContactModal() { document.getElementById("contactModal").style.display = "flex"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+    function openPoyaModal() { toggleMenu(); document.getElementById("poyaModal").style.display = "flex"; renderPoyaList(); }
+
+    function renderPoyaList() {
+    const container = document.getElementById("poyaListContent");
+    const t = i18n[currentLang];
+    const today = new Date().toISOString().split('T')[0];
+    const selYear = new Date(document.getElementById('inputDate').value).getFullYear();
+    
+    let html = `<div style='text-align:center; font-size: 1.3em; font-weight:bold; color:var(--gold); margin-bottom:15px; border-bottom: 2px solid #eee; padding-bottom:5px;'>${selYear} ${t.poyaTitle}</div>`;
+    
+    const yearPoyas = poyaList.filter(p => p.d.startsWith(selYear));
+
+    if (yearPoyas.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:#888;">දත්ත නොමැත / No Data</div>`;
+        return;
+    }
+
+    const earlyHemantha = yearPoyas.filter(p => p.r === "හේමන්ත" && new Date(p.d).getMonth() < 6);
+    let startCount = 8 - earlyHemantha.length + 1;
+    let poyaCounters = { "හේමන්ත": startCount, "ගිම්හාන": 1, "වස්සාන": 1, "නැවත හේමන්ත": 1 };
+    let lastDisplayedSeason = "";
+
+    yearPoyas.forEach(p => {
+        let dt = new Date(p.d);
+        let rawSeason = p.r;
+        
+        if (rawSeason === "හේමන්ත" && dt.getMonth() >= 10) rawSeason = "නැවත හේමන්ත";
+        
+        let seasonKey = Object.keys(i18n.si.seasons).find(k => i18n.si.seasons[k] === rawSeason) || "Hemanta";
+        let displaySeasonName = t.seasons[seasonKey];
+
+        if (lastDisplayedSeason !== displaySeasonName) {
+            lastDisplayedSeason = displaySeasonName;
+            html += `<div style="background: #f0f0f0; padding: 8px; font-weight: bold; margin: 15px 0 10px 0; border-radius: 5px; color: #444; border-left: 5px solid var(--gold);">${displaySeasonName}</div>`;
+        }
+
+        let countInSeason = poyaCounters[rawSeason];
+        poyaCounters[rawSeason]++;
+        let poyaType = (countInSeason === 3 || countInSeason === 7) ? 
+            (currentLang === 'si' ? "චාතුද්දසී" : "Cātuddasī") : 
+            (currentLang === 'si' ? "පණ්ණරසී" : "Paṇṇarasī");
+
+        // පෝය නාමය ඉංග්‍රීසි භාෂාවට අනුව සැකසීම
+        let poyaNameDisplay = p.t;
+        if (currentLang !== 'si') {
+            poyaNameDisplay = poyaNameDisplay
+                .replace("පසළොස්වක", "Full Moon")
+                .replace("අමාවක", "Amavaka");
+        }
+
+        const isToday = (p.d === today);
+        const bgColor = isToday ? "#fff9c4" : "transparent";
+        const borderColor = isToday ? "var(--gold)" : "#eee";
+
+        html += `
+        <div class="list-item" style="background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 8px; margin-bottom: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <div style="display: flex; flex-direction: column;">
+                <span style="font-weight: bold; color: var(--text); font-size: 1.05em;">
+                    ${countInSeason}. ${dt.getDate()} ${dt.toLocaleString(currentLang==='si'?'si-LK':'en-US',{month:'short'})}
+                </span>
+                <span style="font-size: 0.85em; color: #666;">
+                    ${poyaNameDisplay}${t.poyaSuffix} 
+                </span>
+            </div>
+            <div style="text-align: right;">
+                <span style="background: ${poyaType.includes("චාතුද්දසී") || poyaType.includes("Cātuddasī") ? '#c62828' : 'var(--gold)'}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold; min-width: 85px; display: inline-block; text-align: center;">
+                    ${poyaType}
+                </span>
+            </div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+}
+function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+    
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+}
+
+
+    function openVasModal() {
+    toggleMenu(); 
+    document.getElementById("vasModal").style.display = "flex";
+    const t = i18n[currentLang];
+    const d = new Date(document.getElementById('inputDate').value);
+    const y = d.getFullYear();
+    
+    const yearPoyas = poyaList.filter(p => p.d.startsWith(y));
+    const gim = yearPoyas.filter(p => p.r === "ගිම්හාන");
+    const vas = yearPoyas.filter(p => p.r === "වස්සාන");
+    
+    let p1="-", p2="-", p3="-", p4="-";
+    const opt = { year:'numeric', month:'numeric', day:'numeric' };
+    
+    if(gim.length > 0) { 
+        let d1 = new Date(gim[gim.length-1].d); 
+        d1.setDate(d1.getDate()+1); 
+        p1 = d1.toLocaleDateString(currentLang==='si'?'si-LK':'en-US', opt); 
+    }
+    if(vas.length >= 6) p2 = new Date(vas[5].d).toLocaleDateString(currentLang==='si'?'si-LK':'en-US', opt);
+    if(vas.length >= 2) { 
+        let d3 = new Date(vas[1].d); 
+        d3.setDate(d3.getDate()+1); 
+        p3 = d3.toLocaleDateString(currentLang==='si'?'si-LK':'en-US', opt); 
+    }
+    if(vas.length >= 8) p4 = new Date(vas[7].d).toLocaleDateString(currentLang==='si'?'si-LK':'en-US', opt);
+
+    
+    document.getElementById("vasContent").innerHTML = `
+        <div class="vas-card">
+            <span class="vas-label">${t.vas1}</span>
+            <span class="vas-date-badge">${p1}</span>
+        </div>
+        <div class="vas-card">
+            <span class="vas-label">${t.vas2}</span>
+            <span class="vas-date-badge">${p2}</span>
+        </div>
+        <div class="vas-card">
+            <span class="vas-label">${t.vas3}</span>
+            <span class="vas-date-badge">${p3}</span>
+        </div>
+        <div class="vas-card">
+            <span class="vas-label">${t.vas4}</span>
+            <span class="vas-date-badge">${p4}</span>
+        </div>
+    `;
+}
+
+
+    function openContactModal() { toggleMenu(); document.getElementById("contactModal").style.display = "flex"; }
+function calculateAll() {
+    const t = i18n[currentLang];
+    const ds = document.getElementById('inputDate').value;
+    if (!ds) return;
+    
+    const d = new Date(ds); 
+    d.setHours(0,0,0,0);
+    const time = d.getTime(); 
+    const y = d.getFullYear();
+    
+    const vD = new Date(vesakDates[y] || `${y}-05-01`).getTime();
+    const bY = (time <= vD) ? (y + 543) : (y + 544);
+
+    const pastFullMoons = poyaList.filter(p => p.t === "පසළොස්වක" && new Date(p.d).getTime() < time);
+    const lastFullMoon = pastFullMoons.length > 0 ? pastFullMoons[pastFullMoons.length - 1] : null;
+    let tithi = lastFullMoon ? Math.round((time - new Date(lastFullMoon.d).getTime()) / 86400000) : 1;
+    if(tithi === 0) tithi = 1;
+
+    const nextA = poyaList.find(p => p.t === "අමාවක" && new Date(p.d).getTime() >= time);
+    const nextF = poyaList.find(p => p.t === "පසළොස්වක" && new Date(p.d).getTime() >= time);
+    let paksha = (nextA && (!nextF || new Date(nextA.d).getTime() <= new Date(nextF.d).getTime())) ? t.paksha.Kanha : t.paksha.Sukka;
+
+    const lastV = time <= vD ? y-1 : y;
+    const lastVD = new Date(vesakDates[lastV]).getTime();
+    const nextVD = new Date(vesakDates[lastV+1]).getTime();
+    const totM = Math.round((nextVD - lastVD) / 2551442400);
+
+    
+    const nextFT = poyaList.find(p => p.t === "පසළොස්වක" && new Date(p.d).getTime() >= time);
+    let bM = nextFT ? Math.round((new Date(nextFT.d).getTime() - lastVD) / 2551442400) : 1;
+    bM = (bM <= 0) ? totM : (bM > totM ? totM : bM);
+
+    const nextP = poyaList.find(p => new Date(p.d).getTime() >= time);
+
+    const todayP = poyaList.find(p => p.d === ds);
+    let poyaName = "";
+    if (todayP) {
+        if (currentLang === 'en') {
+            poyaName = (todayP.t === "පසළොස්වක") ? "Full Moon" : "Amāvaka";
+        } else {
+            poyaName = todayP.t;
+        }
+    }
+    document.getElementById('poyaStatus').innerText = poyaName ? poyaName + t.poyaSuffix : "";
+
+    const monthMap = {
+        "මාඝ": "Māgha", "ඵග්ගුන": "Phagguna", "චිත්ත": "Citta",
+        "අධිවේසාඛ": "Adhivesākha", "වේසාඛ": "Vesākha", "ජෙට්ඨ": "Jeṭṭha",
+        "ආසාළ්හ": "Āsāḷha", "සාවන": "Sāvana", "පොට්ඨපාද": "Poṭṭhapāda",
+        "අස්සයුජ": "Assayuja", "කත්තික": "Kattika", "මාඝසිර": "Māghasira", "ඵුස්ස": "Phussa"
+    };
+
+  
+    const seasonEntry = poyaList.filter(p => new Date(p.d).getTime() <= time).slice(-1)[0];
+    const rawS = seasonEntry ? seasonEntry.r : "හේමන්ත";
+    const seasonKey = Object.keys(i18n.si.seasons).find(k => i18n.si.seasons[k] === rawS);
+    const displayS = t.seasons[seasonKey];
+
+    const animal = t.animals[bY % 12];
+
+    const sMonth = nextP ? nextP.m : "වේසාඛ"; 
+    const displayMonth = (currentLang === 'en') ? (monthMap[sMonth] || sMonth) : sMonth;
+
+    let paliIndex = tithi; 
+    let finalPaksha = paksha; 
+
+    const currentAmavaka = poyaList.find(p => 
+        p.t === "අමාවක" && 
+        new Date(p.d).getMonth() === d.getMonth() && 
+        new Date(p.d).getFullYear() === d.getFullYear()
+    );
+
+    if (currentAmavaka) {
+        const amavakaDate = new Date(currentAmavaka.d);
+        amavakaDate.setHours(0,0,0,0);
+
+        if (d > amavakaDate) {
+            finalPaksha = t.paksha.Sukka; 
+            const diffTime = d.getTime() - amavakaDate.getTime();
+            paliIndex = Math.round(diffTime / (1000 * 60 * 60 * 24));
+        } else {
+            finalPaksha = t.paksha.Kanha; 
+            paliIndex = tithi;
+        }
+    }
+
+
+        const tithiWord = currentLang === 'si' 
+        ? (tithiPaliS[paliIndex] || "පණ්ණරසමං") 
+        : (tithiPaliE[paliIndex] || "Paṇṇarasaṃ");
+
+    const weekDay = t.week[d.getDay()];
+
+    
+    document.getElementById('bYear').innerText = bY;
+    document.getElementById('bMonth').innerText = bM;
+    document.getElementById('bDay').innerText = tithi;
+    document.getElementById('paliDisplay').innerText = t.paliTemplate(animal, displayS, displayMonth, finalPaksha, tithiWord, weekDay);
+
+    let nextPoya = poyaList.find(p => {
+        let pDate = new Date(p.d);
+        pDate.setHours(0,0,0,0);
+        return pDate >= d;
+    });
+
+    
+    let nextFullMoon = poyaList.find(p => {
+        let pDate = new Date(p.d);
+        pDate.setHours(0,0,0,0);
+        
+        return pDate >= d && p.t.includes("පසළොස්වක");
+    });
+
+    let currentAvasitthaD = 0;
+    let poyaMessage = "";
+    let isPoyaDay = false;
+    let statusAvasitthaD = 0; 
+
+    if (nextPoya) {
+        let targetD = new Date(nextPoya.d);
+        targetD.setHours(0,0,0,0);
+        statusAvasitthaD = Math.round((targetD.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (statusAvasitthaD === 0) {
+            isPoyaDay = true;
+            poyaMessage = (currentLang === 'si') ? nextPoya.t : nextPoya.t.replace("පසළොස්වක", "Full Moon").replace("අමාවක", "New Moon");
+        } else {
+            if (currentLang === 'si') {
+                poyaMessage = `${nextPoya.t} පෝයට තව දින - ${statusAvasitthaD}`;
+            } else {
+                let poyaNameEN = nextPoya.t.replace("පසළොස්වක", "Full Moon").replace("අමාවක", "New Moon");
+                poyaMessage = `${statusAvasitthaD} days to ${poyaNameEN} Poya`;
+            }
+        }
+    }
+
+    
+    if (nextFullMoon) {
+        let fullMoonD = new Date(nextFullMoon.d);
+        fullMoonD.setHours(0,0,0,0);
+        currentAvasitthaD = Math.round((fullMoonD.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    const poyaDisplayElement = document.getElementById("poyaStatus"); 
+    if (poyaDisplayElement) {
+        if (isPoyaDay) {
+            poyaDisplayElement.innerText = poyaMessage + t.poyaSuffix; 
+            poyaDisplayElement.style.setProperty('color', '#c62828', 'important');
+        } else {
+            poyaDisplayElement.innerText = poyaMessage; 
+            if (statusAvasitthaD > 0) {
+                poyaDisplayElement.style.setProperty('color', '#2dbd6e', 'important');
+            } else {
+                poyaDisplayElement.style.setProperty('color', 'var(--text)', 'important');
+            }
+        }
+        poyaDisplayElement.style.fontWeight = "bold";
+    }
+
+    
+    document.getElementById('atikkantaY').innerText = bY - 1;
+    document.getElementById('atikkantaM').innerText = bM - 1;
+    document.getElementById('atikkantaD').innerText = tithi - 1;
+
+    document.getElementById('avasitthaY').innerText = 5000 - bY;
+    document.getElementById('avasitthaM').innerText = totM - bM;
+    document.getElementById('avasitthaD').innerText = currentAvasitthaD;
+
+    document.getElementById('ui-label-atikkanta').innerText = t.atikkanta;
+    document.getElementById('ui-label-avasittha').innerText = t.avasittha;
+}
+
+
+window.onclick = function(e) { 
+    if (!e.target.matches('.menu-dots')) {
+        document.getElementById("myDropdown").style.display = "none";
+    }
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = "none";
+    }
+}
+
+
+function updateDisplay() {
+    let input = document.getElementById('inputDate').value;
+    if (input) {
+        let d = new Date(input);
+        let formatted = d.getFullYear() + "/" + String(d.getMonth() + 1).padStart(2, '0') + "/" + String(d.getDate()).padStart(2, '0');
+        
+        
+        let displayLabel = document.getElementById('dateDisplay');
+        if (displayLabel) {
+            displayLabel.innerText = formatted;
+        }
+    }
+}
+
+
+function resetToToday() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const today = y + "-" + m + "-" + d;
+
+    const dateInput = document.getElementById("inputDate");
+    if (dateInput) {
+        dateInput.value = today;
+        
+        
+        if (typeof calculateAll === "function") {
+            calculateAll();
+        }
+        
+        updateDisplay();
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    
+    if (typeof updateUI === "function") {
+        updateUI();
+    }
+    
+    resetToToday();
+});
+
+
+window.onclick = function(e) { 
+    let myDropdown = document.getElementById("myDropdown");
+    if (myDropdown && !e.target.matches('.menu-dots')) {
+        myDropdown.style.display = "none";
+    }
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = "none";
+    }
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+    resetToToday();
+});
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker Registered'))
+        .catch(err => console.log('Service Worker Failed', err));
+    });
+  }
+</script>
+
+
+</script>
+</body>
+</html>
