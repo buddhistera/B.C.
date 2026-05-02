@@ -500,14 +500,18 @@ body.dark-mode .menu-dropdown div {
         <div class="menu-dots" onclick="toggleMenu()">&#8942;</div>
     </div>
 
-    <div class="menu-dropdown" id="myDropdown">
-        <div onclick="toggleLanguage()" id="ui-lang-btn">English / සිංහල</div>
-        <div onclick="openPoyaModal()" id="ui-menu-poya">පොහොය දින🌛</div>
-        <div onclick="openVasModal()" id="ui-menu-vas">වස් කාලය ⛈️</div>
-        <div onclick="openContactModal()" id="ui-menu-contact"> ℹ️</div>
+<div class="menu-dropdown" id="myDropdown">
+    <div onclick="toggleLanguage()" id="ui-lang-btn">English / සිංහල</div>
+    <div onclick="openPoyaModal()" id="ui-menu-poya">පොහොය දින🌛</div>
+    <div onclick="openVasModal()" id="ui-menu-vas">වස් කාලය ⛈️</div>
+    <div onclick="openContactModal()" id="ui-menu-contact"> ℹ️</div>
     <div onclick="toggleDarkMode()" id="ui-dark-mode-btn">Dark Mode</div>
     
+    <div onclick="downloadApp(event)" id="ui-download-btn" style="border-top: 1px solid #eee; color: #d4af37; font-weight: bold; margin-top: 5px; padding-top: 10px;">
+        Download App 📥
     </div>
+</div>
+
 
     <div class="section" style="text-align: center;">
     <span class="label" id="ui-label-date">දිනය තෝරන්න ( ක්‍රි.ව)</span>
@@ -971,6 +975,36 @@ body.dark-mode .menu-dropdown div {
 
     container.innerHTML = html;
 }
+	function downloadApp(event) {
+    
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = window.URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'Buddhist_Era_App.html'; // බාගත වන ගොනුවේ නම
+    
+    document.body.appendChild(a);
+    a.click();
+    
+    setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }, 100);
+const myDropdown = document.getElementById("myDropdown");
+    if (myDropdown) {
+        myDropdown.style.display = "none";
+    }
+}
+
 function closeModal(id) {
     document.getElementById(id).style.display = 'none';
     
