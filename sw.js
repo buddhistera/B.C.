@@ -1,4 +1,4 @@
-const cacheName = 'v3'; // වෙනසක් කළ විට මෙය v3, v4 ලෙස මාරු කරන්න
+const cacheName = 'v4'; // වෙනසක් කළ විට මෙය v3, v4 ලෙස මාරු කරන්න
 
 // Offline වැඩ කිරීමට අවශ්‍ය ගොනු (මෙහි ඔබේ HTML ගොනුවේ නම නිවැරදිව තිබිය යුතුය)
 const cacheAssets = [
@@ -48,7 +48,7 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // අන්තර්ජාලය නැතිනම් පමණක් Cache එක පරීක්ෂා කරයි
         return caches.match(event.request).then((res) => res);
-      }).then(() => self.skipWaiting()) // මෙය එක් කර
+      })
   );
 });
     fetch(e.request).catch(() => caches.match(e.request))
