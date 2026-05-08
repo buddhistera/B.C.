@@ -48,7 +48,7 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // අන්තර්ජාලය නැතිනම් පමණක් Cache එක පරීක්ෂා කරයි
         return caches.match(event.request).then((res) => res);
-      })
+      }).then(() => self.skipWaiting()) // මෙය එක් කර
   );
 });
     fetch(e.request).catch(() => caches.match(e.request))
