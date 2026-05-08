@@ -1349,7 +1349,6 @@ window.onclick = function(e) {
         e.target.style.display = "none";
     }
 };
-<script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
@@ -1357,7 +1356,7 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('Service Worker: Error: ' + err));
   });
 }
-</script>
+
 </script>
 </body>
 </html>
