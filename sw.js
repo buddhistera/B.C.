@@ -1,8 +1,10 @@
-const cacheName = 'v2'; // වෙනසක් කළ විට මෙය v3, v4 ලෙස මාරු කරන්න
+const cacheName = 'v3'; // වෙනසක් කළ විට මෙය v3, v4 ලෙස මාරු කරන්න
 
 // Offline වැඩ කිරීමට අවශ්‍ය ගොනු (මෙහි ඔබේ HTML ගොනුවේ නම නිවැරදිව තිබිය යුතුය)
 const cacheAssets = [
   'index.html',
+   'manifest.json',
+  'icon-192×192.png',
   './'
 ];
 
