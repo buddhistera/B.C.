@@ -1,6 +1,5 @@
-const cacheName = 'v5'; // ඔබ අලුතින් update කරන විට මෙහි අංකය (v6, v7...) මාරු කරන්න
+const cacheName = 'v7'; // අනිවාර්යයෙන්ම කලින් තිබූ අංකයට වඩා වැඩි අංකයක් ලබා දෙන්න
 
-// Cache කළ යුතු ගොනු (HTML එකේ සියල්ල ඇති බැවින් මෙය සරලයි)
 const cacheAssets = [
   'index.html',
   'manifest.json',
@@ -8,32 +7,60 @@ const cacheAssets = [
   './'
 ];
 
-// Install Event
+// Install Event - ගොනු Cache කිරීම
 self.addEventListener('install', (e) => {
+  self.skipWaiting();
   e.waitUntil(
     caches.open(cacheName).then((cache) => {
-      console.log('Service Worker: Caching Files');
+      console.log('Caching Files...');
       return cache.addAll(cacheAssets);
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
-// Activate Event - පරණ Cache මැකීමට
+// Activate Event - පරණ Cache ඉවත් කිරීම
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== cacheName) {
-            console.log('Service Worker: Clearing Old Cache');
             return caches.delete(cache);
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
+// Fetch Event - Offline Refresh ගැටලුව සඳහා නිවැරදිම විසඳුම
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      // 1. Cache එකේ තිබේ නම් එය වහාම ලබා දෙයි (Refresh ගැටලුව මෙයින් විසඳේ)
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      // 2. නැතිනම් පමණක් අන්තර්ජාලයෙන් ලබා ගැනීමට උත්සාහ කරයි
+      return fetch(event.request).then((networkResponse) => {
+        // ලැබෙන අලුත් දත්ත නැවත Cache එකට දමයි
+        if (event.request.method === 'GET') {
+          return caches.open(cacheName).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+        // අන්තර්ජාලයත් නැතිනම්, Navigation Request එකක් නම් index.html ලබා දෙයි
+        if (event.request.mode === 'navigate') {
+          return caches.match('index.html');
+        }
+      });
+    })
+  );
+});
 // Fetch Event - අලුත්ම කේතය ලබා ගැනීමට (Network First Strategy)
 self.addEventListener('fetch', (event) => {
   event.respondWith(
