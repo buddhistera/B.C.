@@ -1,13 +1,13 @@
 {
-  "name": "Buddhist Calendar",
-  "short_name": "Buddhist era,
+  "name": "Buddhist Era",
+  "short_name": "බුද්ධ වර්ෂය",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#fffff0",
+  "theme_color": "#d4af37",
   "icons": [
     {
-      "src": "icon-192×192.png", 
+      "src": "icon-192×192.png",
       "sizes": "192x192",
       "type": "image/png"
     }
