@@ -1619,27 +1619,7 @@ window.onclick = function(e) {
         e.target.style.display = "none";
     }
 };
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    // './sw.js' ලෙසම භාවිතා කරන්න
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => {
-        console.log('Service Worker: Registered');
-        // අලුත් update එකක් ඇත්නම් එය වහාම පෙන්වීමට
-        reg.onupdatefound = () => {
-          const installingWorker = reg.installing;
-          installingWorker.onstatechange = () => {
-            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              alert('අලුත් යාවත්කාලීන කිරීමක් තිබේ. කරුණාකර පිටුව Refresh කරන්න.');
-            }
-          };
-        };
-      })
-      .catch(err => console.log('Service Worker: Error: ' + err));
-  });
-}
-</script>
+
 
 </script>
 </body>
