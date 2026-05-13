@@ -1,4 +1,4 @@
-const CACHE_NAME = 'buddhist-era-v12';
+const CACHE_NAME = 'buddhist-era-v1.8';
 
 const urlsToCache = [
   './',
