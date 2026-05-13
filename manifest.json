@@ -1,13 +1,13 @@
 {
   "name": "Buddhist Era",
-  "short_name": "බුද්ධ වර්ෂය",
-  "start_url": "index.html",
+  "short_name": "B.C.",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#fffff0",
+  "background_color": "#ffffff",
   "theme_color": "#d4af37",
   "icons": [
     {
-      "src": "icon-192×192.png",
+      "src": "./icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     }
