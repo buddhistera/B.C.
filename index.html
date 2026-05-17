@@ -1776,22 +1776,40 @@ window.onclick = function(e) {
 </script>
 <script>
 if ('serviceWorker' in navigator) {
+
   window.addEventListener('load', () => {
-    // './sw.js' ලෙසම භාවිතා කරන්න
+
     navigator.serviceWorker.register('./sw.js')
+
       .then(reg => {
-        console.log('Service Worker: Registered');
+
+        console.log('Service Worker Registered');
+
         reg.onupdatefound = () => {
-          const installingWorker = reg.installing;
-          installingWorker.onstatechange = () => {
-            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              alert('New update available. Please refresh the page./යාවත්කාලීන කිරීමට chrome වෙත ගොස් පිටුව refresh කරන්න');
+
+          const newWorker = reg.installing;
+
+          newWorker.onstatechange = () => {
+
+            if (
+              newWorker.state === 'installed' &&
+              navigator.serviceWorker.controller
+            ) {
+
+              // page auto refresh
+              window.location.reload();
+
             }
           };
         };
       })
-      .catch(err => console.log('Service Worker: Error: ' + err));
+
+      .catch(err => {
+        console.log('SW Error:', err);
+      });
+
   });
+
 }
 </script>
 </body>
