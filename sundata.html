@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sun Times Calculator</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f0f2f5; }
+         .container { 
+        max-width: 500px; 
+        margin: 40px auto; 
+        background: white; 
+        padding: 35px 25px 25px 25px;
+        border-radius: 20px; 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        position: relative; 
+    }
+        .header { display: flex; justify-content: space-between; margin-bottom: 25px; gap: 10px; }
+        select, input { padding: 12px; border-radius: 10px; border: 1px solid #ddd; flex: 1; font-size: 14px; }
+        .badge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .badge { background: #e3f2fd; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #bbdefb; transition: transform 0.2s; }
+        .badge:hover { transform: translateY(-5px); }
+        .label { font-size: 0.85em; color: #455a64; display: block; margin-bottom: 8px; font-weight: 600; }
+        .time { font-size: 1.6em; font-weight: bold; color: #1565c0; }
+              .close-btn {
+        position: absolute;
+        top: -50px;    
+        right: 0px;    
+        width: 40px;
+        height: 40px;
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(255, 77, 77, 0.4);
+    }
+
+    .close-btn:hover { background-color: #ff1a1a; transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="close-btn" onclick="window.location.href='index.html'">&times;</button>
+
+    <div class="header">
+        <input type="date" id="dateInput">
+       <select id="districtSelect" onchange="updateTimes()">
+    <option value="0">කොළඹ (Colombo)</option>
+    <option value="0">ගම්පහ (Gampaha)</option>
+    <option value="0">කළුතර (Kalutara)</option>
+    <option value="-1">ගාල්ල (Galle)</option>
+    <option value="-1">පුත්තලම (Puttalam)</option>
+    <option value="-2">මාතර (Matara)</option>
+    <option value="-2">කෑගල්ල (Kegalle)</option>
+    <option value="-3">කුරුණෑගල (Kurunegala)</option>
+    <option value="-3">රත්නපුර (Ratnapura)</option>
+    <option value="-4">යාපනය (Jaffna)</option>
+    <option value="-4">මහනුවර (Kandy)</option>
+    <option value="-4">කිලිනොච්චි (Kilinochchi)</option>
+    <option value="-5">අනුරාධපුර (Anuradhapura)</option>
+    <option value="-5">මාතලේ (Matale)</option>
+    <option value="-5">නුවරඑළිය (Nuwara Eliya)</option>
+    <option value="-6">මන්නාරම (Mannar)</option>
+    <option value="-6">වවුනියාව (Vavuniya)</option>
+    <option value="-7">හම්බන්තොට (Hambantota)</option>
+    <option value="-7">මුලතිව් (Mullaitivu)</option>
+    <option value="-8">බදුල්ල (Badulla)</option>
+    <option value="-8">මොණරාගල (Moneragala)</option>
+    <option value="-9">පොළොන්නරුව (Polonnaruwa)</option>
+    <option value="-10">ත්‍රිකුණාමලය (Trincomalee)</option>
+    <option value="-11">අම්පාර (Ampara)</option>
+    <option value="-12">මඩකලපුව (Batticaloa)</option>
+</select>
+
+    </div>
+
+    <div class="badge-grid">
+        <div class="badge"><span class="label">Dawn / අරුණෝදය</span><div class="time" id="dawn">--:--</div></div>
+        <div class="badge"><span class="label">Sunrise / ඉර උදාව</span><div class="time" id="sunrise">--:--</div></div>
+        <div class="badge"><span class="label">noon / මධ්‍යහ්නය</span><div class="time" id="noon">--:--</div></div>
+        <div class="badge"><span class="label">Sunset / ඉර බැසීම</span><div class="time" id="sunset">--:--</div></div>
+    </div>
+</div>
+
+<script>
+    
+    const sunData = {
+        "01-01": { dawn: "05:52", sunrise: "06:22", noon: "12:14", sunset: "18:06" },
+        "01-02": { dawn: "05:53", sunrise: "06:23", noon: "12:14", sunset: "18:06" },
+           "01-03": { dawn: "05:53", sunrise: "06:23", noon: "12:15", sunset: "18:07" },
+        "01-04": { dawn: "05:53", sunrise: "06:23", noon: "12:15", sunset: "18:08" },
+        "01-05": { dawn: "05:54", sunrise: "06:24", noon: "12:16", sunset: "18:08" },
+        "01-06": { dawn: "05:54", sunrise: "06:24", noon: "12:16", sunset: "18:09" },
+        "01-07": { dawn: "05:55", sunrise: "06:25", noon: "12:17", sunset: "18:09" },
+        "01-08": { dawn: "05:55", sunrise: "06:25", noon: "12:17", sunset: "18:10" },
+        "01-09": { dawn: "05:55", sunrise: "06:25", noon: "12:17", sunset: "18:10" },
+        "01-10": { dawn: "05:56", sunrise: "06:26", noon: "12:18", sunset: "18:11" },
+        "01-11": { dawn: "05:56", sunrise: "06:26", noon: "12:18", sunset: "18:11" },
+        "01-12": { dawn: "05:56", sunrise: "06:26", noon: "12:18", sunset: "18:11" },
+        "01-13": { dawn: "05:56", sunrise: "06:26", noon: "12:19", sunset: "18:12" },
+        "01-14": { dawn: "05:57", sunrise: "06:27", noon: "12:19", sunset: "18:12" },
+        "01-15": { dawn: "05:57", sunrise: "06:27", noon: "12:20", sunset: "18:13" },
+        "01-16": { dawn: "05:57", sunrise: "06:27", noon: "12:20", sunset: "18:13" },
+        "01-17": { dawn: "05:58", sunrise: "06:28", noon: "12:21", sunset: "18:14" },
+        "01-18": { dawn: "05:58", sunrise: "06:28", noon: "12:21", sunset: "18:14" },
+        "01-19": { dawn: "05:58", sunrise: "06:28", noon: "12:21", sunset: "18:15" },
+        "01-20": { dawn: "05:58", sunrise: "06:28", noon: "12:21", sunset: "18:15" },
+        "01-21": { dawn: "05:58", sunrise: "06:28", noon: "12:21", sunset: "18:15" },
+        "01-22": { dawn: "05:58", sunrise: "06:28", noon: "12:22", sunset: "18:16" },
+        "01-23": { dawn: "05:59", sunrise: "06:29", noon: "12:22", sunset: "18:16" },
+        "01-24": { dawn: "05:59", sunrise: "06:29", noon: "12:23", sunset: "18:17" },
+        "01-25": { dawn: "05:59", sunrise: "06:29", noon: "12:23", sunset: "18:17" },
+        "01-26": { dawn: "05:59", sunrise: "06:29", noon: "12:23", sunset: "18:17" },
+        "01-27": { dawn: "05:59", sunrise: "06:29", noon: "12:23", sunset: "18:18" },
+        "01-28": { dawn: "05:59", sunrise: "06:29", noon: "12:23", sunset: "18:18" },
+        "01-29": { dawn: "05:59", sunrise: "06:29", noon: "12:23", sunset: "18:18" },
+        "01-30": { dawn: "05:59", sunrise: "06:29", noon: "12:24", sunset: "18:19" },
+        "01-31": { dawn: "05:59", sunrise: "06:29", noon: "12:24", sunset: "18:19" },
+
+        // පෙබරවාරි
+        "02-01": { dawn: "05:59", sunrise: "06:29", noon: "12:24", sunset: "18:19" },
+        "02-02": { dawn: "05:59", sunrise: "06:29", noon: "12:24", sunset: "18:19" },
+        "02-03": { dawn: "05:59", sunrise: "06:29", noon: "12:24", sunset: "18:20" },
+        "02-04": { dawn: "05:59", sunrise: "06:29", noon: "12:24", sunset: "18:20" },
+        "02-05": { dawn: "05:59", sunrise: "06:29", noon: "12:24", sunset: "18:20" },
+        "02-06": { dawn: "05:59", sunrise: "06:29", noon: "12:24", sunset: "18:20" },
+        "02-07": { dawn: "05:59", sunrise: "06:29", noon: "12:25", sunset: "18:21" },
+        "02-08": { dawn: "05:59", sunrise: "06:29", noon: "12:25", sunset: "18:21" },
+        "02-09": { dawn: "05:59", sunrise: "06:29", noon: "12:25", sunset: "18:21" },
+        "02-10": { dawn: "05:59", sunrise: "06:29", noon: "12:25", sunset: "18:21" },
+        "02-11": { dawn: "05:58", sunrise: "06:28", noon: "12:24", sunset: "18:21" },
+        "02-12": { dawn: "05:58", sunrise: "06:28", noon: "12:25", sunset: "18:22" },
+        "02-13": { dawn: "05:58", sunrise: "06:28", noon: "12:25", sunset: "18:22" },
+        "02-14": { dawn: "05:58", sunrise: "06:28", noon: "12:25", sunset: "18:22" },
+        "02-15": { dawn: "05:58", sunrise: "06:28", noon: "12:25", sunset: "18:22" },
+        "02-16": { dawn: "05:57", sunrise: "06:27", noon: "12:24", sunset: "18:22" },
+        "02-17": { dawn: "05:57", sunrise: "06:27", noon: "12:24", sunset: "18:22" },
+        "02-18": { dawn: "05:57", sunrise: "06:27", noon: "12:24", sunset: "18:22" },
+        "02-19": { dawn: "05:57", sunrise: "06:27", noon: "12:24", sunset: "18:22" },
+        "02-20": { dawn: "05:56", sunrise: "06:26", noon: "12:24", sunset: "18:22" },
+        "02-21": { dawn: "05:56", sunrise: "06:26", noon: "12:24", sunset: "18:22" },
+        "02-22": { dawn: "05:56", sunrise: "06:26", noon: "12:24", sunset: "18:23" },
+        "02-23": { dawn: "05:56", sunrise: "06:26", noon: "12:24", sunset: "18:23" },
+        "02-24": { dawn: "05:55", sunrise: "06:25", noon: "12:24", sunset: "18:23" },
+        "02-25": { dawn: "05:55", sunrise: "06:25", noon: "12:24", sunset: "18:23" },
+        "02-26": { dawn: "05:55", sunrise: "06:25", noon: "12:24", sunset: "18:23" },
+        "02-27": { dawn: "05:54", sunrise: "06:24", noon: "12:23", sunset: "18:23" },
+        "02-28": { dawn: "05:54", sunrise: "06:24", noon: "12:23", sunset: "18:23" },
+
+        // මාර්තු
+        "03-01": { dawn: "05:54", sunrise: "06:24", noon: "12:23", sunset: "18:23" },
+        "03-02": { dawn: "05:53", sunrise: "06:23", noon: "12:23", sunset: "18:23" },
+        "03-03": { dawn: "05:53", sunrise: "06:23", noon: "12:23", sunset: "18:23" },
+        "03-04": { dawn: "05:52", sunrise: "06:22", noon: "12:22", sunset: "18:23" },
+        "03-05": { dawn: "05:52", sunrise: "06:22", noon: "12:22", sunset: "18:23" },
+        "03-06": { dawn: "05:52", sunrise: "06:22", noon: "12:22", sunset: "18:23" },
+        "03-07": { dawn: "05:51", sunrise: "06:21", noon: "12:22", sunset: "18:23" },
+        "03-08": { dawn: "05:51", sunrise: "06:21", noon: "12:21", sunset: "18:22" },
+        "03-09": { dawn: "05:50", sunrise: "06:20", noon: "12:21", sunset: "18:22" },
+        "03-10": { dawn: "05:50", sunrise: "06:20", noon: "12:21", sunset: "18:22" },
+        "03-11": { dawn: "05:49", sunrise: "06:19", noon: "12:20", sunset: "18:22" },
+        "03-12": { dawn: "05:49", sunrise: "06:19", noon: "12:20", sunset: "18:22" },
+        "03-13": { dawn: "05:48", sunrise: "06:18", noon: "12:20", sunset: "18:22" },
+        "03-14": { dawn: "05:48", sunrise: "06:18", noon: "12:20", sunset: "18:22" },
+        "03-15": { dawn: "05:48", sunrise: "06:18", noon: "12:20", sunset: "18:22" },
+        "03-16": { dawn: "05:47", sunrise: "06:17", noon: "12:19", sunset: "18:22" },
+        "03-17": { dawn: "05:47", sunrise: "06:17", noon: "12:19", sunset: "18:22" },
+        "03-18": { dawn: "05:46", sunrise: "06:16", noon: "12:19", sunset: "18:22" },
+        "03-19": { dawn: "05:46", sunrise: "06:16", noon: "12:19", sunset: "18:22" },
+        "03-20": { dawn: "05:45", sunrise: "06:15", noon: "12:18", sunset: "18:21" },
+        "03-21": { dawn: "05:45", sunrise: "06:15", noon: "12:18", sunset: "18:21" },
+        "03-22": { dawn: "05:44", sunrise: "06:14", noon: "12:17", sunset: "18:21" },
+        "03-23": { dawn: "05:44", sunrise: "06:14", noon: "12:17", sunset: "18:21" },
+        "03-24": { dawn: "05:43", sunrise: "06:13", noon: "12:17", sunset: "18:21" },
+        "03-25": { dawn: "05:43", sunrise: "06:13", noon: "12:17", sunset: "18:21" },
+        "03-26": { dawn: "05:42", sunrise: "06:12", noon: "12:16", sunset: "18:21" },
+        "03-27": { dawn: "05:42", sunrise: "06:12", noon: "12:16", sunset: "18:21" },
+        "03-28": { dawn: "05:41", sunrise: "06:11", noon: "12:16", sunset: "18:21" },
+        "03-29": { dawn: "05:41", sunrise: "06:11", noon: "12:15", sunset: "18:20" },
+        "03-30": { dawn: "05:40", sunrise: "06:10", noon: "12:15", sunset: "18:20" },
+        "03-31": { dawn: "05:40", sunrise: "06:10", noon: "12:15", sunset: "18:20" },
+
+        // අප්‍රේල්
+        "04-01": { dawn: "05:39", sunrise: "06:09", noon: "12:14", sunset: "18:20" },
+        "04-02": { dawn: "05:39", sunrise: "06:09", noon: "12:14", sunset: "18:20" },
+        "04-03": { dawn: "05:38", sunrise: "06:08", noon: "12:14", sunset: "18:20" },
+        "04-04": { dawn: "05:38", sunrise: "06:08", noon: "12:14", sunset: "18:20" },
+        "04-05": { dawn: "05:37", sunrise: "06:07", noon: "12:13", sunset: "18:20" },
+        "04-06": { dawn: "05:37", sunrise: "06:07", noon: "12:13", sunset: "18:20" },
+        "04-07": { dawn: "05:36", sunrise: "06:06", noon: "12:13", sunset: "18:20" },
+        "04-08": { dawn: "05:36", sunrise: "06:06", noon: "12:12", sunset: "18:19" },
+        "04-09": { dawn: "05:35", sunrise: "06:05", noon: "12:12", sunset: "18:19" },
+        "04-10": { dawn: "05:35", sunrise: "06:05", noon: "12:12", sunset: "18:19" },
+        "04-11": { dawn: "05:34", sunrise: "06:04", noon: "12:11", sunset: "18:19" },
+        "04-12": { dawn: "05:34", sunrise: "06:04", noon: "12:11", sunset: "18:19" },
+        "04-13": { dawn: "05:34", sunrise: "06:04", noon: "12:11", sunset: "18:19" },
+        "04-14": { dawn: "05:33", sunrise: "06:03", noon: "12:11", sunset: "18:19" },
+        "04-15": { dawn: "05:33", sunrise: "06:03", noon: "12:11", sunset: "18:19" },
+        "04-16": { dawn: "05:32", sunrise: "06:02", noon: "12:10", sunset: "18:19" },
+        "04-17": { dawn: "05:32", sunrise: "06:02", noon: "12:10", sunset: "18:19" },
+        "04-18": { dawn: "05:31", sunrise: "06:01", noon: "12:10", sunset: "18:19" },
+        "04-19": { dawn: "05:31", sunrise: "06:01", noon: "12:10", sunset: "18:19" },
+        "04-20": { dawn: "05:31", sunrise: "06:01", noon: "12:10", sunset: "18:19" },
+        "04-21": { dawn: "05:30", sunrise: "06:00", noon: "12:09", sunset: "18:19" },
+        "04-22": { dawn: "05:30", sunrise: "06:00", noon: "12:09", sunset: "18:19" },
+        "04-23": { dawn: "05:30", sunrise: "06:00", noon: "12:09", sunset: "18:19" },
+        "04-24": { dawn: "05:29", sunrise: "05:59", noon: "12:09", sunset: "18:19" },
+        "04-25": { dawn: "05:29", sunrise: "05:59", noon: "12:09", sunset: "18:19" },
+        "04-26": { dawn: "05:28", sunrise: "05:58", noon: "12:08", sunset: "18:19" },
+        "04-27": { dawn: "05:28", sunrise: "05:58", noon: "12:08", sunset: "18:19" },
+        "04-28": { dawn: "05:28", sunrise: "05:58", noon: "12:08", sunset: "18:19" },
+        "04-29": { dawn: "05:27", sunrise: "05:57", noon: "12:08", sunset: "18:19" },
+        "04-30": { dawn: "05:27", sunrise: "05:57", noon: "12:08", sunset: "18:19" },
+
+        // මැයි
+        "05-01": { dawn: "05:27", sunrise: "05:57", noon: "12:08", sunset: "18:19" },
+        "05-02": { dawn: "05:27", sunrise: "05:57", noon: "12:08", sunset: "18:19" },
+        "05-03": { dawn: "05:26", sunrise: "05:56", noon: "12:07", sunset: "18:19" },
+        "05-04": { dawn: "05:26", sunrise: "05:56", noon: "12:07", sunset: "18:19" },
+        "05-05": { dawn: "05:26", sunrise: "05:56", noon: "12:07", sunset: "18:19" },
+        "05-06": { dawn: "05:26", sunrise: "05:56", noon: "12:07", sunset: "18:19" },
+        "05-07": { dawn: "05:25", sunrise: "05:55", noon: "12:07", sunset: "18:19" },
+        "05-08": { dawn: "05:25", sunrise: "05:55", noon: "12:07", sunset: "18:19" },
+        "05-09": { dawn: "05:25", sunrise: "05:55", noon: "12:07", sunset: "18:19" },        
+    "05-10": { dawn: "05:25", sunrise: "05:55", noon: "12:07", sunset: "18:19" },
+    "05-11": { dawn: "05:25", sunrise: "05:55", noon: "12:07", sunset: "18:19" },
+    "05-12": { dawn: "05:24", sunrise: "05:54", noon: "12:07", sunset: "18:20" },
+    "05-13": { dawn: "05:24", sunrise: "05:54", noon: "12:07", sunset: "18:20" },
+    "05-14": { dawn: "05:24", sunrise: "05:54", noon: "12:07", sunset: "18:20" },
+    "05-15": { dawn: "05:24", sunrise: "05:54", noon: "12:07", sunset: "18:20" },
+    "05-16": { dawn: "05:24", sunrise: "05:54", noon: "12:07", sunset: "18:20" },
+    "05-17": { dawn: "05:24", sunrise: "05:54", noon: "12:07", sunset: "18:20" },
+    "05-18": { dawn: "05:24", sunrise: "05:54", noon: "12:07", sunset: "18:20" },
+
+    "05-19": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:21" },
+    "05-20": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:21" },
+    "05-21": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:21" },
+    "05-22": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:21" },
+    "05-23": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:21" },
+    "05-24": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:22" },
+    "05-25": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:22" },
+    "05-26": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:22" },
+    "05-27": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:22" },
+    "05-28": { dawn: "05:23", sunrise: "05:53", noon: "12:07", sunset: "18:22" },
+    "05-29": { dawn: "05:23", sunrise: "05:53", noon: "12:08", sunset: "18:23" },
+    "05-30": { dawn: "05:23", sunrise: "05:53", noon: "12:08", sunset: "18:23" },
+    "05-31": { dawn: "05:23", sunrise: "05:53", noon: "12:08", sunset: "18:23" },
+
+    // ජුනි
+    "06-01": { dawn: "05:23", sunrise: "05:53", noon: "12:08", sunset: "18:23" },
+    "06-02": { dawn: "05:23", sunrise: "05:53", noon: "12:08", sunset: "18:23" },
+    "06-03": { dawn: "05:24", sunrise: "05:54", noon: "12:09", sunset: "18:24" },
+    "06-04": { dawn: "05:24", sunrise: "05:54", noon: "12:09", sunset: "18:24" },
+    "06-05": { dawn: "05:24", sunrise: "05:54", noon: "12:09", sunset: "18:24" },
+    "06-06": { dawn: "05:24", sunrise: "05:54", noon: "12:09", sunset: "18:24" },
+    "06-07": { dawn: "05:24", sunrise: "05:54", noon: "12:09", sunset: "18:25" },
+    "06-08": { dawn: "05:24", sunrise: "05:54", noon: "12:09", sunset: "18:25" },
+    "06-09": { dawn: "05:24", sunrise: "05:54", noon: "12:09", sunset: "18:25" },
+    "06-10": { dawn: "05:24", sunrise: "05:54", noon: "12:09", sunset: "18:25" },
+    "06-11": { dawn: "05:25", sunrise: "05:55", noon: "12:10", sunset: "18:26" },
+    "06-12": { dawn: "05:25", sunrise: "05:55", noon: "12:10", sunset: "18:26" },
+    "06-13": { dawn: "05:25", sunrise: "05:55", noon: "12:10", sunset: "18:26" },
+    "06-14": { dawn: "05:25", sunrise: "05:55", noon: "12:10", sunset: "18:26" },
+    "06-15": { dawn: "05:25", sunrise: "05:55", noon: "12:11", sunset: "18:27" },
+    "06-16": { dawn: "05:25", sunrise: "05:55", noon: "12:11", sunset: "18:27" },
+    "06-17": { dawn: "05:26", sunrise: "05:56", noon: "12:11", sunset: "18:27" },
+    "06-18": { dawn: "05:26", sunrise: "05:56", noon: "12:11", sunset: "18:27" },
+    "06-19": { dawn: "05:26", sunrise: "05:56", noon: "12:12", sunset: "18:28" },
+    "06-20": { dawn: "05:26", sunrise: "05:56", noon: "12:12", sunset: "18:28" },
+    "06-21": { dawn: "05:26", sunrise: "05:56", noon: "12:12", sunset: "18:28" },
+    "06-22": { dawn: "05:27", sunrise: "05:57", noon: "12:12", sunset: "18:28" },
+    "06-23": { dawn: "05:27", sunrise: "05:57", noon: "12:12", sunset: "18:28" },
+    "06-24": { dawn: "05:27", sunrise: "05:57", noon: "12:13", sunset: "18:29" },
+    "06-25": { dawn: "05:27", sunrise: "05:57", noon: "12:13", sunset: "18:29" },
+    "06-26": { dawn: "05:27", sunrise: "05:57", noon: "12:13", sunset: "18:29" },
+    "06-27": { dawn: "05:28", sunrise: "05:58", noon: "12:13", sunset: "18:29" },
+    "06-28": { dawn: "05:28", sunrise: "05:58", noon: "12:13", sunset: "18:29" },
+    "06-29": { dawn: "05:28", sunrise: "05:58", noon: "12:14", sunset: "18:30" },
+    "06-30": { dawn: "05:28", sunrise: "05:58", noon: "12:14", sunset: "18:30" },
+
+    // ජූලි
+    "07-01": { dawn: "05:29", sunrise: "05:59", noon: "12:14", sunset: "18:30" },
+    "07-02": { dawn: "05:29", sunrise: "05:59", noon: "12:14", sunset: "18:30" },
+    "07-03": { dawn: "05:29", sunrise: "05:59", noon: "12:14", sunset: "18:30" },
+    "07-04": { dawn: "05:29", sunrise: "05:59", noon: "12:14", sunset: "18:30" },
+    "07-05": { dawn: "05:30", sunrise: "06:00", noon: "12:15", sunset: "18:30" },
+    "07-06": { dawn: "05:30", sunrise: "06:00", noon: "12:15", sunset: "18:31" },
+    "07-07": { dawn: "05:30", sunrise: "06:00", noon: "12:15", sunset: "18:31" },
+    "07-08": { dawn: "05:30", sunrise: "06:00", noon: "12:15", sunset: "18:31" },
+    "07-09": { dawn: "05:30", sunrise: "06:00", noon: "12:15", sunset: "18:31" },
+    "07-10": { dawn: "05:31", sunrise: "06:01", noon: "12:16", sunset: "18:31" },
+    "07-11": { dawn: "05:31", sunrise: "06:01", noon: "12:16", sunset: "18:31" },
+    "07-12": { dawn: "05:31", sunrise: "06:01", noon: "12:16", sunset: "18:31" },
+    "07-13": { dawn: "05:31", sunrise: "06:01", noon: "12:16", sunset: "18:31" },
+    "07-14": { dawn: "05:32", sunrise: "06:02", noon: "12:16", sunset: "18:31" },
+    "07-15": { dawn: "05:32", sunrise: "06:02", noon: "12:16", sunset: "18:31" },
+    "07-16": { dawn: "05:32", sunrise: "06:02", noon: "12:16", sunset: "18:31" },
+    "07-17": { dawn: "05:32", sunrise: "06:02", noon: "12:16", sunset: "18:31" },
+    "07-18": { dawn: "05:32", sunrise: "06:02", noon: "12:16", sunset: "18:31" },
+    "07-19": { dawn: "05:32", sunrise: "06:02", noon: "12:16", sunset: "18:31" },
+    "07-20": { dawn: "05:33", sunrise: "06:03", noon: "12:17", sunset: "18:31" },
+    "07-21": { dawn: "05:33", sunrise: "06:03", noon: "12:17", sunset: "18:31" },
+    "07-22": { dawn: "05:33", sunrise: "06:03", noon: "12:17", sunset: "18:31" },
+    "07-23": { dawn: "05:33", sunrise: "06:03", noon: "12:17", sunset: "18:31" },
+    "07-24": { dawn: "05:33", sunrise: "06:03", noon: "12:17", sunset: "18:31" },
+    "07-25": { dawn: "05:33", sunrise: "06:03", noon: "12:17", sunset: "18:31" },
+    "07-26": { dawn: "05:34", sunrise: "06:04", noon: "12:17", sunset: "18:30" },
+    "07-27": { dawn: "05:34", sunrise: "06:04", noon: "12:17", sunset: "18:30" },
+    "07-28": { dawn: "05:34", sunrise: "06:04", noon: "12:17", sunset: "18:30" },
+    "07-29": { dawn: "05:34", sunrise: "06:04", noon: "12:17", sunset: "18:30" },
+    "07-30": { dawn: "05:34", sunrise: "06:04", noon: "12:17", sunset: "18:30" },
+    "07-31": { dawn: "05:34", sunrise: "06:04", noon: "12:17", sunset: "18:30" },
+
+    // අගෝස්තු
+    "08-01": { dawn: "05:34", sunrise: "06:04", noon: "12:16", sunset: "18:29" },
+    "08-02": { dawn: "05:34", sunrise: "06:04", noon: "12:16", sunset: "18:29" },
+    "08-03": { dawn: "05:34", sunrise: "06:04", noon: "12:16", sunset: "18:29" },
+    "08-04": { dawn: "05:34", sunrise: "06:04", noon: "12:16", sunset: "18:29" },
+    "08-05": { dawn: "05:34", sunrise: "06:04", noon: "12:16", sunset: "18:29" },
+    "08-06": { dawn: "05:35", sunrise: "06:05", noon: "12:16", sunset: "18:28" },
+    "08-07": { dawn: "05:35", sunrise: "06:05", noon: "12:16", sunset: "18:28" },
+    "08-08": { dawn: "05:35", sunrise: "06:05", noon: "12:16", sunset: "18:28" },
+    "08-09": { dawn: "05:35", sunrise: "06:05", noon: "12:16", sunset: "18:27" },
+    "08-10": { dawn: "05:35", sunrise: "06:05", noon: "12:16", sunset: "18:27" },
+    "08-11": { dawn: "05:35", sunrise: "06:05", noon: "12:16", sunset: "18:27" },
+    "08-12": { dawn: "05:35", sunrise: "06:05", noon: "12:16", sunset: "18:27" },
+    "08-13": { dawn: "05:35", sunrise: "06:05", noon: "12:15", sunset: "18:26" },
+    "08-14": { dawn: "05:35", sunrise: "06:05", noon: "12:15", sunset: "18:26" },
+    "08-15": { dawn: "05:35", sunrise: "06:05", noon: "12:15", sunset: "18:25" },
+    "08-16": { dawn: "05:35", sunrise: "06:05", noon: "12:15", sunset: "18:25" },
+    "08-17": { dawn: "05:35", sunrise: "06:05", noon: "12:15", sunset: "18:25" },
+    "08-18": { dawn: "05:35", sunrise: "06:05", noon: "12:14", sunset: "18:24" },
+    "08-19": { dawn: "05:34", sunrise: "06:04", noon: "12:14", sunset: "18:24" },
+    "08-20": { dawn: "05:34", sunrise: "06:04", noon: "12:14", sunset: "18:24" },
+    "08-21": { dawn: "05:34", sunrise: "06:04", noon: "12:13", sunset: "18:23" },
+    "08-22": { dawn: "05:34", sunrise: "06:04", noon: "12:13", sunset: "18:23" },
+    "08-23": { dawn: "05:34", sunrise: "06:04", noon: "12:13", sunset: "18:22" },
+    "08-24": { dawn: "05:34", sunrise: "06:04", noon: "12:13", sunset: "18:22" },
+    "08-25": { dawn: "05:34", sunrise: "06:04", noon: "12:12", sunset: "18:21" },
+    "08-26": { dawn: "05:34", sunrise: "06:04", noon: "12:12", sunset: "18:21" },
+    "08-27": { dawn: "05:34", sunrise: "06:04", noon: "12:12", sunset: "18:20" },
+    "08-28": { dawn: "05:34", sunrise: "06:04", noon: "12:12", sunset: "18:20" },
+    "08-29": { dawn: "05:34", sunrise: "06:04", noon: "12:12", sunset: "18:20" },
+    "08-30": { dawn: "05:33", sunrise: "06:03", noon: "12:11", sunset: "18:19" },
+    "08-31": { dawn: "05:33", sunrise: "06:03", noon: "12:11", sunset: "18:19" },
+
+    // සැප්තැම්බර්
+    "09-01": { dawn: "05:33", sunrise: "06:03", noon: "12:10", sunset: "18:18" },
+    "09-02": { dawn: "05:33", sunrise: "06:03", noon: "12:10", sunset: "18:18" },
+    "09-03": { dawn: "05:33", sunrise: "06:03", noon: "12:10", sunset: "18:17" },
+    "09-04": { dawn: "05:33", sunrise: "06:03", noon: "12:10", sunset: "18:17" },
+    "09-05": { dawn: "05:33", sunrise: "06:03", noon: "12:09", sunset: "18:16" },
+    "09-06": { dawn: "05:33", sunrise: "06:03", noon: "12:09", sunset: "18:15" },
+    "09-07": { dawn: "05:32", sunrise: "06:02", noon: "12:08", sunset: "18:15" },
+    "09-08": { dawn: "05:32", sunrise: "06:02", noon: "12:08", sunset: "18:14" },
+    "09-09": { dawn: "05:32", sunrise: "06:02", noon: "12:08", sunset: "18:14" },
+    "09-10": { dawn: "05:32", sunrise: "06:02", noon: "12:07", sunset: "18:13" },
+    "09-11": { dawn: "05:32", sunrise: "06:02", noon: "12:07", sunset: "18:13" },
+    "09-12": { dawn: "05:32", sunrise: "06:02", noon: "12:07", sunset: "18:12" },
+    "09-13": { dawn: "05:31", sunrise: "06:01", noon: "12:06", sunset: "18:12" },
+    "09-14": { dawn: "05:31", sunrise: "06:01", noon: "12:06", sunset: "18:11" },
+    "09-15": { dawn: "05:31", sunrise: "06:01", noon: "12:06", sunset: "18:11" },
+    "09-16": { dawn: "05:31", sunrise: "06:01", noon: "12:05", sunset: "18:10" },
+    "09-17": { dawn: "05:31", sunrise: "06:01", noon: "12:05", sunset: "18:10" },
+    "09-18": { dawn: "05:31", sunrise: "06:01", noon: "12:05", sunset: "18:09" },
+    "09-19": { dawn: "05:30", sunrise: "06:00", noon: "12:04", sunset: "18:08" },
+    "09-20": { dawn: "05:30", sunrise: "06:00", noon: "12:04", sunset: "18:08" },
+    "09-21": { dawn: "05:30", sunrise: "06:00", noon: "12:03", sunset: "18:07" },
+    "09-22": { dawn: "05:30", sunrise: "06:00", noon: "12:03", sunset: "18:07" },
+    "09-23": { dawn: "05:30", sunrise: "06:00", noon: "12:03", sunset: "18:06" },
+    "09-24": { dawn: "05:30", sunrise: "06:00", noon: "12:03", sunset: "18:06" },
+    "09-25": { dawn: "05:29", sunrise: "05:59", noon: "12:02", sunset: "18:05" },
+    "09-26": { dawn: "05:29", sunrise: "05:59", noon: "12:02", sunset: "18:05" },
+    "09-27": { dawn: "05:29", sunrise: "05:59", noon: "12:01", sunset: "18:04" },
+    "09-28": { dawn: "05:29", sunrise: "05:59", noon: "12:01", sunset: "18:04" },
+    "09-29": { dawn: "05:29", sunrise: "05:59", noon: "12:01", sunset: "18:03" },
+    "09-30": { dawn: "05:29", sunrise: "05:59", noon: "12:01", sunset: "18:03" },
+
+    // ඔක්තෝම්බර්
+    "10-01": { dawn: "05:29", sunrise: "05:59", noon: "12:00", sunset: "18:02" },
+    "10-02": { dawn: "05:28", sunrise: "05:58", noon: "12:00", sunset: "18:02" },
+    "10-03": { dawn: "05:28", sunrise: "05:58", noon: "11:59", sunset: "18:01" },
+    "10-04": { dawn: "05:28", sunrise: "05:58", noon: "11:59", sunset: "18:01" },
+    "10-05": { dawn: "05:28", sunrise: "05:58", noon: "11:59", sunset: "18:00" },
+    "10-06": { dawn: "05:28", sunrise: "05:58", noon: "11:59", sunset: "18:00" },
+    "10-07": { dawn: "05:28", sunrise: "05:58", noon: "11:58", sunset: "17:59" },
+    "10-08": { dawn: "05:28", sunrise: "05:58", noon: "11:58", sunset: "17:59" },
+    "10-09": { dawn: "05:28", sunrise: "05:58", noon: "11:58", sunset: "17:58" },
+    "10-10": { dawn: "05:28", sunrise: "05:58", noon: "11:58", sunset: "17:58" },
+    "10-11": { dawn: "05:27", sunrise: "05:57", noon: "11:57", sunset: "17:57" },
+    "10-12": { dawn: "05:27", sunrise: "05:57", noon: "11:57", sunset: "17:57" },
+    "10-13": { dawn: "05:27", sunrise: "05:57", noon: "11:56", sunset: "17:56" },
+    "10-14": { dawn: "05:27", sunrise: "05:57", noon: "11:56", sunset: "17:56" },
+    "10-15": { dawn: "05:27", sunrise: "05:57", noon: "11:56", sunset: "17:56" },
+    "10-16": { dawn: "05:27", sunrise: "05:57", noon: "11:56", sunset: "17:55" },
+    "10-17": { dawn: "05:27", sunrise: "05:57", noon: "11:56", sunset: "17:55" },
+    "10-18": { dawn: "05:27", sunrise: "05:57", noon: "11:55", sunset: "17:54" },
+    "10-19": { dawn: "05:27", sunrise: "05:57", noon: "11:55", sunset: "17:54" },
+    "10-20": { dawn: "05:27", sunrise: "05:57", noon: "11:55", sunset: "17:54" },
+    "10-21": { dawn: "05:27", sunrise: "05:57", noon: "11:55", sunset: "17:53" },
+    "10-22": { dawn: "05:27", sunrise: "05:57", noon: "11:55", sunset: "17:53" },
+    "10-23": { dawn: "05:27", sunrise: "05:57", noon: "11:55", sunset: "17:53" },
+    "10-24": { dawn: "05:27", sunrise: "05:57", noon: "11:54", sunset: "17:52" },
+    "10-25": { dawn: "05:27", sunrise: "05:57", noon: "11:54", sunset: "17:52" },
+    "10-26": { dawn: "05:27", sunrise: "05:57", noon: "11:54", sunset: "17:52" },
+    "10-27": { dawn: "05:27", sunrise: "05:57", noon: "11:54", sunset: "17:52" },
+    "10-28": { dawn: "05:27", sunrise: "05:57", noon: "11:54", sunset: "17:51" },
+    "10-29": { dawn: "05:27", sunrise: "05:57", noon: "11:54", sunset: "17:51" },
+    "10-30": { dawn: "05:28", sunrise: "05:58", noon: "11:54", sunset: "17:51" },
+    "10-31": { dawn: "05:28", sunrise: "05:58", noon: "11:54", sunset: "17:51" },
+
+    // නොවැම්බර්
+    "11-01": { dawn: "05:28", sunrise: "05:58", noon: "11:54", sunset: "17:50" },
+    "11-02": { dawn: "05:28", sunrise: "05:58", noon: "11:54", sunset: "17:50" },
+    "11-03": { dawn: "05:28", sunrise: "05:58", noon: "11:54", sunset: "17:50" },
+    "11-04": { dawn: "05:28", sunrise: "05:58", noon: "11:54", sunset: "17:50" },
+    "11-05": { dawn: "05:28", sunrise: "05:58", noon: "11:54", sunset: "17:50" },
+    "11-06": { dawn: "05:29", sunrise: "05:59", noon: "11:54", sunset: "17:50" },
+    "11-07": { dawn: "05:29", sunrise: "05:59", noon: "11:54", sunset: "17:50" },
+    "11-08": { dawn: "05:29", sunrise: "05:59", noon: "11:54", sunset: "17:50" },
+    "11-09": { dawn: "05:29", sunrise: "05:59", noon: "11:54", sunset: "17:49" },
+    "11-10": { dawn: "05:29", sunrise: "05:59", noon: "11:54", sunset: "17:49" },
+    "11-11": { dawn: "05:30", sunrise: "06:00", noon: "11:54", sunset: "17:49" },
+    "11-12": { dawn: "05:30", sunrise: "06:00", noon: "11:54", sunset: "17:49" },
+    "11-13": { dawn: "05:30", sunrise: "06:00", noon: "11:54", sunset: "17:49" },
+    "11-14": { dawn: "05:30", sunrise: "06:00", noon: "11:54", sunset: "17:49" },
+    "11-15": { dawn: "05:31", sunrise: "06:01", noon: "11:55", sunset: "17:49" },
+    "11-16": { dawn: "05:31", sunrise: "06:01", noon: "11:55", sunset: "17:49" },
+    "11-17": { dawn: "05:31", sunrise: "06:01", noon: "11:55", sunset: "17:49" },
+    "11-18": { dawn: "05:32", sunrise: "06:02", noon: "11:56", sunset: "17:50" },
+    "11-19": { dawn: "05:32", sunrise: "06:02", noon: "11:56", sunset: "17:50" },
+    "11-20": { dawn: "05:32", sunrise: "06:02", noon: "11:56", sunset: "17:50" },
+    "11-21": { dawn: "05:33", sunrise: "06:03", noon: "11:56", sunset: "17:50" },
+    "11-22": { dawn: "05:33", sunrise: "06:03", noon: "11:56", sunset: "17:50" },
+    "11-23": { dawn: "05:33", sunrise: "06:03", noon: "11:56", sunset: "17:50" },
+    "11-24": { dawn: "05:34", sunrise: "06:04", noon: "11:57", sunset: "17:50" },
+    "11-25": { dawn: "05:34", sunrise: "06:04", noon: "11:57", sunset: "17:51" },
+    "11-26": { dawn: "05:35", sunrise: "06:05", noon: "11:58", sunset: "17:51" },
+    "11-27": { dawn: "05:35", sunrise: "06:05", noon: "11:58", sunset: "17:51" },
+    "11-28": { dawn: "05:36", sunrise: "06:06", noon: "11:58", sunset: "17:51" },
+    "11-29": { dawn: "05:36", sunrise: "06:06", noon: "11:58", sunset: "17:51" },
+    "11-30": { dawn: "05:36", sunrise: "06:06", noon: "11:59", sunset: "17:52" },
+
+    // දෙසැම්බර්
+    "12-01": { dawn: "05:37", sunrise: "06:07", noon: "11:59", sunset: "17:52" },
+    "12-02": { dawn: "05:37", sunrise: "06:07", noon: "11:59", sunset: "17:52" },
+    "12-03": { dawn: "05:38", sunrise: "06:08", noon: "12:00", sunset: "17:53" },
+    "12-04": { dawn: "05:38", sunrise: "06:08", noon: "12:00", sunset: "17:53" },
+    "12-05": { dawn: "05:39", sunrise: "06:09", noon: "12:01", sunset: "17:53" },
+    "12-06": { dawn: "05:39", sunrise: "06:09", noon: "12:01", sunset: "17:54" },
+    "12-07": { dawn: "05:40", sunrise: "06:10", noon: "12:02", sunset: "17:54" },
+    "12-08": { dawn: "05:40", sunrise: "06:10", noon: "12:02", sunset: "17:54" },
+    "12-09": { dawn: "05:41", sunrise: "06:11", noon: "12:03", sunset: "17:55" },
+    "12-10": { dawn: "05:41", sunrise: "06:11", noon: "12:03", sunset: "17:55" },
+    "12-11": { dawn: "05:42", sunrise: "06:12", noon: "12:04", sunset: "17:56" },
+    "12-12": { dawn: "05:42", sunrise: "06:12", noon: "12:04", sunset: "17:56" },
+    "12-13": { dawn: "05:43", sunrise: "06:13", noon: "12:04", sunset: "17:56" },
+    "12-14": { dawn: "05:43", sunrise: "06:13", noon: "12:05", sunset: "17:57" },
+    "12-15": { dawn: "05:44", sunrise: "06:14", noon: "12:05", sunset: "17:57" },
+    "12-16": { dawn: "05:44", sunrise: "06:14", noon: "12:06", sunset: "17:58" },
+    "12-17": { dawn: "05:45", sunrise: "06:15", noon: "12:06", sunset: "17:58" },
+    "12-18": { dawn: "05:45", sunrise: "06:15", noon: "12:07", sunset: "17:59" },
+    "12-19": { dawn: "05:46", sunrise: "06:16", noon: "12:07", sunset: "17:59" },
+    "12-20": { dawn: "05:46", sunrise: "06:16", noon: "12:08", sunset: "18:00" },
+    "12-21": { dawn: "05:47", sunrise: "06:17", noon: "12:08", sunset: "18:00" },
+    "12-22": { dawn: "05:47", sunrise: "06:17", noon: "12:09", sunset: "18:01" },
+    "12-23": { dawn: "05:48", sunrise: "06:18", noon: "12:09", sunset: "18:01" },
+    "12-24": { dawn: "05:48", sunrise: "06:18", noon: "12:10", sunset: "18:02" },
+    "12-25": { dawn: "05:49", sunrise: "06:19", noon: "12:10", sunset: "18:02" },
+    "12-26": { dawn: "05:49", sunrise: "06:19", noon: "12:11", sunset: "18:03" },
+    "12-27": { dawn: "05:50", sunrise: "06:20", noon: "12:11", sunset: "18:03" },
+    "12-28": { dawn: "05:50", sunrise: "06:20", noon: "12:12", sunset: "18:04" },
+    "12-29": { dawn: "05:51", sunrise: "06:21", noon: "12:12", sunset: "18:04" },
+    "12-30": { dawn: "05:51", sunrise: "06:21", noon: "12:13", sunset: "18:05" },
+    "12-31": { dawn: "05:51", sunrise: "06:21", noon: "12:13", sunset: "18:05" }
+};
+
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    document.getElementById('dateInput').value = formattedDate;
+
+    function updateTimes() {
+        const dateVal = document.getElementById('dateInput').value; 
+        if (!dateVal) return;
+        
+        const monthDay = dateVal.substring(5); // MM-DD ලබා ගනී
+        const offset = parseInt(document.getElementById('districtSelect').value);
+        
+        const dayData = sunData[monthDay];
+
+        if (dayData) {
+            const adjust = (timeStr) => {
+                if(!timeStr) return "--:--";
+                let [h, m] = timeStr.split(':').map(Number);
+                let date = new Date(2026, 0, 1, h, m + offset);
+                return date.getHours().toString().padStart(2, '0') + ':' + 
+                       date.getMinutes().toString().padStart(2, '0');
+            };
+
+            document.getElementById('dawn').innerText = adjust(dayData.dawn);
+            document.getElementById('sunrise').innerText = adjust(dayData.sunrise);
+            document.getElementById('noon').innerText = adjust(dayData.noon);
+            document.getElementById('sunset').innerText = adjust(dayData.sunset);
+        } else {
+            document.getElementById('dawn').innerText = "--:--";
+            document.getElementById('sunrise').innerText = "--:--";
+            document.getElementById('noon').innerText = "--:--";
+            document.getElementById('sunset').innerText = "--:--";
+        }
+    }
+
+    document.getElementById('dateInput').addEventListener('change', updateTimes);
+    document.getElementById('districtSelect').addEventListener('change', updateTimes);
+
+window.onload = function() {
+    const savedDistrict = localStorage.getItem('selectedDistrict');
+    if (savedDistrict) {
+        document.getElementById('districtSelect').value = savedDistrict;
+    }
+    updateTimes(); 
+};
+
+document.getElementById('districtSelect').addEventListener('change', function() {
+    localStorage.setItem('selectedDistrict', this.value);
+    updateTimes();
+});
+
+    updateTimes();
+</script>
+
+</body>
+</html>
