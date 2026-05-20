@@ -3,6 +3,7 @@ const CACHE_NAME = 'buddhist-era-v3.1';
 const urlsToCache = [
   './',
   './index.html',
+  './sundata.html',
   './manifest.json',
   './icon-192x192.png'
 ];
