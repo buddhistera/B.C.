@@ -1,9 +1,8 @@
-const CACHE_NAME = 'buddhist-era-v3.3';
+const CACHE_NAME = 'buddhist-era-v3.4';
 
 const urlsToCache = [
   './',
   './index.html',
-  './sundata.html',
   './manifest.json',
   './icon-192x192.png'
 ];
