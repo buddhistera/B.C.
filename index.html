@@ -102,7 +102,7 @@
         background: #fdfdfd;
     }
 
-    .main-panel {
+      .main-panel {
         width: 50%;
         border-radius: 12px;
         padding: 8px;
@@ -111,7 +111,10 @@
         flex-direction: column; 
         gap: 8px;
         box-sizing: border-box;
-        background: #4B0082;
+
+        background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa7c11 100%); 
+        border: 1px solid #b8860b;
+        box-shadow: inset 0 1px 3px rgba(255,255,255,0.5);
     }
 
     .data-item {
@@ -123,24 +126,43 @@
         border-radius: 8px;
     }
 
-    .label-text { font-size: 0.7em; color: #666; font-weight: bold; }
+    .label-text { font-size: 0.7em; color: #3e2723; font-weight: bold; }
     .val-text { font-size: 1.1em; font-weight: bold; color: #000; }
-    .main-val-text { font-size: 1.6em; font-weight: bold; color: #0d47a1; }
 
-    .bg-atikkanta { background-color: #fce4ec; border: 1px solid #f8bbd0; }
-    .bg-avasittha { background-color: #e8f5e9; border: 1px solid #c8e6c9; }
-    .main-bg-y { background: #e3f2fd; }
-    .main-bg-m { background: #f1f8e9; }
-    .main-bg-d { background: #fff3e0; }
+    .main-val-text { 
+        font-size: 1.6em; 
+        font-weight: bold; 
+        color: #111111;
+        text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5), 0px -1px 0px rgba(0, 0, 0, 0.7);
+    }
+     .bg-atikkanta { background-color: #fce4ec; border: 1px solid #f8bbd0; }
+    .bg-avasittha { background-color: #fce4ec; border: 1px solid #f8bbd0; }
+    .main-bg-y, .main-bg-m, .main-bg-d { 
+        background: transparent !important; 
+        border: none !important;
+    }
 
     body.dark-mode .side-panel,
-    body.dark-mode .main-panel,
     body.dark-mode .data-item {
         background-color: #1d1d1d !important;
         border-color: #333 !important;
     }
-    body.dark-mode .val-text, 
-    body.dark-mode .main-val-text { color: #fff !important; }
+
+    body.dark-mode .val-text { 
+        color: #fff !important; 
+    }
+    body.dark-mode .label-text { 
+        color: #aaa !important; 
+    }
+    body.dark-mode .main-panel {
+        background: linear-gradient(135deg, #aa7c11 0%, #8a640f 100%) !important;
+        border-color: #5a420b !important;
+    }
+    body.dark-mode .main-val-text {
+        color: #004e64 !important;
+        text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4), 0px -1px 0px rgba(0, 0, 0, 0.9) !important;
+    }
+
     
 .header { 
     
