@@ -2262,23 +2262,30 @@ function updateDarkModeBtnText() {
         }
     }
 
-    // 2. Modal පාලනය සහ Event Listeners
-    function openSunModal() {
-        document.getElementById('sunModal').style.display = 'flex';
-        
+        function initializeSunTimes() {
         const dateInput = document.getElementById('sunDateInput');
         const districtSelect = document.getElementById('sunDistrictSelect');
+        
+        if (!dateInput) return;
 
-        // අද දිනය සකසන්න
-        if (dateInput && !dateInput.value) {
+     
+        if (!dateInput.value) {
             dateInput.value = new Date().toISOString().split('T')[0];
         }
-
-        // localStorage වෙතින් කලින් තෝරාගත් දිස්ත්‍රික්කය ගැනීම
-        const savedDistrict = localStorage.getItem('selectedSunDistrict');
-        if (savedDistrict && districtSelect) {
-            districtSelect.value = savedDistrict;
+        if (districtSelect) {
+            const savedDistrict = localStorage.getItem('selectedSunDistrict');
+            if (savedDistrict) {
+                districtSelect.value = savedDistrict;
+            }
         }
+
+        
+        updateTimes();
+    }
+
+    
+    function openSunModal() {
+        document.getElementById('sunModal').style.display = 'flex';
         
         updateTimes(); 
     }
@@ -2287,26 +2294,27 @@ function updateDarkModeBtnText() {
         document.getElementById('sunModal').style.display = 'none';
     }
 
-    // 3. වෙනස්කම් සිදු වූ විට ක්‍රියාත්මක වීමට (මෙය ඉතා වැදගත්)
+    
     document.addEventListener('DOMContentLoaded', () => {
         const dateInput = document.getElementById('sunDateInput');
         const districtSelect = document.getElementById('sunDistrictSelect');
 
+        
+        initializeSunTimes();
+
+        
         if (dateInput) {
             dateInput.addEventListener('change', updateTimes);
         }
 
         if (districtSelect) {
             districtSelect.addEventListener('change', function() {
-                // දිස්ත්‍රික්කය මාරු කළ විට එය Save කිරීම
                 localStorage.setItem('selectedSunDistrict', this.value);
-                updateTimes(); // වෙලාව මාරු කිරීමට මෙය අත්‍යවශ්‍යයි
+                updateTimes();
             });
         }
     });
 
-
-    
 function updateDisplay() {
     let input = document.getElementById('inputDate').value;
     let dateText = document.getElementById('dateText');
@@ -2317,7 +2325,7 @@ function updateDisplay() {
         let month = String(d.getMonth() + 1).padStart(2, '0');
         let day = String(d.getDate()).padStart(2, '0');
         
-        // Input box එක තුළ පෙන්වන text එක update කිරීම
+        
         if (dateText) {
             dateText.innerText = year + "-" + month + "-" + day;
         }
@@ -2411,8 +2419,6 @@ if ('serviceWorker' in navigator) {
 
 }
 </script>
-	<div style="text-align:center; margin-top:20px;">
-    <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://buddhistera.github.io/B.C./&count_bg=%2379C83D&title_bg=%23555555&icon=github.svg&icon_color=%23E7E7E7&title=views&edge_flat=false"/>
-	</div>
+
 </body>
 </html>
