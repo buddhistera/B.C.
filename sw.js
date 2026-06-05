@@ -1,31 +1,47 @@
-const CACHE_NAME = 'buddhist-era-v4.1.3';
+const CACHE_NAME = 'buddhist-era-v4.1.4';
 
-const OFFLINE_URL = './offline.html';
-
+// Cache කරන ප්‍රධාන ගොනු
 const STATIC_ASSETS = [
-  './',
-  './index.html',
-  './offline.html',
-  './manifest.json',
-
-  './icon-32x32.png',
-  './icon-192x192.png',
-  './icon-512x512.png'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icon-32x32.png',
+  '/icon-192x192.png',
+  '/icon-512x512.png'
 ];
 
 
+// ==========================
 // INSTALL
+// ==========================
 self.addEventListener('install', event => {
 
+  // අලුත් Service Worker එක වහාම සක්‍රීය කිරීම
   self.skipWaiting();
 
   event.waitUntil(
 
     caches.open(CACHE_NAME)
 
-      .then(cache => {
+      .then(async cache => {
 
-        return cache.addAll(STATIC_ASSETS);
+        for (const file of STATIC_ASSETS) {
+
+          try {
+
+            await cache.add(file);
+
+            console.log('Cached OK:', file);
+
+          }
+
+          catch (err) {
+
+            console.error('Cache FAILED:', file, err);
+
+          }
+
+        }
 
       })
 
@@ -34,43 +50,54 @@ self.addEventListener('install', event => {
 });
 
 
+// ==========================
 // ACTIVATE
+// ==========================
 self.addEventListener('activate', event => {
 
   event.waitUntil(
 
-    caches.keys().then(keys => {
+    caches.keys()
 
-      return Promise.all(
+      .then(keys => {
 
-        keys.map(key => {
+        return Promise.all(
 
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
+          keys.map(key => {
 
-        })
+            // පැරණි cache මකා දැමීම
+            if (key !== CACHE_NAME) {
 
-      );
+              return caches.delete(key);
 
-    }).then(() => self.clients.claim())
+            }
+
+          })
+
+        );
+
+      })
+
+      .then(() => self.clients.claim())
 
   );
 
 });
 
 
+// ==========================
 // FETCH
+// ==========================
 self.addEventListener('fetch', event => {
 
-  // GET only
+  // GET requests පමණක්
   if (event.request.method !== 'GET') return;
 
-  // Skip unsupported
+  // http/https පමණක්
   if (!event.request.url.startsWith('http')) return;
 
 
-  // HTML pages
+  // HTML Pages
   if (event.request.mode === 'navigate') {
 
     event.respondWith(
@@ -79,14 +106,14 @@ self.addEventListener('fetch', event => {
 
         .then(networkResponse => {
 
-          // update cache
+          // අලුත් page එක cache කිරීම
           const clone = networkResponse.clone();
 
           caches.open(CACHE_NAME)
 
             .then(cache => {
 
-              cache.put('./index.html', clone);
+              cache.put('/index.html', clone);
 
             });
 
@@ -96,7 +123,8 @@ self.addEventListener('fetch', event => {
 
         .catch(() => {
 
-          return caches.match('./index.html');
+          // Offline fallback
+          return caches.match('/index.html');
 
         })
 
@@ -106,58 +134,72 @@ self.addEventListener('fetch', event => {
   }
 
 
-  // Other assets
+  // Images / CSS / JS
   event.respondWith(
 
     caches.match(event.request)
 
       .then(cachedResponse => {
 
-        // network fetch
-        const fetchPromise = fetch(event.request)
+        // Cache එකේ තිබේ නම් එය පෙන්වයි
+        if (cachedResponse) {
 
-          .then(networkResponse => {
+          // පසුබිමෙන් update කිරීම
+          fetch(event.request)
 
-            // cache valid responses
-            if (
-              networkResponse &&
-              networkResponse.status === 200
-            ) {
-
-              const clone = networkResponse.clone();
+            .then(networkResponse => {
 
               caches.open(CACHE_NAME)
 
                 .then(cache => {
 
-                  cache.put(event.request, clone);
+                  cache.put(
+                    event.request,
+                    networkResponse.clone()
+                  );
 
                 });
 
-            }
+            });
+
+          return cachedResponse;
+        }
+
+
+        // Cache එකේ නැත්නම් network
+        return fetch(event.request)
+
+          .then(networkResponse => {
+
+            const clone = networkResponse.clone();
+
+            caches.open(CACHE_NAME)
+
+              .then(cache => {
+
+                cache.put(event.request, clone);
+
+              });
 
             return networkResponse;
 
-          })
-
-          .catch(() => {
-
-            // image fallback
-            if (
-              event.request.destination === 'image'
-            ) {
-
-              return caches.match('./icon-192x192.png');
-
-            }
-
-            return caches.match(OFFLINE_URL);
-
           });
 
-        // IMPORTANT:
-        // network first for updates
-        return cachedResponse || fetchPromise;
+      })
+
+      .catch(() => {
+
+        // Image fallback
+        if (
+          event.request.destination === 'image'
+        ) {
+
+          return caches.match('/icon-192x192.png');
+
+        }
+
+        // Default fallback
+        return caches.match('/index.html');
 
       })
 
