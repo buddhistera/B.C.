@@ -25,13 +25,12 @@ self.addEventListener('install', event => {
   );
 });
 
-// 2. ACTIVATE - සක්‍රීය වන විට පැරණි Cache මතකය සම්පූර්ණයෙන්ම මකා දැමීම
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
         keys.map(key => {
-          // දැනට පවතින CACHE_NAME එකට වඩා වෙනස් පැරණි Cache සියල්ල මකා දමයි
+          // delete old caches
           if (key !== CACHE_NAME) {
             return caches.delete(key);
           }
@@ -40,6 +39,7 @@ self.addEventListener('activate', event => {
     }).then(() => self.clients.claim())
   );
 });
+
 
 // 3. FETCH - වෙබ් අඩවියේ දත්ත ඉල්ලීම් (Requests) පාලනය කිරීම
 self.addEventListener('fetch', event => {
