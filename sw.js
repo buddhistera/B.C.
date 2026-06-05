@@ -1,4 +1,4 @@
-const CACHE_NAME = 'buddhist-era-v4.0';
+const CACHE_NAME = 'buddhist-era-v4.1.1';
 
 const OFFLINE_URL = './offline.html';
 
@@ -13,7 +13,6 @@ const STATIC_ASSETS = [
   './icon-192x192.png',
   './icon-512x512.png',
 
-  './favicon.ico'
 ];
 
 
