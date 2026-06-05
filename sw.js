@@ -1,208 +1,101 @@
-const CACHE_NAME = 'buddhist-era-v4.1.4';
+const cacheName = 'v4.1.5'; // අනිවාර්යයෙන්ම කලින් තිබූ අංකයට වඩා වැඩි අංකයක් ලබා දෙන්න
 
-// Cache කරන ප්‍රධාන ගොනු
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-32x32.png',
-  '/icon-192x192.png',
-  '/icon-512x512.png'
+const cacheAssets = [
+  'index.html',
+  'manifest.json',
+  'icon-192.png',
+  './'
 ];
 
-
-// ==========================
-// INSTALL
-// ==========================
-self.addEventListener('install', event => {
-
-  // අලුත් Service Worker එක වහාම සක්‍රීය කිරීම
+// Install Event - ගොනු Cache කිරීම
+self.addEventListener('install', (e) => {
   self.skipWaiting();
-
-  event.waitUntil(
-
-    caches.open(CACHE_NAME)
-
-      .then(async cache => {
-
-        for (const file of STATIC_ASSETS) {
-
-          try {
-
-            await cache.add(file);
-
-            console.log('Cached OK:', file);
-
-          }
-
-          catch (err) {
-
-            console.error('Cache FAILED:', file, err);
-
-          }
-
-        }
-
-      })
-
+  e.waitUntil(
+    caches.open(cacheName).then((cache) => {
+      console.log('Caching Files...');
+      return cache.addAll(cacheAssets);
+    })
   );
-
 });
 
-
-// ==========================
-// ACTIVATE
-// ==========================
-self.addEventListener('activate', event => {
-
-  event.waitUntil(
-
-    caches.keys()
-
-      .then(keys => {
-
-        return Promise.all(
-
-          keys.map(key => {
-
-            // පැරණි cache මකා දැමීම
-            if (key !== CACHE_NAME) {
-
-              return caches.delete(key);
-
-            }
-
-          })
-
-        );
-
-      })
-
-      .then(() => self.clients.claim())
-
+// Activate Event - පරණ Cache ඉවත් කිරීම
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== cacheName) {
+            return caches.delete(cache);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
   );
-
 });
 
-
-// ==========================
-// FETCH
-// ==========================
-self.addEventListener('fetch', event => {
-
-  // GET requests පමණක්
-  if (event.request.method !== 'GET') return;
-
-  // http/https පමණක්
-  if (!event.request.url.startsWith('http')) return;
-
-
-  // HTML Pages
-  if (event.request.mode === 'navigate') {
-
-    event.respondWith(
-
-      fetch(event.request)
-
-        .then(networkResponse => {
-
-          // අලුත් page එක cache කිරීම
-          const clone = networkResponse.clone();
-
-          caches.open(CACHE_NAME)
-
-            .then(cache => {
-
-              cache.put('/index.html', clone);
-
-            });
-
-          return networkResponse;
-
-        })
-
-        .catch(() => {
-
-          // Offline fallback
-          return caches.match('/index.html');
-
-        })
-
-    );
-
-    return;
-  }
-
-
-  // Images / CSS / JS
+// Fetch Event - Offline Refresh ගැටලුව සඳහා නිවැරදිම විසඳුම
+self.addEventListener('fetch', (event) => {
   event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      // 1. Cache එකේ තිබේ නම් එය වහාම ලබා දෙයි (Refresh ගැටලුව මෙයින් විසඳේ)
+      if (cachedResponse) {
+        return cachedResponse;
+      }
 
-    caches.match(event.request)
-
-      .then(cachedResponse => {
-
-        // Cache එකේ තිබේ නම් එය පෙන්වයි
-        if (cachedResponse) {
-
-          // පසුබිමෙන් update කිරීම
-          fetch(event.request)
-
-            .then(networkResponse => {
-
-              caches.open(CACHE_NAME)
-
-                .then(cache => {
-
-                  cache.put(
-                    event.request,
-                    networkResponse.clone()
-                  );
-
-                });
-
-            });
-
-          return cachedResponse;
-        }
-
-
-        // Cache එකේ නැත්නම් network
-        return fetch(event.request)
-
-          .then(networkResponse => {
-
-            const clone = networkResponse.clone();
-
-            caches.open(CACHE_NAME)
-
-              .then(cache => {
-
-                cache.put(event.request, clone);
-
-              });
-
+      // 2. නැතිනම් පමණක් අන්තර්ජාලයෙන් ලබා ගැනීමට උත්සාහ කරයි
+      return fetch(event.request).then((networkResponse) => {
+        // ලැබෙන අලුත් දත්ත නැවත Cache එකට දමයි
+        if (event.request.method === 'GET') {
+          return caches.open(cacheName).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
             return networkResponse;
-
           });
-
-      })
-
-      .catch(() => {
-
-        // Image fallback
-        if (
-          event.request.destination === 'image'
-        ) {
-
-          return caches.match('/icon-192x192.png');
-
         }
-
-        // Default fallback
-        return caches.match('/index.html');
-
-      })
-
+        return networkResponse;
+      }).catch(() => {
+        // අන්තර්ජාලයත් නැතිනම්, Navigation Request එකක් නම් index.html ලබා දෙයි
+        if (event.request.mode === 'navigate') {
+          return caches.match('index.html');
+        }
+      });
+    })
   );
-
+});
+// Fetch Event - අලුත්ම කේතය ලබා ගැනීමට (Network First Strategy)
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // අන්තර්ජාලය තිබේ නම් අලුත් පිටුව පෙන්වයි, එය Cache එකේ Update කරයි
+        const resClone = response.clone();
+        caches.open(cacheName).then((cache) => {
+          cache.put(event.request, resClone);
+        });
+        return response;
+      })
+      .catch(() => {
+        // අන්තර්ජාලය නැතිනම් පමණක් කලින් Save වූ පිටුව ලබා දෙයි
+        return caches.match(event.request);
+      })
+  );
+});
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // අන්තර්ජාලය තිබේ නම්, ලැබෙන අලුත් පිටුව Cache එකටත් දමයි (Update කරයි)
+        const resClone = response.clone();
+        caches.open(cacheName).then((cache) => {
+          cache.put(event.request, resClone);
+        });
+        return response;
+      })
+      .catch(() => {
+        // අන්තර්ජාලය නැතිනම් පමණක් Cache එක පරීක්ෂා කරයි
+        return caches.match(event.request).then((res) => res);
+      })
+  );
+});
+    fetch(e.request).catch(() => caches.match(e.request))
+  );
 });
