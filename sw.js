@@ -1,8 +1,8 @@
-const cacheName = 'v4.1.5'; // අනිවාර්යයෙන්ම කලින් තිබූ අංකයට වඩා වැඩි අංකයක් ලබා දෙන්න
-
+const cacheName = 'v4.1.6'; 
 const cacheAssets = [
   'index.html',
   'manifest.json',
+  'suncalc.js',
   'icon-192.png',
   './'
 ];
