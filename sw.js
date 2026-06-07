@@ -1,4 +1,4 @@
-const cacheName = 'v4.1.6'; 
+const cacheName = 'v4.1.7'; 
 const cacheAssets = [
   'index.html',
   'manifest.json',
