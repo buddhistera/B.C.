@@ -1,10 +1,9 @@
-const cacheName = 'v4.1.7'; 
+const cacheName = 'v4.1.8'; 
 const cacheAssets = [
   'index.html',
   'manifest.json',
   'suncalc.js',
-  'icon-192.png',
-  './'
+  'icon-192×192.png',
 ];
 
 // Install Event - ගොනු Cache කිරීම
