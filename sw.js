@@ -1,10 +1,10 @@
-const CACHE_NAME = 'buddhist-era-v4.1.11';
+const CACHE_NAME = 'buddhist-era-v4.1.12';
 
 const CACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './suncalc.js',
+  './astronomy.browser.min.js',
   './icon-192x192.png',
     
 ];
