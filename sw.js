@@ -1,88 +1,70 @@
-const CACHE_NAME = 'buddhist-era-v4.1.12';
+const CACHE_NAME = ' buddhist-era-v4.1.13';
 
-const CACHE_ASSETS = [
+const PRECACHE_FILES = [
   './',
   './index.html',
   './manifest.json',
   './astronomy.browser.min.js',
   './icon-192x192.png',
-    
+  './style.css',
+  './script.js'
 ];
 
-// INSTALL
-self.addEventListener('install', (event) => {
+// Install
+self.addEventListener('install', event => {
   self.skipWaiting();
 
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(CACHE_ASSETS))
+      .then(cache => cache.addAll(PRECACHE_FILES))
   );
 });
 
-// ACTIVATE
-self.addEventListener('activate', (event) => {
+// Activate
+self.addEventListener('activate', event => {
+
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
+    )
   );
+
+  self.clients.claim();
 });
 
-// FETCH
-self.addEventListener('fetch', (event) => {
+// Fetch
+self.addEventListener('fetch', event => {
 
-  // Google Analytics requests ignore
-  if (
-    event.request.url.includes('googletagmanager.com') ||
-    event.request.url.includes('google-analytics.com')
-  ) {
-    return;
-  }
+  if (event.request.method !== 'GET') return;
 
   event.respondWith(
 
-    caches.match(event.request)
-      .then((cachedResponse) => {
+    caches.match(event.request).then(cachedResponse => {
 
-        if (cachedResponse) {
-          return cachedResponse;
-        }
+      const networkFetch = fetch(event.request)
+        .then(networkResponse => {
 
-        return fetch(event.request)
-          .then((networkResponse) => {
+          if (
+            networkResponse &&
+            networkResponse.status === 200 &&
+            event.request.url.startsWith(self.location.origin)
+          ) {
 
-            if (
-              event.request.method === 'GET' &&
-              networkResponse.status === 200
-            ) {
+            const clone = networkResponse.clone();
 
-              const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => cache.put(event.request, clone));
+          }
 
-              caches.open(CACHE_NAME)
-                .then((cache) => {
-                  cache.put(event.request, responseClone);
-                });
-            }
+          return networkResponse;
+        })
+        .catch(() => cachedResponse);
 
-            return networkResponse;
-
-          })
-          .catch(() => {
-
-            if (event.request.mode === 'navigate') {
-              return caches.match('./index.html');
-            }
-
-          });
-
-      })
-
+      return cachedResponse || networkFetch;
+    })
   );
-
 });
