@@ -1115,7 +1115,6 @@ function updateSunTimes() {
                 solarNoon = sn ? (sn.date || sn.time?.date || null) : null;
             }
 
-            // 🌙 [MOON RISE / SET FIX] 
             const mr = Astronomy.SearchRiseSet('Moon', observer, 1, astroStartOfDay, 1);
             moonTimes.rise = mr ? (mr.date || mr.time?.date || null) : null;
 
@@ -1379,7 +1378,6 @@ function updateSinhalaAstroDate() {
         }
     }
 
-    
     if (tithiLabelElement && mainDateInput && mainDateInput.value) {
         const selectedDateObj = new Date(mainDateInput.value);
         
@@ -1391,7 +1389,6 @@ function updateSinhalaAstroDate() {
         }
 
         if (engMode) {
-            
             const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
             const formattedDate = selectedDateObj.toLocaleDateString('en-US', dateOptions);
             
@@ -1402,7 +1399,12 @@ function updateSinhalaAstroDate() {
             }
         } else {
             
-            const monthName = selectedDateObj.toLocaleDateString('si-LK', { month: 'long' });
+            const traditionalMonths = [
+                "දුරුතු", "නවම්", "මැදින්", "බක්", "වෙසක්", "පොසොන්", 
+                "ඇසළ", "නිකිණි", "බිනර", "වප්", "ඉල්", "උඳුවප්"
+            ];
+
+            const monthName = traditionalMonths[selectedDateObj.getMonth()];
             
             let tithiFormatted = '';
             if (currentTithi && currentTithi !== '--') {
@@ -1425,7 +1427,7 @@ function updateSinhalaAstroDate() {
         }
     }
 }
-// Modal එක open කිරීමට
+
 function openModal() {
     const modal = document.getElementById("infoModal");
     if (modal) {
@@ -1433,35 +1435,73 @@ function openModal() {
     }
 }
 
-// Modal එක close කිරීමට
-function closeModal() {
-    const modal = document.getElementById("infoModal");
+function closeModal(modalId) {
+
+    const idToClose = modalId ? modalId : "infoModal";
+    const modal = document.getElementById(idToClose);
     if (modal) {
         modal.style.display = "none";
     }
 }
-// Pop-up එකෙන් පිටත ක්ලික් කල විටත් එය වැසීමට
-window.onclick = function(event) {
-    const modal = document.getElementById("infoModal");
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
 
-window.onclick = function(e) { 
+window.addEventListener('click', function(e) {
+
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = "none";
+    }
+
     let myDropdown = document.getElementById("myDropdown");
     if (myDropdown && !e.target.matches('.menu-dots')) {
         myDropdown.style.display = "none";
     }
-    
-    if (e.target.classList.contains('modal')) {
-        e.target.style.display = "none";
+});
+
+function setupAutoDateUpdater() {
+    const mainDateInput = document.getElementById('inputDate');
+    if (!mainDateInput) return; 
+
+    function getTodayDateString() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
-    
-    if (e.target.id === 'sunModal') {
-        e.target.style.display = "none";
+
+    function checkAndUpdateDate() {
+        const currentDateString = getTodayDateString();
+
+        if (mainDateInput.value !== currentDateString) {
+
+            mainDateInput.value = currentDateString;
+            
+            const changeEvent = new Event('change', { bubbles: true });
+            mainDateInput.dispatchEvent(changeEvent);
+        }
     }
-};
+
+    setInterval(checkAndUpdateDate, 3600000); 
+
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "visible") {
+            checkAndUpdateDate();
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    setupAutoDateUpdater();
+
+    const mainDateInput = document.getElementById('inputDate');
+    if (mainDateInput) {
+        mainDateInput.addEventListener('change', function() {
+            if (typeof updateSinhalaAstroDate === "function") {
+                updateSinhalaAstroDate();
+            }
+        });
+    }
+});
+
 
 if ('serviceWorker' in navigator) {
 

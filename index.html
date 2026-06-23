@@ -4,7 +4,7 @@
 	
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ECEGZ86GGK"></script>
 <script src="astronomy.browser.min.js?v=1"></script>
-<script src="script.js?v=1"></script>
+<script src="script.js?v=2.1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
 	<link rel="apple-touch-icon" href="./icon-192x192.png?v=1">
 	<link rel="manifest" href="./manifest.json?v=1">
-	<link rel="stylesheet" href="style.css?v=1">
+	<link rel="stylesheet" href="style.css?v=2.1">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="canonical" href="https://buddhist-era.vercel.app/">
@@ -47,7 +47,7 @@
 </div>
         <div onclick="openPoyaModal()" id="ui-menu-poya">පොහොය දින🌛</div>
         <div onclick="openVasModal()" id="ui-menu-vas">වස් කාලය ⛈️</div>
-    <div onclick="window.open('https://docs.google.com/document/d/12JJBZHIvGMyL_E1Wo6qLHnLZ6OYFTESw/edit?usp=drivesdk&ouid=115460318484779143786&rtpof=true&sd=true')" id="ui-menu-contact" style="cursor: pointer;">ℹ️</div>
+       <div onclick="window.open('https://docs.google.com/document/d/12JJBZHIvGMyL_E1Wo6qLHnLZ6OYFTESw/edit?usp=drivesdk&ouid=115460318484779143786&rtpof=true&sd=true')" id="ui-menu-contact" style="cursor: pointer;">ℹ️</div>
 
     <div onclick="toggleDarkMode()" id="ui-dark-mode-btn">Dark Mode</div>
     
@@ -69,6 +69,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="buddhist-calendar-row">
     <div class="side-panel bg-atikkanta">
@@ -130,8 +131,7 @@
         <div class="modal-header">
             <span id="ui-poya-title">පොහොය දින ලැයිස්තුව</span>
             <div>
-                <span class="close-btn" onclick="document.getElementById('poyaModal').style.display='none'">&times;</span>
-
+                <span class="close-btn" onclick="closeModal('poyaModal')">&times;</span>
             </div>
         </div>
         <div id="poyaListContent"></div>
@@ -202,7 +202,7 @@
         <div id="moonVisual"></div>
     </div>
     <div class="moon-details">
-        <div id="moonPhaseLabel" class="moon-phase-title">need 📍...</div>
+        <div id="moonPhaseLabel" class="moon-phase-title">පූරණය වේ...</div>
         <div id="moonIllumLabel" class="moon-illumination">දීප්තිය: --%</div>
     </div>
 </div>
