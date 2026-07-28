@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.buddhist_era.twa",
+        "sha256_cert_fingerprints": ["73:EC:D2:9C:42:03:64:61:37:37:E8:52:89:1C:D6:36:3A:86:5F:E4:45:A8:B1:DB:7B:D3:74:17:23:24:3D:CF"]
+      }
+    }]
