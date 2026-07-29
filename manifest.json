@@ -1,22 +1,72 @@
 {
+  "id": "buddhist-era-calendar-pwa",
   "name": "Buddhist Era| බුද්ධ වර්ෂය",
   "short_name": "Buddhist Era",
-  "description": "Buddhist Calendar Application",
-  "start_url": "./",
+  "description": "Buddhist Calendar Application ",
+  "lang": "si",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#d4af37",
-  "orientation": "portrait",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "categories": [
+    "education",
+    "lifestyle",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "./icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "./icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "කැලැන්ඩරය",
+      "short_name": "Calendar",
+      "description": "බුද්ධ වර්ෂ කැලැන්ඩරය වෙත පිවිසෙන්න",
+      "url": "./index.html",
+      "icons": [{ "src": "./icon-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile Calendar Screen"
+    },
+    {
+      "src": "./icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop Calendar Screen"
     }
   ]
 }
