@@ -27,12 +27,13 @@
     };   
 
 const manualOverrides = {
-    "2025-01-11": "2025-01-13",
+    "2020-01-08":"2020-01-09",
+    "2021-07-08":"2021-07-09",
     "2025-06-24": "2025-06-25",
     "2032-07-06": "2032-07-07",
     "2035-07-04": "2035-07-05",
-    "2039-08-19": "2039-08-18",
-    "2039-09-16": "2039-09-17",
+    "2039-08-19":"2039-08-18",
+     "2039-09-16": "2039-09-17",
     "2039-10-17": "2039-10-16",
     "2039-11-14": "2039-11-15",
     "2039-12-15": "2039-12-14",
@@ -174,9 +175,7 @@ function buildRawChain(uptoYear) {
         }
 
         items.push({ dateObj: displayDate, season, type, month: monthName });
-
-        // full moon පෝයකට පසුව මාසය ඊළඟට යනවා - "අධිවේසාඛ"හි full moon
-        // එකෙන් පසුව පමණක් හැර (එහිදී සැබෑ වේසාඛ මාසයම තවම ලැබී නැති නිසා).
+        
         if (type === 'full') {
             let wasAdhiFull = (season === 'gimhana' && thisGimhanaLeap && posInSeason === 4);
             if (!wasAdhiFull) {
@@ -206,7 +205,7 @@ function buildPoyaList(startYear, endYear) {
         }));
 }
 
-const poyaList = buildPoyaList(2020, 2250);
+const poyaList = buildPoyaList(2020, 2200);
 
 function buildVesakDates(list, startYear, endYear) {
     const result = {};
@@ -218,7 +217,7 @@ function buildVesakDates(list, startYear, endYear) {
     return result;
 }
 
-const vesakDates = buildVesakDates(poyaList, 2020, 2250);
+const vesakDates = buildVesakDates(poyaList, 2020, 2200);
     const tithiPaliS = ["","පඨමං","දුතියං","තතියං","චතුත්ථං","පඤ්චමං","ඡට්ඨමං","සත්තමං","අට්ඨමං","නවමං","දසමං","එකාදසමං","ද්වාදසමං","තෙරසමං","චුද්දසමං","පණ්ණරසමං"];
     const tithiPaliE = ["","Paṭhamaṃ","Dutiyaṃ","Tatiyaṃ","Catutthaṃ","Pañcamaṃ","Chaṭṭhamaṃ","Sattamaṃ","Aṭṭhamaṃ","Navamaṃ","Dasamaṃ","Ekādasamaṃ","Dvādasamaṃ","Terasamaṃ","Cuddasamaṃ","Paṇṇarasamaṃ"];
 
@@ -1122,14 +1121,8 @@ function resetToToday() {
     }
 } 
 
-// =====================================================================
-// Custom Wheel Date Picker (Year → Month → Date, easy year selection)
-// Month/Date columns scroll continuously (loop around) - Year does not
-// (bounded 2020-2250; further years can be added via manualOverrides
-// as needed, so this range is generous headroom rather than a hard limit).
-// =====================================================================
 const WHEEL_MIN_YEAR = 2020;
-const WHEEL_MAX_YEAR = 2250;
+const WHEEL_MAX_YEAR = 2200;
 const WHEEL_ROW_H = 44;
 const WHEEL_CYCLES = 9;              // odd number of repeated loops for circular columns
 const WHEEL_MID_CYCLE = 4;           // Math.floor(WHEEL_CYCLES/2)
