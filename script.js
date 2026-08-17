@@ -108,6 +108,21 @@ function isLeapGimhanaYear(year) {
     });
 }
 
+
+function resolveEsalaGap(prevDate) {
+    let est14 = new Date(prevDate.getTime() + 14 * 24 * 60 * 60 * 1000);
+    let est15 = new Date(prevDate.getTime() + 15 * 24 * 60 * 60 * 1000);
+    let searchStart = new Date(prevDate.getTime() + 8 * 24 * 60 * 60 * 1000);
+    let nm = Astronomy.SearchMoonPhase(0, searchStart, 20);
+    if (!nm) return { date: est14, days: 14 };
+    let diff14 = Math.abs(nm.date - est14), diff15 = Math.abs(nm.date - est15);
+    return (diff14 <= diff15) ? { date: est14, days: 14 } : { date: est15, days: 15 };
+}
+
+const CURATED_THROUGH_YEAR = Object.keys(manualOverrides).length
+    ? Math.max(...Object.keys(manualOverrides).map(k => parseInt(k.split('-')[0])))
+    : 2019;
+
 const MONTH_CYCLE_SINHALA = ["ඵුස්ස", "මාඝ", "ඵග්ගුන", "චිත්ත", "වේසාඛ", "ජෙට්ඨ", "ආසාළ්හ", "සාවන", "පොට්ඨපාද", "අස්සයුජ", "කත්තික", "මාඝසිර"];
 
 const SEED_DATE = new Date(Date.UTC(2020, 0, 9, 12, 0, 0));
@@ -115,109 +130,138 @@ const SEED_SEASON = 'hemanta';
 const SEED_POS = 4;
 const SEED_MONTH_IDX = 0; // reference calendar සමඟ calibrate කර ඇත
 
-function buildRawChain(uptoYear) {
-    let currentDate = SEED_DATE;
-    let season = SEED_SEASON;
-    let posInSeason = SEED_POS;
-    let isFirst = true;
-    let prevDisplayDate = null;
-    let items = [];
+const MIN_YEAR = 2020;
+const MAX_YEAR = 2200;
 
-    let monthIdx = SEED_MONTH_IDX;
-    let thisGimhanaLeap = false;
+const seasonNameMap = { hemanta: "හේමන්ත", gimhana: "ගිම්හාන", vassana: "වස්සාන" };
+const typeNameMap = { full: "පසළොස්වක", new: "අමාවක" };
 
-    while (slYear(currentDate) <= uptoYear) {
-        let actualDaysUsed = null;
-        if (!isFirst) {
-            let isChatPos = (posInSeason === 3 || posInSeason === 7);
+let poyaList = [];
+let vesakDates = {};
+let poyaListComputedUpToYear = MIN_YEAR - 1;
+
+let _chainState = null; // { currentDate, season, posInSeason, isFirst, monthIdx, thisGimhanaLeap }
+
+function extendPoyaDataTo(uptoYear) {
+    uptoYear = Math.min(uptoYear, MAX_YEAR);
+    if (uptoYear <= poyaListComputedUpToYear) return;
+
+    if (_chainState === null) {
+        _chainState = {
+            currentDate: SEED_DATE,
+            season: SEED_SEASON,
+            posInSeason: SEED_POS,
+            isFirst: true,
+            monthIdx: SEED_MONTH_IDX,
+            thisGimhanaLeap: false
+        };
+    }
+    let s = _chainState;
+
+    while (slYear(s.currentDate) <= uptoYear) {
+        let prevPoyaDate = s.currentDate; 
+        if (!s.isFirst) {
+            let isChatPos = (s.posInSeason === 3 || s.posInSeason === 7);
             let days = isChatPos ? 14 : 15;
-            currentDate = new Date(currentDate.getTime() + days * 24 * 60 * 60 * 1000);
-            actualDaysUsed = days;
+            s.currentDate = new Date(s.currentDate.getTime() + days * 24 * 60 * 60 * 1000);
         }
-        isFirst = false;
+        s.isFirst = false;
 
-        let type = detectPoyaType(currentDate);
+        let type = detectPoyaType(s.currentDate);
 
-        let estimatedDisplayDate = new Date(currentDate.getTime() + DISPLAY_DAY_ADJUST_MS);
+        let estimatedDisplayDate = new Date(s.currentDate.getTime() + DISPLAY_DAY_ADJUST_MS);
         let isoKey = fmtISO(estimatedDisplayDate);
         if (manualOverrides[isoKey]) {
+
             let correctedDisplay = parseISO(manualOverrides[isoKey]);
             let deltaMs = correctedDisplay.getTime() - estimatedDisplayDate.getTime();
-            currentDate = new Date(currentDate.getTime() + deltaMs);
+            s.currentDate = new Date(s.currentDate.getTime() + deltaMs);
+        } else if (slYear(estimatedDisplayDate) > CURATED_THROUGH_YEAR && s.season === 'gimhana' && s.posInSeason === 7) {
+
+            let resolved = resolveEsalaGap(prevPoyaDate);
+            s.currentDate = new Date(prevPoyaDate.getTime() + resolved.days * 24 * 60 * 60 * 1000);
         }
-        let displayDate = new Date(currentDate.getTime() + DISPLAY_DAY_ADJUST_MS);
-
-        prevDisplayDate = displayDate;
-
+        let displayDate = new Date(s.currentDate.getTime() + DISPLAY_DAY_ADJUST_MS);
 
         let monthName;
-        if (season === 'gimhana' && thisGimhanaLeap && (posInSeason === 3 || posInSeason === 4)) {
-            monthName = 'අධි' + MONTH_CYCLE_SINHALA[monthIdx];
+        if (s.season === 'gimhana' && s.thisGimhanaLeap && (s.posInSeason === 3 || s.posInSeason === 4)) {
+            monthName = 'අධි' + MONTH_CYCLE_SINHALA[s.monthIdx];
         } else {
-            monthName = MONTH_CYCLE_SINHALA[monthIdx];
+            monthName = MONTH_CYCLE_SINHALA[s.monthIdx];
         }
 
         let nextSeason, nextPos;
-        if (season === 'hemanta' && posInSeason === 8) {
+        if (s.season === 'hemanta' && s.posInSeason === 8) {
             nextSeason = 'gimhana'; nextPos = 1;
-            thisGimhanaLeap = isLeapGimhanaYear(slYear(currentDate));
-        } else if (season === 'gimhana') {
-            let target = findEsalaTarget(slYear(currentDate));
-            let isTarget = target && Math.abs(currentDate - target) < 2 * 24 * 60 * 60 * 1000;
-            if (isTarget || posInSeason === 10) { nextSeason = 'vassana'; nextPos = 1; }
-            else { nextSeason = 'gimhana'; nextPos = posInSeason + 1; }
-        } else if (season === 'vassana' && posInSeason === 8) {
+            s.thisGimhanaLeap = isLeapGimhanaYear(slYear(s.currentDate));
+        } else if (s.season === 'gimhana') {
+            let target = findEsalaTarget(slYear(s.currentDate));
+            let isTarget = target && Math.abs(s.currentDate - target) < 2 * 24 * 60 * 60 * 1000;
+            if (isTarget || s.posInSeason === 10) { nextSeason = 'vassana'; nextPos = 1; }
+            else { nextSeason = 'gimhana'; nextPos = s.posInSeason + 1; }
+        } else if (s.season === 'vassana' && s.posInSeason === 8) {
             nextSeason = 'hemanta'; nextPos = 1;
-        } else if (season === 'vassana') {
-            nextSeason = 'vassana'; nextPos = posInSeason + 1;
+        } else if (s.season === 'vassana') {
+            nextSeason = 'vassana'; nextPos = s.posInSeason + 1;
         } else {
-            nextSeason = 'hemanta'; nextPos = posInSeason + 1;
+            nextSeason = 'hemanta'; nextPos = s.posInSeason + 1;
         }
 
-        items.push({ dateObj: displayDate, season, type, month: monthName });
-        
+        if (slYear(displayDate) <= MAX_YEAR) {
+            poyaList.push({
+                d: fmtISO(displayDate),
+                r: seasonNameMap[s.season],
+                t: typeNameMap[type],
+                m: monthName
+            });
+        }
+
         if (type === 'full') {
-            let wasAdhiFull = (season === 'gimhana' && thisGimhanaLeap && posInSeason === 4);
+            let wasAdhiFull = (s.season === 'gimhana' && s.thisGimhanaLeap && s.posInSeason === 4);
             if (!wasAdhiFull) {
-                monthIdx = (monthIdx + 1) % 12;
+                s.monthIdx = (s.monthIdx + 1) % 12;
             }
         }
 
-        season = nextSeason; posInSeason = nextPos;
+        s.season = nextSeason; s.posInSeason = nextPos;
     }
-    return items;
-}
 
-function buildPoyaList(startYear, endYear) {
-    const rawItems = buildRawChain(endYear);
-
-    const seasonNameMap = { hemanta: "හේමන්ත", gimhana: "ගිම්හාන", vassana: "වස්සාන" };
-
-    const typeNameMap = { full: "පසළොස්වක", new: "අමාවක" };
-
-    return rawItems
-        .filter(it => slYear(it.dateObj) >= startYear && slYear(it.dateObj) <= endYear)
-        .map(it => ({
-            d: fmtISO(it.dateObj),
-            r: seasonNameMap[it.season],
-            t: typeNameMap[it.type],
-            m: it.month
-        }));
-}
-
-const poyaList = buildPoyaList(2020, 2200);
-
-function buildVesakDates(list, startYear, endYear) {
-    const result = {};
-    for (let y = startYear; y <= endYear; y++) {
-        const candidates = list.filter(p => p.t === "පසළොස්වක" && p.d >= `${y}-05-04` && p.d <= `${y}-06-04`);
+    poyaListComputedUpToYear = uptoYear;
+   
+    for (let y = MIN_YEAR; y <= poyaListComputedUpToYear; y++) {
+        if (vesakDates[y]) continue;
+        const candidates = poyaList.filter(p => p.t === "පසළොස්වක" && p.d >= `${y}-05-04` && p.d <= `${y}-06-04`);
         const vesak = candidates.find(p => p.m === "වේසාඛ") || candidates[0];
-        if (vesak) result[y] = vesak.d;
+        if (vesak) vesakDates[y] = vesak.d;
     }
-    return result;
 }
 
-const vesakDates = buildVesakDates(poyaList, 2020, 2200);
+function ensurePoyaDataUpTo(year) {
+    const target = Math.min(Math.max(year, MIN_YEAR), MAX_YEAR);
+    extendPoyaDataTo(target);
+}
+
+function scheduleBackgroundPoyaExtension() {
+    if (poyaListComputedUpToYear >= MAX_YEAR) return;
+    const YEARS_PER_CHUNK = 15;
+    const step = () => {
+        extendPoyaDataTo(Math.min(poyaListComputedUpToYear + YEARS_PER_CHUNK, MAX_YEAR));
+        if (poyaListComputedUpToYear < MAX_YEAR) {
+            scheduleNext();
+        }
+    };
+    function scheduleNext() {
+        if (typeof requestIdleCallback === 'function') {
+            requestIdleCallback(step, { timeout: 500 });
+        } else {
+            setTimeout(step, 30);
+        }
+    }
+    scheduleNext();
+}
+
+ensurePoyaDataUpTo(slYear(new Date()) + 1);
+scheduleBackgroundPoyaExtension();
     const tithiPaliS = ["","පඨමං","දුතියං","තතියං","චතුත්ථං","පඤ්චමං","ඡට්ඨමං","සත්තමං","අට්ඨමං","නවමං","දසමං","එකාදසමං","ද්වාදසමං","තෙරසමං","චුද්දසමං","පණ්ණරසමං"];
     const tithiPaliE = ["","Paṭhamaṃ","Dutiyaṃ","Tatiyaṃ","Catutthaṃ","Pañcamaṃ","Chaṭṭhamaṃ","Sattamaṃ","Aṭṭhamaṃ","Navamaṃ","Dasamaṃ","Ekādasamaṃ","Dvādasamaṃ","Terasamaṃ","Cuddasamaṃ","Paṇṇarasamaṃ"];
 
@@ -321,7 +365,8 @@ function renderPoyaList() {
     const t = i18n[currentLang];
     const today = new Date().toISOString().split('T')[0];
     const selYear = new Date(document.getElementById('inputDate').value).getFullYear();
-    
+    ensurePoyaDataUpTo(selYear + 1);
+
     let html = `<div style='text-align:center; font-size: 1.3em; font-weight:bold; color:var(--gold); margin-bottom:15px; border-bottom: 2px solid #eee; padding-bottom:5px;'>${selYear} ${t.poyaTitle}</div>`;
     
     const yearPoyas = poyaList.filter(p => p.d.startsWith(selYear));
@@ -447,7 +492,8 @@ function renderPoyaList() {
     const t = i18n[currentLang];
     const d = new Date(document.getElementById('inputDate').value);
     const y = d.getFullYear();
-    
+    ensurePoyaDataUpTo(y + 1);
+
     const yearPoyas = poyaList.filter(p => p.d.startsWith(y));
     const gim = yearPoyas.filter(p => p.r === "ගිම්හාන");
     const vas = yearPoyas.filter(p => p.r === "වස්සාන");
@@ -498,7 +544,8 @@ function calculateAll() {
     d.setHours(0,0,0,0);
     const time = d.getTime(); 
     const y = d.getFullYear();
-    
+    ensurePoyaDataUpTo(y + 1);
+
     const vD = new Date(vesakDates[y] || `${y}-05-01`).getTime();
     const bY = (time <= vD) ? (y + 543) : (y + 544);
 
@@ -967,6 +1014,7 @@ phaseName = "";
     const selectedDateStr = dateInput.value; 
     const d = new Date(selectedDateStr);
     d.setHours(0,0,0,0);
+    ensurePoyaDataUpTo(d.getFullYear() + 1);
 
     let targetPoya = null;
     if (typeof poyaList !== 'undefined' && Array.isArray(poyaList)) {
@@ -1124,8 +1172,8 @@ function resetToToday() {
 const WHEEL_MIN_YEAR = 2020;
 const WHEEL_MAX_YEAR = 2200;
 const WHEEL_ROW_H = 44;
-const WHEEL_CYCLES = 9;              // odd number of repeated loops for circular columns
-const WHEEL_MID_CYCLE = 4;           // Math.floor(WHEEL_CYCLES/2)
+const WHEEL_CYCLES = 9;
+const WHEEL_MID_CYCLE = 4;
 let wheelTargetInputId = null;
 let wheelScrollTimers = { year: null, month: null, date: null };
 let wheelCurrentMaxDay = 31;
@@ -1140,7 +1188,6 @@ function daysInMonth(year, monthIndex0) {
     return new Date(year, monthIndex0 + 1, 0).getDate();
 }
 
-// සාමාන්‍ය (bounded) column එකක් - වර්ෂය සඳහා පමණයි භාවිතා වේ.
 function buildWheelColumnBounded(colEl, values, selectedIndex, key) {
     colEl.innerHTML = values.map((v, i) =>
         `<div class="wheel-item${i === selectedIndex ? ' wheel-selected' : ''}" data-idx="${i}">${v}</div>`
