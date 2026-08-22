@@ -1,8 +1,14 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "app.vercel.buddhist_era.twa",
-        "sha256_cert_fingerprints": ["75:23:64:6B:B9:DA:49:BB:A9:FC:7F:8C:BC:17:33:4B:58:47:6B:7B:46:08:F6:F9:22:53:99:5D:16:F3:ED:7D"]
-      }
-    }]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vercel.buddhist_era.twa",
+      "sha256_cert_fingerprints": [
+        "75:23:64:6B:B9:DA:49:BB:A9:FC:7F:8C:BC:17:33:4B:58:47:6B:7B:46:08:F6:F9:22:53:99:5D:16:F3:ED:7D"
+      ]
+    }
+  }
+]
