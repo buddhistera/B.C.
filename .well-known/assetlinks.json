@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "app.vercel.buddhist_era.twa",
-        "sha256_cert_fingerprints": ["7F:A1:66:48:B6:32:E0:CC:BC:8B:BC:06:1A:78:C4:53:A9:41:F0:32:4C:02:24:8D:14:EC:5F:6C:11:B2:EC:EA"]
+        "sha256_cert_fingerprints": ["7F:A1:66:48:B6:32:E0:CC:BC:8B:BC:06:1A:78:C4:53:A9:41:F0:32:4C:02:24:8D:14:EC:5F:6C:11:B2:EC:EA","75:23:64:6B:B9:DA:49:BB:A9:FC:7F:8C:BC:17:33:4B:58:47:6B:7B:46:08:F6:F9:22:53:99:5D:16:F3:ED:7D"]
       }
     }]
