@@ -75,6 +75,82 @@ function detectPoyaType(dateObj) {
     return (diffFull < diffNew) ? 'full' : 'new';
 }
 
+
+function getPoyaTimes(dateObj) {
+    let searchStart = new Date(dateObj.getTime() - (3 * 24 * 60 * 60 * 1000));
+    let fullMoon = Astronomy.SearchMoonPhase(180, searchStart, 7);
+    let newMoon = Astronomy.SearchMoonPhase(0, searchStart, 7);
+    let diffFull = fullMoon ? Math.abs(fullMoon.date - dateObj) : Infinity;
+    let diffNew = newMoon ? Math.abs(newMoon.date - dateObj) : Infinity;
+
+    let type, endTime, beginAngle;
+    if (diffFull < diffNew) {
+        type = 'full'; endTime = fullMoon.date; beginAngle = 168;
+    } else {
+        type = 'new'; endTime = newMoon.date; beginAngle = 348;
+    }
+
+    let beginSearchStart = new Date(endTime.getTime() - 2 * 24 * 60 * 60 * 1000);
+    let beginResult = Astronomy.SearchMoonPhase(beginAngle, beginSearchStart, 5);
+    let beginTime = beginResult ? beginResult.date : endTime;
+
+    return { type, beginTime, endTime };
+}
+
+
+const POYA_PHASE_BOUNDARIES = [
+    { beginAngle: 84,  endAngle: 96,  phase: 'firstQuarter' },
+    { beginAngle: 168, endAngle: 180, phase: 'fullMoon' },
+    { beginAngle: 264, endAngle: 276, phase: 'lastQuarter' },
+    { beginAngle: 348, endAngle: 0,   phase: 'newMoon' }
+];
+
+const POYA_PHASE_NAMES = {
+    firstQuarter: { si: 'පුර අටවක', en: 'First Quarter' },
+    fullMoon:     { si: 'පසළොස්වක', en: 'Full Moon' },
+    lastQuarter:  { si: 'අව අටවක', en: 'Last Quarter' },
+    newMoon:      { si: 'අමාවක', en: 'New Moon' }
+};
+
+
+function getPoyaEventsForDate(dateObj) {
+    const dayStart = new Date(dateObj); dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
+    const searchStart = new Date(dayStart.getTime() - 3 * 24 * 60 * 60 * 1000);
+
+    let beginEvent = null, endEvent = null;
+
+    POYA_PHASE_BOUNDARIES.forEach(b => {
+        let beginResult = Astronomy.SearchMoonPhase(b.beginAngle, searchStart, 10);
+        if (beginResult && beginResult.date >= dayStart && beginResult.date < dayEnd) {
+            beginEvent = { phase: b.phase, time: beginResult.date };
+        }
+        let endResult = Astronomy.SearchMoonPhase(b.endAngle, searchStart, 10);
+        if (endResult && endResult.date >= dayStart && endResult.date < dayEnd) {
+            endEvent = { phase: b.phase, time: endResult.date };
+        }
+    });
+
+    return { beginEvent, endEvent };
+}
+
+
+function fmtTime12hLocal(dateObj, isSinhala) {
+    if (!dateObj) return '';
+    let hours = dateObj.getHours();
+    let minutes = dateObj.getMinutes();
+    const isPM = hours >= 12;
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    let mm = minutes < 10 ? '0' + minutes : minutes;
+    if (isSinhala) {
+        const marker = isPM ? 'අ.භා' : 'පූ.භා';
+        return `${marker} ${hours}.${mm}`;
+    }
+    const ampm = isPM ? 'PM' : 'AM';
+    return `${hours}:${mm} ${ampm}`;
+}
+
 function findEsalaTarget(year) {
     let d = new Date(Date.UTC(year, 5, 1));
     let candidates = [];
@@ -655,7 +731,9 @@ function calculateAll() {
 
 if (statusAvasitthaD === 0) {
     isPoyaDay = true;
-    poyaMessage = (currentLang === 'si') ? nextPoya.t : nextPoya.t.replace("පසළොස්වක", "Full Moon").replace("අමාවක", "New Moon");
+    // ප්‍රධාන කවුන්ටරයේ පෝය දිනයේදී නිශ්චිත තිථි නාමය (අමාවක/පසළොස්වක) වෙනුවට
+    // "උපෝසථ දිනය" ලෙසම පෙන්වයි - දෙකේදීම (අමාවක සහ පසළොස්වක) එකම ලෙබලය.
+    poyaMessage = (currentLang === 'si') ? "උපෝසථ දිනය" : "Uposatha Day";
 } else {
     if (currentLang === 'si') {
         
@@ -685,7 +763,7 @@ if (nextFullMoon) {
     const poyaDisplayElement = document.getElementById("poyaStatus"); 
     if (poyaDisplayElement) {
         if (isPoyaDay) {
-            poyaDisplayElement.innerText = poyaMessage + t.poyaSuffix; 
+            poyaDisplayElement.innerText = poyaMessage; 
             poyaDisplayElement.style.setProperty('color', '#c62828', 'important');
         } else {
             poyaDisplayElement.innerText = poyaMessage; 
@@ -907,6 +985,87 @@ function showCoordinatesOnly(statusText) {
     }
 }
 
+// -------------------------------------------------------------------
+// විශේෂ තිථි 4 (පුර අටවක/පසළොස්වක/අව අටවක/අමාවක) ආරම්භය/අවසානය
+// තෝරාගත් දිනය තුළ වැටේද කියා සොයාගැනීමට. Astronomy engine එකේ මෙය
+// සෘජුවම කරන function එකක් නැති නිසා (SearchSunMoonAngle නොමැත),
+// Astronomy.MoonPhase() එකෙන්ම manual bisection search එකක් හදාගෙන ඇත.
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+// සෑම දිනකටම නොව - "පුර අටවක" (84°), "පසළොස්වක" (168°→180°), "අව අටවක"
+// (264°→276°), "අමාවක" (348°→360°) යන විශේෂ තිථි 4 ආරම්භ/අවසන් වන මොහොත
+// තෝරාගත් දිනය (midnight-to-midnight) තුළ වැටේද කියා පමණක් සොයාගනී.
+// එම විශේෂ තිථියක ආරම්භය/අවසානය සමහරවිට කලින්/පසු දිනයට වැටිය හැකි නිසා,
+// එදිනට අදාළ කොටස පමණක් (ලබන හෝ ගෙවෙන) මෙයින් ස්වයංක්‍රීයව හඳුනාගැනේ.
+// -------------------------------------------------------------------
+const SPECIAL_TITHI_BEGIN_ANGLES = [84, 168, 264, 348];  // පුර අටවක, පසළොස්වක, අව අටවක, අමාවක ආරම්භය
+const SPECIAL_TITHI_END_ANGLES = [96, 180, 276, 0];      // ඒවායේම අවසානය (0 = 360°)
+
+function findCrossingBetween(target, sampleA, sampleB) {
+    let lo = sampleA.d, hi = sampleB.d;
+    let baseline = sampleA.unwrapped;
+    function unwrappedAngle(d) {
+        let ang = Astronomy.MoonPhase(Astronomy.MakeTime(d));
+        while (ang - baseline > 180) ang -= 360;
+        while (ang - baseline < -180) ang += 360;
+        return ang;
+    }
+    let fLo = unwrappedAngle(lo) - target;
+    for (let k = 0; k < 40; k++) {
+        let mid = new Date((lo.getTime() + hi.getTime()) / 2);
+        let fMid = unwrappedAngle(mid) - target;
+        if ((fMid < 0) === (fLo < 0)) { lo = mid; fLo = fMid; } else { hi = mid; }
+    }
+    return new Date((lo.getTime() + hi.getTime()) / 2);
+}
+
+function findSpecialTithiEventsForDay(dayStart) {
+    function rawAngle(d) { return Astronomy.MoonPhase(Astronomy.MakeTime(d)); }
+    const dayEnd = new Date(dayStart.getTime() + 24 * 3600000);
+    const winStart = new Date(dayStart.getTime() - 8 * 3600000);
+    const winEnd = new Date(dayEnd.getTime() + 8 * 3600000);
+
+    const samples = [];
+    for (let t = winStart.getTime(); t <= winEnd.getTime(); t += 2 * 3600000) {
+        samples.push({ d: new Date(t), raw: null });
+    }
+    samples.forEach(s => { s.raw = rawAngle(s.d); });
+
+    let unwrapped = [samples[0].raw];
+    for (let i = 1; i < samples.length; i++) {
+        let prev = unwrapped[i - 1];
+        let cur = samples[i].raw;
+        while (cur - prev > 180) cur -= 360;
+        while (cur - prev < -180) cur += 360;
+        unwrapped.push(cur);
+    }
+    samples.forEach((s, i) => { s.unwrapped = unwrapped[i]; });
+
+    let poyaStart = null, poyaEnd = null;
+
+    for (let i = 1; i < samples.length; i++) {
+        const lo = samples[i - 1].unwrapped, hi = samples[i].unwrapped;
+        const kLo = Math.ceil(lo / 12), kHi = Math.floor(hi / 12);
+        for (let k = kLo; k <= kHi; k++) {
+            const target = k * 12;
+            if (target < lo || target > hi) continue;
+            const angleMod = ((k % 30) + 30) % 30 * 12; // 0..348 exact multiple of 12
+            const isBegin = SPECIAL_TITHI_BEGIN_ANGLES.includes(angleMod);
+            const isEnd = SPECIAL_TITHI_END_ANGLES.includes(angleMod);
+            if (!isBegin && !isEnd) continue;
+
+            const t = findCrossingBetween(target, samples[i - 1], samples[i]);
+            if (t < dayStart || t >= dayEnd) continue;
+
+            if (isBegin) poyaStart = t;
+            if (isEnd) poyaEnd = t;
+        }
+    }
+
+    return { beginTime: poyaStart, endTime: poyaEnd };
+}
+
 function updateSunTimes() {
     const dateInput = document.getElementById('sunDateInput');
     const statusText = document.getElementById('locationStatus');
@@ -928,6 +1087,9 @@ function updateSunTimes() {
     if (document.getElementById('lblSunset')) document.getElementById('lblSunset').innerText = engMode ? "Sunset" : "ඉර බැසීම";
     if (document.getElementById('lblMoonrise')) document.getElementById('lblMoonrise').innerText = engMode ? "Moonrise" : "සඳ උදාව";
     if (document.getElementById('lblMoonset')) document.getElementById('lblMoonset').innerText = engMode ? "Moonset" : "සඳ බැසීම";
+    if (document.getElementById('lblPoyaBegin')) document.getElementById('lblPoyaBegin').innerText = engMode ? "Poya Begins" : "පෝය ලබන වේලාව";
+    if (document.getElementById('lblPoyaEnd')) document.getElementById('lblPoyaEnd').innerText = engMode ? "Poya Ends" : "පෝය ගෙවෙන වේලාව";
+    if (document.getElementById('lblAstroTitle')) document.getElementById('lblAstroTitle').innerText = engMode ? "Astronomical Position, Tithi & Timings of the Moon" : "තාරකා විද්‍යානුකූලව සඳෙහි පිහිටීම, තිථිය සහ වෙලාවන්";
 
     const lat = userLatitude || localStorage.getItem('userLat');
     const lng = userLongitude || localStorage.getItem('userLng');
@@ -948,6 +1110,8 @@ function updateSunTimes() {
     let moonTimes = { rise: null, set: null };
     let fraction = 0;
     let phase = 0;
+    let phaseAngle = 0;
+    let stableTithiIndex = null; // කලින්/පසු දින "ක්ෂය" (kshaya) එකකින් වැදගත් තිථියක් (14/29 - පසළොස්වක/අමාවක) නොපෙනී යාම වළක්වයි
 
     try {
         if (typeof Astronomy !== 'undefined') {
@@ -956,7 +1120,6 @@ function updateSunTimes() {
             const startOfDay = new Date(selectedDate);
             startOfDay.setHours(0, 0, 0, 0);
             const astroStartOfDay = Astronomy.MakeTime(startOfDay);
-            const astroSelectedDate = Astronomy.MakeTime(selectedDate);
 
             const sr = Astronomy.SearchRiseSet('Sun', observer, 1, astroStartOfDay, 1);
             sunrise = sr ? (sr.date || sr.time?.date || null) : null;
@@ -977,10 +1140,59 @@ function updateSunTimes() {
             const ms = Astronomy.SearchRiseSet('Moon', observer, -1, astroStartOfDay, 1);
             moonTimes.set = ms ? (ms.date || ms.time?.date || null) : null;
 
-            const phaseAngle = Astronomy.MoonPhase(astroSelectedDate);
+            // -------------------------------------------------------------
+            // තිථි නාමය (phaseName) සදහා ලංකා ලිත් ක්‍රමයේම reference moment -
+            // "සවස 6" (Sri Lanka Standard Time, viewer කොහේ සිටියත් සැමවිටම
+            // ස්ථිරයි - මෙය location-dependent sunrise/sunset වගේ දෙයක් නොවෙයි,
+            // Sri Lanka civil convention එකක් නිසා). තෝරාගත් දිනයේම YYYY-MM-DD
+            // අගයෙන්ම ගණනය කරයි - browser එකේ local timezone එකට කිසිසේත්
+            // සම්බන්ධ නැත, ඒ නිසා viewer කොහේ සිටියත් එකම ප්‍රතිඵලයක් ලැබේ.
+            // -------------------------------------------------------------
+            const SLST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
+            function sixPmSLST(ymd) {
+                const [yy, mm, dd] = ymd.split('-').map(Number);
+                // 18:00 SLST (UTC+5:30) = 12:30 UTC ​එම දිනයේම
+                return new Date(Date.UTC(yy, mm - 1, dd, 18, 0, 0) - SLST_OFFSET_MS);
+            }
+            const selectedYMD = dateInput.value;
+            const sixPmToday = sixPmSLST(selectedYMD);
+            const tomorrowYMD = (() => {
+                const [yy, mm, dd] = selectedYMD.split('-').map(Number);
+                const t = new Date(Date.UTC(yy, mm - 1, dd + 1));
+                return `${t.getUTCFullYear()}-${String(t.getUTCMonth() + 1).padStart(2, '0')}-${String(t.getUTCDate()).padStart(2, '0')}`;
+            })();
+            const sixPmTomorrow = sixPmSLST(tomorrowYMD);
+
+            const astroTithiAnchor = Astronomy.MakeTime(sixPmToday);
+
+            phaseAngle = Astronomy.MoonPhase(astroTithiAnchor);
             phase = phaseAngle / 360.0; 
             
             fraction = (1 - Math.cos(phaseAngle * Math.PI / 180)) / 2;
+
+            // -------------------------------------------------------------
+            // ස්ථායීතා පරීක්ෂාව: "ක්ෂය" (kshaya) එකක් නිසා පසළොස්වක (14) හෝ
+            // අමාවක (29) - වැදගත්ම තිථි දෙකම - කිසිම දිනකට නොපෙනී යාම වළක්වයි.
+            // එදින (සවස 6 සිට ඊළඟ දිනයේ සවස 6 දක්වා) තුළදී 180° (පසළොස්වක)
+            // හෝ 0°/360° (අමාවක) මොහොතම සැබවින්ම සිදුවී ඇත්නම්, 6pm-sample
+            // එකෙන් ලැබෙන idx එක කුමක් වුවත්, එදිනටම පසළොස්වක/අමාවක නාමයම
+            // ස්ථිරව යොදයි.
+            // -------------------------------------------------------------
+            let baseIdx = Math.floor(((phaseAngle % 360) + 360) % 360 / 12);
+
+            const fmEvent = Astronomy.SearchMoonPhase(180, Astronomy.MakeTime(sixPmToday), 2);
+            const fmDate = fmEvent ? fmEvent.date : null;
+            if (fmDate && fmDate >= sixPmToday && fmDate < sixPmTomorrow) {
+                baseIdx = 14; // පසළොස්වක
+            }
+
+            const nmEvent = Astronomy.SearchMoonPhase(0, Astronomy.MakeTime(sixPmToday), 2);
+            const nmDate = nmEvent ? nmEvent.date : null;
+            if (nmDate && nmDate >= sixPmToday && nmDate < sixPmTomorrow) {
+                baseIdx = 29; // අමාවක
+            }
+
+            stableTithiIndex = baseIdx;
         }
     } catch (e) {
         console.error("Astronomy Engine error:", e);
@@ -1007,71 +1219,95 @@ function updateSunTimes() {
     if (document.getElementById('sunSunset')) document.getElementById('sunSunset').innerText = formatTime(sunset);
     if (document.getElementById('sunMoonrise')) document.getElementById('sunMoonrise').innerText = formatTime(moonTimes.rise);
     if (document.getElementById('sunMoonset')) document.getElementById('sunMoonset').innerText = formatTime(moonTimes.set);
-phaseName = "";
-    const tithiSukha = ["පුර පෑලවිය", "පුර දියවක", "පුර තියවක", "පුර ජලවක", "පුර විසේනිය", "පුර සැටවක", "පුර සතවක", "පුර අටවක", "පුර නවවක", "පුර දසවක", "පුර එකොළොස්වක", "පුර දොළොස්වක", "පුර තෙළෙස්වක", "පුර තුදුස්වක", "පුර පසළොස්වක"];
-    const tithiKanha = ["අව පෑලවිය", "අව දියවක", "අව තියවක", "අව ජලවක", "අව විසේනිය", "අව සැටවක", "අව සතවක", "අව අටවක", "අව නවවක", "අව දසවක", "අව එකොළොස්වක", "අව දොළොස්වක", "අව තෙළෙස්වක", "අව තුදුස්වක", "අමාවක"];
 
-    const selectedDateStr = dateInput.value; 
-    const d = new Date(selectedDateStr);
-    d.setHours(0,0,0,0);
-    ensurePoyaDataUpTo(d.getFullYear() + 1);
+    // ==========================================================
+    // POYA BEGIN & END TIME CALCULATION (DYNAMIC)
+    // පුර අටවක/පසළොස්වක/අව අටවක/අමාවක යන විශේෂ තිථි 4 ට පමණයි මෙය පෙන්වන්නේ.
+    // ඒවායේ ආරම්භය/අවසානය තෝරාගත් දිනයේ (midnight-to-midnight) වැටේද කියා
+    // astronomy engine එකෙන්ම සොයාගනී (poyaList එක මින් නොබලයි). විශේෂ
+    // තිථියක ආරම්භය/අවසානය සමහරවිට කලින්/පසු දිනයට වැටිය හැකි නිසා, එදිනට
+    // අදාළ කොටස (ආරම්භය හෝ අවසානය) පමණක් පෙන්වයි - අනෙක් දිනට අයත් කොටස hide කරයි.
+    // ==========================================================
+    try {
+        const beginTimeEl = document.getElementById('sunPoyaBegin');
+        const endTimeEl = document.getElementById('sunPoyaEnd');
+        const beginLineWrap = document.getElementById('poyaBeginLine');
+        const endLineWrap = document.getElementById('poyaEndLine');
 
-    let targetPoya = null;
-    if (typeof poyaList !== 'undefined' && Array.isArray(poyaList)) {
-        targetPoya = poyaList.find(p => {
-            let pDate = new Date(p.d);
-            pDate.setHours(0,0,0,0);
-            return pDate >= d && (p.t.includes("පසළොස්වක") || p.t.includes("අමාවක"));
-        });
-    }
+        let poyaStart = null, poyaEnd = null;
 
-    if (targetPoya) {
-        let poyaDate = new Date(targetPoya.d);
-        poyaDate.setHours(0,0,0,0);
-        
-        let daysToPoya = Math.round((poyaDate.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
-        const isSukha = targetPoya.t.includes("පසළොස්වක");
-
-        if (daysToPoya === 0) {
-            phaseName = engMode ? (isSukha ? "Full Moon" : "New Moon") : (isSukha ? "පුර පසළොස්වක පෝය" : "අමාවක පෝය");
-        } else {
-            let tithiIndex = 0;
-
-            if (isSukha) {
-                tithiIndex = 15 - daysToPoya - 1; 
-                if (tithiIndex < 0) tithiIndex = 0;
-                phaseName = engMode ? `Waxing ${tithiIndex + 1}` : tithiSukha[tithiIndex];
-            } else {
-                const pastFullMoons = poyaList.filter(p => p.t.includes("පසළොස්වක") && new Date(p.d).getTime() < poyaDate.getTime());
-                const lastFullMoon = pastFullMoons.length > 0 ? pastFullMoons[pastFullMoons.length - 1] : null;
-
-                let totalDaysInWaning = 15; 
-                if (lastFullMoon) {
-                    let lastFullMoonDate = new Date(lastFullMoon.d);
-                    lastFullMoonDate.setHours(0,0,0,0);
-                    totalDaysInWaning = Math.round((poyaDate.getTime() - lastFullMoonDate.getTime()) / (1000 * 60 * 60 * 24));
-                }
-
-                let elapsedDays = totalDaysInWaning - daysToPoya;
-                tithiIndex = elapsedDays - 1;
-
-                if (tithiIndex < 0) tithiIndex = 0;
-                if (tithiIndex > 14) tithiIndex = 14;
-
-                phaseName = engMode ? `Waning ${tithiIndex + 1}` : tithiKanha[tithiIndex];
-            }
+        if (typeof Astronomy !== 'undefined') {
+            const dayStart = new Date(selectedDate);
+            dayStart.setHours(0, 0, 0, 0);
+            const events = findSpecialTithiEventsForDay(dayStart);
+            poyaStart = events.beginTime;
+            poyaEnd = events.endTime;
         }
-    } else {
-        let tithiFullIndex = Math.floor(phase * 30);
-        if (tithiFullIndex >= 30) tithiFullIndex = 0;
-        let fallbackIndex = tithiFullIndex <= 14 ? tithiFullIndex : tithiFullIndex - 15;
-        if (fallbackIndex > 14) fallbackIndex = 14;
-        
-        phaseName = engMode 
-            ? (phase <= 0.5 ? `Waxing ${fallbackIndex + 1}` : `Waning ${fallbackIndex + 1}`) 
-            : (phase <= 0.5 ? tithiSukha[fallbackIndex] : tithiKanha[fallbackIndex]);
+
+        if (poyaStart && beginTimeEl) {
+            beginTimeEl.innerText = formatTime(poyaStart);
+            if (beginLineWrap) beginLineWrap.style.display = '';
+        } else if (beginLineWrap) {
+            beginLineWrap.style.display = 'none';
+        }
+
+        if (poyaEnd && endTimeEl) {
+            endTimeEl.innerText = formatTime(poyaEnd);
+            if (endLineWrap) endLineWrap.style.display = '';
+        } else if (endLineWrap) {
+            endLineWrap.style.display = 'none';
+        }
+    } catch (poyaTimeErr) {
+        console.error('Poya begin/end time error:', poyaTimeErr);
     }
 
+    // ==========================================================
+    // DYNAMIC TITHI & PHASE NAME GENERATION
+    // ==========================================================
+    let phaseName = "";
+    const tithiSukha = ["පුර පෑලවිය", "පුර දියවක", "පුර තියවක", "පුර ජලවක", "පුර විසේනිය", "පුර සැටවක", "පුර සතවක", "පුර අටවක", "පුර නවවක", "පුර දසවක", "පුර එකොළොස්වක", "පුර දොළොස්වක", "පුර තෙළෙස්වක", "පුර තුදුස්වක", "පුර පසළොස්වක පෝය"];
+    const tithiKanha = ["අව පෑලවිය", "අව දියවක", "අව තියවක", "අව ජලවක", "අව විසේනිය", "අව සැටවක", "අව සතවක", "අව අටවක", "අව නවවක", "අව දසවක", "අව එකොළොස්වක", "අව දොළොස්වක", "අව තෙළෙස්වක", "අව තුදුස්වක", "අමාවක පෝය"];
+
+    let tithiIndex = (stableTithiIndex !== null) ? stableTithiIndex : Math.floor(phaseAngle / 12);
+    
+    if (tithiIndex < 15) {
+        phaseName = engMode ? (tithiIndex === 14 ? "Full Moon" : `Waxing ${tithiIndex + 1}`) : tithiSukha[tithiIndex];
+    } else {
+        let waningIndex = tithiIndex - 15;
+        phaseName = engMode ? (waningIndex === 14 ? "New Moon" : `Waning ${waningIndex + 1}`) : tithiKanha[waningIndex];
+    }
+
+    // ==========================================================
+    // ASTRO CARD SUBTITLE: "[මාසය] මස [තිථිය] තිථිය ලත් [දිනය] දින"
+    // ==========================================================
+    const astroSubtitleEl = document.getElementById('sunModalTithiLabel');
+    if (astroSubtitleEl) {
+        if (engMode) {
+            const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+            astroSubtitleEl.innerText = selectedDate.toLocaleDateString('en-US', dateOptions) + (phaseName ? `, ${phaseName}` : '');
+        } else {
+            const traditionalMonths = [
+                "දුරුතු", "නවම්", "මැදින්", "බක්", "වෙසක්", "පොසොන්",
+                "ඇසළ", "නිකිණි", "බිනර", "වප්", "ඉල්", "උඳුවප්"
+            ];
+            const monthName = traditionalMonths[selectedDate.getMonth()];
+            const dayOfWeekIndex = selectedDate.getDay();
+            const sinhalaDays = ["රවි දින", "සඳු දින", "කුජ දින", "බුධ දින", "ගුරු දින", "කිවි දින", "ශනි දින"];
+            const sinhalaDayName = sinhalaDays[dayOfWeekIndex];
+
+            let tithiFormatted = '';
+            if (phaseName) {
+                tithiFormatted = `${phaseName.replace("පෝය", "").trim()} තිථිය ලත්`;
+            }
+            astroSubtitleEl.innerText = tithiFormatted
+                ? `${monthName} මස ${tithiFormatted} ${sinhalaDayName}`
+                : `${monthName} මස ${sinhalaDayName}`;
+        }
+    }
+
+    // ==========================================================
+    // MOON VISUAL RENDER (DOM Updates)
+    // ==========================================================
     const moonVisual = document.getElementById('moonVisual');
     if (moonVisual) {
         moonVisual.style.boxShadow = `0 0 ${fraction * 20}px rgba(253, 224, 71, ${fraction * 0.6})`;
@@ -1100,18 +1336,18 @@ phaseName = "";
         }
     }
 
-        const percentage = Math.round(fraction * 100);
+    const percentage = Math.round(fraction * 100);
     const moonPhaseLabel = document.getElementById('moonPhaseLabel');
     if (moonPhaseLabel) moonPhaseLabel.innerText = phaseName;
     
     const moonIllumLabel = document.getElementById('moonIllumLabel');
     if (moonIllumLabel) moonIllumLabel.innerText = engMode ? `Illumination: ${percentage}%` : `දීප්තිය: ${percentage}%`;
 
-    
     if (typeof updateSinhalaAstroDate === "function") {
         updateSinhalaAstroDate();
     }
-} 
+}
+
 function openSunModal() {
     const sunModal = document.getElementById("sunModal");
     if (sunModal) sunModal.style.display = "flex";

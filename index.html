@@ -56,7 +56,6 @@
 <div class="section date-section-wrapper">
     <div class="date-label-row">
         <span class="label" id="ui-label-date">දිනය තෝරන්න ( ක්‍රි.ව) ⇓</span>
-        <span id="sinhalaTithiLabel" class="tithi-astro-date">--</span>
     </div>
     
     <div class="date-row">
@@ -200,25 +199,32 @@
         <div class="sun-label" id="lblSunset">ඉර බැසීම</div>
         <div class="sun-time" id="sunSunset">--:-- --</div>
     </div>
-    
-    <div class="sun-badge moonrise-badge">
-        <div class="sun-label" id="lblMoonrise">සඳ උදාව</div>
-        <div class="sun-time" id="sunMoonrise">--:-- --</div>
-    </div>
-    
-    <div class="sun-badge moonset-badge">
-        <div class="sun-label" id="lblMoonset">සඳ බැසීම</div>
-        <div class="sun-time" id="sunMoonset">--:-- --</div>
-    </div>
 </div>
 
-<div class="moon-phase-container">
-    <div class="moon-visual-wrapper">
-        <div id="moonVisual"></div>
+<div class="sun-astro-card">
+    <div class="sun-astro-title" id="lblAstroTitle">තාරකා විද්‍යානුකූලව සඳෙහි පිහිටීම, තිථිය සහ වෙලාවන්</div>
+    <div class="sun-astro-subtitle" id="sunModalTithiLabel">--</div>
+
+    <div class="sun-astro-moon-row">
+        <div class="poya-time-line"><span id="lblMoonrise">සඳ උදාව</span> <span id="sunMoonrise">--:-- --</span></div>
+        <div class="poya-time-line"><span id="lblMoonset">සඳ බැසීම</span> <span id="sunMoonset">--:-- --</span></div>
     </div>
-    <div class="moon-details">
-        <div id="moonPhaseLabel" class="moon-phase-title">need 📍...</div>
-        <div id="moonIllumLabel" class="moon-illumination">දීප්තිය: --%</div>
+
+    <div class="poya-time-line" id="poyaBeginLine">
+        <span id="lblPoyaBegin">පෝය ලබන වේලාව</span> <span id="sunPoyaBegin"></span>
+    </div>
+    <div class="poya-time-line" id="poyaEndLine">
+        <span id="lblPoyaEnd">පෝය ගෙවෙන වේලාව</span> <span id="sunPoyaEnd"></span>
+    </div>
+
+    <div class="moon-phase-container">
+        <div class="moon-visual-wrapper">
+            <div id="moonVisual"></div>
+        </div>
+        <div class="moon-details">
+            <div id="moonPhaseLabel" class="moon-phase-title">need 📍...</div>
+            <div id="moonIllumLabel" class="moon-illumination">දීප්තිය: --%</div>
+        </div>
     </div>
 </div>
 

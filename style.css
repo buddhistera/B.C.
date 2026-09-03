@@ -902,6 +902,58 @@ body.dark-mode .new-moon-bg {
 .sun-time { font-size: 1.05rem; font-weight: bold; color: #003399; font-family: 'monospace', sans-serif; }
 .dawn-badge .sun-time, .sunrise-badge .sun-time, .noon-badge .sun-time, .sunset-badge .sun-time { color: var(--dark-red, #8B0000); }
 
+.poya-time-line {
+    font-size: 0.8rem;
+    color: #546e7a;
+    text-align: center;
+    margin: 3px 0;
+    font-weight: 500;
+}
+.poya-time-line span:last-child {
+    color: #b8860b;
+    font-weight: 600;
+    font-family: 'monospace', sans-serif;
+}
+body.dark-mode .poya-time-line { color: #b0bec5; }
+body.dark-mode .poya-time-line span:last-child { color: var(--gold, #d4af37); }
+
+.sun-astro-card {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid #8d6e46;
+    border-radius: 20px;
+    padding: 14px 16px;
+    margin-top: 15px;
+    background: #e0e0e0;
+}
+.sun-astro-title {
+    text-align: center;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #6d4c26;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+.sun-astro-subtitle {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #3e2723;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.sun-astro-moon-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+.sun-astro-moon-row .poya-time-line {
+    flex: 1;
+    margin: 0;
+}
+body.dark-mode .sun-astro-card { background: #1e1e1e; border-color: #a1887f; }
+body.dark-mode .sun-astro-title { color: #d7ccc8; }
+body.dark-mode .sun-astro-subtitle { color: #e0e0e0; }
+
 .moon-phase-container {
     background: #e0e0e0;
     border-radius: 25px;
