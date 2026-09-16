@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buddhist Era | බුද්ධ වර්ෂය</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --mint-bg: #F1FBF6;
+    --mint-card: #FFFFFF;
+    --mint-deep: #1E8F6C;
+    --mint-mid: #34B88A;
+    --mint-soft: #DCF4E8;
+    --mint-line: #C7ECDA;
+    --ink: #17332A;
+    --ink-soft: #56736A;
+    --saffron: #C9852E;
+    --saffron-soft: #FBF0DE;
+    --saffron-line: #F0DCB4;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(900px 500px at 88% -10%, #DEF6EA 0%, transparent 60%),
+      radial-gradient(700px 480px at -10% 15%, #FBF0DE 0%, transparent 55%),
+      var(--mint-bg);
+    font-family:'Noto Sans Sinhala','Noto Sans',sans-serif;
+    color:var(--ink);
+    padding:34px 14px 56px;
+  }
+  .wrap{max-width:640px;margin:0 auto;}
+
+  /* header */
+  .wheel{width:50px;height:50px;margin:0 auto 14px;display:block;}
+  .eyebrow-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px;}
+  .eyebrow-line{height:1px;width:26px;background:var(--mint-line);}
+  .eyebrow{font-size:12.5px;color:var(--mint-deep);letter-spacing:.03em;font-weight:600;}
+
+  h1.appname{
+    font-family:'Noto Serif Sinhala', serif;
+    text-align:center;
+    font-size:clamp(24px,5.5vw,32px);
+    margin:2px 0 20px;
+    font-weight:700;
+  }
+
+  /* language toggle */
+  .lang-toggle{
+    display:flex;justify-content:center;gap:6px;margin-bottom:26px;
+  }
+  .lang-toggle button{
+    font-family:inherit;font-size:13.5px;font-weight:600;
+    padding:7px 18px;border-radius:999px;border:1.5px solid var(--mint-line);
+    background:#fff;color:var(--ink-soft);cursor:pointer;
+    transition:all .15s ease;
+  }
+  .lang-toggle button.active{
+    background:var(--mint-deep);border-color:var(--mint-deep);color:#fff;
+  }
+
+  [data-lang]{display:none;}
+  [data-lang].active{display:block;}
+
+  /* blessing */
+  .blessing{
+    text-align:center;
+    font-family:'Noto Serif Sinhala',serif;
+    font-style:italic;
+    font-weight:600;
+    color:var(--saffron);
+    font-size:19px;
+    line-height:1.6;
+    margin:0 0 28px;
+    padding:0 6px;
+  }
+
+  .card{
+    background:var(--mint-card);
+    border:1px solid var(--mint-line);
+    border-radius:20px;
+    padding:22px 22px;
+    margin-bottom:18px;
+    box-shadow:0 16px 34px -26px rgba(20,80,60,.35);
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:4px;
+    background:linear-gradient(90deg,var(--mint-mid),var(--mint-deep));
+  }
+  .card p{margin:0 0 10px;font-size:14.8px;line-height:1.7;color:var(--ink);}
+  .card p:last-child{margin-bottom:0;}
+
+  .email-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    margin-top:6px;
+    padding:9px 16px;border-radius:10px;
+    background:var(--mint-soft);color:var(--mint-deep);
+    font-weight:600;font-size:13.5px;text-decoration:none;
+  }
+
+  .important{
+    background:var(--saffron-soft);
+    border:1px solid var(--saffron-line);
+  }
+  .important::before{background:linear-gradient(90deg,var(--saffron),#E0A857);}
+  .important .tag{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12.5px;font-weight:700;color:var(--saffron);
+    letter-spacing:.02em;margin-bottom:10px;
+  }
+  .important a{color:var(--saffron);font-weight:600;text-decoration:underline;}
+
+  .section-heading{
+    font-size:13px;font-weight:700;color:var(--mint-deep);
+    letter-spacing:.02em;margin:30px 0 12px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .section-heading .dot{width:6px;height:6px;border-radius:50%;background:var(--mint-mid);}
+
+  .platform-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+  .platform-card{
+    background:var(--mint-card);border:1px solid var(--mint-line);
+    border-radius:18px;padding:18px 20px;
+    box-shadow:0 14px 30px -26px rgba(20,80,60,.3);
+  }
+  .platform-card h3{
+    margin:0 0 6px;font-size:16px;font-family:'Noto Serif Sinhala',serif;
+    display:flex;align-items:center;gap:8px;
+  }
+  .platform-card p{margin:0 0 12px;font-size:13.8px;color:var(--ink-soft);line-height:1.6;}
+  .platform-btn{
+    display:inline-block;padding:10px 18px;border-radius:10px;
+    background:linear-gradient(180deg,var(--mint-mid),var(--mint-deep));
+    color:#fff;text-decoration:none;font-weight:700;font-size:14px;
+    box-shadow:0 10px 20px -10px rgba(30,143,108,.5);
+  }
+
+  .tips{list-style:none;margin:0;padding:0;}
+  .tips li{
+    display:flex;gap:10px;padding:10px 0;
+    font-size:14.3px;line-height:1.6;color:var(--ink);
+    border-bottom:1px dashed var(--mint-line);
+  }
+  .tips li:last-child{border-bottom:none;}
+  .tips .pin{flex:none;color:var(--mint-deep);font-weight:700;}
+  .tips a{color:var(--mint-deep);font-weight:600;}
+
+  .qr-card{
+    text-align:center;
+    background:linear-gradient(180deg,#ffffff, var(--mint-soft));
+  }
+  .qr-card h3{
+    font-family:'Noto Serif Sinhala',serif;font-size:17px;margin:0 0 4px;
+  }
+  .qr-card p.small{font-size:12.5px;color:var(--ink-soft);margin:0 0 16px;}
+  #qrcode{
+    display:inline-block;padding:14px;background:#fff;border-radius:16px;
+    border:1px solid var(--mint-line);
+  }
+  .qr-label{
+    margin-top:12px;font-weight:700;font-size:13.5px;color:var(--mint-deep);
+  }
+
+  .footer-note{
+    text-align:center;color:var(--ink-soft);font-size:12px;margin-top:26px;line-height:1.6;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <svg class="wheel" viewBox="0 0 60 60" fill="none">
+    <circle cx="30" cy="30" r="22" stroke="#1E8F6C" stroke-width="2"/>
+    <circle cx="30" cy="30" r="4" fill="#1E8F6C"/>
+    <g stroke="#1E8F6C" stroke-width="1.6">
+      <line x1="30" y1="8" x2="30" y2="20"/>
+      <line x1="30" y1="40" x2="30" y2="52"/>
+      <line x1="8" y1="30" x2="20" y2="30"/>
+      <line x1="40" y1="30" x2="52" y2="30"/>
+      <line x1="14.9" y1="14.9" x2="22.8" y2="22.8"/>
+      <line x1="37.2" y1="37.2" x2="45.1" y2="45.1"/>
+      <line x1="45.1" y1="14.9" x2="37.2" y2="22.8"/>
+      <line x1="22.8" y1="37.2" x2="14.9" y2="45.1"/>
+    </g>
+  </svg>
+
+  <div class="eyebrow-row">
+    <span class="eyebrow-line"></span>
+    <span class="eyebrow">Buddhist Era</span>
+    <span class="eyebrow-line"></span>
+  </div>
+  <h1 class="appname">බුද්ධ වර්ෂය</h1>
+
+  <div class="lang-toggle">
+    <button type="button" class="active" data-btn="si">සිංහල</button>
+    <button type="button" data-btn="en">English</button>
+  </div>
+
+  <!-- ================= SINHALA ================= -->
+  <div data-lang="si" class="active">
+
+    <p class="blessing">බුදු සසුන ලොව බැබළේවා !</p>
+
+    <div class="card">
+      <p>මෙහි සඳහන් පෝය දිනයන් තායිලන්ත සහ ශ්‍රී ලංකා උපෝසථ දිනයන් මත පදනම්ව සකස් කොට ඇත. ඇතැම් විට මියන්මාර් උපෝසථ දිනයන් මීට වඩා දවසක් පමණක් වෙනස් විය හැකිය.</p>
+      <p>ඔබගේ අදහස් සහ යෝජනා පහත ලිපිනයට එවන්න.</p>
+      <a class="email-btn" href="mailto:bhamarawali@gmail.com">📧 bhamarawali@gmail.com</a>
+    </div>
+
+    <div class="card important">
+      <span class="tag">❄️ වැදගත්</span>
+      <p>ඔබ පළමු වරට ඇප් එක ඕපන් කළ පසු මෙනු එකේ ඇති <strong>අරුණ</strong> පිටුවට ගොස් ස්ථානය ලබාදෙන්න.</p>
+      <p>✏️ අවශ්‍ය නම් ඔබ සිටින ස්ථානයේ දත්ත ඇතුලත් කර අරුණ මධ්‍යාහ්නය වාර්ෂික සටහන මුද්‍රණය කර ගැනීමට <a href="https://buddhistera.github.io/Dawn-Noon-calculation/" target="_blank" rel="noopener noreferrer">මෙතනින්</a> බලන්න.</p>
+      <p>🔶 බුද්ධ වර්ෂය සකසන ආකාරය දැන ගැනීමට pdf එක <a href="https://drive.google.com/file/d/1BC3P0wWUopIvbH-Hvp3EWYSy2PAl-den/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">මෙතනින්</a> බාගත කරගන්න.</p>
+    </div>
+
+    <div class="section-heading"><span class="dot"></span>ඇප් එක ලබාගන්නා ආකාරය</div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <h3>🤖 Android සඳහා</h3>
+        <p>මෙතනින් apk ගොනුව බාගත කර install කරන්න.</p>
+        <a class="platform-btn" href="https://drive.google.com/file/d/1URufgqrLwAt6QBE22w-wPYKWTFvBzLrf/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">බාගත කරන්න ⬇️</a>
+      </div>
+      <div class="platform-card">
+        <h3>🪟 Windows සඳහා</h3>
+        <p>මෙම web ලිපිනය Chrome බ්‍රවුසරයකින් විවෘත කොට, Address bar එක තුළ තිබෙන <em>"install app"</em> icon එක click කර install කරන්න.</p>
+        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+      </div>
+      <div class="platform-card">
+        <h3>🍎 iPhone / Mac OS සඳහා</h3>
+        <p>මෙම web ලිපිනය Safari බ්‍රවුසරයෙන් විවෘත කොට Share → <em>"Add to Home Screen"</em> කරන්න.</p>
+        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+      </div>
+    </div>
+
+    <div class="section-heading"><span class="dot"></span>ප්‍රයෝජනවත් ඉඟි</div>
+    <div class="card">
+      <ul class="tips">
+        <li><span class="pin">✏️</span><span>අන්තර්ජාල පහසුකම නොමැති ස්ථානයක අරුණෝදය ස්ථානය ලබා ගැනීමට එළිමහනකදී උත්සාහ කිරීමෙන් ඉක්මන් ප්‍රතිඵල ලැබේ.</span></li>
+        <li><span class="pin">✏️</span><span>පාලි භාෂාව පහසුවෙන් ඉගෙන ගැනීම සඳහා <a href="https://pali-learning-app.vercel.app/" target="_blank" rel="noopener noreferrer">මෙම ලිපිනය</a> භාවිතා කරන්න.</span></li>
+        <li><span class="pin">✏️</span><span>මියන්මාර් පෝය දිනයන් <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">මෙතනින්</a> බලා ගත හැකිය.</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ================= ENGLISH ================= -->
+  <div data-lang="en">
+
+    <p class="blessing">May the Buddha's teachings spread throughout the world!</p>
+
+    <div class="card">
+      <p>The Uposatha dates mentioned here are based on the Thai and Sri Lankan uposatha dates. Sometimes Myanmar Uposatha dates may differ by only one day.</p>
+      <p>Send your comments and suggestions to the below address.</p>
+      <a class="email-btn" href="mailto:bhamarawali@gmail.com">📧 bhamarawali@gmail.com</a>
+    </div>
+
+    <div class="card important">
+      <span class="tag">❄️ Important</span>
+      <p>After you open the app for the first time, go to the <strong>Dawn/Noon</strong> page in the menu and provide your location.</p>
+      <p>⬇️ If necessary, enter the data for your location and print the annual dawn/noon chart <a href="https://buddhistera.github.io/Dawn-Noon-calculation/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+      <p>🔶 To know how to set the Buddhist year, download the pdf <a href="https://docs.google.com/document/d/1r9hgfgWlz970U-r2s6cdAdJhpn2soGnTu8TeP_3Yh1w/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">here</a>.</p>
+    </div>
+
+    <div class="section-heading"><span class="dot"></span>How to get the app</div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <h3>🤖 For Android</h3>
+        <p>Download the apk file here and install it.</p>
+        <a class="platform-btn" href="https://drive.google.com/file/d/1URufgqrLwAt6QBE22w-wPYKWTFvBzLrf/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">Download ⬇️</a>
+      </div>
+      <div class="platform-card">
+        <h3>🪟 For Windows</h3>
+        <p>Open this web address in a Chrome browser and install it by clicking the <em>"install app"</em> icon in the address bar.</p>
+        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+      </div>
+      <div class="platform-card">
+        <h3>🍎 For iPhone, Mac OS</h3>
+        <p>Open this web address in Safari browser and Share → <em>"Add to Home Screen"</em>.</p>
+        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+      </div>
+    </div>
+
+    <div class="section-heading"><span class="dot"></span>Helpful tips</div>
+    <div class="card">
+      <ul class="tips">
+        <li><span class="pin">✏️</span><span>Trying to get a sunrise location outdoors in a place without internet access will yield quicker results.</span></li>
+        <li><span class="pin">✏️</span><span>You can check Myanmar Uposatha dates <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">here</a>.</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- QR (shared, not language-specific) -->
+  <div class="card qr-card">
+    <p class="small">Scan to open ·  QR කේතය scan කරන්න</p>
+    <div id="qrcode"></div>
+    <div class="qr-label">Buddhist Era | බුද්ධ වර්ෂය</div>
+  </div>
+
+  <p class="footer-note">🙏 Sādhu Sādhu Sādhu 🙏</p>
+</div>
+
+<script>
+  new QRCode(document.getElementById("qrcode"), {
+    text: "https://buddhist-era.vercel.app",
+    width: 176,
+    height: 176,
+    colorDark: "#1E8F6C",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  document.querySelectorAll('.lang-toggle button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const lang = btn.getAttribute('data-btn');
+      document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('[data-lang]').forEach(function(el){
+        el.classList.toggle('active', el.getAttribute('data-lang') === lang);
+      });
+    });
+  });
+
+  // app එකේ භාෂාවට (localStorage 'appLang' හෝ ?lang= query param) ගැලපෙන ලෙස
+  // මුල් load එකේදීම නිවැරදි භාෂාව පෙන්වීම
+  (function syncLangWithApp(){
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get('lang') || localStorage.getItem('appLang');
+    if (requested === 'en') {
+      const enBtn = document.querySelector('.lang-toggle button[data-btn="en"]');
+      if (enBtn) enBtn.click();
+    }
+  })();
+</script>
+</body>
+</html>
