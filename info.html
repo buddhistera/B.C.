@@ -32,6 +32,7 @@
     font-family:'Noto Sans Sinhala','Noto Sans',sans-serif;
     color:var(--ink);
     padding:34px 14px 56px;
+    transition: background 0.5s ease, color 0.5s ease;
   }
   .wrap{max-width:640px;margin:0 auto;}
 
@@ -88,6 +89,7 @@
     box-shadow:0 16px 34px -26px rgba(20,80,60,.35);
     position:relative;
     overflow:hidden;
+    transition: all 0.3s ease;
   }
   .card::before{
     content:"";position:absolute;top:0;left:0;right:0;height:4px;
@@ -128,6 +130,7 @@
     background:var(--mint-card);border:1px solid var(--mint-line);
     border-radius:18px;padding:18px 20px;
     box-shadow:0 14px 30px -26px rgba(20,80,60,.3);
+    transition: all 0.3s ease;
   }
   .platform-card h3{
     margin:0 0 6px;font-size:16px;font-family:'Noto Serif Sinhala',serif;
@@ -139,6 +142,7 @@
     background:linear-gradient(180deg,var(--mint-mid),var(--mint-deep));
     color:#fff;text-decoration:none;font-weight:700;font-size:14px;
     box-shadow:0 10px 20px -10px rgba(30,143,108,.5);
+    transition: all 0.3s ease;
   }
 
   .tips{list-style:none;margin:0;padding:0;}
@@ -169,6 +173,83 @@
 
   .footer-note{
     text-align:center;color:var(--ink-soft);font-size:12px;margin-top:26px;line-height:1.6;
+  }
+
+  /* =========================================
+     DARK MODE STYLES FOR INFO.HTML
+     ========================================= */
+  body.dark-mode {
+      --mint-bg: #090a10;
+      --mint-card: #131724;
+      --mint-deep: #00e5ff;
+      --mint-mid: #b388ff;
+      --mint-soft: #1a1f2e;
+      --mint-line: rgba(0, 229, 255, 0.2);
+      --ink: #ffffff;
+      --ink-soft: #a0aec0;
+      --saffron: #00e676;
+      --saffron-soft: #1a1025;
+      --saffron-line: rgba(0, 230, 118, 0.3);
+      
+      background: linear-gradient(-45deg, #090a10, #101426, #1a0f29, #090a10) !important;
+      background-size: 400% 400% !important;
+      animation: gradientBG 15s ease infinite !important;
+      color: var(--ink);
+  }
+  
+  @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+  }
+
+  body.dark-mode .card, 
+  body.dark-mode .platform-card {
+      background: rgba(19, 23, 36, 0.85) !important;
+      backdrop-filter: blur(12px) !important;
+      border: 1px solid var(--mint-line) !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 0 20px rgba(179, 136, 255, 0.05) !important;
+  }
+  body.dark-mode .card::before {
+      background: linear-gradient(90deg, var(--mint-deep), var(--mint-mid)) !important;
+  }
+  body.dark-mode .important {
+      background: var(--saffron-soft) !important;
+      border: 1px solid var(--saffron-line) !important;
+  }
+  body.dark-mode .important::before {
+      background: linear-gradient(90deg, var(--saffron), #00b0ff) !important;
+  }
+  body.dark-mode .email-btn {
+      background: var(--mint-soft) !important;
+      color: var(--mint-deep) !important;
+  }
+  body.dark-mode .lang-toggle button {
+      background: #1a1f2e !important;
+      border-color: var(--mint-line) !important;
+      color: var(--ink-soft) !important;
+  }
+  body.dark-mode .lang-toggle button.active {
+      background: var(--mint-deep) !important;
+      border-color: var(--mint-deep) !important;
+      color: #000 !important;
+  }
+  body.dark-mode .platform-btn {
+      background: linear-gradient(180deg, #00e5ff, #007bff) !important;
+      box-shadow: 0 10px 20px -10px rgba(0, 229, 255, 0.5) !important;
+  }
+  body.dark-mode .qr-card {
+      background: linear-gradient(180deg, #131724, #1a1f2e) !important;
+  }
+  body.dark-mode #qrcode {
+      background: #fff !important; /* Keep QR white for scanning */
+      border: 1px solid var(--mint-line) !important;
+  }
+  body.dark-mode .tips li {
+      border-bottom: 1px dashed var(--mint-line) !important;
+  }
+  body.dark-mode .wheel circle, body.dark-mode .wheel line {
+      stroke: var(--mint-deep) !important;
   }
 </style>
 </head>
@@ -308,6 +389,11 @@
 </div>
 
 <script>
+  // Dark Mode Sync for info.html
+  if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+  }
+
   new QRCode(document.getElementById("qrcode"), {
     text: "https://buddhist-era.vercel.app",
     width: 176,
