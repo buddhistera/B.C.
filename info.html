@@ -36,36 +36,154 @@
   }
   .wrap{max-width:640px;margin:0 auto;}
 
-  /* header */
-  .wheel{width:50px;height:50px;margin:0 auto 14px;display:block;}
-  .eyebrow-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px;}
-  .eyebrow-line{height:1px;width:26px;background:var(--mint-line);}
-  .eyebrow{font-size:12.5px;color:var(--mint-deep);letter-spacing:.03em;font-weight:600;}
-
-  h1.appname{
-    font-family:'Noto Serif Sinhala', serif;
-    text-align:center;
-    font-size:clamp(24px,5.5vw,32px);
-    margin:2px 0 20px;
-    font-weight:700;
+  /* =========================================================
+     LOCAL VARIABLE SINHALA FONTS — Offline
+     ========================================================= */
+  @font-face {
+      font-family: 'Noto Sans Sinhala';
+      src: url('fonts/NotoSansSinhala-Variable.ttf') format('truetype-variations'),
+           url('fonts/NotoSansSinhala-Variable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+  }
+  @font-face {
+      font-family: 'Noto Serif Sinhala';
+      src: url('fonts/NotoSerifSinhala-Variable.ttf') format('truetype-variations'),
+           url('fonts/NotoSerifSinhala-Variable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
   }
 
-  /* language toggle */
-  .lang-toggle{
-    display:flex;justify-content:center;gap:6px;margin-bottom:26px;
+  /* =========================================================
+     LANGUAGE VISIBILITY — භාෂාව අනුව පෙන්වීම
+     ========================================================= */
+  [data-lang]{
+    display: none;
   }
-  .lang-toggle button{
-    font-family:inherit;font-size:13.5px;font-weight:600;
-    padding:7px 18px;border-radius:999px;border:1.5px solid var(--mint-line);
-    background:#fff;color:var(--ink-soft);cursor:pointer;
-    transition:all .15s ease;
+  [data-lang].active{
+    display: block;
+    animation: langFadeIn 0.3s ease;
   }
-  .lang-toggle button.active{
-    background:var(--mint-deep);border-color:var(--mint-deep);color:#fff;
+  @keyframes langFadeIn{
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  [data-lang]{display:none;}
-  [data-lang].active{display:block;}
+  /* =========================================================
+     බෞද්ධ කොඩිය — පාට 6
+     පිටුවේ පළලින් ~50%, අනුපාතය 3:2
+     ========================================================= */
+  .buddhist-flag-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 4px auto 28px;
+  }
+  .buddhist-flag {
+    display: flex;
+    width: clamp(200px, 50%, 320px);
+    aspect-ratio: 3 / 2;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 12px 28px -12px rgba(20, 80, 60, 0.40),
+      0 3px 8px rgba(0, 0, 0, 0.10),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+  .buddhist-flag span {
+    flex: 1 1 16.6667%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* නීල — Blue */
+  .buddhist-flag span:nth-child(1) {
+    background: linear-gradient(180deg, #1a52c9, #0b3a99);
+  }
+  /* පීත — Yellow */
+  .buddhist-flag span:nth-child(2) {
+    background: linear-gradient(180deg, #ffdc26, #ffc400);
+  }
+  /* ලෝහිත — Red */
+  .buddhist-flag span:nth-child(3) {
+    background: linear-gradient(180deg, #ed2f36, #c9101a);
+  }
+  /* ඕදාත — White */
+  .buddhist-flag span:nth-child(4) {
+    background: linear-gradient(180deg, #ffffff, #e8e8e8);
+  }
+  /* මංජිෂ්ට — Orange */
+  .buddhist-flag span:nth-child(5) {
+    background: linear-gradient(180deg, #fda83c, #ee7f0c);
+  }
+
+  /* =========================================================
+     ප්‍රභාස්වර — 6වන කොටුව
+     පාට පහ මිශ්‍රව · ඉහළට පමණක් අඛණ්ඩව ගමන් කරයි
+     background-position ක්‍රමය — සියලු browsers වල නිවැරදිව ක්‍රියා කරයි
+     ========================================================= */
+  .buddhist-flag span:nth-child(6) {
+    position: relative;
+    overflow: hidden;
+    background: #0b3a99;              /* fallback */
+  }
+  .buddhist-flag span:nth-child(6)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      0deg,
+      /* ---- චක්‍රය 1 (පහළ භාගය) ---- */
+      #0b3a99 0%,                     /* නීල */
+      #1a52c9 4%,
+      #ffdc26 10%,                    /* පීත */
+      #ffc400 14%,
+      #ed2f36 20%,                    /* ලෝහිත */
+      #c9101a 24%,
+      #ffffff 30%,                    /* ඕදාත */
+      #e8e8e8 34%,
+      #fda83c 40%,                    /* මංජිෂ්ට */
+      #ee7f0c 44%,
+      #0b3a99 50%,                    /* නීල — චක්‍රය 1 අවසානය */
+      /* ---- චක්‍රය 2 (ඉහළ භාගය) — එකම අනුපිළිවෙල ---- */
+      #1a52c9 54%,
+      #ffdc26 60%,
+      #ffc400 64%,
+      #ed2f36 70%,
+      #c9101a 74%,
+      #ffffff 80%,
+      #e8e8e8 84%,
+      #fda83c 90%,
+      #ee7f0c 94%,
+      #0b3a99 100%                    /* නීල — චක්‍රය 2 අවසානය */
+    );
+    background-size: 100% 200%;        /* gradient එක උසින් 2 ගුණයක් */
+    background-repeat: no-repeat;
+    background-position: 0% 100%;      /* පහළ භාගය පෙන්වයි */
+    animation: prabhasvaraMove 14s linear infinite;
+    will-change: background-position;
+  }
+  @keyframes prabhasvaraMove {
+    from { background-position: 0% 100%; }   /* පහළ භාගය */
+    to   { background-position: 0%   0%; }   /* ඉහළ භාගය — ඉහළට ගමන් */
+  }
+
+  /* ස්ථිතික ප්‍රභාස්වර ආලෝකය — මධ්‍යයේ මෘදු බැබළීමක් */
+  .buddhist-flag span:nth-child(6)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.18) 0%,
+      transparent 75%
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
 
   /* blessing */
   .blessing{
@@ -190,20 +308,20 @@
       --saffron: #00e676;
       --saffron-soft: #1a1025;
       --saffron-line: rgba(0, 230, 118, 0.3);
-      
+
       background: linear-gradient(-45deg, #090a10, #101426, #1a0f29, #090a10) !important;
       background-size: 400% 400% !important;
       animation: gradientBG 15s ease infinite !important;
       color: var(--ink);
   }
-  
+
   @keyframes gradientBG {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
   }
 
-  body.dark-mode .card, 
+  body.dark-mode .card,
   body.dark-mode .platform-card {
       background: rgba(19, 23, 36, 0.85) !important;
       backdrop-filter: blur(12px) !important;
@@ -224,16 +342,6 @@
       background: var(--mint-soft) !important;
       color: var(--mint-deep) !important;
   }
-  body.dark-mode .lang-toggle button {
-      background: #1a1f2e !important;
-      border-color: var(--mint-line) !important;
-      color: var(--ink-soft) !important;
-  }
-  body.dark-mode .lang-toggle button.active {
-      background: var(--mint-deep) !important;
-      border-color: var(--mint-deep) !important;
-      color: #000 !important;
-  }
   body.dark-mode .platform-btn {
       background: linear-gradient(180deg, #00e5ff, #007bff) !important;
       box-shadow: 0 10px 20px -10px rgba(0, 229, 255, 0.5) !important;
@@ -242,45 +350,42 @@
       background: linear-gradient(180deg, #131724, #1a1f2e) !important;
   }
   body.dark-mode #qrcode {
-      background: #fff !important; /* Keep QR white for scanning */
+      background: #fff !important;
       border: 1px solid var(--mint-line) !important;
   }
   body.dark-mode .tips li {
       border-bottom: 1px dashed var(--mint-line) !important;
   }
-  body.dark-mode .wheel circle, body.dark-mode .wheel line {
-      stroke: var(--mint-deep) !important;
+
+  /* බෞද්ධ කොඩිය — Dark mode හිදී තරමක් දීප්තිමත් වේ */
+  body.dark-mode .buddhist-flag {
+      box-shadow:
+          0 14px 30px -12px rgba(0, 0, 0, 0.75),
+          0 0 22px rgba(179, 136, 255, 0.20),
+          0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  /* Reduced motion සහාය */
+  @media (prefers-reduced-motion: reduce){
+    .buddhist-flag span:nth-child(6)::before{
+      animation: none;
+    }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <svg class="wheel" viewBox="0 0 60 60" fill="none">
-    <circle cx="30" cy="30" r="22" stroke="#1E8F6C" stroke-width="2"/>
-    <circle cx="30" cy="30" r="4" fill="#1E8F6C"/>
-    <g stroke="#1E8F6C" stroke-width="1.6">
-      <line x1="30" y1="8" x2="30" y2="20"/>
-      <line x1="30" y1="40" x2="30" y2="52"/>
-      <line x1="8" y1="30" x2="20" y2="30"/>
-      <line x1="40" y1="30" x2="52" y2="30"/>
-      <line x1="14.9" y1="14.9" x2="22.8" y2="22.8"/>
-      <line x1="37.2" y1="37.2" x2="45.1" y2="45.1"/>
-      <line x1="45.1" y1="14.9" x2="37.2" y2="22.8"/>
-      <line x1="22.8" y1="37.2" x2="14.9" y2="45.1"/>
-    </g>
-  </svg>
-
-  <div class="eyebrow-row">
-    <span class="eyebrow-line"></span>
-    <span class="eyebrow">Buddhist Era</span>
-    <span class="eyebrow-line"></span>
-  </div>
-  <h1 class="appname">බුද්ධ වර්ෂය</h1>
-
-  <div class="lang-toggle">
-    <button type="button" class="active" data-btn="si">සිංහල</button>
-    <button type="button" data-btn="en">English</button>
+  <!-- ================= බෞද්ධ කොඩිය ================= -->
+  <div class="buddhist-flag-wrap">
+    <div class="buddhist-flag" role="img" aria-label="Buddhist flag — නීල · පීත · ලෝහිත · ඕදාත · මංජිෂ්ට · ප්‍රභාස්වර">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
 
   <!-- ================= SINHALA ================= -->
@@ -306,12 +411,12 @@
       <div class="platform-card">
         <h3>🤖 Android සඳහා</h3>
         <p>මෙතනින් apk ගොනුව බාගත කර install කරන්න.</p>
-        <a class="platform-btn" href="https://drive..com/file/d/1URufgqrLwAt6QBE22w-wPYKWTFvBzLrf/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">බාගත කරන්න ⬇️</a>
+        <a class="platform-btn" href="https://drive.google.com/file/d/1URufgqrLwAt6QBE22w-wPYKWTFvBzLrf/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">බාගත කරන්න ⬇️</a>
       </div>
       <div class="platform-card">
         <h3>🪟 Windows සඳහා</h3>
-        <p>මෙම web ලිපිනය Chrome බ්‍රවුසරයකින් විවෘත කොට, Address bar එක තුළ තිබෙන <em>"install app"</em> icon එක click කර install කරන්න.</p>
-        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+        <p>මෙතනින් apk ගොනුව බාගත කර install කරන්න.</p>
+        <a class="platform-btn" href="https://drive.google.com/file/d/1ORbEqsn1KBrH58p0JDilcN0RARooi4Dy/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">Windows App බාගත කරන්න</a>
       </div>
       <div class="platform-card">
         <h3>🍎 iPhone / Mac OS සඳහා</h3>
@@ -390,41 +495,95 @@
 </div>
 
 <script>
-  // Dark Mode Sync for info.html
-  if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark-mode');
-  }
+/* =========================================================
+   DARK MODE SYNC
+   ========================================================= */
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+}
 
-  new QRCode(document.getElementById("qrcode"), {
+/* =========================================================
+   QR CODE
+   ========================================================= */
+new QRCode(document.getElementById("qrcode"), {
     text: "https://buddhist-era.vercel.app",
     width: 176,
     height: 176,
     colorDark: "#1E8F6C",
     colorLight: "#ffffff",
     correctLevel: QRCode.CorrectLevel.M
-  });
+});
 
-  document.querySelectorAll('.lang-toggle button').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      const lang = btn.getAttribute('data-btn');
-      document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('[data-lang]').forEach(function(el){
-        el.classList.toggle('active', el.getAttribute('data-lang') === lang);
-      });
+/* =========================================================
+   LANGUAGE SYNC — ඇප් එකේ භාෂාවට අනුව ස්වයංක්‍රීයව මාරු වේ
+   
+   මූලාශ්‍ර 3ක් පරීක්ෂා කරයි (පිළිවෙලින්):
+   1. URL query param  → ?lang=en හෝ ?lang=si
+   2. localStorage     → 'appLang' (ඇප් එකේ භාෂාව)
+   3. Browser භාෂාව    → navigator.language
+   ========================================================= */
+function applyLanguage(lang){
+    const safe = (lang === 'en') ? 'en' : 'si';
+    document.querySelectorAll('[data-lang]').forEach(function(el){
+        el.classList.toggle('active', el.getAttribute('data-lang') === safe);
     });
-  });
+    document.documentElement.setAttribute('lang', safe);
+}
 
-  // app එකේ භාෂාවට (localStorage 'appLang' හෝ ?lang= query param) ගැලපෙන ලෙස
-  // මුල් load එකේදීම නිවැරදි භාෂාව පෙන්වීම
-  (function syncLangWithApp(){
+function detectAppLanguage(){
+    // 1. URL query parameter
     const params = new URLSearchParams(window.location.search);
-    const requested = params.get('lang') || localStorage.getItem('appLang');
-    if (requested === 'en') {
-      const enBtn = document.querySelector('.lang-toggle button[data-btn="en"]');
-      if (enBtn) enBtn.click();
+    const queryLang = params.get('lang');
+    if (queryLang === 'en' || queryLang === 'si') return queryLang;
+
+    // 2. localStorage — ඇප් එකේ භාෂාව
+    const stored = localStorage.getItem('appLang');
+    if (stored === 'en' || stored === 'si') return stored;
+
+    // 3. Browser භාෂාව
+    const nav = (navigator.language || 'si').toLowerCase();
+    return nav.startsWith('en') ? 'en' : 'si';
+}
+
+/* මුල් load එකේදී භාෂාව යොදන්න */
+applyLanguage(detectAppLanguage());
+
+/* =========================================================
+   වෙනත් tab/window එකකින් භාෂාව වෙනස් වූ විට sync වන්න
+   (storage event එක වෙනත් tab වලට පමණක් fire වේ)
+   ========================================================= */
+window.addEventListener('storage', function(e){
+    if (e.key === 'appLang'){
+        applyLanguage(e.newValue);
     }
-  })();
+});
+
+/* =========================================================
+   එකම tab එකේදී app එකෙන් භාෂාව වෙනස් කළ විට sync වන්න
+   — ඇප් එක මගින් 'appLangChanged' custom event එක dispatch කරන්න
+   ========================================================= */
+window.addEventListener('appLangChanged', function(e){
+    if (e.detail && e.detail.lang) {
+        applyLanguage(e.detail.lang);
+    }
+});
+
+/* =========================================================
+   Page එකට නැවත focus ලැබුණු විට localStorage නැවත පරීක්ෂා කරන්න
+   (උදා: ඇප් එකේ tab එකේ භාෂාව වෙනස් කර info.html tab එකට ආපසු ආ විට)
+   ========================================================= */
+window.addEventListener('focus', function(){
+    applyLanguage(detectAppLanguage());
+});
+
+/* =========================================================
+   Browser tab එක නැවත visible වූ විටද පරීක්ෂා කරන්න
+   ========================================================= */
+document.addEventListener('visibilitychange', function(){
+    if (!document.hidden) {
+        applyLanguage(detectAppLanguage());
+    }
+});
 </script>
 </body>
 </html>
