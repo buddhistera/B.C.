@@ -1,4 +1,4 @@
-// --- Language Settings ---2055
+// --- Language Settings ---
     let currentLang = localStorage.getItem('appLang') || 'en';
 
     const i18n = {
@@ -26,28 +26,223 @@
         }
     };   
 
+// Poya chain overrides 1900-3000
+// රීතිය: ඕනෑම පෝයන් දෙකක් අතර පරතරය 14 හෝ 15 පමණි. 14 වන්නේ සෘතුවේ 3 සහ 7 පමණි;
+// ගිම්හාන 7 වන පෝය 14→15 (+1) වසර 5 කට පමණ වරක්. ඉතිරි ඒවා ඔබේ අත්සන් කළ දින පමණි.
 const manualOverrides = {
-    "2020-01-08":"2020-01-09",
-    "2021-07-08":"2021-07-09",
+    "1903-06-23": "1903-06-24",
+    "1910-07-05": "1910-07-06",
+    "1914-06-21": "1914-06-22",
+    "1919-06-26": "1919-06-27",
+    "1926-07-08": "1926-07-09",
+    "1929-07-05": "1929-07-06",
+    "1935-06-29": "1935-06-30",
+    "1941-06-22": "1941-06-23",
+    "1946-06-27": "1946-06-28",
+    "1951-07-02": "1951-07-03",
+    "1956-07-06": "1956-07-07",
+    "1960-06-22": "1960-06-23",
+    "1965-06-27": "1965-06-28",
+    "1971-06-21": "1971-06-22",
+    "1978-07-03": "1978-07-04",
+    "1981-06-30": "1981-07-01",
+    "1987-06-24": "1987-06-25",
+    "1990-06-21": "1990-06-22",
+    "1998-06-22": "1998-06-23",
+    "2003-06-27": "2003-06-28",
+    "2008-07-01": "2008-07-02",
+    "2013-07-06": "2013-07-07",
+    "2017-06-22": "2017-06-23",
+    "2021-07-08": "2021-07-09",
     "2025-06-24": "2025-06-25",
     "2032-07-06": "2032-07-07",
-    "2035-07-04": "2035-07-05",
-    "2039-08-19":"2039-08-18",
-     "2039-09-16": "2039-09-17",
-    "2039-10-17": "2039-10-16",
-    "2039-11-14": "2039-11-15",
-    "2039-12-15": "2039-12-14",
-    "2040-01-12": "2040-01-13",
-    "2040-02-12": "2040-02-11",
-    "2040-03-11": "2040-03-12",
-    "2040-04-11": "2040-04-10",
-    "2040-05-09": "2040-05-10",
-    "2040-06-09": "2040-06-08",
-    "2040-07-07": "2040-07-08",
+    "2035-07-04": "2035-07-05",    
     "2043-07-05": "2043-07-06",
     "2046-07-02": "2046-07-03",
     "2052-06-25": "2052-06-26",
-
+    "2060-06-26": "2060-06-27",
+    "2063-06-24": "2063-06-25",
+    "2070-07-06": "2070-07-07",
+    "2074-06-22": "2074-06-23",
+    "2079-06-27": "2079-06-28",
+    "2085-06-20": "2085-06-21",
+    "2089-07-06": "2089-07-07",
+    "2095-06-30": "2095-07-01",
+    "2101-06-24": "2101-06-25",
+    "2104-06-21": "2104-06-22",
+    "2111-07-04": "2111-07-05",
+    "2115-06-20": "2115-06-21",
+    "2122-07-02": "2122-07-03",
+    "2126-06-18": "2126-06-19",
+    "2131-06-23": "2131-06-24",
+    "2136-06-27": "2136-06-28",
+    "2141-07-02": "2141-07-03",
+    "2147-06-26": "2147-06-27",
+    "2150-06-23": "2150-06-24",
+    "2157-07-05": "2157-07-06",
+    "2162-06-10": "2162-06-11",
+    "2166-06-26": "2166-06-27",
+    "2173-07-08": "2173-07-09",
+    "2177-06-24": "2177-06-25",
+    "2184-07-06": "2184-07-07",
+    "2188-06-22": "2188-06-23",
+    "2193-06-27": "2193-06-28",
+    "2199-06-21": "2199-06-22",
+    "2202-06-19": "2202-06-20",
+    "2209-07-01": "2209-07-02",
+    "2212-06-28": "2212-06-29",
+    "2218-06-22": "2218-06-23",
+    "2224-06-15": "2224-06-16",
+    "2228-07-01": "2228-07-02",
+    "2234-06-25": "2234-06-26",
+    "2239-06-30": "2239-07-01",
+    "2245-06-23": "2245-06-24",
+    "2248-06-20": "2248-06-21",
+    "2255-07-03": "2255-07-04",
+    "2261-06-26": "2261-06-27",
+    "2264-06-23": "2264-06-24",
+    "2271-07-06": "2271-07-07",
+    "2274-07-03": "2274-07-04",
+    "2280-06-26": "2280-06-27",
+    "2286-06-20": "2286-06-21",
+    "2291-06-25": "2291-06-26",
+    "2296-06-29": "2296-06-30",
+    "2301-07-05": "2301-07-06",
+    "2305-06-21": "2305-06-22",
+    "2310-06-26": "2310-06-27",
+    "2316-06-19": "2316-06-20",
+    "2322-06-13": "2322-06-14",
+    "2326-06-29": "2326-06-30",
+    "2332-06-22": "2332-06-23",
+    "2335-06-20": "2335-06-21",
+    "2343-06-21": "2343-06-22",
+    "2348-06-25": "2348-06-26",
+    "2353-06-30": "2353-07-01",
+    "2358-07-05": "2358-07-06",
+    "2362-06-21": "2362-06-22",
+    "2369-07-03": "2369-07-04",
+    "2372-06-30": "2372-07-01",
+    "2378-06-24": "2378-06-25",
+    "2385-07-06": "2385-07-07",
+    "2388-07-03": "2388-07-04",
+    "2394-06-27": "2394-06-28",
+    "2397-06-24": "2397-06-25",
+    "2405-06-25": "2405-06-26",
+    "2408-06-22": "2408-06-23",
+    "2415-07-05": "2415-07-06",
+    "2419-06-21": "2419-06-22",
+    "2424-06-25": "2424-06-26",
+    "2431-07-08": "2431-07-09",
+    "2434-07-05": "2434-07-06",
+    "2440-06-28": "2440-06-29",
+    "2446-06-22": "2446-06-23",
+    "2450-07-08": "2450-07-09",
+    "2456-07-01": "2456-07-02",
+    "2461-07-06": "2461-07-07",
+    "2465-06-22": "2465-06-23",
+    "2470-06-27": "2470-06-28",
+    "2476-06-20": "2476-06-21",
+    "2481-06-25": "2481-06-26",
+    "2486-06-30": "2486-07-01",
+    "2492-06-23": "2492-06-24",
+    "2495-06-21": "2495-06-22",
+    "2502-07-04": "2502-07-05",
+    "2507-06-09": "2507-06-10",
+    "2511-06-25": "2511-06-26",
+    "2518-07-07": "2518-07-08",
+    "2522-06-23": "2522-06-24",
+    "2529-07-05": "2529-07-06",
+    "2533-06-21": "2533-06-22",
+    "2538-06-26": "2538-06-27",
+    "2545-07-08": "2545-07-09",
+    "2548-07-05": "2548-07-06",
+    "2554-06-29": "2554-06-30",
+    "2557-06-26": "2557-06-27",
+    "2563-06-20": "2563-06-21",
+    "2569-06-13": "2569-06-14",
+    "2575-07-07": "2575-07-08",
+    "2579-06-23": "2579-06-24",
+    "2584-06-27": "2584-06-28",
+    "2590-06-21": "2590-06-22",
+    "2595-06-26": "2595-06-27",
+    "2600-07-01": "2600-07-02",
+    "2606-06-25": "2606-06-26",
+    "2609-06-22": "2609-06-23",
+    "2616-07-04": "2616-07-05",
+    "2619-07-02": "2619-07-03",
+    "2626-06-14": "2626-06-15",
+    "2631-06-19": "2631-06-20",
+    "2636-06-23": "2636-06-24",
+    "2641-06-28": "2641-06-29",
+    "2646-07-03": "2646-07-04",
+    "2652-06-26": "2652-06-27",
+    "2655-06-24": "2655-06-25",
+    "2662-07-06": "2662-07-07",
+    "2667-06-11": "2667-06-12",
+    "2671-06-27": "2671-06-28",
+    "2677-06-20": "2677-06-21",
+    "2681-07-06": "2681-07-07",
+    "2688-06-18": "2688-06-19",
+    "2693-06-23": "2693-06-24",
+    "2698-06-28": "2698-06-29",
+    "2703-07-04": "2703-07-05",
+    "2707-06-20": "2707-06-21",
+    "2712-06-24": "2712-06-25",
+    "2717-06-29": "2717-06-30",
+    "2723-06-23": "2723-06-24",
+    "2727-06-09": "2727-06-10",
+    "2733-07-02": "2733-07-03",
+    "2739-06-26": "2739-06-27",
+    "2742-06-23": "2742-06-24",
+    "2750-06-24": "2750-06-25",
+    "2753-06-21": "2753-06-22",
+    "2760-07-03": "2760-07-04",
+    "2765-07-08": "2765-07-09",
+    "2769-06-24": "2769-06-25",
+    "2776-07-06": "2776-07-07",
+    "2779-07-04": "2779-07-05",
+    "2785-06-27": "2785-06-28",
+    "2791-06-21": "2791-06-22",
+    "2795-07-07": "2795-07-08",
+    "2801-06-30": "2801-07-01",
+    "2806-07-05": "2806-07-06",
+    "2810-06-21": "2810-06-22",
+    "2815-06-26": "2815-06-27",
+    "2821-06-19": "2821-06-20",
+    "2826-06-24": "2826-06-25",
+    "2831-06-29": "2831-06-30",
+    "2837-06-22": "2837-06-23",
+    "2841-07-08": "2841-07-09",
+    "2847-07-02": "2847-07-03",
+    "2853-06-25": "2853-06-26",
+    "2856-06-22": "2856-06-23",
+    "2863-07-05": "2863-07-06",
+    "2867-06-21": "2867-06-22",
+    "2872-06-25": "2872-06-26",
+    "2878-06-19": "2878-06-20",
+    "2883-06-24": "2883-06-25",
+    "2890-07-06": "2890-07-07",
+    "2893-07-03": "2893-07-04",
+    "2899-06-27": "2899-06-28",
+    "2902-06-25": "2902-06-26",
+    "2909-07-07": "2909-07-08",
+    "2914-06-12": "2914-06-13",
+    "2920-07-05": "2920-07-06",
+    "2924-06-21": "2924-06-22",
+    "2929-06-26": "2929-06-27",
+    "2935-06-20": "2935-06-21",
+    "2940-06-24": "2940-06-25",
+    "2945-06-29": "2945-06-30",
+    "2951-06-23": "2951-06-24",
+    "2954-06-20": "2954-06-21",
+    "2961-07-02": "2961-07-03",
+    "2964-06-29": "2964-06-30",
+    "2971-06-12": "2971-06-13",
+    "2976-06-16": "2976-06-17",
+    "2981-06-21": "2981-06-22",
+    "2986-06-26": "2986-06-27",
+    "2991-07-01": "2991-07-02",
+    "2997-06-24": "2997-06-25",
 };
 
 const DISPLAY_DAY_ADJUST_MS = -1 * 24 * 60 * 60 * 1000;
@@ -151,7 +346,7 @@ function fmtTime12hLocal(dateObj, isSinhala) {
     return `${hours}:${mm} ${ampm}`;
 }
 
-function findEsalaTarget(year) {
+function _findEsalaTargetRaw(year) {
     let d = new Date(Date.UTC(year, 5, 1));
     let candidates = [];
     for (let i = 0; i < 4; i++) {
@@ -170,7 +365,7 @@ function findEsalaTarget(year) {
     return leap || normal;
 }
 
-function isLeapGimhanaYear(year) {
+function _isLeapGimhanaYearRaw(year) {
     let d = new Date(Date.UTC(year, 5, 1));
     let candidates = [];
     for (let i = 0; i < 4; i++) {
@@ -195,19 +390,27 @@ function resolveEsalaGap(prevDate) {
     return (diff14 <= diff15) ? { date: est14, days: 14 } : { date: est15, days: 15 };
 }
 
-const CURATED_THROUGH_YEAR = Object.keys(manualOverrides).length
-    ? Math.max(...Object.keys(manualOverrides).map(k => parseInt(k.split('-')[0])))
-    : 2019;
+const CURATED_THROUGH_YEAR = 3000;
+
+const _esalaCache = {}, _leapCache = {};
+function findEsalaTarget(year) {
+    if (!(year in _esalaCache)) _esalaCache[year] = _findEsalaTargetRaw(year);
+    return _esalaCache[year];
+}
+function isLeapGimhanaYear(year) {
+    if (!(year in _leapCache)) _leapCache[year] = _isLeapGimhanaYearRaw(year);
+    return _leapCache[year];
+}
 
 const MONTH_CYCLE_SINHALA = ["ඵුස්ස", "මාඝ", "ඵග්ගුන", "චිත්ත", "වේසාඛ", "ජෙට්ඨ", "ආසාළ්හ", "සාවන", "පොට්ඨපාද", "අස්සයුජ", "කත්තික", "මාඝසිර"];
 
-const SEED_DATE = new Date(Date.UTC(2020, 0, 9, 12, 0, 0));
+const SEED_DATE = new Date(Date.UTC(1899, 11, 3, 12, 0, 0)); // 1899-12-03 අමාවක (හේමන්ත 1)
 const SEED_SEASON = 'hemanta';
-const SEED_POS = 4;
-const SEED_MONTH_IDX = 0; // reference calendar සමඟ calibrate කර ඇත
+const SEED_POS = 1;
+const SEED_MONTH_IDX = 1; // 2020-01-09 (හේමන්ත 4) හිදී 0 වන පරිදි calibrate කර ඇත
 
-const MIN_YEAR = 2020;
-const MAX_YEAR = 2200;
+const MIN_YEAR = 1900;
+const MAX_YEAR = 3000;
 
 const seasonNameMap = { hemanta: "හේමන්ත", gimhana: "ගිම්හාන", vassana: "වස්සාන" };
 const typeNameMap = { full: "පසළොස්වක", new: "අමාවක" };
@@ -215,6 +418,15 @@ const typeNameMap = { full: "පසළොස්වක", new: "අමාවක" }
 let poyaList = [];
 let vesakDates = {};
 let poyaListComputedUpToYear = MIN_YEAR - 1;
+
+// poyaList දිනය අනුව ඇණවුම් කර ඇත → binary search (O(log n)); 27k ඇතුළත් කිරීම් වලදී Date parse නොකර ඉක්මනින් සොයයි
+function _pLowerBound(pred) {          // pred(p) අසත්‍යයෙන් සත්‍යයට මාරුවන පළමු දර්ශකය
+    let lo = 0, hi = poyaList.length;
+    while (lo < hi) { const mid = (lo + hi) >> 1; if (pred(poyaList[mid])) hi = mid; else lo = mid + 1; }
+    return lo;
+}
+function _pFirstFrom(i, fn) { for (; i < poyaList.length; i++) if (fn(poyaList[i])) return poyaList[i]; return undefined; }
+function _pLastBefore(i, fn) { for (i = i - 1; i >= 0; i--) if (fn(poyaList[i])) return poyaList[i]; return null; }
 
 let _chainState = null; // { currentDate, season, posInSeason, isFirst, monthIdx, thisGimhanaLeap }
 
@@ -243,7 +455,7 @@ function extendPoyaDataTo(uptoYear) {
         }
         s.isFirst = false;
 
-        let type = detectPoyaType(s.currentDate);
+        let type = (s.posInSeason % 2 === 0) ? 'full' : 'new'; // අමාවක = ඔත්තේ ස්ථාන, පසළොස්වක = ඉරට්ටේ ස්ථාන (Astronomy ඇමතුම් නැත)
 
         let estimatedDisplayDate = new Date(s.currentDate.getTime() + DISPLAY_DAY_ADJUST_MS);
         let isoKey = fmtISO(estimatedDisplayDate);
@@ -625,13 +837,13 @@ function calculateAll() {
     const vD = new Date(vesakDates[y] || `${y}-05-01`).getTime();
     const bY = (time <= vD) ? (y + 543) : (y + 544);
 
-    const pastFullMoons = poyaList.filter(p => p.t === "පසළොස්වක" && new Date(p.d).getTime() < time);
-    const lastFullMoon = pastFullMoons.length > 0 ? pastFullMoons[pastFullMoons.length - 1] : null;
+    const iT = _pLowerBound(p => new Date(p.d).getTime() >= time);
+    const lastFullMoon = _pLastBefore(iT, p => p.t === "පසළොස්වක");
     let tithi = lastFullMoon ? Math.round((time - new Date(lastFullMoon.d).getTime()) / 86400000) : 1;
     if(tithi === 0) tithi = 1;
 
-    const nextA = poyaList.find(p => p.t === "අමාවක" && new Date(p.d).getTime() >= time);
-    const nextF = poyaList.find(p => p.t === "පසළොස්වක" && new Date(p.d).getTime() >= time);
+    const nextA = _pFirstFrom(iT, p => p.t === "අමාවක");
+    const nextF = _pFirstFrom(iT, p => p.t === "පසළොස්වක");
     let paksha = (nextA && (!nextF || new Date(nextA.d).getTime() <= new Date(nextF.d).getTime())) ? t.paksha.Kanha : t.paksha.Sukka;
 
     const lastV = time <= vD ? y-1 : y;
@@ -640,13 +852,14 @@ function calculateAll() {
     const totM = Math.round((nextVD - lastVD) / 2551442400);
 
     
-    const nextFT = poyaList.find(p => p.t === "පසළොස්වක" && new Date(p.d).getTime() >= time);
+    const nextFT = _pFirstFrom(iT, p => p.t === "පසළොස්වක");
     let bM = nextFT ? Math.round((new Date(nextFT.d).getTime() - lastVD) / 2551442400) : 1;
     bM = (bM <= 0) ? totM : (bM > totM ? totM : bM);
 
-    const nextP = poyaList.find(p => new Date(p.d).getTime() >= time);
+    const nextP = poyaList[iT];
 
-    const todayP = poyaList.find(p => p.d === ds);
+    const _iD = _pLowerBound(p => p.d >= ds);
+    const todayP = (poyaList[_iD] && poyaList[_iD].d === ds) ? poyaList[_iD] : undefined;
     let poyaName = "";
     if (todayP) {
         if (currentLang === 'en') {
@@ -665,7 +878,7 @@ function calculateAll() {
     };
 
   
-    const nextSeasonEntry = poyaList.find(p => new Date(p.d).getTime() >= time);
+    const nextSeasonEntry = poyaList[iT];
     const rawS = nextSeasonEntry ? nextSeasonEntry.r : "හේමන්ත";
     
     const seasonKey = Object.keys(i18n.si.seasons).find(k => i18n.si.seasons[k] === rawS);
@@ -680,8 +893,7 @@ function calculateAll() {
     let paliIndex = tithi; 
     let finalPaksha = paksha; 
 
-    const pastAmavakas = poyaList.filter(p => p.t === "අමාවක" && new Date(p.d).getTime() < d.getTime());
-    const lastAmavaka = pastAmavakas.length > 0 ? pastAmavakas[pastAmavakas.length - 1] : null;
+    const lastAmavaka = _pLastBefore(iT, p => p.t === "අමාවක");
 
     if (finalPaksha === t.paksha.Sukka && lastAmavaka) {
         const amavakaDate = new Date(lastAmavaka.d);
@@ -705,19 +917,11 @@ function calculateAll() {
     document.getElementById('bDay').innerText = tithi;
     document.getElementById('paliDisplay').innerText = t.paliTemplate(animal, displayS, displayMonth, finalPaksha, tithiWord, weekDay);
 
-    let nextPoya = poyaList.find(p => {
-        let pDate = new Date(p.d);
-        pDate.setHours(0,0,0,0);
-        return pDate >= d;
-    });
+    const _iN = _pLowerBound(p => { let pDate = new Date(p.d); pDate.setHours(0,0,0,0); return pDate >= d; });
+    let nextPoya = poyaList[_iN];
 
     
-    let nextFullMoon = poyaList.find(p => {
-        let pDate = new Date(p.d);
-        pDate.setHours(0,0,0,0);
-        
-        return pDate >= d && p.t.includes("පසළොස්වක");
-    });
+    let nextFullMoon = _pFirstFrom(_iN, p => p.t.includes("පසළොස්වක"));
 
     let currentAvasitthaD = 0;
     let poyaMessage = "";
@@ -1405,8 +1609,8 @@ function resetToToday() {
     }
 } 
 
-const WHEEL_MIN_YEAR = 2020;
-const WHEEL_MAX_YEAR = 2200;
+const WHEEL_MIN_YEAR = 1900;
+const WHEEL_MAX_YEAR = 3000;
 const WHEEL_ROW_H = 44;
 const WHEEL_CYCLES = 9;
 const WHEEL_MID_CYCLE = 4;
