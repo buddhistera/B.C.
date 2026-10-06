@@ -434,8 +434,8 @@ return html;
       setupSpy(ov);
     }).catch(function () {
       if (cur !== tab.id) return;
-      main.innerHTML = '<div class="ch-load"><b>⚠️</b>' + T('අන්තර්ගතය පූරණය කළ නොහැකි විය. (අන්තර්ජාලය/ගොනුව පරීක්ෂා කරන්න)', 'Could not load this section. Please check your connection.') +
-        '<br><button class="ch-retry" type="button">' + T('නැවත උත්සාහ කරන්න', 'Retry') + '</button></div>';
+      main.innerHTML = '<div class="ch-load"><b>⚠️</b>' + T('බලාපොරොත්තු වන්න', 'Coming Soon') +
+        '<br><button class="ch-retry" type="button">' + T(' ....', ' ....') + '</button></div>';
       main.querySelector('.ch-retry').addEventListener('click', function () { showTab(ov, tab.id, true); });
     });
   }
