@@ -33,7 +33,7 @@
     { id: 'recitation',   icon: '🗓️', title: { si: 'බුද්ධ වර්ෂය',    en: 'Buddha Year' },  src: 'buddha-recitation.js?v=1' },
     { id: 'pirith',       icon: '📖', title: { si: 'පිරිත්',        en: 'Pirith' },       src: 'pirith-data.js?v=1' },
     { id: 'patimokkha',   icon: '🪷', title: { si: 'ප්‍රාතිමෝක්ෂය',   en: 'Pātimokkha' },   src: 'patimokkha-data.js?v=1', adapt: adaptPatimokkha },
-    { id: 'patthana',     icon: '✨', title: { si: 'පට්ඨානය',       en: 'Paṭṭhāna' },     src: 'patthana-data.js?v=1' },
+    { id: 'patthana',     icon: '✨', title: { si: 'පට්ඨානය',       en: 'Paṭṭhāna' },     src: 'patthana-data.js?v=2' },
     { id: 'satipatthana', icon: '🧘', title: { si: 'සතිපට්ඨාන',     en: 'Satipaṭṭhāna' }, src: 'satipatthana-data.js?v=1' }
   ];
 
@@ -108,7 +108,7 @@
   window.chPmToggle = function (b) {
     var open = b.getAttribute('aria-expanded') !== 'true';
     b.setAttribute('aria-expanded', open ? 'true' : 'false');
-    b.closest('.ch-card').querySelector('.pm-meaning').classList.toggle('open', open);
+    b.closest('.ch-card').querySelector('.pm-meaning, .ch-mean-wrap').classList.toggle('open', open);
   };
 
   /* --------------------------- loading ---------------------------- */
@@ -240,6 +240,8 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
 #chOverlay .pm-more[aria-expanded=true] .pm-arr{transform:rotate(180deg)}\
 #chOverlay .pm-meaning{display:none;margin-top:12px;padding:4px 4px 2px 13px;border-left:4px solid var(--m700);font-size:.95rem;line-height:1.95;color:var(--tx)}\
 #chOverlay .pm-meaning.open{display:block}\
+#chOverlay .ch-mean-wrap{display:none}\
+#chOverlay .ch-mean-wrap.open{display:block}\
 #chOverlay .pm-meaning.en{font-family:Georgia,"Noto Serif",serif;font-size:.97rem;line-height:1.85}\
 #chOverlay .pm-meaning p{margin:0 0 .7em;white-space:pre-line}\
 @media (min-width:720px){#chOverlay .ch-card{padding:24px 28px}#chOverlay .ch-main{padding:22px 18px 40px}#chOverlay .ch-pali{font-size:1.06rem;padding:20px 24px}}';
@@ -302,7 +304,14 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     var mean = si ? it.sinhala : it.english;
     var body = '';
     if (main) body += '<div class="ch-box ch-pali" data-l="' + esc(si ? '📜 පාළි' : '📜 Pāḷi') + '">' + esc(main) + '</div>';
-    if (mean) body += '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(si ? '🇱🇰 සිංහල අර්ථය' : '🌐 Meaning') + '">' + esc(mean) + '</div>';
+    if (mean) {
+      var meanBox = '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(si ? '🇱🇰 සිංහල අර්ථය' : '🌐 Meaning') + '">' + esc(mean) + '</div>';
+      if (mod.meaningToggle) {   // තේරුම බටනයෙන් පමණක් දිගහැරේ (ප්‍රාතිමෝක්ෂය මෙන්)
+        body += '<div class="pm-row"><button type="button" class="pm-more" aria-expanded="false" onclick="chPmToggle(this)">' +
+          T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button></div>' +
+          '<div class="ch-mean-wrap">' + meanBox + '</div>';
+      } else body += meanBox;
+    }
     var gt = si ? it.gatha : (it.gathaTr || it.gatha);
     if (gt) body += '<div class="ch-gatha">' + esc(gt) + '</div>';
     return '<article class="ch-card" data-a="' + esc(it.id) + '" data-k="' + esc(key) + '">' + head + body + '</article>';
