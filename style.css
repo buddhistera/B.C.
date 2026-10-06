@@ -5,31 +5,35 @@
     --blue: #003399; 
     --dark-red: #8B0000;
     --orange: #FF6600;
+    --nav-h: 70px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-l: env(safe-area-inset-left, 0px);
+    --safe-r: env(safe-area-inset-right, 0px);
 }
-
-/* --- Fonts --- */
-@font-face { font-family: 'UN Abhaya'; src: url('AbhayaLibre-Regular.ttf') format('truetype'); font-weight: normal; }
 
 * { box-sizing: border-box; }
 
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
     width: 100%;
     overscroll-behavior-y: none !important;
     touch-action: pan-x pan-y !important;
 }
+html { height: 100%; }
+body { min-height: 100vh; min-height: 100dvh; }
 
 body { 
-    font-family: 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif; 
+    font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif; 
     display: flex; 
     justify-content: center; 
     align-items: flex-start;
-    min-height: 100vh;
     background-color: #e0e0e0;
     -webkit-font-smoothing: antialiased;
     transition: background 0.5s ease;
+    padding-bottom: calc(var(--nav-h) + var(--safe-b) + 20px) !important;
+    box-sizing: border-box;
 }
 
 /* =========================================
@@ -46,7 +50,7 @@ body {
     flex-direction: column; 
     box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
     position: relative; 
-    overflow: visible !important; /* මෙනුව කැපී යාම වළක්වයි */
+    overflow: visible !important;
     background-image: linear-gradient(rgba(255,255,255,0.96), rgba(255,255,255,0.96)), 
                   linear-gradient(to right, 
                       #0033aa 20%, 
@@ -152,7 +156,7 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
     position: relative; 
     z-index: 100;
-    border-radius: 24px 24px 0 0; /* ඉහළ කොන් වටකුරු කිරීම */
+    border-radius: 24px 24px 0 0;
 }
 
 .menu-dots { 
@@ -178,7 +182,7 @@ body {
     border-radius: 12px; 
     box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
     min-width: 200px; 
-    z-index: 9999; /* ඉහළම z-index එකක් ලබා දීම */
+    z-index: 9999;
     overflow: hidden; 
     border: 2px solid var(--gold);
     animation: menuFade 0.2s ease-out;
@@ -266,8 +270,36 @@ body {
 #miniMoonVisual.phase-moon { background-color: #000000; }
 #miniMoonVisual.new-moon { background-color: #000000; }
 
-.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-.modal-content { background: white; width: 90%; max-width: 460px; max-height: 85vh; border-radius: 15px; overflow-y: auto; padding: 20px; position: relative; box-shadow: 4px 4px 15px rgba(0,0,0,0.2), -4px -4px 15px rgba(255,255,255,0.8); }
+/* ============================================================
+   MODALS (poya, vas) — scrollable, only shown via inline style
+   NOTE: .show class trigger නොමැත — JS එක style.display = 'flex'
+         ලෙස set කරන විට පමණක් open වේ (original behavior).
+   ============================================================ */
+.modal { 
+    display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.55); 
+    z-index: 3000; 
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: center; 
+    align-items: flex-start;
+    padding: calc(var(--safe-t) + 16px) 12px calc(var(--nav-h) + var(--safe-b) + 20px);
+    box-sizing: border-box;
+}
+.modal-content { 
+    background: white; 
+    width: 100%; 
+    max-width: 460px; 
+    border-radius: 15px; 
+    padding: 20px; 
+    position: relative; 
+    box-shadow: 4px 4px 15px rgba(0,0,0,0.2), -4px -4px 15px rgba(255,255,255,0.8); 
+    flex-shrink: 0;
+    margin-top: 10px;
+}
 .modal-header { font-weight: bold; font-size: 1.2em; border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
 .close-btn { cursor: pointer; font-size: 24px; color: #777; }
 
@@ -288,10 +320,6 @@ body {
 .poya-name { font-size: 0.8em; color: #666; }
 .poya-tag { font-size: 0.75em; padding: 4px 10px; border-radius: 20px; color: white; font-weight: bold; min-width: 85px; text-align: center; display: inline-block; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
 
-.sun-container { position: relative !important; }
-.sun-close-btn { position: absolute !important; top: 10px !important; right: 15px !important; background: transparent !important; border: none !important; box-shadow: none !important; border-radius: 0 !important; color: #e74c3c !important; font-size: 26px !important; font-weight: bold !important; font-family: Arial, sans-serif !important; cursor: pointer !important; z-index: 3000 !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 0 !important; width: auto !important; height: auto !important; }
-.sun-close-btn:hover { background: transparent !important; color: #ff6b6b !important; }
-
 #poyaListContent { max-height: 65vh; overflow-y: auto; padding-right: 5px; }
 #poyaListContent::-webkit-scrollbar { width: 6px; }
 #poyaListContent::-webkit-scrollbar-thumb { background: #bbb; border-radius: 10px; }
@@ -308,17 +336,83 @@ body {
 .full-moon-bg { background-color: rgba(255, 235, 59, 0.2) !important; border: 1px solid #d4af37 !important; }
 .new-moon-bg { background-color: rgba(0, 0, 0, 0.15) !important; color: inherit; }
 
-/* --- Sun Times Modal Styles --- */
-.modal-sun { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); backdrop-filter: blur(4px); justify-content: center; align-items: center; }
-.sun-container { width: 95%; max-width: 460px; min-height: 580px; background: #e0e0e0; padding: 30px 22px; border-radius: 40px; box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff; position: relative; display: flex; flex-direction: column; justify-content: space-between; animation: slideUp 0.4s ease-out; }
-.sun-close-btn { position: absolute; top: -60px; right: 10px; width: 45px; height: 45px; background-color: #ff4d4d; color: white; border: none; border-radius: 50%; font-size: 26px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
-.sun-close-btn:hover { background-color: #ff1a1a; transform: scale(1.1); }
+/* ============================================================
+   SUN TIMES MODAL — scrollable, only shown via inline style
+   ============================================================ */
+.modal-sun { 
+    display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0, 0, 0, 0.15); 
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px); 
+    z-index: 3000;
+    overflow-y: auto; 
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: calc(var(--safe-t) + 20px) 12px calc(var(--nav-h) + var(--safe-b) + 20px);
+    box-sizing: border-box;
+    justify-content: center; 
+    align-items: flex-start; 
+}
+
+.sun-container { 
+    width: 95%; 
+    max-width: 460px; 
+    min-height: auto !important;
+    height: auto !important;
+    background: #e0e0e0; 
+    padding: 55px 22px 24px; 
+    border-radius: 40px; 
+    box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start; 
+    gap: 14px;
+    animation: slideUp 0.4s ease-out;
+    flex-shrink: 0;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.sun-close-btn {
+    position: absolute !important;
+    top: 14px !important;
+    right: 16px !important;
+    width: 42px !important;
+    height: 42px !important;
+    background-color: #ff4d4d !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50% !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    font-family: Arial, sans-serif !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    z-index: 10 !important;
+}
+.sun-close-btn:hover { background-color: #ff1a1a !important; transform: scale(1.08); }
+
 .sun-h3 { text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 1.3rem; color: #3e2723; }
-.sun-header-controls { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; margin-bottom: 20px; }
+.sun-header-controls { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; margin-bottom: 5px; }
 .sun-input { width: 60%; min-width: 180px; padding: 12px; border: 2px solid #ffffff; border-radius: 15px; background: #e0e0e0; box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff; color: #3e2723; outline: none; font-size: 15px; text-align: center; }
 .sun-btn-location { width: 85%; padding: 12px; border: none; border-radius: 15px; background: #e0e0e0; color: #b8860b; font-size: 15px; font-weight: bold; cursor: pointer; outline: none; transition: all 0.2s ease; box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .sun-btn-location:active { box-shadow: inset 3px 3px 6px #bebebe, inset -3px -3px 6px #ffffff; transform: scale(0.98); }
 #locationStatus { font-size: 0.85em; color: #424242; text-align: center; margin: 5px 0 15px 0; font-weight: 500; line-height: 1.4; }
+
 .sun-badge-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
 .sun-badge { background: #e0e0e0; padding: 12px 14px; border-radius: 20px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff; }
 .dawn-badge, .sunrise-badge, .noon-badge, .sunset-badge { border-left: 4px solid var(--dark-red, #8B0000); }
@@ -328,7 +422,7 @@ body {
 .dawn-badge .sun-time, .sunrise-badge .sun-time, .noon-badge .sun-time, .sunset-badge .sun-time { color: var(--dark-red, #8B0000); }
 .poya-time-line { font-size: 0.8rem; color: #546e7a; text-align: center; margin: 3px 0; font-weight: 500; }
 .poya-time-line span:last-child { color: #b8860b; font-weight: 600; font-family: 'monospace', sans-serif; }
-.sun-astro-card { width: 100%; box-sizing: border-box; border: 2px solid #8d6e46; border-radius: 20px; padding: 14px 16px; margin-top: 15px; background: #e0e0e0; }
+.sun-astro-card { width: 100%; box-sizing: border-box; border: 2px solid #8d6e46; border-radius: 20px; padding: 14px 16px; margin-top: 5px; background: #e0e0e0; }
 .sun-astro-title { text-align: center; font-size: 0.88rem; font-weight: 700; color: #6d4c26; margin-bottom: 8px; line-height: 1.3; }
 .sun-astro-subtitle { text-align: center; font-size: 0.85rem; color: #3e2723; font-weight: 600; margin-bottom: 10px; }
 .sun-astro-moon-row { display: flex; gap: 10px; margin-bottom: 4px; }
@@ -342,10 +436,33 @@ body {
 .loc-coords { font-size: 0.9em; color: #616161; }
 
 /* =====================================================================
-   Custom Wheel Date Picker
+   Custom Wheel Date Picker — ORIGINAL (no .show trigger!)
+   JS එක style.display = 'flex' ලෙස set කරන විට පමණක් පෙනේ.
    ===================================================================== */
-.modal-wheel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(3px); z-index: 3000; justify-content: center; align-items: center; }
-.wheel-picker-container { width: 90%; max-width: 340px; background: #ffffff; border-radius: 24px; padding: 20px 16px 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.35); position: relative; animation: slideUp 0.25s ease-out; }
+.modal-wheel { 
+    display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0, 0, 0, 0.45); 
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px); 
+    z-index: 3200; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+.wheel-picker-container { 
+    width: 90%; 
+    max-width: 340px; 
+    background: #ffffff; 
+    border-radius: 24px; 
+    padding: 20px 16px 16px; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35); 
+    position: relative; 
+    animation: slideUp 0.25s ease-out; 
+}
 .wheel-picker-close { position: absolute; top: -50px; right: 4px; width: 40px; height: 40px; background: #ffffff; color: #3e2723; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
 .wheel-columns { display: flex; justify-content: space-between; gap: 6px; position: relative; height: 220px; }
 .wheel-col { flex: 1; height: 220px; overflow-y: scroll; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 88px 0; box-sizing: border-box; }
@@ -357,7 +474,7 @@ body {
 .wheel-ok-btn:active { transform: scale(0.98); }
 
 /* =====================================================================
-   PREMIUM DARK MODE THEME (FIXED STARS INSIDE & MENU VISIBLE)
+   PREMIUM DARK MODE THEME
    ===================================================================== */
 body.dark-mode {
     --bg-dark: #090a10;
@@ -370,15 +487,11 @@ body.dark-mode {
     --accent-green: #00e676;
     --border-glow: rgba(0, 229, 255, 0.3);
     --border-purple: rgba(179, 136, 255, 0.3);
-    
-    /* Override the original --text variable to fix Poya list visibility */
     --text: #ffffff;
-
     background: transparent !important;
     color: var(--text-main) !important;
 }
 
-/* Animated Gradient Background (Outer Body) */
 body.dark-mode::before {
     content: '';
     position: fixed;
@@ -396,22 +509,19 @@ body.dark-mode::before {
     100% { background-position: 0% 50%; }
 }
 
-/* App Container - Glassmorphism & Stars Inside */
 body.dark-mode .app-container {
-    background: #131724 !important; /* Solid background for app card */
+    background: #131724 !important;
     background-image: none !important;
-    backdrop-filter: blur(12px) !important;
     border: 2px solid var(--border-purple) !important;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(179, 136, 255, 0.05) !important;
-    overflow: visible !important; /* මෙනුව කැපී යාම වළක්වයි */
+    overflow: visible !important;
 }
 
-/* Moving Blue Lights (Satellites/Stars) Inside App Container */
 body.dark-mode .app-container::before {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    border-radius: 24px; /* App card එකේ කොන් වටකුරු ආකාරයටම */
+    border-radius: 24px;
     overflow: hidden;
     background-image:
         radial-gradient(1.5px 1.5px at 10% 20%, #00e5ff, transparent),
@@ -433,22 +543,20 @@ body.dark-mode .app-container::before {
     100% { transform: translateY(-150px) translateX(-150px); }
 }
 
-/* Header */
 body.dark-mode .header {
     background: linear-gradient(to right, #1a1025, #2a1b40) !important;
     border-bottom: 1px solid var(--border-purple) !important;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
     text-shadow: 0 0 10px rgba(179, 136, 255, 0.5) !important;
     position: relative;
-    z-index: 10; /* තරු වලට ඉහළින් තැබීමට */
+    z-index: 10;
 }
 
-/* Menu Dropdown - High Z-Index to stay on top */
 body.dark-mode .menu-dropdown {
     background: #131724 !important;
     border: 1px solid var(--accent-purple) !important;
     box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(179, 136, 255, 0.2) !important;
-    z-index: 9999 !important; /* ඉහළම z-index එක */
+    z-index: 9999 !important;
 }
 body.dark-mode .menu-dropdown div {
     color: var(--text-main) !important;
@@ -459,16 +567,14 @@ body.dark-mode .menu-dropdown div:hover {
     color: var(--accent-cyan) !important;
 }
 
-/* Main Content Area - Sits above stars */
 body.dark-mode .buddhist-calendar-row,
 body.dark-mode .pali-box,
 body.dark-mode .date-section-wrapper,
 body.dark-mode .section {
     position: relative;
-    z-index: 1; /* තරු වලට ඉහළින් තැබීමට */
+    z-index: 1;
 }
 
-/* Main Calendar Section */
 body.dark-mode .side-panel, 
 body.dark-mode .data-item {
     background-color: var(--bg-card) !important;
@@ -497,7 +603,6 @@ body.dark-mode .main-val-text {
     text-shadow: 0 0 10px rgba(0, 229, 255, 0.8) !important;
 }
 
-/* Pali Text Box */
 body.dark-mode .pali-box {
     background: rgba(15, 23, 42, 0.9) !important;
     border: 1px solid rgba(0, 229, 255, 0.3) !important;
@@ -505,7 +610,6 @@ body.dark-mode .pali-box {
     box-shadow: inset 0 0 15px rgba(0,0,0,0.5) !important;
 }
 
-/* Modals (Poya, Vas, Sun, Wheel) */
 body.dark-mode .modal-content, 
 body.dark-mode .sun-container, 
 body.dark-mode .wheel-picker-container {
@@ -534,7 +638,6 @@ body.dark-mode .list-item.next-poya-bg {
     border-left: 6px solid var(--accent-green) !important;
 }
 
-/* Poya List Text Visibility Fixes (Purple and Cyan) */
 body.dark-mode .list-item span[style*="color: var(--text)"] {
     color: var(--accent-purple) !important;
     text-shadow: 0 0 8px rgba(179, 136, 255, 0.5);
@@ -550,7 +653,6 @@ body.dark-mode .vas-label {
     color: var(--text-muted) !important;
 }
 
-/* Sun Modal Elements */
 body.dark-mode .sun-badge {
     background: var(--bg-card) !important;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05) !important;
@@ -595,7 +697,6 @@ body.dark-mode .sun-btn-location {
     border: 1px solid rgba(0, 229, 255, 0.3) !important;
 }
 
-/* Wheel Picker */
 body.dark-mode .wheel-item { color: var(--text-muted) !important; }
 body.dark-mode .wheel-item.wheel-selected { color: var(--accent-cyan) !important; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); }
 body.dark-mode .wheel-selection-band {
@@ -609,7 +710,6 @@ body.dark-mode .wheel-picker-close {
     border: 1px solid var(--accent-purple) !important;
 }
 
-/* Custom Date Container */
 body.dark-mode .custom-date-container {
     background-color: #0d1117 !important;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.8) !important;
@@ -628,7 +728,6 @@ body.dark-mode #miniMoonVisual.full-moon {
     box-shadow: 0 0 20px 8px rgba(253, 224, 71, 0.6) !important;
 }
 
-/* Vas Card */
 body.dark-mode .vas-card {
     background: #1a1025 !important;
     border-left: 5px solid var(--accent-purple) !important;
@@ -637,13 +736,13 @@ body.dark-mode .vas-date-badge {
     background: var(--accent-purple) !important;
     color: #fff !important;
 }
+
 /* =========================================================
    PWA INSTALL BANNER
    ========================================================= */
-
 #pwa-install-banner {
     position: fixed;
-    bottom: 16px;
+    bottom: calc(var(--nav-h) + var(--safe-b) + 12px);
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(135deg, #f3e5ab 0%, var(--gold) 50%, #aa7c11 100%);
@@ -659,10 +758,10 @@ body.dark-mode .vas-date-badge {
     align-items: center;
     gap: 12px;
     z-index: 1200;
-    max-width: calc(100% - 32px);
+    max-width: calc(100% - 24px);
     width: 420px;
     animation: pwaBannerSlideUp 0.4s ease-out;
-    font-family: 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
+    font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
 }
 #pwa-install-banner.show { display: flex; }
 
@@ -684,10 +783,7 @@ body.dark-mode .vas-date-badge {
 }
 #pwa-install-banner .pwa-banner-icon svg { width: 22px; height: 22px; }
 
-#pwa-install-banner .pwa-banner-text {
-    flex: 1;
-    min-width: 0;
-}
+#pwa-install-banner .pwa-banner-text { flex: 1; min-width: 0; }
 #pwa-install-banner .pwa-banner-title {
     font-size: 13.5px;
     font-weight: bold;
@@ -736,10 +832,9 @@ body.dark-mode .vas-date-badge {
 }
 #pwa-install-banner .pwa-dismiss-btn:active { background: rgba(0, 0, 0, 0.10); }
 
-/* iOS "Add to Home Screen" instructions popover */
 #pwa-ios-tip {
     position: fixed;
-    bottom: 100px;
+    bottom: calc(var(--nav-h) + var(--safe-b) + 90px);
     left: 50%;
     transform: translateX(-50%);
     background: #fffff0;
@@ -754,7 +849,7 @@ body.dark-mode .vas-date-badge {
     line-height: 1.55;
     z-index: 1201;
     display: none;
-    font-family: 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
+    font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
 }
 #pwa-ios-tip.show { display: block; animation: pwaBannerSlideUp 0.35s ease-out; }
 #pwa-ios-tip strong { color: var(--dark-red); }
@@ -773,9 +868,228 @@ body.dark-mode .vas-date-badge {
     padding: 4px;
 }
 
+/* ============================================================
+   BOTTOM NAVIGATION — FULL WIDTH + TRANSPARENT (GLASS)
+   ============================================================ */
+.bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    margin: 0;
+    z-index: 900;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 2px;
+    padding: 8px 6px calc(8px + var(--safe-b));
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(14px) saturate(180%);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+}
+
+.bn-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 1px 6px;
+    border: none;
+    background: transparent;
+    color: #2e7d5b;
+    border-radius: 16px;
+    cursor: pointer;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .2s ease, color .2s ease, transform .15s ease;
+}
+.bn-item svg, .np-item svg {
+    width: 25px; height: 25px; flex: none;
+    fill: none; stroke: currentColor; stroke-width: 1.6;
+    stroke-linecap: round; stroke-linejoin: round;
+}
+.nav-lbl {
+    font-size: 9.5px; font-weight: 700; letter-spacing: .1px;
+    line-height: 1.2; max-width: 100%;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bn-item:hover, .bn-item:active, .bn-item.active {
+    background: rgba(30, 143, 108, 0.12);
+    color: #1E8F6C;
+}
+.bn-item:active { transform: scale(.94); }
+
+.nav-popup {
+    display: none;
+    position: absolute;
+    right: 10px;
+    bottom: calc(100% + 12px);
+    min-width: 190px;
+    padding: 6px;
+    background: #ffffff;
+    border: 1.5px solid #8fd8bc;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(30, 143, 108, 0.25);
+    animation: menuFade .2s ease-out;
+    z-index: 1001;
+}
+.nav-popup.show { display: block; }
+.np-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    color: #1E8F6C;
+    cursor: pointer;
+}
+.np-item .nav-lbl { font-size: 14px; font-weight: 600; color: #134e3a; }
+.np-item:hover, .np-item:active { background: #dcf5ea; }
+
+body.dark-mode .bottom-nav {
+    background: rgba(18, 32, 26, 0.72);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(14px) saturate(180%);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.5);
+}
+body.dark-mode .bn-item { color: #6fb59c; }
+body.dark-mode .bn-item:hover, 
+body.dark-mode .bn-item:active, 
+body.dark-mode .bn-item.active { 
+    background: rgba(60, 220, 160, .16); 
+    color: #5fe3b6; 
+}
+body.dark-mode .nav-popup { 
+    background: #12201a; 
+    border-color: #2fbf8f; 
+    box-shadow: 0 10px 30px rgba(0,0,0,.7); 
+}
+body.dark-mode .np-item { color: #5fe3b6; }
+body.dark-mode .np-item .nav-lbl { color: #d6f5e8; }
+body.dark-mode .np-item:hover, 
+body.dark-mode .np-item:active { background: rgba(60, 220, 160, .16); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width: 420px) {
     #pwa-install-banner { padding: 12px; gap: 10px; }
     #pwa-install-banner .pwa-banner-title { font-size: 12.5px; }
     #pwa-install-banner .pwa-banner-sub { font-size: 10px; }
     #pwa-install-banner .pwa-install-btn { padding: 8px 12px; font-size: 12px; }
+}
+@media (max-width: 360px) {
+    .nav-lbl { font-size: 8.5px; }
+    .bn-item svg { width: 23px; height: 23px; }
+    .sun-container { padding: 50px 16px 20px; border-radius: 28px; }
+}
+
+/* ============================================================
+   LANDSCAPE (phones / short screens) — 2 column layout,
+   compact bottom nav
+   ============================================================ */
+@media (orientation: landscape) and (max-height: 600px) {
+    :root { --nav-h: 58px; }
+
+    html, body { width: 100%; }
+    body {
+        padding-top: 0 !important;
+        padding-left: var(--safe-l) !important;
+        padding-right: var(--safe-r) !important;
+        padding-bottom: calc(var(--nav-h) + var(--safe-b) + 12px) !important;
+    }
+
+    .app-container {
+        max-width: none;
+        margin: 6px;
+        border-radius: 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: min-content;
+        column-gap: 6px;
+        align-items: start;
+    }
+    .header {
+        grid-column: 1 / -1;
+        padding: 9px 12px;
+        font-size: 1.1em;
+        border-radius: 18px 18px 0 0;
+    }
+    .date-section-wrapper { grid-column: 1; grid-row: 2; padding: 6px 12px; gap: 4px; }
+    .buddhist-calendar-row { grid-column: 1; grid-row: 3; padding: 4px 10px 8px; gap: 4px; align-self: start; }
+    .pali-box {
+        grid-column: 2; grid-row: 2 / span 2;
+        align-self: stretch;
+        display: flex; flex-direction: column; justify-content: center;
+        margin: 8px 10px 8px 0 !important;
+        padding: 10px;
+        font-size: 0.95em;
+        line-height: 1.5;
+    }
+    .poya-wrap {
+        grid-column: 1 / -1; grid-row: 4;
+        margin-bottom: 6px !important;
+    }
+    .side-panel { padding: 5px 3px; gap: 2px; }
+    .main-panel { padding: 5px; gap: 4px; }
+    .data-item { padding: 2px; }
+    .panel-header { margin-bottom: 3px; padding-bottom: 2px; }
+    .main-val-text { font-size: 1.4em; }
+
+    /* compact bottom navigation (stays at the bottom in landscape) */
+    .bottom-nav {
+        padding: 3px calc(6px + var(--safe-r)) calc(3px + var(--safe-b)) calc(6px + var(--safe-l));
+    }
+    .bn-item { flex-direction: row; gap: 6px; padding: 6px 2px; border-radius: 12px; }
+    .bn-item svg { width: 20px; height: 20px; }
+    .nav-lbl { font-size: 10px; }
+    .nav-popup { bottom: calc(100% + 8px); }
+
+    /* modals */
+    .modal, .modal-sun {
+        padding: calc(var(--safe-t) + 8px) calc(var(--safe-r) + 12px) calc(var(--safe-b) + 12px) calc(var(--safe-l) + 12px);
+    }
+    .modal-content { max-width: 600px; margin-top: 0; }
+    #poyaListContent { max-height: calc(100vh - 130px); max-height: calc(100dvh - 130px); }
+    .sun-container {
+        max-width: 720px;
+        width: 100%;
+        margin-top: 0;
+        padding: 50px 18px 18px;
+        border-radius: 28px;
+    }
+    .sun-badge-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .sun-badge { padding: 10px; border-radius: 16px; }
+
+    /* wheel date picker: keep close button reachable on a short screen */
+    .modal-wheel { padding: 8px; }
+    .wheel-picker-container { max-width: 360px; padding: 14px 14px 12px; }
+    .wheel-picker-close { top: 0; right: -52px; }
+    .wheel-columns, .wheel-col { height: 176px; }
+    .wheel-col { padding: 66px 0; }
+    .wheel-selection-band { top: 66px; }
+    .wheel-ok-btn { margin-top: 10px; padding: 11px; }
+
+    /* install banners */
+    #pwa-install-banner {
+        bottom: calc(var(--safe-b) + 8px);
+        width: 440px;
+    }
+    #pwa-ios-tip {
+        bottom: calc(var(--safe-b) + 80px);
+    }
+}
+
+/* Very short landscape (small phones) */
+@media (orientation: landscape) and (max-height: 400px) {
+    .header { padding: 6px 10px; font-size: 1em; }
+    .nav-lbl { font-size: 9px; }
 }

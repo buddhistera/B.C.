@@ -4,7 +4,10 @@
 	
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ECEGZ86GGK"></script>
 <script src="astronomy.browser.min.js?v=1"></script>
-<script src="script.js"></script>
+<script src="script.js?v=3.4"></script>
+<script src="calculation.js?v=3"></script>
+<script src="info.js?v=1"></script>
+<script src="chanting.js?v=6"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -14,9 +17,10 @@
     <meta charset="UTF-8">
 	<link rel="apple-touch-icon" href="./icon-192x192.png?v=1">
 	<link rel="manifest" href="./manifest.json?v=1">
-	<link rel="stylesheet" href="style.css?v=2.7">
+	<link rel="stylesheet" href="style.css?v=3.2">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700;800&family=Noto+Serif+Sinhala:wght@500;600;700;800&family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
     <link rel="canonical" href="https://buddhist-era.vercel.app/">
 <meta property="og:title" content="Buddhist Era | බුද්ධ වර්ෂය">
 <meta property="og:description" content="Buddhist Era calendar and tools">
@@ -26,7 +30,7 @@
 <meta property="og:site_name" content="Buddhist Era">
 	<meta name="description" content="Buddhist Era calendar and tools. බෞද්ධ වර්ෂය සහ දින දර්ශනය .">
 <meta name="keywords" content="Buddhist Era, Calendar, B.C., බුද්ධ වර්ෂය, බෞද්ධ දින දර්ශනය">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="google" content="notranslate">
     <meta name="robots" content="index, follow">
     <title>Buddhist Era | බුද්ධ වර්ෂය</title>
@@ -37,21 +41,10 @@
 <div class="app-container">
     <div class="header" id="ui-title">
         බුද්ධ වර්ෂය
-        <div class="menu-dots" onclick="toggleMenu()">&#8942;</div>
     </div>
 
-    <div class="menu-dropdown" id="myDropdown">
-        <div onclick="toggleLanguage()" id="ui-lang-btn">English / සිංහල</div>
-<div onclick="openSunModal()" id="ui-menu-sun" class="menu-item">
-    අරුණ | මධ්‍යහ්නය ☀️
-</div>
-        <div onclick="openPoyaModal()" id="ui-menu-poya">උපෝසථ දින🌛</div>
-        <div onclick="openVasModal()" id="ui-menu-vas">වස් කාලය ⛈️</div>
-       <div onclick="window.open('info.html?lang=' + currentLang, '_blank')" id="ui-menu-contact" style="cursor: pointer;">ℹ️ තොරතුරු</div>
 
-    <div onclick="toggleDarkMode()" id="ui-dark-mode-btn">Dark Mode</div>
-    
-    </div>
+
 
 <div class="section date-section-wrapper">
     <div class="date-label-row">
@@ -134,7 +127,7 @@
 
 <div class="pali-box" id="paliDisplay" style="margin-bottom: 10px; text-align: center;"></div>
         
-<div style="text-align: center; margin-bottom: 20px;">
+<div class="poya-wrap" style="text-align: center; margin-bottom: 20px;">
     <div id="poyaStatus" class="poya-status" style="color: #c62828; font-weight: bold; font-size: 0.9em;"></div>
 </div>
 
@@ -227,6 +220,8 @@
         </div>
     </div>
 </div>
+    </div>
+</div>
 
 <!-- PWA Install Banner -->
 <div id="pwa-install-banner" role="dialog" aria-label="Install App">
@@ -249,6 +244,24 @@
     <strong>iPhone / iPad වල Install කරගන්නා ආකාරය:</strong>
     <p>Safari පහළ පෙන්වන Share <span class="pwa-share-icon">⎋</span> බටනය click කර, පහළට scroll කර <b>“Add to Home Screen”</b> තෝරන්න.</p>
 </div>
+
+
+
+
+<nav class="bottom-nav" id="bottomNav" aria-label="Main menu">
+    <button type="button" class="bn-item" onclick="openSunModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 18h17"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 4.5v3M5 8.5l2 2M19 8.5l-2 2M2.5 14h2M19.5 14h2"/></svg><span class="nav-lbl" id="ui-menu-sun">අරුණ</span></button>
+    <button type="button" class="bn-item" onclick="openPoyaModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg><span class="nav-lbl" id="ui-menu-poya">උපෝසථ</span></button>
+    <button type="button" class="bn-item" onclick="openChanting()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c2 2.2 2.8 3.8 2.8 5.2a2.8 2.8 0 0 1-5.6 0c0-1.4.8-3 2.8-5.2z"/><path d="M4.5 12.5h15c0 3-2.7 5-7.5 5s-7.5-2-7.5-5z"/><path d="M12 17.5v2.5M8 21.5h8"/></svg><span class="nav-lbl" id="ui-menu-chant">සජ්ඣායනය</span></button>
+    <button type="button" class="bn-item" onclick="openVasModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 15a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 8a3.5 3.5 0 0 1 .5 7H7z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg><span class="nav-lbl" id="ui-menu-vas">වස්</span></button>
+    <button type="button" class="bn-item" onclick="openCalculation()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8 4.7 4.5 5v12.5c3.5-.3 5.8.2 7.5 1.5 1.7-1.3 4-1.8 7.5-1.5V5C16 4.7 13.7 5.2 12 6.5z"/><path d="M12 6.5V19"/></svg><span class="nav-lbl" id="ui-menu-calc">ගණනය</span></button>
+    <button type="button" class="bn-item nav-more-btn" onclick="toggleMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg><span class="nav-lbl" id="ui-menu-more">තව</span></button>
+
+    <div class="nav-popup" id="myDropdown">
+        <div class="np-item" onclick="toggleLanguage()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg><span class="nav-lbl" id="ui-lang-lbl">English</span></div>
+        <div class="np-item" onclick="toggleDarkMode()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span class="nav-lbl" id="ui-dark-lbl">Dark Mode</span></div>
+        <div class="np-item" onclick="openInfo()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".7" fill="currentColor"/></svg><span class="nav-lbl" id="ui-menu-contact">තොරතුරු</span></div>
+    </div>
+</nav>
 
 </body>
 </html>

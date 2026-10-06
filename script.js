@@ -4,7 +4,7 @@
     const i18n = {
         si: {
             title: "බුද්ධ වර්ෂය", dateLabel: "දිනය තෝරන්න ( ක්‍රි.ව) ⇓", atikkanta: "අතික්කන්ත\n(ඉකුත් වූ)", avasittha: "අවසිට්ඨ\n(ඉතිරි)",
-            langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", contactMenu: "ℹ️ විස්තර", poyaTitle: "පෝය දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
+            langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", calcMenu: "📖 ගණනය", navSun: "අරුණ", navPoya: "උපෝසථ", navVas: "වස්", navChant: "සජ්ඣායනය", navCalc: "ගණනය", navMore: "තව", langLbl: "English", darkLbl: "අඳුරු තිරය", lightLbl: "ආලෝකමත් තිරය", infoLbl: "තොරතුරු", contactMenu: "ℹ️ තොරතුරු", poyaTitle: "පෝය දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
             vasTitle: "", contactTitle: " තොරතුරු සහ බාගත කිරීම්", poyaSuffix: " පෝය",
             vas1: "පෙරවස් සමාදන්වීම", vas2: "පෙරවස් පවාරණය", vas3: "පසුවස් සමාදන්වීම", vas4: "පසුවස් පවාරණය",
             animals: ["සප්ප","අස්ස","අජ","කපි","කුක්කුට","සෝන","සූකර","මුසික"," වසභ","ව්‍යග්ග","සස","නාග"],
@@ -15,7 +15,7 @@
         },
         en: {
             title: "Buddhist Era", dateLabel: "Select Date (C.E.) ⇓", atikkanta: "Atikkanta\n(Elapsed)", avasittha: "Avasiṭṭha\n(remaining)",
-            langBtn: "සිංහල 🇱🇰", sunMenu: "Dawn | Noon ☀️", poyaMenu: " Uposatha Days🌛", vasMenu: "Vassa Season ⛈️", contactMenu: "ℹ️ info", poyaTitle: " Uposatha Calendar",darkMode: "Dark Mode 🌑",lightMode: "Light Mode 💡",yearLabel: "Year",monthLabel: "Month",dayLabel: "Day",
+            langBtn: "සිංහල 🇱🇰", sunMenu: "Dawn | Noon ☀️", poyaMenu: " Uposatha Days🌛", vasMenu: "Vassa Season ⛈️", calcMenu: "📖 Calculation", navSun: "Sun", navPoya: "Uposatha", navVas: "Vassa", navChant: "Chanting", navCalc: "Calculate", navMore: "More", langLbl: "සිංහල", darkLbl: "Dark Mode", lightLbl: "Light Mode", infoLbl: "Info", contactMenu: "ℹ️ Info", poyaTitle: " Uposatha Calendar",darkMode: "Dark Mode 🌑",lightMode: "Light Mode 💡",yearLabel: "Year",monthLabel: "Month",dayLabel: "Day",
             vasTitle: "", contactTitle: "Contact & Downloads", poyaSuffix: "",
             vas1: "Entering the Early Rains Retreat", vas2: "Early Vassa Pavāraṇā", vas3: "Entering the Late Rains Retreat ", vas4: "Late Vassa Pavāraṇā ",
             animals: ["Sappa","Assa","Aja","Kapi","Kukkuṭa","Sona","Sūkara","Musika"," Vasabha","Vyaggha","Sasa","Nāga"],
@@ -402,12 +402,36 @@ function isLeapGimhanaYear(year) {
     return _leapCache[year];
 }
 
+
+// ගිම්හාන සෘතුව අධික මාසයක් (පෝය 10ක්) ඇති වසරක්ද යන්න තීරණය කිරීම.
+// පෝය දාමයෙන්ම (14/15 රටාව + manualOverrides) ගිම්හාන 8 වන පෝය දිනය ගණනය කර
+// එය ඇසළ පුරපසළොස්වක (target) ට ආසන්න නම් සාමාන්‍ය (8), නැතිනම් අධික (10) ලෙස සලකයි.
+// (පෙර: ජූලි 25 - අගෝ 4 කවුළුව පමණක් බැලූ නිසා, දාමය හා සීමා දිනයන්හිදී අසමාන වූ අතර මාස නාම 1 කින් ගිලිහුණි.)
+function isLeapGimhanaChain(hemantaEndDate) {
+    const DAY = 24 * 60 * 60 * 1000;
+    let date = hemantaEndDate;
+    let prevPos = 8;                       // හේමන්ත 8
+    for (let i = 1; i <= 8; i++) {
+        const days = (prevPos === 3 || prevPos === 7) ? 14 : 15;
+        date = new Date(date.getTime() + days * DAY);
+        const est = new Date(date.getTime() + DISPLAY_DAY_ADJUST_MS);
+        const key = fmtISO(est);
+        if (manualOverrides[key]) {
+            date = new Date(date.getTime() + (parseISO(manualOverrides[key]).getTime() - est.getTime()));
+        }
+        prevPos = i;
+    }
+    const target = findEsalaTarget(slYear(hemantaEndDate));
+    if (!target) return isLeapGimhanaYear(slYear(hemantaEndDate));
+    return Math.abs(date - target) >= 2 * DAY;
+}
+
 const MONTH_CYCLE_SINHALA = ["ඵුස්ස", "මාඝ", "ඵග්ගුන", "චිත්ත", "වේසාඛ", "ජෙට්ඨ", "ආසාළ්හ", "සාවන", "පොට්ඨපාද", "අස්සයුජ", "කත්තික", "මාඝසිර"];
 
 const SEED_DATE = new Date(Date.UTC(1899, 11, 3, 12, 0, 0)); // 1899-12-03 අමාවක (හේමන්ත 1)
 const SEED_SEASON = 'hemanta';
 const SEED_POS = 1;
-const SEED_MONTH_IDX = 1; // 2020-01-09 (හේමන්ත 4) හිදී 0 වන පරිදි calibrate කර ඇත
+const SEED_MONTH_IDX = 11; // හේමන්ත 1 (අමාවක) = මාඝසිර (idx 11) – සෘතු ස්ථානයට අනුව
 
 const MIN_YEAR = 1900;
 const MAX_YEAR = 3000;
@@ -481,7 +505,7 @@ function extendPoyaDataTo(uptoYear) {
         let nextSeason, nextPos;
         if (s.season === 'hemanta' && s.posInSeason === 8) {
             nextSeason = 'gimhana'; nextPos = 1;
-            s.thisGimhanaLeap = isLeapGimhanaYear(slYear(s.currentDate));
+            s.thisGimhanaLeap = isLeapGimhanaChain(s.currentDate);
         } else if (s.season === 'gimhana') {
             let target = findEsalaTarget(slYear(s.currentDate));
             let isTarget = target && Math.abs(s.currentDate - target) < 2 * 24 * 60 * 60 * 1000;
@@ -557,11 +581,15 @@ scheduleBackgroundPoyaExtension();
         const d = document.getElementById("myDropdown");
         d.style.display = (d.style.display === "block") ? "none" : "block";
     }
+    function closeMenu() {
+        const d = document.getElementById("myDropdown");
+        if (d) d.style.display = "none";
+    }
 
    
     window.onclick = function(event) {
-        if (!event.target.matches('.menu-dots')) {
-            document.getElementById("myDropdown").style.display = "none";
+        if (!event.target.closest('.nav-more-btn')) {
+            closeMenu();
         }
     }
 
@@ -580,24 +608,30 @@ scheduleBackgroundPoyaExtension();
     const t = i18n[currentLang];
     const isDark = document.body.classList.contains('dark-mode');
 
-    document.getElementById('ui-title').innerHTML = t.title + `<div class="menu-dots" onclick="toggleMenu()">&#8942;</div>`;
+    document.getElementById('ui-title').innerHTML = t.title;
     document.getElementById('ui-label-date').innerText = t.dateLabel;
     document.getElementById('ui-label-year').innerText = t.yearLabel;
     document.getElementById('ui-label-month').innerText = t.monthLabel;
     document.getElementById('ui-label-day').innerText = t.dayLabel;
-    document.getElementById('ui-menu-sun').innerText = t.sunMenu;
-    document.getElementById('ui-menu-poya').innerText = t.poyaMenu;
-    document.getElementById('ui-menu-vas').innerText = t.vasMenu;
-    document.getElementById('ui-menu-contact').innerText = t.contactMenu;
+    document.getElementById('ui-menu-sun').innerText = t.navSun;
+    document.getElementById('ui-menu-poya').innerText = t.navPoya;
+    document.getElementById('ui-menu-vas').innerText = t.navVas;
+    const calcItem = document.getElementById('ui-menu-calc');
+    if (calcItem) calcItem.innerText = t.navCalc;
+    const chantItem = document.getElementById('ui-menu-chant');
+    if (chantItem) chantItem.innerText = t.navChant;
+    const moreItem = document.getElementById('ui-menu-more');
+    if (moreItem) moreItem.innerText = t.navMore;
+    document.getElementById('ui-menu-contact').innerText = t.infoLbl;
     
-    const darkBtn = document.getElementById('ui-dark-mode-btn');
+    const darkBtn = document.getElementById('ui-dark-lbl');
     if (darkBtn) {
-        darkBtn.innerText = isDark ? t.lightMode : t.darkMode;
+        darkBtn.innerText = isDark ? t.lightLbl : t.darkLbl;
     }
 
-    const langBtn = document.getElementById('ui-lang-btn');
+    const langBtn = document.getElementById('ui-lang-lbl');
     if (langBtn) {
-        langBtn.innerText = t.langBtn;
+        langBtn.innerText = t.langLbl;
     }
 
     document.getElementById('ui-poya-title').innerText = t.poyaTitle;
@@ -619,7 +653,7 @@ scheduleBackgroundPoyaExtension();
 }
 
 function openPoyaModal() { 
-    toggleMenu(); 
+    closeMenu(); 
     document.getElementById("poyaModal").style.display = "flex"; 
     
     renderPoyaList(); 
@@ -639,7 +673,7 @@ function openPoyaModal() {
 }
 
 function openVasModal() { 
-    toggleMenu();
+    closeMenu();
     document.getElementById("vasModal").style.display = "flex"; 
 }
 
@@ -775,7 +809,7 @@ function renderPoyaList() {
 }
 
     function openVasModal() {
-    toggleMenu(); 
+    closeMenu(); 
     document.getElementById("vasModal").style.display = "flex";
     const t = i18n[currentLang];
     const d = new Date(document.getElementById('inputDate').value);
@@ -989,6 +1023,17 @@ if (nextFullMoon) {
     document.getElementById('avasitthaM').innerText = totM - bM;
     document.getElementById('avasitthaD').innerText = currentAvasitthaD;
 
+    // ---- සජ්ඣායනය (buddha-recitation.js) සඳහා ගණනය කළ අගයන් බෙදා ගැනීම ----
+    window.BuddhaState = {
+        dateStr: ds, weekIdx: d.getDay(),
+        bY: bY, bM: bM, bD: tithi, totM: totM,
+        atk: { y: bY - 1, m: bM - 1, d: tithi - 1 },
+        avs: { y: 5000 - bY, m: totM - bM, d: currentAvasitthaD },
+        animalIdx: bY % 12, season: seasonKey, monthSi: sMonth,
+        paksha: (finalPaksha === t.paksha.Sukka) ? 'sukka' : 'kanha',
+        tithi: Math.max(1, Math.min(15, paliIndex)), isPoya: isPoyaDay
+    };
+
     document.getElementById('ui-label-atikkanta').innerText = t.atikkanta;
     document.getElementById('ui-label-avasittha').innerText = t.avasittha;
 }
@@ -1004,11 +1049,11 @@ function toggleDarkMode() {
 }
 
 function updateDarkModeBtnText() {
-    const btn = document.getElementById('ui-dark-mode-btn');
+    const btn = document.getElementById('ui-dark-lbl');
     if (btn) {
-        
+        const t = i18n[currentLang];
         const isDark = document.body.classList.contains('dark-mode');
-        btn.innerText = isDark ? "Light Mode" : "Dark Mode";
+        btn.innerText = isDark ? t.lightLbl : t.darkLbl;
     }
 }
 let userLatitude = null;
@@ -1912,7 +1957,7 @@ window.addEventListener('click', function(e) {
     }
 
     let myDropdown = document.getElementById("myDropdown");
-    if (myDropdown && !e.target.matches('.menu-dots')) {
+    if (myDropdown && !e.target.closest('.nav-more-btn')) {
         myDropdown.style.display = "none";
     }
 });
@@ -2103,3 +2148,11 @@ if ('serviceWorker' in navigator) {
         initInstallBanner();
     }
 })();
+
+
+// Bottom nav: always attach directly to <body> so that it stays fixed to the screen
+// (a parent with backdrop-filter / transform – e.g. dark-mode .app-container – would otherwise move it).
+document.addEventListener('DOMContentLoaded', function () {
+    const nav = document.getElementById('bottomNav');
+    if (nav && nav.parentElement !== document.body) document.body.appendChild(nav);
+});
