@@ -738,29 +738,41 @@ body.dark-mode .vas-date-badge {
 }
 
 /* =========================================================
-   PWA INSTALL BANNER
+/* =========================================================
+   PWA INSTALL BANNER — Mint Edition
    ========================================================= */
+
 #pwa-install-banner {
     position: fixed;
-    bottom: calc(var(--nav-h) + var(--safe-b) + 12px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 100px);
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, #f3e5ab 0%, var(--gold) 50%, #aa7c11 100%);
-    color: var(--text);
+
+    /* ✅ Mint gradient — Bottom nav එකේ වර්ණ පටිපාටියට ගැලපේ */
+    background: linear-gradient(135deg, #dcf5ea 0%, #b7ead6 45%, #8fd8bc 100%);
+    color: #134e3a;
+
     padding: 14px 14px 14px 16px;
     border-radius: 18px;
+
     box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.25),
-        0 0 30px rgba(212, 175, 55, 0.30),
-        inset 0 1px 3px rgba(255, 255, 255, 0.55);
-    border: 1px solid #b8860b;
+        0 15px 40px rgba(30, 143, 108, 0.30),
+        0 0 35px rgba(95, 227, 182, 0.35),
+        inset 0 1px 3px rgba(255, 255, 255, 0.75);
+
+    border: 1px solid #8fd8bc;
+
     display: none;
     align-items: center;
     gap: 12px;
-    z-index: 1200;
-    max-width: calc(100% - 24px);
+
+    z-index: 2500;
+
+    max-width: calc(100% - 32px);
     width: 420px;
+
     animation: pwaBannerSlideUp 0.4s ease-out;
+
     font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
 }
 #pwa-install-banner.show { display: flex; }
@@ -770,34 +782,43 @@ body.dark-mode .vas-date-badge {
     to   { transform: translate(-50%, 0); opacity: 1; }
 }
 
+/* ── අයිකනය — mint වළල්ල ─────────────────────────────── */
 #pwa-install-banner .pwa-banner-icon {
     width: 42px;
     height: 42px;
     flex-shrink: 0;
     border-radius: 13px;
-    background: rgba(255, 255, 255, 0.35);
+    background: linear-gradient(135deg, #1E8F6C, #14a374);
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--dark-red);
+    box-shadow:
+        0 4px 12px rgba(30, 143, 108, 0.35),
+        inset 0 1px 2px rgba(255, 255, 255, 0.30);
 }
 #pwa-install-banner .pwa-banner-icon svg { width: 22px; height: 22px; }
 
-#pwa-install-banner .pwa-banner-text { flex: 1; min-width: 0; }
+/* ── පෙළ ──────────────────────────────────────────────── */
+#pwa-install-banner .pwa-banner-text {
+    flex: 1;
+    min-width: 0;
+}
 #pwa-install-banner .pwa-banner-title {
     font-size: 13.5px;
-    font-weight: bold;
+    font-weight: 700;
     margin: 0 0 3px;
-    color: var(--text);
+    color: #134e3a;
     line-height: 1.3;
 }
 #pwa-install-banner .pwa-banner-sub {
     font-size: 11px;
     margin: 0;
-    color: #5d4321;
+    color: #3d7060;
     line-height: 1.35;
 }
 
+/* ── බටන් ────────────────────────────────────────────── */
 #pwa-install-banner .pwa-banner-actions {
     display: flex;
     align-items: center;
@@ -811,50 +832,69 @@ body.dark-mode .vas-date-badge {
     font-family: inherit;
 }
 #pwa-install-banner .pwa-install-btn {
-    background: var(--dark-red);
-    color: #fff;
-    font-weight: bold;
+    background: linear-gradient(135deg, #1E8F6C, #16a375);
+    color: #ffffff;
+    font-weight: 700;
     font-size: 13px;
-    padding: 9px 16px;
+    padding: 9px 18px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    transition: transform 0.15s ease;
+    box-shadow:
+        0 4px 12px rgba(30, 143, 108, 0.40),
+        inset 0 1px 2px rgba(255, 255, 255, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+#pwa-install-banner .pwa-install-btn:hover {
+    box-shadow:
+        0 6px 16px rgba(30, 143, 108, 0.50),
+        inset 0 1px 2px rgba(255, 255, 255, 0.30);
 }
 #pwa-install-banner .pwa-install-btn:active { transform: scale(0.95); }
 
 #pwa-install-banner .pwa-dismiss-btn {
     background: transparent;
-    color: #5d4321;
+    color: #3d7060;
     font-size: 22px;
     line-height: 1;
     padding: 4px 7px;
     border-radius: 8px;
+    transition: background 0.15s ease;
 }
-#pwa-install-banner .pwa-dismiss-btn:active { background: rgba(0, 0, 0, 0.10); }
+#pwa-install-banner .pwa-dismiss-btn:active { background: rgba(30, 143, 108, 0.15); }
 
+/* ── iOS "Add to Home Screen" popover ─────────────────── */
 #pwa-ios-tip {
     position: fixed;
-    bottom: calc(var(--nav-h) + var(--safe-b) + 90px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 210px);
     left: 50%;
     transform: translateX(-50%);
-    background: #fffff0;
-    color: var(--text);
+
+    /* ✅ Mint tinted background */
+    background: #f0fbf6;
+    color: #134e3a;
+
     padding: 16px 18px;
     border-radius: 16px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
-    border: 1px solid var(--gold);
+
+    box-shadow:
+        0 15px 40px rgba(30, 143, 108, 0.25),
+        0 0 25px rgba(95, 227, 182, 0.25);
+    border: 1.5px solid #8fd8bc;
+
     max-width: calc(100% - 32px);
     width: 320px;
+
     font-size: 13px;
     line-height: 1.55;
-    z-index: 1201;
+
+    z-index: 2600;
+
     display: none;
     font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
 }
 #pwa-ios-tip.show { display: block; animation: pwaBannerSlideUp 0.35s ease-out; }
-#pwa-ios-tip strong { color: var(--dark-red); }
-#pwa-ios-tip p { margin: 6px 0 0; }
-#pwa-ios-tip .pwa-share-icon { font-weight: bold; }
+#pwa-ios-tip strong { color: #1E8F6C; }
+#pwa-ios-tip p { margin: 6px 0 0; color: #2c5f4d; }
+#pwa-ios-tip .pwa-share-icon { font-weight: 700; color: #1E8F6C; }
 #pwa-ios-tip .pwa-ios-tip-close {
     position: absolute;
     top: 8px;
@@ -863,9 +903,90 @@ body.dark-mode .vas-date-badge {
     border: none;
     font-size: 20px;
     line-height: 1;
-    color: #5d4321;
+    color: #3d7060;
     cursor: pointer;
     padding: 4px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+#pwa-ios-tip .pwa-ios-tip-close:hover { background: rgba(30, 143, 108, 0.12); }
+
+/* =========================================================
+   DARK MODE — Mint (Neon Mint Glow)
+   ========================================================= */
+
+body.dark-mode #pwa-install-banner {
+    background: linear-gradient(135deg, #12201a 0%, #0d2e24 50%, #1a4d3c 100%);
+    border-color: #2fbf8f;
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.65),
+        0 0 40px rgba(60, 220, 160, 0.30),
+        inset 0 1px 2px rgba(95, 227, 182, 0.15);
+}
+body.dark-mode #pwa-install-banner .pwa-banner-title {
+    color: #5fe3b6;
+    text-shadow: 0 0 10px rgba(95, 227, 182, 0.35);
+}
+body.dark-mode #pwa-install-banner .pwa-banner-sub {
+    color: #6fb59c;
+}
+body.dark-mode #pwa-install-banner .pwa-banner-icon {
+    background: linear-gradient(135deg, #1E8F6C, #14a374);
+    color: #ffffff;
+    box-shadow:
+        0 4px 14px rgba(60, 220, 160, 0.45),
+        inset 0 1px 2px rgba(255, 255, 255, 0.20);
+}
+body.dark-mode #pwa-install-banner .pwa-install-btn {
+    background: linear-gradient(135deg, #16a375, #1ed897);
+    color: #052e22;
+    font-weight: 800;
+    box-shadow:
+        0 4px 14px rgba(60, 220, 160, 0.45),
+        inset 0 1px 2px rgba(255, 255, 255, 0.30);
+}
+body.dark-mode #pwa-install-banner .pwa-install-btn:hover {
+    box-shadow:
+        0 6px 20px rgba(60, 220, 160, 0.55),
+        inset 0 1px 2px rgba(255, 255, 255, 0.35);
+}
+body.dark-mode #pwa-install-banner .pwa-dismiss-btn { color: #6fb59c; }
+body.dark-mode #pwa-install-banner .pwa-dismiss-btn:active {
+    background: rgba(60, 220, 160, 0.16);
+}
+
+body.dark-mode #pwa-ios-tip {
+    background: rgba(18, 32, 26, 0.98);
+    border-color: #2fbf8f;
+    color: #d6f5e8;
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.75),
+        0 0 30px rgba(60, 220, 160, 0.25);
+}
+body.dark-mode #pwa-ios-tip strong { color: #5fe3b6; }
+body.dark-mode #pwa-ios-tip p { color: #a9d9c5; }
+body.dark-mode #pwa-ios-tip .pwa-share-icon { color: #5fe3b6; }
+body.dark-mode #pwa-ios-tip .pwa-ios-tip-close { color: #6fb59c; }
+body.dark-mode #pwa-ios-tip .pwa-ios-tip-close:hover {
+    background: rgba(60, 220, 160, 0.16);
+}
+
+/* ── Mobile ───────────────────────────────────────────── */
+@media (max-width: 420px) {
+    #pwa-install-banner {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 96px);
+        padding: 12px;
+        gap: 10px;
+        width: calc(100% - 24px);
+    }
+    #pwa-install-banner .pwa-banner-title { font-size: 12.5px; }
+    #pwa-install-banner .pwa-banner-sub   { font-size: 10px; }
+    #pwa-install-banner .pwa-install-btn  { padding: 8px 14px; font-size: 12px; }
+
+    #pwa-ios-tip {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 200px);
+        width: calc(100% - 24px);
+    }
 }
 
 /* ============================================================
