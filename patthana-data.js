@@ -23,7 +23,7 @@
   ]
  },
  "vandana": {
-  "pali": "විචිත්ත මති ගම්භීර මනන්ත නය මණ්ඩිතං පට්ඨානං සම්මසන්තස්ස විමලාමිත බුද්ධියා \n\nයස්ස දේහා නික්ඛමිංසු සුභා ඡබ්බණ්ණ රංසියෝ\nනීල පීතා රත්ත සේතා මඤ්ඡිට්ඨා ව පභස්සරා\n\nතං ලෝකනාථං සුගතං ධම්මඤ්ච පින සේවිතං \nසංඝං නිරංගණං සෙට්ඨං නමාමි සිරසාදරං.",
+  "pali": "විචිත්ත මති ගම්භීර මනන්ත නය මණ්ඩිතං පට්ඨානං සම්මසන්තස්ස විමලාමිත බුද්ධියා \n\nයස්ස දේහා නික්ඛමිංසු සුභා ඡබ්බණ්ණ රංසියෝ\nනීල පීතා රත්ත සේතා මඤ්ඡිට්ඨා ව පභස්සරා\n\nතං ලෝකනාථං සුගතං ධම්මඤ්ච ජින සේවිතං \nසංඝං නිරංගණං සෙට්ඨං නමාමි සිරසාදරං.",
   "translit": "Vicitta mati gambhīra mananta naya maṇḍitaṃ paṭṭhānaṃ sammasantassa vimalāmita buddhiyā \n\nYassa dehā nikkhamiṃsu subhā chabbaṇṇa raṃsiyo\nnīla pītā ratta setā mañjiṭṭhā va pabhassarā\n\nTaṃ lokanāthaṃ sugataṃ  dhammañca jina sevitaṃ \nsaṅghaṃ niraṅgaṇaṃ seṭṭhaṃ namāmi sirasādaraṃ."
  },
  "paccayaList": {
