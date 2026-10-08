@@ -3,25 +3,6 @@
    ---------------------------------------------------------------------
    මෙය "ධාරකය" (host) ය: tab තීරුව, සූත්‍ර ලැයිස්තුව, කාඩ්පත් පෙන්වීම, භාෂාව සහ
    theme අනුගමනය, ✕ / Esc / Back මගින් ඉවත් වීම යන සියල්ල මෙහි ඇත.
-   අන්තර්ගතය (දත්ත) වෙනම ගොනුවල ඇති අතර, tab එක පළමුවරට විවෘත කළ විට පමණක් load වේ:
-
-       tab            දත්ත ගොනුව
-       ─────────────  ─────────────────────────
-       පිරිත්          pirith-data.js
-       ප්‍රාතිමෝක්ෂය     patimokkha-data.js
-       බුද්ධ වර්ෂය       buddha-recitation.js  (ගතික – ප්‍රධාන ඇප් එකේ දිනයට අනුව)
-       පට්ඨානය         patthana-data.js
-       සතිපට්ඨාන       satipatthana-data.js
-
-   ► අලුත් කොටසක් එක් කරන ආකාරය
-     1. අලුත් දත්ත ගොනුවක් සාදන්න (pirith-data.js ආකෘතියට සමානව –
-        (window.ChantingModules = window.ChantingModules || {}).<id> = { title, subtitle,
-         navLabel, groups?, items:[{id, num?, short?, name:{si,en,tr?}, pali, translit?,
-         sinhala?, english?, gatha?, gathaTr?}], intro?, footer? };
-     2. පහත TABS ලැයිස්තුවට පේළියක් එක් කරන්න.   (වෙනත් කිසිවක් වෙනස් කළ යුතු නැත)
-
-   භාෂාව : ප්‍රධාන ඇප් එකේ currentLang ('si' | 'en')      Theme : body.dark-mode
-   භාවිතය : openChanting([tabId])  /  closeChanting()
    ===================================================================== */
 (function () {
   'use strict';
@@ -30,11 +11,11 @@
      TABS — නව කොටසක් එක් කරන්නේ මෙතැනයි
      ------------------------------------------------------------------ */
   var TABS = [
-    { id: 'recitation',   icon: '🗓️', title: { si: 'බුද්ධ වර්ෂය',    en: 'Buddha Year' },  src: 'buddha-recitation.js?v=1' },
-    { id: 'pirith',       icon: '📖', title: { si: 'පිරිත්',        en: 'Pirith' },       src: 'pirith-data.js?v=2' },
-    { id: 'patimokkha',   icon: '🪷', title: { si: 'ප්‍රාතිමෝක්ෂය',   en: 'Pātimokkha' },   src: 'patimokkha-data.js?v=1', adapt: adaptPatimokkha },
-    { id: 'patthana',     icon: '✨', title: { si: 'පට්ඨානය',       en: 'Paṭṭhāna' },     src: 'patthana-data.js?v=2' },
-    { id: 'satipatthana', icon: '🧘', title: { si: 'සතිපට්ඨාන',     en: 'Satipaṭṭhāna' }, src: 'satipatthana-data.js?v=1' }
+    { id: 'recitation',   icon: '🗓️', title: { si: 'බුද්ධ වර්ෂය',    en: 'Buddha Year' },  src: 'buddha-recitation.js' },
+    { id: 'pirith',       icon: '📖', title: { si: 'පිරිත්',        en: 'Pirith' },       src: 'pirith-data.js' },
+    { id: 'patimokkha',   icon: '🪷', title: { si: 'ප්‍රාතිමෝක්ෂය',   en: 'Pātimokkha' },   src: 'patimokkha-data.js', adapt: adaptPatimokkha },
+    { id: 'patthana',     icon: '✨', title: { si: 'පට්ඨානය',       en: 'Paṭṭhāna' },     src: 'patthana-data.js' },
+    { id: 'satipatthana', icon: '🧘', title: { si: 'සතිපට්ඨාන',     en: 'Satipaṭṭhāna' }, src: 'satipatthana-data.js' }
   ];
 
   var STORE_KEY = 'chantingTab';
@@ -120,7 +101,6 @@
         if (!m) return reject(new Error('empty'));
         MODS[tab.id] = m; resolve(m);
       }
-      // දැනටමත් load වී ඇත්නම්
       var pre = tab.adapt ? tab.adapt() : (window.ChantingModules && window.ChantingModules[tab.id]);
       if (pre) { MODS[tab.id] = pre; return resolve(pre); }
       var sc = document.createElement('script');
@@ -208,6 +188,7 @@ body.dark-mode #chOverlay .ch-nm{color:var(--g400)}\
 #chOverlay .ch-box::before{position:absolute;top:-12px;left:16px;color:#fff;font-family:var(--sans);font-style:normal;font-size:.68rem;font-weight:700;padding:2px 11px;border-radius:20px;letter-spacing:.4px;white-space:nowrap;line-height:1.7}\
 #chOverlay .ch-pali{background:var(--pali-bg);border:1.5px dashed var(--m600);padding:16px 15px;font-family:var(--serif);font-weight:600;color:var(--m900);font-size:1rem;line-height:2.1}\
 #chOverlay .ch-pali::before{content:attr(data-l);background:var(--m700)}\
+#chOverlay .ch-pali.no-lbl::before,#chOverlay .ch-mean.no-lbl::before{display:none}\
 body.dark-mode #chOverlay .ch-pali{color:var(--m200);border-color:var(--m500)}\
 body.dark-mode #chOverlay .ch-pali::before{background:#1a8558}\
 #chOverlay .ch-mean{background:var(--subtle);border-left:4px solid var(--m700);padding:15px 15px;font-size:.95rem;line-height:1.95;color:var(--tx);border-radius:10px}\
@@ -251,7 +232,6 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     var st = document.createElement('style'); st.id = 'chStyle'; st.textContent = CSS;
     document.head.appendChild(st);
   }
-
   /* ----------------------------- rendering ----------------------------- */
   var LAMP = '<svg class="ch-lamp" viewBox="0 0 70 90" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
     '<ellipse class="ch-glow" cx="35" cy="30" rx="22" ry="24" fill="#f9e9b8" opacity=".5"/>' +
@@ -279,8 +259,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     var key = mod.navMode === 'groups' ? ('g-' + (it.group || '')) : it.id;
     var name = it.name || {};
     var title = si ? (name.si || '') : (name.en || name.si || '');
-    var sec = si ? (name.tr || '') : (name.tr || '');
-    var third = it.sub ? it.sub : (si ? (name.en || '') : (name.si || ''));
+    var third = it.sub || '';
     var hasName = !!title;
     var numHtml = '';
     if (it.num != null && it.num !== '') {
@@ -295,7 +274,6 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     if (numHtml || hasName || glabel) {
       head = '<div class="ch-card-h">' + numHtml + '<div class="ch-names">' +
         (hasName ? '<div class="ch-nm">' + esc(title) + '</div>' : '') +
-        (hasName && sec ? '<div class="ch-nm2">' + esc(sec) + '</div>' : '') +
         (hasName && third ? '<div class="ch-nm3">' + esc(third) + '</div>' : '') +
         (glabel ? '<div class="ch-gl">' + esc(glabel) + '</div>' : '') +
         '</div></div>';
@@ -303,10 +281,14 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     var main = si ? it.pali : (it.translit || it.pali);
     var mean = si ? it.sinhala : it.english;
     var body = '';
-    if (main) body += '<div class="ch-box ch-pali" data-l="' + esc(si ? '📜 පාළි' : '📜 Pāḷi') + '">' + esc(main) + '</div>';
+    if (main) {
+      var lblAttr = mod.hidePaliLabel ? '' : ' data-l="' + esc(si ? '📜 පාළි' : '📜 Pāḷi') + '"';
+      var lblCls = mod.hidePaliLabel ? ' no-lbl' : '';
+      body += '<div class="ch-box ch-pali' + lblCls + '"' + lblAttr + '>' + esc(main) + '</div>';
+    }
     if (mean) {
       var meanBox = '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(si ? '🇱🇰 සිංහල අර්ථය' : '🌐 Meaning') + '">' + esc(mean) + '</div>';
-      if (mod.meaningToggle) {   // තේරුම බටනයෙන් පමණක් දිගහැරේ (ප්‍රාතිමෝක්ෂය මෙන්)
+      if (mod.meaningToggle) {
         body += '<div class="pm-row"><button type="button" class="pm-more" aria-expanded="false" onclick="chPmToggle(this)">' +
           T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button></div>' +
           '<div class="ch-mean-wrap">' + meanBox + '</div>';
@@ -321,6 +303,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     var si = lang() === 'si';
     var html = '<div class="ch-head"><h2>' + esc(L(mod.title)) + '</h2>' + (mod.subtitle ? '<p>' + esc(L(mod.subtitle)) + '</p>' : '') + '</div>';
 
+    // 1. Intro (නමස්කාරය)
     if (mod.intro) {
       var lines = (!si && mod.intro.en && mod.intro.en.length) ? mod.intro.en : (mod.intro.si || []);
       html += '<div class="ch-namo">';
@@ -332,22 +315,47 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
       html += '</div>';
     }
 
-    if (typeof mod.renderHtml === 'function') {      // ගතික (dynamic) මොඩියුලය – උදා: බුද්ධ වර්ෂ සජ්ඣායනය
-      html += mod.renderHtml(lang());
-      return html + footerHtml(mod);
+    // 2. Vandana (වන්දනා ගාථා)
+    if (mod.vandana) {
+      html += '<div class="ch-namo" style="margin-top:14px">' +
+        '<div class="ch-namo-pali">' + br(si ? mod.vandana.pali : (mod.vandana.translit || mod.vandana.pali)) + '</div>' +
+        '</div>';
     }
 
-    var multi = mod.groups && mod.groups.length > 1;
-    var lastGroup = null;
-    mod.items.forEach(function (it) {
-      if (multi && it.group !== lastGroup) {
-        lastGroup = it.group;
-        var gp = mod.groups.filter(function (g) { return g.id === it.group; })[0];
-        if (gp) html += '<div class="ch-group" data-a="g-' + esc(gp.id) + '"><h3>' + esc(L(gp.label)) + '</h3>' +
-          (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' rules') + '</span>' : '') + '</div>';
-      }
-      html += itemHtml(mod, it);
-    });
+    // 3. Paccaya List (ප්‍රත්‍ය ලැයිස්තුව)
+    if (mod.paccayaList) {
+      html += '<div class="ch-namo" style="margin-top:14px">' +
+        '<div class="ch-namo-t">' + esc(si ? 'වතුවීසති පච්චය' : 'The Twenty-Four Conditions') + '</div>' +
+        '<div class="ch-namo-line"></div>' +
+        '<div class="ch-namo-pali" style="font-size:.95rem;line-height:2.1;text-align:left">' +
+        br(si ? mod.paccayaList.pali : (mod.paccayaList.translit || mod.paccayaList.pali)) + '</div>' +
+        '</div>';
+    }
+
+    // 4. Custom render (dynamic modules)
+    if (typeof mod.renderHtml === 'function') {
+      html += mod.renderHtml(lang());
+    } else {
+      var multi = mod.groups && mod.groups.length > 1;
+      var lastGroup = null;
+      mod.items.forEach(function (it) {
+        if (multi && it.group !== lastGroup) {
+          lastGroup = it.group;
+          var gp = mod.groups.filter(function (g) { return g.id === it.group; })[0];
+          if (gp) html += '<div class="ch-group" data-a="g-' + esc(gp.id) + '"><h3>' + esc(L(gp.label)) + '</h3>' +
+            (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' rules') + '</span>' : '') + '</div>';
+        }
+        html += itemHtml(mod, it);
+      });
+    }
+
+    // 5. Ending (අවසාන කොටස)
+    if (mod.ending) {
+      html += '<div class="ch-namo" style="margin-top:20px">' +
+        '<div class="ch-namo-pali" style="font-size:1.05rem;line-height:2.2">' +
+        br(si ? mod.ending.pali : (mod.ending.translit || mod.ending.pali)) + '</div>' +
+        '</div>';
+    }
 
     return html + footerHtml(mod);
   }
@@ -358,8 +366,8 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     html += '<div class="ch-foot"><div class="ls">🪔 🪔 🪔</div>';
     if (ft && ft.bless) html += '<p>' + br(L(ft.bless)) + '</p>';
     else html += '<p>' + T('සියලු සත්ත්වයෝ නිවනින් සැනසීම ලබත්වා! ', 'May all beings be well and happy! ') + '</p>';
-html += '<div class="th">' + esc(ft && ft.thanks ? L(ft.thanks) : T('බුද්ධ සාසනං චිරං තිට්ඨතු !', 'Buddha Sāsanaṃ ciraṃ tiṭṭhatu!')) + '</div></div>';
-return html;
+    html += '<div class="th">' + esc(ft && ft.thanks ? L(ft.thanks) : T('බුද්ධ සාසනං චිරං තිට්ඨතු !', 'Buddha Sāsanaṃ ciraṃ tiṭṭhatu!')) + '</div></div>';
+    return html;
   }
 
   function buildNav(ov, mod) {
@@ -374,7 +382,8 @@ return html;
       });
     } else {
       mod.items.forEach(function (it) {
-        var lbl = si ? (it.short || (it.name && it.name.si)) : (it.shortEn || (it.name && (it.name.tr || it.name.en)) || it.short);
+        var lbl = si ? (it.short || (it.name && it.name.si))
+                     : (it.shortEn || (it.name && it.name.en) || it.short);
         var nb = (mod.chipNum && it.num != null && /^\d+$/.test(String(it.num))) ? '<span class="ch-nb">' + esc(it.num) + '</span>' : '';
         chips += '<button type="button" class="ch-chip" data-go="' + esc(it.id) + '" data-k="' + esc(it.id) + '">' + nb + esc(lbl) + '</button>';
       });
@@ -415,7 +424,6 @@ return html;
     ov.querySelectorAll('.ch-card').forEach(function (c) { spy.observe(c); });
   }
 
-  /* ----------------------------- tab logic ----------------------------- */
   function showTab(ov, id, keepScroll) {
     var tab = tabById(id); cur = tab.id;
     try { localStorage.setItem(STORE_KEY, cur); } catch (e) {}
@@ -427,7 +435,7 @@ return html;
     ov.querySelector('.ch-subnav-in').innerHTML = '';
     main.innerHTML = '<div class="ch-load"><b>🪔</b>' + T('පූරණය වෙමින්...', 'Loading...') + '</div>';
     loadModule(tab).then(function (mod) {
-      if (cur !== tab.id) return;                       // ඒ අතරතුර වෙනත් tab එකක් තෝරා ඇත
+      if (cur !== tab.id) return;
       main.innerHTML = render(mod);
       buildNav(ov, mod);
       if (!keepScroll) ov.scrollTop = Math.min(ov.scrollTop, ov.querySelector('.ch-hero').offsetHeight);
@@ -458,7 +466,6 @@ return html;
     return ov;
   }
 
-  /* ----------------------- open / close / history ----------------------- */
   function onKey(e) { if (e.key === 'Escape') closeChanting(); }
   function onPop() { if (pushed) { pushed = false; hide(); } }
   function hide() {
