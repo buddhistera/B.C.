@@ -1,2 +1,2 @@
-All Rights Recerved
-This is software that is still under development.
+All Rights Recerved.
+This software that is still under development.
