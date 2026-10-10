@@ -5,7 +5,17 @@
       "namespace": "android_app",
       "package_name": "app.vercel.buddhist_era.twa",
       "sha256_cert_fingerprints": [
-        "6F:3B:6E:77:43:2B:48:95:70:4A:AB:19:99:B7:4F:72:5C:8B:0B:FE:9D:2E:2C:5A:26:2C:F8:41:1F:4F:01:FB","F0:42:20:11:D8:EC:25:06:D9:C6:A2:55:A1:E4:D1:5C:F6:85:38:CE:79:33:C7:B3:F5:5E:85:5F:8B:85:DE:E7"
+        "6F:3B:6E:77:43:2B:48:95:70:4A:AB:19:99:B7:4F:72:5C:8B:0B:FE:9D:2E:2C:5A:26:2C:F8:41:1F:4F:01:FB"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.yogasrama.buddhistcalendar",
+      "sha256_cert_fingerprints": [
+        "F0:42:20:11:D8:EC:25:06:D9:C6:A2:55:A1:E4:D1:5C:F6:85:38:CE:79:33:C7:B3:F5:5E:85:5F:8B:85:DE:E7"
       ]
     }
   }
