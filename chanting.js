@@ -64,30 +64,49 @@ function attachChPinch(ov) {
   if (!main) return;
 
   var badge = ov.querySelector('.ch-zoom-badge');
-  var currentZoom = getSavedChZoom();
-  var pendingZoom = currentZoom;
+  var currentZoom = getSavedChZoom();   /* layout එකට යෙදූ (commit කළ) zoom */
+  var pendingZoom = currentZoom;        /* pinch අතරතුර ඉලක්ක අගය */
   var rafId = 0;
   var badgeHideT = 0;
-  var active = false, startDist = 0, startZoom = 1;
+  var active = false, startDist = 0, startZoom = 1, focalY = 0;
 
-  /* zoom අගය ක්ෂණිකව යොදයි — rAF එක මගින් එක frame එකකට එක වරක් පමණක් */
   function clamp(z) { return Math.max(CH_ZOOM_MIN, Math.min(CH_ZOOM_MAX, z)); }
 
-  function commit() {
+  /* Pinch අතරතුර: CSS zoom (මුළු පිටුවම නැවත layout කරයි → ප්‍රමාදය) වෙනුවට
+     GPU transform: scale() පමණක් භාවිතා කරයි — layout නැත, ඉතා සුමටයි. */
+  function paint() {
     rafId = 0;
-    currentZoom = pendingZoom;
-    main.style.zoom = currentZoom;
-    if (badge) badge.textContent = Math.round(currentZoom * 100) + '%';
+    var r = pendingZoom / currentZoom;
+    main.style.transformOrigin = '50% ' + focalY + 'px';
+    main.style.transform = 'scale(' + r + ')';
+    if (badge) badge.textContent = Math.round(pendingZoom * 100) + '%';
   }
 
   function queueZoom(z) {
     pendingZoom = clamp(z);
-    if (!rafId) rafId = requestAnimationFrame(commit);
+    if (!rafId) rafId = requestAnimationFrame(paint);
+  }
+
+  /* අවසානයේ එක වරක් පමණක් සැබෑ zoom (layout) යොදයි; scroll ස්ථානය රඳවයි */
+  function commit() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+    var ratio = pendingZoom / currentZoom;
+    main.style.transform = '';
+    main.style.transformOrigin = '';
+    main.style.willChange = '';
+    if (ratio !== 1) {
+      currentZoom = pendingZoom;
+      main.style.zoom = currentZoom;
+      ov.scrollTop += focalY * (ratio - 1);
+    }
+    if (badge) badge.textContent = Math.round(currentZoom * 100) + '%';
+    saveChZoom(currentZoom);
   }
 
   function showBadge() {
     if (!badge) return;
     clearTimeout(badgeHideT);
+    badge.textContent = Math.round(pendingZoom * 100) + '%';
     badge.classList.add('show');
   }
 
@@ -111,6 +130,11 @@ function attachChPinch(ov) {
       active = true;
       startDist = dist(e.touches);
       startZoom = currentZoom;
+      pendingZoom = currentZoom;
+      /* ඇඟිලි දෙක මැද ලක්ෂ්‍යය (main ඉහළ සිට) */
+      var midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      focalY = midY - main.getBoundingClientRect().top;
+      main.style.willChange = 'transform';
       showBadge();
       e.preventDefault();
     }
@@ -127,9 +151,7 @@ function attachChPinch(ov) {
   function stop() {
     if (!active) return;
     active = false;
-    /* අවසන් අගය ක්ෂණිකව commit කර save කරයි */
-    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; commit(); }
-    saveChZoom(currentZoom);
+    commit();
     hideBadgeSoon();
   }
   main.addEventListener('touchend', stop);
@@ -141,10 +163,11 @@ function attachChPinch(ov) {
     if (e.touches.length > 0) return;
     var now = Date.now();
     if (now - lastTap < 300) {
+      var t = e.changedTouches && e.changedTouches[0];
+      focalY = t ? t.clientY - main.getBoundingClientRect().top : 0;
+      pendingZoom = 1.0;
       showBadge();
-      queueZoom(1.0);
-      if (rafId) { cancelAnimationFrame(rafId); rafId = 0; commit(); }
-      saveChZoom(currentZoom);
+      commit();
       hideBadgeSoon();
       lastTap = 0;
     } else {
