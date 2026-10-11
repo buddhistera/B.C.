@@ -585,7 +585,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     }).catch(function () {
       if (cur !== tab.id) return;
       main.innerHTML = '<div class="ch-load"><b>⚠️</b>' + T('බලාපොරොත්තු වන්න', 'coming soon.') +
-        '<br><button class="ch-retry" type="button">' + T('🪷, '🪷') + '</button></div>';
+        '<br><button class="ch-retry" type="button">' + T('🪷', '🪷') + '</button></div>';
       main.querySelector('.ch-retry').addEventListener('click', function () { showTab(ov, tab.id, true); });
     });
   }
