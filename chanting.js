@@ -32,13 +32,136 @@
   function tabById(id) { for (var i = 0; i < TABS.length; i++) if (TABS[i].id === id) return TABS[i]; return TABS[0]; }
   function T(si, en) { return lang() === 'en' ? en : si; }
 
+  /* --- ගද්‍ය ඡේද සහ ගාථා වෙන් කර හඳුනා ගැනීම ---------------------------
+     - ගද්‍ය ඡේදයක් : තුළ තනි \n නොමැති, එක් අඛණ්ඩ පෙළක්  → indent ලැබේ
+     - ගාථා පදයක්   : තුළ තනි \n ඇති, පේළි කිහිපයක්         → indent නොලැබේ
+     --------------------------------------------------------------------- */
+  function splitParasHtml(text) {
+    if (!text) return '';
+    return String(text).split(/\n\n+/).filter(function (p) { return p.length > 0; }).map(function (p) {
+      var isVerse = /\n/.test(p);
+      var cls = isVerse ? 'v' : 'p';
+      return '<p class="' + cls + '">' + esc(p) + '</p>';
+    }).join('');
+  }
+
+/* --------------- පින්ච්-සූම් (කියවන කොටසට පමණයි) ------------------- */
+var CH_ZOOM_KEY = 'chZoom';
+var CH_ZOOM_MIN = 0.6;
+var CH_ZOOM_MAX = 3.0;
+
+function getSavedChZoom() {
+  try {
+    var v = parseFloat(localStorage.getItem(CH_ZOOM_KEY));
+    return (isFinite(v) && v > 0) ? v : 1.0;
+  } catch (e) { return 1.0; }
+}
+function saveChZoom(v) {
+  try { localStorage.setItem(CH_ZOOM_KEY, String(v)); } catch (e) {}
+}
+function attachChPinch(ov) {
+  var main = ov.querySelector('.ch-main');
+  if (!main) return;
+
+  var badge = ov.querySelector('.ch-zoom-badge');
+  var currentZoom = getSavedChZoom();
+  var pendingZoom = currentZoom;
+  var rafId = 0;
+  var badgeHideT = 0;
+  var active = false, startDist = 0, startZoom = 1;
+
+  /* zoom අගය ක්ෂණිකව යොදයි — rAF එක මගින් එක frame එකකට එක වරක් පමණක් */
+  function clamp(z) { return Math.max(CH_ZOOM_MIN, Math.min(CH_ZOOM_MAX, z)); }
+
+  function commit() {
+    rafId = 0;
+    currentZoom = pendingZoom;
+    main.style.zoom = currentZoom;
+    if (badge) badge.textContent = Math.round(currentZoom * 100) + '%';
+  }
+
+  function queueZoom(z) {
+    pendingZoom = clamp(z);
+    if (!rafId) rafId = requestAnimationFrame(commit);
+  }
+
+  function showBadge() {
+    if (!badge) return;
+    clearTimeout(badgeHideT);
+    badge.classList.add('show');
+  }
+
+  function hideBadgeSoon() {
+    if (!badge) return;
+    clearTimeout(badgeHideT);
+    badgeHideT = setTimeout(function () { badge.classList.remove('show'); }, 900);
+  }
+
+  /* ආරම්භයේදී මුල් zoom එක ක්ෂණිකව යොදයි */
+  main.style.zoom = currentZoom;
+
+  function dist(t) {
+    var dx = t[0].clientX - t[1].clientX;
+    var dy = t[0].clientY - t[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  main.addEventListener('touchstart', function (e) {
+    if (e.touches.length === 2) {
+      active = true;
+      startDist = dist(e.touches);
+      startZoom = currentZoom;
+      showBadge();
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  main.addEventListener('touchmove', function (e) {
+    if (!active || e.touches.length !== 2) return;
+    var d = dist(e.touches);
+    if (startDist < 1) return;
+    queueZoom(startZoom * (d / startDist));
+    e.preventDefault();
+  }, { passive: false });
+
+  function stop() {
+    if (!active) return;
+    active = false;
+    /* අවසන් අගය ක්ෂණිකව commit කර save කරයි */
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; commit(); }
+    saveChZoom(currentZoom);
+    hideBadgeSoon();
+  }
+  main.addEventListener('touchend', stop);
+  main.addEventListener('touchcancel', stop);
+
+  /* Double-tap = 100% ට නැවත සකසයි */
+  var lastTap = 0;
+  main.addEventListener('touchend', function (e) {
+    if (e.touches.length > 0) return;
+    var now = Date.now();
+    if (now - lastTap < 300) {
+      showBadge();
+      queueZoom(1.0);
+      if (rafId) { cancelAnimationFrame(rafId); rafId = 0; commit(); }
+      saveChZoom(currentZoom);
+      hideBadgeSoon();
+      lastTap = 0;
+    } else {
+      lastTap = now;
+    }
+  });
+}
+
   /* ----------------- ප්‍රාතිමෝක්ෂ දත්ත → පොදු ආකෘතිය ----------------- */
   function adaptPatimokkha() {
     if (typeof PATIMOKKHA_DATA === 'undefined' || !Array.isArray(PATIMOKKHA_DATA)) return null;
     var groups = [], items = [];
     PATIMOKKHA_DATA.forEach(function (sec) {
       groups.push({ id: sec.id, label: { si: sec.title_si, en: sec.title_en }, short: { si: sec.si, en: sec.en }, count: sec.count });
-      var split = sec.kind !== 'rules' && sec.parts.length > 1;
+      /* role:"end" කොටසක් ඇත්නම් split නොකර, එම කොටසම pm-end ලෙස පෙන්වයි */
+      var hasEnd = sec.parts.some(function (p) { return p.role === 'end'; });
+      var split = sec.kind !== 'rules' && sec.parts.length > 1 && !hasEnd;
       var units = split ? sec.parts.map(function (p) { return [p]; }) : [sec.parts];
       units.forEach(function (parts, idx) {
         var p0 = parts[0];
@@ -115,10 +238,10 @@
   var CSS = '\
 #chOverlay{--m950:#042a1c;--m900:#083f2a;--m800:#0d5539;--m700:#136c48;--m600:#1a8558;--m500:#22a06b;--m400:#3eb489;--m300:#68cba3;--m200:#98ddbd;--m100:#c8edd8;--m50:#e8f8f0;\
 --g700:#8a6508;--g600:#b8860b;--g500:#d4a017;--g400:#e6b944;--g300:#f2d478;--g200:#f9e9b8;--g100:#fdf5db;\
---bg:#f3fcf7;--card:#ffffff;--elev:#f8fdfa;--subtle:#e8f8f0;--tint:#e0f5e8;--pali-bg:linear-gradient(135deg,#f3fcf7,#e8f8f0);\
+--bg:#f3fcf7;--card:#ffffff;--elev:#f8fdfa;--subtle:#e8f8f0;--tint:#e0f5e8;--pali-bg:#edfaf3;\
 --tx:#0a2018;--tx2:#2a4a3a;--muted:#608a76;--bd:#c8e6d5;--bd2:#a0d4b8;--sh:0 4px 14px rgba(8,63,42,.10);--shs:0 1px 4px rgba(8,63,42,.08);\
 --serif:"Noto Serif Sinhala","Noto Sans Sinhala",Georgia,serif;--sans:"Noto Sans Sinhala","Segoe UI",sans-serif}\
-body.dark-mode #chOverlay{--bg:#061410;--card:#0a2118;--elev:#0e2c20;--subtle:#123828;--tint:#123828;--pali-bg:linear-gradient(135deg,#0e2c20,#143a2a);\
+body.dark-mode #chOverlay{--bg:#061410;--card:#0a2118;--elev:#0e2c20;--subtle:#123828;--tint:#123828;--pali-bg:#113325;\
 --tx:#e0f5e8;--tx2:#a8d4b8;--muted:#6a9a80;--bd:#1a4830;--bd2:#2a6042;--sh:0 4px 14px rgba(0,0,0,.5);--shs:0 1px 4px rgba(0,0,0,.45);\
 --g700:#e6b944;--g600:#f2d478;--g500:#f9e9b8;--g400:#fdf5db;--m700:#68cba3;--m600:#98ddbd;--m500:#c8edd8;--m800:#98ddbd;--m900:#c8edd8}\
 #chOverlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:5000;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;\
@@ -126,6 +249,10 @@ background:var(--bg);color:var(--tx);font-family:var(--sans);line-height:1.9;fon
 #chOverlay *{box-sizing:border-box}\
 #chOverlay .ch-close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);right:10px;z-index:5100;width:42px;height:42px;border-radius:50%;border:2px solid var(--m700);background:var(--card);color:var(--m700);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:26px;line-height:1;font-family:Arial,sans-serif;box-shadow:0 5px 16px rgba(0,0,0,.25);transition:all .25s ease}\
 #chOverlay .ch-close:hover{background:var(--m700);color:#fff;transform:rotate(90deg)}\
+/* zoom badge */\
+#chOverlay .ch-zoom-badge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.75);background:rgba(8,63,42,.88);color:#fff;font-family:var(--sans);font-weight:800;font-size:1.15rem;padding:12px 26px;border-radius:34px;box-shadow:0 10px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.15);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:5200;letter-spacing:1.5px;border:1.5px solid rgba(255,255,255,.25)}\
+#chOverlay .ch-zoom-badge.show{opacity:1;transform:translate(-50%,-50%) scale(1)}\
+body.dark-mode #chOverlay .ch-zoom-badge{background:rgba(0,229,255,.88);color:#042a1c;border-color:rgba(0,0,0,.2)}\
 /* hero */\
 #chOverlay .ch-hero{background:linear-gradient(135deg,#042a1c 0%,#0d5539 40%,#22a06b 75%,#d4a017 100%);color:#f3fcf7;text-align:center;padding:calc(26px + env(safe-area-inset-top,0px)) 16px 22px;position:relative;overflow:hidden}\
 #chOverlay .ch-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,transparent,#c8edd8,#f3fcf7,#c8edd8,transparent)}\
@@ -154,8 +281,8 @@ body.dark-mode #chOverlay .ch-chip{background:var(--subtle);color:var(--m200)}\
 body.dark-mode #chOverlay .ch-chip.active{background:#22a06b;color:#061410}\
 #chOverlay .ch-nb{background:rgba(255,255,255,.35);padding:0 6px;border-radius:20px;font-size:.66rem;font-weight:800;line-height:1.6}\
 #chOverlay .ch-chip:not(.active) .ch-nb{background:rgba(26,133,88,.18)}\
-/* content */\
-#chOverlay .ch-main{max-width:900px;margin:0 auto;padding:16px 12px 30px}\
+/* content — touch-action:pan-y මගින් 2-ඇඟිලි ඉඟි browser එකට නොයවා අපට ලබා දේ */\
+#chOverlay .ch-main{max-width:900px;margin:0 auto;padding:16px 12px 30px;touch-action:pan-y;transform-origin:top center}\
 #chOverlay .ch-head{text-align:center;margin:8px 0 14px}\
 #chOverlay .ch-head h2{font-family:var(--serif);font-size:1.3rem;color:var(--m800);margin:0 0 2px;font-weight:800;line-height:1.5}\
 body.dark-mode #chOverlay .ch-head h2{color:var(--g400)}\
@@ -167,6 +294,12 @@ body.dark-mode #chOverlay .ch-namo-pali{color:var(--g400)}\
 #chOverlay .ch-namo-tr{font-family:Georgia,serif;font-style:italic;font-size:.92rem;color:var(--g700);margin-top:2px}\
 #chOverlay .ch-namo-line{width:110px;height:2px;background:linear-gradient(90deg,transparent,var(--g500),transparent);margin:14px auto}\
 #chOverlay .ch-namo-t{font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--m800);margin:6px 0;line-height:1.9}\
+#chOverlay .ch-gold-namo{text-align:center;padding:20px 14px;margin:6px 0 16px;border-radius:16px;border:2px solid var(--g600);background:linear-gradient(135deg,var(--g300),var(--g400) 55%,var(--g500));box-shadow:var(--sh)}\
+#chOverlay .ch-gold-namo .p{font-family:var(--serif);font-size:1.18rem;font-weight:800;color:#3d2c00;line-height:1.9}\
+#chOverlay .ch-gold-namo .t{font-family:Georgia,serif;font-style:italic;font-size:.92rem;color:#5c4300;margin-top:4px}\
+body.dark-mode #chOverlay .ch-gold-namo{background:linear-gradient(135deg,#8a6508,#b8860b 55%,#d4a017);border-color:#e6b944}\
+body.dark-mode #chOverlay .ch-gold-namo .p{color:#fff8e1}\
+body.dark-mode #chOverlay .ch-gold-namo .t{color:#ffe9a8}\
 body.dark-mode #chOverlay .ch-namo-t{color:var(--g400)}\
 #chOverlay .ch-group{margin:30px 0 14px;padding:16px 18px;background:linear-gradient(135deg,var(--m800),var(--m600),var(--g600));border-radius:14px;color:#f3fcf7;box-shadow:var(--sh);text-align:center}\
 body.dark-mode #chOverlay .ch-group{background:linear-gradient(135deg,#0d5539,#1a8558,#8a6508);color:#f3fcf7}\
@@ -174,25 +307,33 @@ body.dark-mode #chOverlay .ch-group{background:linear-gradient(135deg,#0d5539,#1
 #chOverlay .ch-group span{display:inline-block;margin-top:6px;background:rgba(255,255,255,.22);padding:2px 12px;border-radius:30px;font-size:.76rem;font-weight:700}\
 /* card */\
 #chOverlay .ch-card{background:var(--card);border-radius:14px;padding:18px 15px;margin:16px 0;box-shadow:var(--sh);border:1px solid var(--bd);border-left:5px solid var(--m600)}\
-#chOverlay .ch-card-h{display:flex;align-items:center;gap:11px;margin-bottom:12px;padding-bottom:10px;border-bottom:1.5px dashed var(--bd2)}\
-#chOverlay .ch-num{background:linear-gradient(135deg,var(--m800),var(--m500));color:#fff;font-weight:800;font-size:.9rem;min-width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(19,108,72,.3);flex-shrink:0;border:2px solid var(--g500)}\
+#chOverlay .ch-card-h{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1.5px dashed var(--bd2)}\
+#chOverlay .ch-num{display:none;background:linear-gradient(135deg,var(--m800),var(--m500));color:#fff;font-weight:800;font-size:.9rem;min-width:42px;height:42px;border-radius:50%;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(19,108,72,.3);flex-shrink:0;border:2px solid var(--g500)}\
 body.dark-mode #chOverlay .ch-num{background:linear-gradient(135deg,#136c48,#22a06b);color:#fff}\
 #chOverlay .ch-num.txt{border-radius:22px;padding:0 12px;font-size:.78rem}\
-#chOverlay .ch-names{flex:1;min-width:0}\
+#chOverlay .ch-names{flex:1;min-width:0;text-align:center}\
 #chOverlay .ch-nm{font-family:var(--serif);font-weight:700;color:var(--m800);font-size:1.08rem;line-height:1.5}\
 body.dark-mode #chOverlay .ch-nm{color:var(--g400)}\
 #chOverlay .ch-nm2{font-family:Georgia,serif;font-style:italic;font-weight:600;color:var(--g700);font-size:.88rem;margin-top:2px}\
 #chOverlay .ch-nm3{font-size:.8rem;color:var(--muted);font-weight:600;margin-top:1px}\
 #chOverlay .ch-gl{font-size:.8rem;color:var(--muted);font-weight:600}\
-#chOverlay .ch-box{position:relative;border-radius:12px;margin:20px 0 10px;white-space:pre-line;word-break:break-word}\
+#chOverlay .ch-box{position:relative;border-radius:12px;margin:20px 0 10px;white-space:pre-line;word-break:break-word;text-align:justify}\
 #chOverlay .ch-box::before{position:absolute;top:-12px;left:16px;color:#fff;font-family:var(--sans);font-style:normal;font-size:.68rem;font-weight:700;padding:2px 11px;border-radius:20px;letter-spacing:.4px;white-space:nowrap;line-height:1.7}\
-#chOverlay .ch-pali{background:var(--pali-bg);border:1.5px dashed var(--m600);padding:16px 15px;font-family:var(--serif);font-weight:600;color:var(--m900);font-size:1rem;line-height:2.1}\
+#chOverlay .ch-pali{background:var(--pali-bg);border:1.5px dashed var(--m600);padding:16px 15px;font-family:var(--serif);font-weight:600;color:var(--m900);font-size:1rem;line-height:2.1;text-align:justify}\
 #chOverlay .ch-pali::before{content:attr(data-l);background:var(--m700)}\
 #chOverlay .ch-pali.no-lbl::before,#chOverlay .ch-mean.no-lbl::before{display:none}\
+#chOverlay .ch-pali p{margin:0 0 .5em;white-space:pre-line}\
+#chOverlay .ch-pali p.p{text-indent:2em}\
+#chOverlay .ch-pali p.v{text-indent:0}\
+#chOverlay .ch-pali p:last-child{margin-bottom:0}\
 body.dark-mode #chOverlay .ch-pali{color:var(--m200);border-color:var(--m500)}\
 body.dark-mode #chOverlay .ch-pali::before{background:#1a8558}\
-#chOverlay .ch-mean{background:var(--subtle);border-left:4px solid var(--m700);padding:15px 15px;font-size:.95rem;line-height:1.95;color:var(--tx);border-radius:10px}\
+#chOverlay .ch-mean{background:var(--subtle);border-left:4px solid var(--m700);padding:15px 15px;font-size:.95rem;line-height:1.95;color:var(--tx);border-radius:10px;text-align:justify}\
 #chOverlay .ch-mean::before{content:attr(data-l);background:var(--m800)}\
+#chOverlay .ch-mean p{margin:0 0 .5em;white-space:pre-line}\
+#chOverlay .ch-mean p.p{text-indent:2em}\
+#chOverlay .ch-mean p.v{text-indent:0}\
+#chOverlay .ch-mean p:last-child{margin-bottom:0}\
 body.dark-mode #chOverlay .ch-mean::before{background:#136c48}\
 #chOverlay .ch-mean.en{font-family:Georgia,"Noto Serif",serif;font-size:.97rem;line-height:1.85}\
 #chOverlay .ch-gatha{background:linear-gradient(135deg,#fdf5db,#f9e9b8);border:2px solid var(--g500);border-radius:14px;padding:16px 12px;text-align:center;font-family:var(--serif);font-style:italic;font-weight:600;color:#8a6508;margin:16px 0 2px;line-height:2.1;font-size:.95rem;white-space:pre-line;box-shadow:inset 0 0 22px rgba(212,160,23,.12)}\
@@ -247,6 +388,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     }).join('');
     var all = TABS.map(function (t) { return L(t.title); }).join(' · ');
     return '<button class="ch-close" type="button" aria-label="' + T('ඉවත් වන්න', 'Close') + '">&times;</button>' +
+      '<div class="ch-zoom-badge" aria-hidden="true"></div>' +
       '<header class="ch-hero">' + LAMP + '<h1>' + T('සජ්ඣායනය', 'Chanting') + '</h1><p>' + esc(all) + '</p></header>' +
       '<div class="ch-tabs"><div class="ch-tabs-in">' + tabs + '</div></div>' +
       '<div class="ch-subnav"><div class="ch-subnav-in"></div></div>' +
@@ -284,10 +426,10 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     if (main) {
       var lblAttr = mod.hidePaliLabel ? '' : ' data-l="' + esc(si ? '📜 පාළි' : '📜 Pāḷi') + '"';
       var lblCls = mod.hidePaliLabel ? ' no-lbl' : '';
-      body += '<div class="ch-box ch-pali' + lblCls + '"' + lblAttr + '>' + esc(main) + '</div>';
+      body += '<div class="ch-box ch-pali' + lblCls + '"' + lblAttr + '>' + splitParasHtml(main) + '</div>';
     }
     if (mean) {
-      var meanBox = '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(si ? '🇱🇰 සිංහල අර්ථය' : '🌐 Meaning') + '">' + esc(mean) + '</div>';
+      var meanBox = '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(si ? '🇱🇰 සිංහල අර්ථය' : '🌐 Meaning') + '">' + splitParasHtml(mean) + '</div>';
       if (mod.meaningToggle) {
         body += '<div class="pm-row"><button type="button" class="pm-more" aria-expanded="false" onclick="chPmToggle(this)">' +
           T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button></div>' +
@@ -321,8 +463,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
         '<div class="ch-namo-pali">' + br(si ? mod.vandana.pali : (mod.vandana.translit || mod.vandana.pali)) + '</div>' +
         '</div>';
     }
-
-    // 3. Paccaya List (ප්‍රත්‍ය ලැයිස්තුව)
+        // 3. Paccaya List (ප්‍රත්‍ය ලැයිස්තුව)
     if (mod.paccayaList) {
       html += '<div class="ch-namo" style="margin-top:14px">' +
         '<div class="ch-namo-t">' + esc(si ? 'වතුවීසති පච්චය' : 'The Twenty-Four Conditions') + '</div>' +
@@ -343,7 +484,8 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
           lastGroup = it.group;
           var gp = mod.groups.filter(function (g) { return g.id === it.group; })[0];
           if (gp) html += '<div class="ch-group" data-a="g-' + esc(gp.id) + '"><h3>' + esc(L(gp.label)) + '</h3>' +
-            (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' rules') + '</span>' : '') + '</div>';
+            (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' rules') + '</span>' : '') + '</div>' +
+            (gp.namo ? '<div class="ch-gold-namo"><div class="p">' + esc(gp.namo.pali) + '</div>' + (!si && gp.namo.translit ? '<div class="t">' + esc(gp.namo.translit) + '</div>' : '') + '</div>' : '');
         }
         html += itemHtml(mod, it);
       });
@@ -442,8 +584,8 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
       setupSpy(ov);
     }).catch(function () {
       if (cur !== tab.id) return;
-      main.innerHTML = '<div class="ch-load"><b>⚠️</b>' + T('අන්තර්ගතය පූරණය කළ නොහැකි විය. (අන්තර්ජාලය/ගොනුව පරීක්ෂා කරන්න)', 'Could not load this section. Please check your connection.') +
-        '<br><button class="ch-retry" type="button">' + T('නැවත උත්සාහ කරන්න', 'Retry') + '</button></div>';
+      main.innerHTML = '<div class="ch-load"><b>⚠️</b>' + T('බලාපොරොත්තු වන්න', 'coming soon.') +
+        '<br><button class="ch-retry" type="button">' + T('🪷, '🪷') + '</button></div>';
       main.querySelector('.ch-retry').addEventListener('click', function () { showTab(ov, tab.id, true); });
     });
   }
@@ -460,6 +602,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     ov.querySelector('.ch-subnav-in').addEventListener('click', function (e) {
       var c = e.target.closest('.ch-chip'); if (c) scrollToAnchor(ov, c.getAttribute('data-go'));
     });
+    attachChPinch(ov);
     var saved = null; try { saved = localStorage.getItem(STORE_KEY); } catch (e) {}
     ov.scrollTop = 0;
     showTab(ov, startTab || saved || TABS[0].id, true);
