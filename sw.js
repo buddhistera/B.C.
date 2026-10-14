@@ -1,8 +1,8 @@
-const CACHE_NAME = 'buddhist-era-v4.1.35';
+const CACHE_NAME = 'buddhist-era-v4.1.36';
 
 const CACHE_ASSETS = [
   '/',
-  '/index.html',
+  '/index.html?v=4',
   '/manifest.json',
   '/info.js',
   '/style.css?v=4',
