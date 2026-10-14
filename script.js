@@ -4,12 +4,12 @@
     const i18n = {
         si: {
             title: "බුද්ධ වර්ෂය", dateLabel: "දිනය තෝරන්න ( ක්‍රි.ව) ⇓", atikkanta: "අතික්කන්ත\n(ඉකුත් වූ)", avasittha: "අවසිට්ඨ\n(ඉතිරි)",
-            langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", calcMenu: "📖 ගණනය", navSun: "අරුණ", navPoya: "උපෝසථ", navVas: "වස්", navChant: "සජ්ඣායනය", navCalc: "ගණනය", navMore: "තව", langLbl: "English", darkLbl: "අඳුරු තිරය", lightLbl: "ආලෝකමත් තිරය", infoLbl: "තොරතුරු", contactMenu: "ℹ️ තොරතුරු", poyaTitle: "පෝය දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
+            langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", calcMenu: "📖 ගණනය", navSun: "අරුණ", navPoya: "උපෝසථ", navVas: "වස්", navChant: "සජ්ඣායනා", navCalc: "ගණනය", navMore: "තව", langLbl: "English", darkLbl: "අඳුරු තිරය", lightLbl: "ආලෝකමත් තිරය", infoLbl: "තොරතුරු", contactMenu: "ℹ️ තොරතුරු", poyaTitle: " උපෝසථ දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
             vasTitle: "", contactTitle: " තොරතුරු සහ බාගත කිරීම්", poyaSuffix: " පෝය",
             vas1: "පෙරවස් සමාදන්වීම", vas2: "පෙරවස් පවාරණය", vas3: "පසුවස් සමාදන්වීම", vas4: "පසුවස් පවාරණය",
             animals: ["සප්ප","අස්ස","අජ","කපි","කුක්කුට","සෝන","සූකර","මුසික"," වසභ","ව්‍යග්ග","සස","නාග"],
             seasons: { Hemanta: "හේමන්ත", Gimhana: "ගිම්හාන", Vassana: "වස්සාන", ReHemanta: "නැවත හේමන්ත" },
-            paksha: { Kanha: "කණ්හ පක්ඛෙ", Sukka: "සුක්ක පක්ඛෙ" },
+            paksha: { Kāla: " කාල පක්ඛෙ", Sukka: "සුක්ක පක්ඛෙ" },
             week: ["රවිවාරං","චන්දවාරං","භුම්මවාරං","බුධවාරං","ගුරුවාරං","සුක්කවාරං","සෝරවාරං"],
             paliTemplate: (a, s, m, p, t, w) => `අයං\n${a} සංවච්ඡරෙ\n${s} උතු අස්මිං උතුම්හි\n${m} මාසස්ස\n${p}\n${t}\n${w}\nඉදන්ති දට්ඨබ්බං.`
         },
@@ -20,7 +20,7 @@
             vas1: "Entering the Early Rains Retreat", vas2: "Early Vassa Pavāraṇā", vas3: "Entering the Late Rains Retreat ", vas4: "Late Vassa Pavāraṇā ",
             animals: ["Sappa","Assa","Aja","Kapi","Kukkuṭa","Sona","Sūkara","Musika"," Vasabha","Vyaggha","Sasa","Nāga"],
             seasons: { Hemanta: "Hemanta", Gimhana: "Gimhāna", Vassana: "Vassāna", ReHemanta: "Late Hemanta" },
-            paksha: { Kanha: "Kaṇha pakkhe", Sukka: "Sukka pakkhe" },
+            paksha: { Kāla: "Kāla pakkhe", Sukka: "Sukka pakkhe" },
             week: ["Ravivāraṃ","Candavāraṃ","Bhummavāraṃ","Budhavāraṃ","Guruvāraṃ","Sukkavāraṃ","Soravāraṃ"],
             paliTemplate: (a, s, m, p, t, w) => `Ayaṃ\n${a} saṃvacchare\n${s} utu asmiṃ utumhi\n${m} māsassa\n${p}\n${t}\n${w}\nidanti daṭṭhabbaṃ.`
         }
@@ -878,7 +878,7 @@ function calculateAll() {
 
     const nextA = _pFirstFrom(iT, p => p.t === "අමාවක");
     const nextF = _pFirstFrom(iT, p => p.t === "පසළොස්වක");
-    let paksha = (nextA && (!nextF || new Date(nextA.d).getTime() <= new Date(nextF.d).getTime())) ? t.paksha.Kanha : t.paksha.Sukka;
+    let paksha = (nextA && (!nextF || new Date(nextA.d).getTime() <= new Date(nextF.d).getTime())) ? t.paksha.Kāla : t.paksha.Sukka;
 
     const lastV = time <= vD ? y-1 : y;
     const lastVD = new Date(vesakDates[lastV]).getTime();
@@ -1030,7 +1030,7 @@ if (nextFullMoon) {
         atk: { y: bY - 1, m: bM - 1, d: tithi - 1 },
         avs: { y: 5000 - bY, m: totM - bM, d: currentAvasitthaD },
         animalIdx: bY % 12, season: seasonKey, monthSi: sMonth,
-        paksha: (finalPaksha === t.paksha.Sukka) ? 'sukka' : 'kanha',
+        paksha: (finalPaksha === t.paksha.Sukka) ? 'sukka' : 'kāla',
         tithi: Math.max(1, Math.min(15, paliIndex)), isPoya: isPoyaDay
     };
 
@@ -1515,7 +1515,7 @@ function updateSunTimes() {
     // ==========================================================
     let phaseName = "";
     const tithiSukha = ["පුර පෑලවිය", "පුර දියවක", "පුර තියවක", "පුර ජලවක", "පුර විසේනිය", "පුර සැටවක", "පුර සතවක", "පුර අටවක", "පුර නවවක", "පුර දසවක", "පුර එකොළොස්වක", "පුර දොළොස්වක", "පුර තෙළෙස්වක", "පුර තුදුස්වක", "පුර පසළොස්වක පෝය"];
-    const tithiKanha = ["අව පෑලවිය", "අව දියවක", "අව තියවක", "අව ජලවක", "අව විසේනිය", "අව සැටවක", "අව සතවක", "අව අටවක", "අව නවවක", "අව දසවක", "අව එකොළොස්වක", "අව දොළොස්වක", "අව තෙළෙස්වක", "අව තුදුස්වක", "අමාවක පෝය"];
+    const tithiKāla = ["අව පෑලවිය", "අව දියවක", "අව තියවක", "අව ජලවක", "අව විසේනිය", "අව සැටවක", "අව සතවක", "අව අටවක", "අව නවවක", "අව දසවක", "අව එකොළොස්වක", "අව දොළොස්වක", "අව තෙළෙස්වක", "අව තුදුස්වක", "අමාවක පෝය"];
 
     let tithiIndex = (stableTithiIndex !== null) ? stableTithiIndex : Math.floor(phaseAngle / 12);
     
@@ -1523,7 +1523,7 @@ function updateSunTimes() {
         phaseName = engMode ? (tithiIndex === 14 ? "Full Moon" : `Waxing ${tithiIndex + 1}`) : tithiSukha[tithiIndex];
     } else {
         let waningIndex = tithiIndex - 15;
-        phaseName = engMode ? (waningIndex === 14 ? "New Moon" : `Waning ${waningIndex + 1}`) : tithiKanha[waningIndex];
+        phaseName = engMode ? (waningIndex === 14 ? "New Moon" : `Waning ${waningIndex + 1}`) : tithiKāla[waningIndex];
     }
 
     // ==========================================================

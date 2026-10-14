@@ -1,40 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ECEGZ86GGK"></script>
-<script src="astronomy.browser.min.js?v=1"></script>
-<script src="script.js?v=3.4"></script>
-<script src="calculation.js?v=3"></script>
-<script src="info.js?v=1"></script>
-<script src="chanting.js?v=6"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-ECEGZ86GGK');
-</script>
     <meta charset="UTF-8">
-	<link rel="apple-touch-icon" href="./icon-192x192.png?v=1">
-	<link rel="manifest" href="./manifest.json?v=1">
-	<link rel="stylesheet" href="style.css?v=3.2">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700;800&family=Noto+Serif+Sinhala:wght@500;600;700;800&family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
-    <link rel="canonical" href="https://buddhist-era.vercel.app/">
-<meta property="og:title" content="Buddhist Era | බුද්ධ වර්ෂය">
-<meta property="og:description" content="Buddhist Era calendar and tools">
-<meta property="og:image" content="https://buddhist-era.vercel.app/icon-512x512.png">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://buddhist-era.vercel.app/">
-<meta property="og:site_name" content="Buddhist Era">
-	<meta name="description" content="Buddhist Era calendar and tools. බෞද්ධ වර්ෂය සහ දින දර්ශනය .">
-<meta name="keywords" content="Buddhist Era, Calendar, B.C., බුද්ධ වර්ෂය, බෞද්ධ දින දර්ශනය">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="google" content="notranslate">
     <meta name="robots" content="index, follow">
-    <title>Buddhist Era | බුද්ධ වර්ෂය</title>
+    <meta name="description" content="Buddhist Era calendar and tools. බෞද්ධ වර්ෂය සහ දින දර්ශනය.">
+    
+    <link rel="canonical" href="https://buddhist-era.vercel.app/">
+    <meta property="og:title" content="Buddhist Era | බුද්ධ වර්ෂය">
+    <meta property="og:description" content="Buddhist Era calendar and tools">
+    <meta property="og:image" content="https://buddhist-era.vercel.app/icon-512x512.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://buddhist-era.vercel.app/">
+    <meta property="og:site_name" content="Buddhist Era">
 
+    <link rel="apple-touch-icon" href="./icon-192x192.png">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700;800&family=Noto+Serif+Sinhala:wght@500;600;700;800&family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+
+    <style>
+      /* pull-to-refresh block එක අයින් කරන්න - allow native refresh */
+      html, body {
+        overscroll-behavior-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ECEGZ86GGK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ECEGZ86GGK');
+    </script>
+    
+    <script src="astronomy.browser.min.js?v=1" defer></script>
+    <script src="script.js" defer></script>
+    <script src="calculation.js" defer></script>
+    <script src="info.js" defer></script>
+    <script src="chanting.js" defer></script>
+
+    <title>Buddhist Era | බුද්ධ වර්ෂය</title>
 </head>
 <body>
 
@@ -43,219 +54,200 @@
         බුද්ධ වර්ෂය
     </div>
 
-
-
-
-<div class="section date-section-wrapper">
-    <div class="date-label-row">
-        <span class="label" id="ui-label-date">දිනය තෝරන්න ( ක්‍රි.ව) ⇓</span>
-    </div>
-    
-    <div class="date-row">
-        <div class="custom-date-container" onclick="openWheelPicker('inputDate')">
-           <input type="date" id="inputDate" readonly onfocus="this.blur()" onchange="updateDisplay(); calculateAll(); updateSinhalaAstroDate();">
-            <span id="dateText"></span>
+    <div class="section date-section-wrapper">
+        <div class="date-label-row">
+            <span class="label" id="ui-label-date">දිනය තෝරන්න ( ක්‍රි.ව) ⇓</span>
         </div>
-        <div id="miniMoonContainer" onclick="resetToToday()">
-            <div id="miniMoonVisual"></div>
-        </div>
-    </div>
-</div>
-
-<div id="wheelPickerModal" class="modal-wheel">
-    <div class="wheel-picker-container">
-        <div class="wheel-picker-close" onclick="closeWheelPicker()">&times;</div>
-        <div class="wheel-columns">
-            <div class="wheel-col" id="wheelYear"></div>
-            <div class="wheel-col" id="wheelMonth"></div>
-            <div class="wheel-col" id="wheelDate"></div>
-            <div class="wheel-selection-band"></div>
-        </div>
-        <button class="wheel-ok-btn" onclick="confirmWheelPicker()" id="ui-wheel-ok">OK</button>
-    </div>
-</div>
-
-
-<div class="buddhist-calendar-row">
-    <div class="side-panel bg-atikkanta">
-        <span class="panel-header" id="ui-label-atikkanta">අතික්කන්ත</span>
-        <div class="data-item">
-            <span class="label-text" id="ui-short-y1">ව</span>
-            <span id="atikkantaY" class="val-text"></span>
-        </div>
-        <div class="data-item">
-            <span class="label-text" id="ui-short-m1">මා</span>
-            <span id="atikkantaM" class="val-text"></span>
-        </div>
-        <div class="data-item">
-            <span class="label-text" id="ui-short-d1">දි</span>
-            <span id="atikkantaD" class="val-text"></span>
-        </div>
-    </div>
-
-    <div class="main-panel">
-        <div class="data-item main-bg-y">
-            <span class="label-text" id="ui-label-year">වර්ෂය</span>
-            <span id="bYear" class="main-val-text"></span>
-        </div>
-        <div class="data-item main-bg-m">
-            <span class="label-text" id="ui-label-month">මාසය</span>
-            <span id="bMonth" class="main-val-text"></span>
-        </div>
-        <div class="data-item main-bg-d">
-            <span class="label-text" id="ui-label-day">දිනය</span>
-            <span id="bDay" class="main-val-text"></span>
-        </div>
-    </div>
-
-    <div class="side-panel bg-avasittha">
-        <span class="panel-header" id="ui-label-avasittha">අවසිට්ඨ</span>
-        <div class="data-item">
-            <span class="label-text" id="ui-short-y2">ව</span>
-            <span id="avasitthaY" class="val-text"></span>
-        </div>
-        <div class="data-item">
-            <span class="label-text" id="ui-short-m2">මා</span>
-            <span id="avasitthaM" class="val-text"></span>
-        </div>
-        <div class="data-item">
-            <span class="label-text" id="ui-short-d2">දි</span>
-            <span id="avasitthaD" class="val-text"></span>
-        </div>
-    </div>
-</div>
-
-<div class="pali-box" id="paliDisplay" style="margin-bottom: 10px; text-align: center;"></div>
-        
-<div class="poya-wrap" style="text-align: center; margin-bottom: 20px;">
-    <div id="poyaStatus" class="poya-status" style="color: #c62828; font-weight: bold; font-size: 0.9em;"></div>
-</div>
-
-        <div id="poyaModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span id="ui-poya-title">පොහොය දින ලැයිස්තුව</span>
-            <div>
-                <span class="close-btn" onclick="closeModal('poyaModal')">&times;</span>
+        <div class="date-row">
+            <div class="custom-date-container" onclick="openWheelPicker('inputDate')">
+               <input type="date" id="inputDate" readonly onfocus="this.blur()" onchange="updateDisplay(); calculateAll(); updateSinhalaAstroDate();">
+                <span id="dateText"></span>
+            </div>
+            <div id="miniMoonContainer" onclick="resetToToday()">
+                <div id="miniMoonVisual"></div>
             </div>
         </div>
-        <div id="poyaListContent"></div>
-        <div id="editArea" style="display:none; margin-top:10px;">
-            <textarea id="poyaDataEdit" style="width:100%; height:300px; font-family: monospace; font-size: 12px;"></textarea><br>
-            <button onclick="savePoyaData()" style="margin-top:10px; background:var(--blue); border:none; padding:12px; color:white; border-radius:5px; width:100%; font-weight:bold;">Save & Update</button>
-        </div>
     </div>
-</div>
-   
-<div id="vasModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span id="ui-vas-title">වස් පිළිබඳව</span>
-            <span class="close-btn" onclick="closeModal('vasModal')">&times;</span>
-        </div>
-        <div id="vasContent" style="line-height: 2.2; font-size: 1.05em;"></div>
-    </div>
-</div>
 
-
-<div id="sunModal" class="modal-sun">
-    <div class="sun-container">
-        <button class="sun-close-btn" onclick="closeSunModal()">&times;</button>
-        
-        <div class="sun-header-controls" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-            <div class="sun-date-wrap" onclick="openWheelPicker('sunDateInput')">
-                <input type="date" id="sunDateInput" class="sun-input" readonly onfocus="this.blur()">
+    <div id="wheelPickerModal" class="modal-wheel">
+        <div class="wheel-picker-container">
+            <div class="wheel-picker-close" onclick="closeWheelPicker()">&times;</div>
+            <div class="wheel-columns">
+                <div class="wheel-col" id="wheelYear"></div>
+                <div class="wheel-col" id="wheelMonth"></div>
+                <div class="wheel-col" id="wheelDate"></div>
+                <div class="wheel-selection-band"></div>
             </div>
-            <button id="getLocationBtn" onclick="fetchLocationAndSunData()" style="padding: 8px 15px; font-size: 14px; background-color: #d4af37; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
-                📍 Get My Location
-            </button>
-            <p id="locationStatus" style="font-size: 0.85em; color: #555; margin: 0;"></p>
-        </div>
-
-        <div class="sun-badge-grid">
-    <div class="sun-badge dawn-badge">
-        <div class="sun-label" id="lblDawn">අරුණෝදය</div>
-        <div class="sun-time" id="sunDawn">--:-- --</div>
-    </div>
-    
-    <div class="sun-badge sunrise-badge">
-        <div class="sun-label" id="lblSunrise">ඉර උදාව</div>
-        <div class="sun-time" id="sunSunrise">--:-- --</div>
-    </div>
-    
-    <div class="sun-badge noon-badge">
-        <div class="sun-label" id="lblNoon">මධ්‍යහ්නය</div>
-        <div class="sun-time" id="sunNoon">--:-- --</div>
-    </div>
-    
-    <div class="sun-badge sunset-badge">
-        <div class="sun-label" id="lblSunset">ඉර බැසීම</div>
-        <div class="sun-time" id="sunSunset">--:-- --</div>
-    </div>
-</div>
-
-<div class="sun-astro-card">
-    <div class="sun-astro-title" id="lblAstroTitle">තාරකා විද්‍යානුකූලව සඳෙහි පිහිටීම, තිථිය සහ වෙලාවන්</div>
-    <div class="sun-astro-subtitle" id="sunModalTithiLabel">--</div>
-
-    <div class="sun-astro-moon-row">
-        <div class="poya-time-line"><span id="lblMoonrise">සඳ උදාව</span> <span id="sunMoonrise">--:-- --</span></div>
-        <div class="poya-time-line"><span id="lblMoonset">සඳ බැසීම</span> <span id="sunMoonset">--:-- --</span></div>
-    </div>
-
-    <div class="poya-time-line" id="poyaBeginLine">
-        <span id="lblPoyaBegin">පෝය ලබන වේලාව</span> <span id="sunPoyaBegin"></span>
-    </div>
-    <div class="poya-time-line" id="poyaEndLine">
-        <span id="lblPoyaEnd">පෝය ගෙවෙන වේලාව</span> <span id="sunPoyaEnd"></span>
-    </div>
-
-    <div class="moon-phase-container">
-        <div class="moon-visual-wrapper">
-            <div id="moonVisual"></div>
-        </div>
-        <div class="moon-details">
-            <div id="moonPhaseLabel" class="moon-phase-title">need 📍...</div>
-            <div id="moonIllumLabel" class="moon-illumination">දීප්තිය: --%</div>
+            <button class="wheel-ok-btn" onclick="confirmWheelPicker()" id="ui-wheel-ok">OK</button>
         </div>
     </div>
-</div>
+
+    <div class="buddhist-calendar-row">
+        <div class="side-panel bg-atikkanta">
+            <span class="panel-header" id="ui-label-atikkanta">අතික්කන්ත</span>
+            <div class="data-item">
+                <span class="label-text" id="ui-short-y1">ව</span>
+                <span id="atikkantaY" class="val-text"></span>
+            </div>
+            <div class="data-item">
+                <span class="label-text" id="ui-short-m1">මා</span>
+                <span id="atikkantaM" class="val-text"></span>
+            </div>
+            <div class="data-item">
+                <span class="label-text" id="ui-short-d1">දි</span>
+                <span id="atikkantaD" class="val-text"></span>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <div class="data-item main-bg-y">
+                <span class="label-text" id="ui-label-year">වර්ෂය</span>
+                <span id="bYear" class="main-val-text"></span>
+            </div>
+            <div class="data-item main-bg-m">
+                <span class="label-text" id="ui-label-month">මාසය</span>
+                <span id="bMonth" class="main-val-text"></span>
+            </div>
+            <div class="data-item main-bg-d">
+                <span class="label-text" id="ui-label-day">දිනය</span>
+                <span id="bDay" class="main-val-text"></span>
+            </div>
+        </div>
+
+        <div class="side-panel bg-avasittha">
+            <span class="panel-header" id="ui-label-avasittha">අවසිට්ඨ</span>
+            <div class="data-item">
+                <span class="label-text" id="ui-short-y2">ව</span>
+                <span id="avasitthaY" class="val-text"></span>
+            </div>
+            <div class="data-item">
+                <span class="label-text" id="ui-short-m2">මා</span>
+                <span id="avasitthaM" class="val-text"></span>
+            </div>
+            <div class="data-item">
+                <span class="label-text" id="ui-short-d2">දි</span>
+                <span id="avasitthaD" class="val-text"></span>
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- PWA Install Banner -->
-<div id="pwa-install-banner" role="dialog" aria-label="Install App">
-    <div class="pwa-banner-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
+    <div class="pali-box" id="paliDisplay" style="margin-bottom: 10px; text-align: center;"></div>
+            
+    <div class="poya-wrap" style="text-align: center; margin-bottom: 20px;">
+        <div id="poyaStatus" class="poya-status" style="color: #c62828; font-weight: bold; font-size: 0.9em;"></div>
     </div>
-    <div class="pwa-banner-text">
-        <p class="pwa-banner-title">බුද්ධ වර්ෂය ඔබේ දුරකථනයට එක් කරගන්න</p>
-        <p class="pwa-banner-sub" id="pwaBannerSub"> Use chrome browser for install.</p>
+
+    <div id="poyaModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="ui-poya-title">උපෝසථ දින ලැයිස්තුව</span>
+                <div>
+                    <span class="close-btn" onclick="closeModal('poyaModal')">&times;</span>
+                </div>
+            </div>
+            <div id="poyaListContent"></div>
+            <div id="editArea" style="display:none; margin-top:10px;">
+                <textarea id="poyaDataEdit" style="width:100%; height:300px; font-family: monospace; font-size: 12px;"></textarea><br>
+                <button onclick="savePoyaData()" style="margin-top:10px; background:var(--blue); border:none; padding:12px; color:white; border-radius:5px; width:100%; font-weight:bold;">Save & Update</button>
+            </div>
+        </div>
     </div>
-    <div class="pwa-banner-actions">
-        <button type="button" class="pwa-install-btn" id="pwaInstallBtn">Install</button>
-        <button type="button" class="pwa-dismiss-btn" id="pwaDismissBtn" aria-label="close">&times;</button>
+       
+    <div id="vasModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="ui-vas-title">වස් පිළිබඳව</span>
+                <span class="close-btn" onclick="closeModal('vasModal')">&times;</span>
+            </div>
+            <div id="vasContent" style="line-height: 2.2; font-size: 1.05em;"></div>
+        </div>
     </div>
+
+    <div id="sunModal" class="modal-sun">
+        <div class="sun-container">
+            <button class="sun-close-btn" onclick="closeSunModal()">&times;</button>
+            <div class="sun-header-controls" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <div class="sun-date-wrap" onclick="openWheelPicker('sunDateInput')">
+                    <input type="date" id="sunDateInput" class="sun-input" readonly onfocus="this.blur()">
+                </div>
+                <button id="getLocationBtn" onclick="fetchLocationAndSunData()" style="padding: 8px 15px; font-size: 14px; background-color: #d4af37; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
+                    📍 Get My Location
+                </button>
+                <p id="locationStatus" style="font-size: 0.85em; color: #555; margin: 0;"></p>
+            </div>
+            <div class="sun-badge-grid">
+                <div class="sun-badge dawn-badge">
+                    <div class="sun-label" id="lblDawn">අරුණෝදය</div>
+                    <div class="sun-time" id="sunDawn">--:-- --</div>
+                </div>
+                <div class="sun-badge sunrise-badge">
+                    <div class="sun-label" id="lblSunrise">ඉර උදාව</div>
+                    <div class="sun-time" id="sunSunrise">--:-- --</div>
+                </div>
+                <div class="sun-badge noon-badge">
+                    <div class="sun-label" id="lblNoon">මධ්‍යහ්නය</div>
+                    <div class="sun-time" id="sunNoon">--:-- --</div>
+                </div>
+                <div class="sun-badge sunset-badge">
+                    <div class="sun-label" id="lblSunset">ඉර බැසීම</div>
+                    <div class="sun-time" id="sunSunset">--:-- --</div>
+                </div>
+            </div>
+            <div class="sun-astro-card">
+                <div class="sun-astro-title" id="lblAstroTitle">තාරකා විද්‍යානුකූලව සඳෙහි පිහිටීම, තිථිය සහ වෙලාවන්</div>
+                <div class="sun-astro-subtitle" id="sunModalTithiLabel">--</div>
+                <div class="sun-astro-moon-row">
+                    <div class="poya-time-line"><span id="lblMoonrise">සඳ උදාව</span> <span id="sunMoonrise">--:-- --</span></div>
+                    <div class="poya-time-line"><span id="lblMoonset">සඳ බැසීම</span> <span id="sunMoonset">--:-- --</span></div>
+                </div>
+                <div class="poya-time-line" id="poyaBeginLine">
+                    <span id="lblPoyaBegin">පෝය ලබන වේලාව</span> <span id="sunPoyaBegin"></span>
+                </div>
+                <div class="poya-time-line" id="poyaEndLine">
+                    <span id="lblPoyaEnd">පෝය ගෙවෙන වේලාව</span> <span id="sunPoyaEnd"></span>
+                </div>
+                <div class="moon-phase-container">
+                    <div class="moon-visual-wrapper">
+                        <div id="moonVisual"></div>
+                    </div>
+                    <div class="moon-details">
+                        <div id="moonPhaseLabel" class="moon-phase-title">need 📍...</div>
+                        <div id="moonIllumLabel" class="moon-illumination">දීප්තිය: --%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pwa-install-banner" role="dialog" aria-label="Install App">
+        <div class="pwa-banner-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
+        </div>
+        <div class="pwa-banner-text">
+            <p class="pwa-banner-title">බුද්ධ වර්ෂය ඔබේ දුරකථනයට එක් කරගන්න</p>
+            <p class="pwa-banner-sub" id="pwaBannerSub"> Use chrome browser for install.</p>
+        </div>
+        <div class="pwa-banner-actions">
+            <button type="button" class="pwa-install-btn" id="pwaInstallBtn">Install</button>
+            <button type="button" class="pwa-dismiss-btn" id="pwaDismissBtn" aria-label="close">&times;</button>
+        </div>
+    </div>
+
+    <div id="pwa-ios-tip" role="dialog" aria-label="iOS Install Instructions">
+        <button type="button" class="pwa-ios-tip-close" id="pwaIosTipClose" aria-label="close">&times;</button>
+        <strong>iPhone / iPad වල Install කරගන්නා ආකාරය:</strong>
+        <p>Safari පහළ පෙන්වන Share <span class="pwa-share-icon">⎋</span> බටනය click කර, පහළට scroll කර <b>“Add to Home Screen”</b> තෝරන්න.</p>
+    </div>
+
 </div>
-
-<!-- iOS "Add to Home Screen" instructions popover -->
-<div id="pwa-ios-tip" role="dialog" aria-label="iOS Install Instructions">
-    <button type="button" class="pwa-ios-tip-close" id="pwaIosTipClose" aria-label="close">&times;</button>
-    <strong>iPhone / iPad වල Install කරගන්නා ආකාරය:</strong>
-    <p>Safari පහළ පෙන්වන Share <span class="pwa-share-icon">⎋</span> බටනය click කර, පහළට scroll කර <b>“Add to Home Screen”</b> තෝරන්න.</p>
-</div>
-
-
-
 
 <nav class="bottom-nav" id="bottomNav" aria-label="Main menu">
     <button type="button" class="bn-item" onclick="openSunModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 18h17"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 4.5v3M5 8.5l2 2M19 8.5l-2 2M2.5 14h2M19.5 14h2"/></svg><span class="nav-lbl" id="ui-menu-sun">අරුණ</span></button>
     <button type="button" class="bn-item" onclick="openPoyaModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg><span class="nav-lbl" id="ui-menu-poya">උපෝසථ</span></button>
-    <button type="button" class="bn-item" onclick="openChanting()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c2 2.2 2.8 3.8 2.8 5.2a2.8 2.8 0 0 1-5.6 0c0-1.4.8-3 2.8-5.2z"/><path d="M4.5 12.5h15c0 3-2.7 5-7.5 5s-7.5-2-7.5-5z"/><path d="M12 17.5v2.5M8 21.5h8"/></svg><span class="nav-lbl" id="ui-menu-chant">සජ්ඣායනය</span></button>
+    <button type="button" class="bn-item" onclick="openChanting()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c2 2.2 2.8 3.8 2.8 5.2a2.8 2.8 0 0 1-5.6 0c0-1.4.8-3 2.8-5.2z"/><path d="M4.5 12.5h15c0 3-2.7 5-7.5 5s-7.5-2-7.5-5z"/><path d="M12 17.5v2.5M8 21.5h8"/></svg><span class="nav-lbl" id="ui-menu-chant">සජ්ඣායනා</span></button>
     <button type="button" class="bn-item" onclick="openVasModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 15a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 8a3.5 3.5 0 0 1 .5 7H7z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg><span class="nav-lbl" id="ui-menu-vas">වස්</span></button>
     <button type="button" class="bn-item" onclick="openCalculation()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8 4.7 4.5 5v12.5c3.5-.3 5.8.2 7.5 1.5 1.7-1.3 4-1.8 7.5-1.5V5C16 4.7 13.7 5.2 12 6.5z"/><path d="M12 6.5V19"/></svg><span class="nav-lbl" id="ui-menu-calc">ගණනය</span></button>
     <button type="button" class="bn-item nav-more-btn" onclick="toggleMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg><span class="nav-lbl" id="ui-menu-more">තව</span></button>
-
     <div class="nav-popup" id="myDropdown">
         <div class="np-item" onclick="toggleLanguage()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg><span class="nav-lbl" id="ui-lang-lbl">English</span></div>
         <div class="np-item" onclick="toggleDarkMode()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span class="nav-lbl" id="ui-dark-lbl">Dark Mode</span></div>

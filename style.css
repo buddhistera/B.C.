@@ -13,16 +13,20 @@
 }
 
 * { box-sizing: border-box; }
-
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
-    overscroll-behavior-y: none !important;
-    touch-action: pan-x pan-y !important;
+    overscroll-behavior-y: auto; /* none කියන එක auto කලා */
+    touch-action: auto; /* pan-x pan-y වෙනුවට auto */
 }
 html { height: 100%; }
-body { min-height: 100vh; min-height: 100dvh; }
+body { 
+    min-height: 100vh; 
+    min-height: 100dvh;
+    /* පහලට ඇද්දම refresh වෙන්න දෙන්න */
+    -webkit-overflow-scrolling: touch;
+}
 
 body { 
     font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif; 

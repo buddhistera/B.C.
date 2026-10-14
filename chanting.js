@@ -12,6 +12,7 @@
      ------------------------------------------------------------------ */
   var TABS = [
     { id: 'recitation',   icon: '🗓️', title: { si: 'බුද්ධ වර්ෂය',    en: 'Buddha Year' },  src: 'buddha-recitation.js' },
+    { id: 'vandana',      icon: '🙏', title: { si: 'බුද්ධ වන්දනාව',  en: 'Buddha Vandanā' }, src: 'buddha-vandana-data.js' },
     { id: 'pirith',       icon: '📖', title: { si: 'පිරිත්',        en: 'Pirith' },       src: 'pirith-data.js' },
     { id: 'patimokkha',   icon: '🪷', title: { si: 'ප්‍රාතිමෝක්ෂය',   en: 'Pātimokkha' },   src: 'patimokkha-data.js', adapt: adaptPatimokkha },
     { id: 'patthana',     icon: '✨', title: { si: 'පට්ඨානය',       en: 'Paṭṭhāna' },     src: 'patthana-data.js' },
@@ -412,7 +413,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     var all = TABS.map(function (t) { return L(t.title); }).join(' · ');
     return '<button class="ch-close" type="button" aria-label="' + T('ඉවත් වන්න', 'Close') + '">&times;</button>' +
       '<div class="ch-zoom-badge" aria-hidden="true"></div>' +
-      '<header class="ch-hero">' + LAMP + '<h1>' + T('සජ්ඣායනය', 'Chanting') + '</h1><p>' + esc(all) + '</p></header>' +
+      '<header class="ch-hero">' + LAMP + '<h1>' + T('සජ්ඣායනා', 'Chanting') + '</h1><p>' + esc(all) + '</p></header>' +
       '<div class="ch-tabs"><div class="ch-tabs-in">' + tabs + '</div></div>' +
       '<div class="ch-subnav"><div class="ch-subnav-in"></div></div>' +
       '<main class="ch-main"></main>';
