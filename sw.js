@@ -2,18 +2,18 @@ const CACHE_NAME = 'buddhist-era-v4.1.36';
 
 const CACHE_ASSETS = [
   '/',
-  '/index.html?v=4',
+  '/index.html',
   '/manifest.json',
   '/info.js',
-  '/style.css?v=4',
-  '/script.js?v=4',
+  '/style.css',
+  '/script.js',
   '/astronomy.browser.min.js',
   '/chanting.js',
   '/patthana-data.js',
   '/calculation.js',
   '/pirith-data.js',
   '/buddha-recitation.js',
-  '/buddha-vandana-data.js,
+  '/buddha-vandana-data.js',
   '/icon-192x192.png',
   '/icon-512x512.png'
 ];
