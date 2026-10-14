@@ -1,4 +1,4 @@
-const CACHE_NAME = 'buddhist-era-v4.1.33';
+const CACHE_NAME = 'buddhist-era-v4.1.34';
 
 const CACHE_ASSETS = [
   '/',
@@ -13,6 +13,7 @@ const CACHE_ASSETS = [
   '/calculation.js',
   '/pirith-data.js',
   '/buddha-recitation.js',
+  '/buddha-vandana-data.js,
   '/icon-192x192.png',
   '/icon-512x512.png'
 ];
