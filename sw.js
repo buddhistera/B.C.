@@ -1,4 +1,4 @@
-const CACHE_NAME = 'buddhist-era-v4.1.36';
+const CACHE_NAME = 'buddhist-era-v4.1.37';
 
 const CACHE_ASSETS = [
   '/',
@@ -8,6 +8,7 @@ const CACHE_ASSETS = [
   '/style.css',
   '/script.js',
   '/astronomy.browser.min.js',
+  '/location.js',
   '/chanting.js',
   '/patthana-data.js',
   '/calculation.js',
