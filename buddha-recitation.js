@@ -646,10 +646,10 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
       : ['','first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth','eleventh','twelfth','thirteenth','fourteenth','fifteenth'];
     if (si) {
       out.push('<p>මෙය <strong>' + names.animal + '</strong> සංවත්සරයයි; <strong>' + names.utu + '</strong> ඍතුවයි; මේ ඍතුවෙහි <strong>' + names.month + '</strong> මාසයේ ' +
-        (st.paksha === 'sukka' ? 'සුක්ක (පුර)' : 'කණ්හ (අව)') + ' පක්ෂයේ <strong>' + ord[st.tithi] + '</strong> දිනය (තිථිය) <strong>' + wk + '</strong> යැයි දත යුතුය.</p>');
+        (st.paksha === 'sukka' ? 'සුක්ක (පුර)' : ' කාල (අව)') + ' පක්ෂයේ <strong>' + ord[st.tithi] + '</strong> දිනය (තිථිය) <strong>' + wk + '</strong> යැයි දත යුතුය.</p>');
     } else {
       out.push('<p>This is the <strong>' + names.animal + '</strong> saṃvacchara (year), the <strong>' + names.utu + '</strong> season. In this season, in the month of <strong>' + names.month + '</strong>, on the <strong>' + ord[st.tithi] + '</strong> day (tithi) of the ' +
-        (st.paksha === 'sukka' ? 'Sukka (waxing)' : 'Kaṇha (waning)') + ' pakkha, a <strong>' + wk + '</strong> — thus it should be understood.</p>');
+        (st.paksha === 'sukka' ? 'Sukka (waxing)' : 'Kāla (waning)') + ' pakkha, a <strong>' + wk + '</strong> — thus it should be understood.</p>');
     }
     return out.join('');
   }
@@ -667,7 +667,7 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
     var month = monthName(st.monthSi, lang);
     var tithi = D.TITHI[lang][st.tithi];
     var week = D.WEEK[lang][st.weekIdx];
-    var pak = si ? (st.paksha === 'sukka' ? 'සුක්ක පක්ඛෙ' : 'කණ්හ පක්ඛෙ') : (st.paksha === 'sukka' ? 'sukka-pakkhe' : 'kaṇha-pakkhe');
+    var pak = si ? (st.paksha === 'sukka' ? 'සුක්ක පක්ඛෙ' : 'කාල පක්ඛෙ') : (st.paksha === 'sukka' ? 'sukka-pakkhe' : 'kāla-pakkhe');
 
     // අද දිනයේ ප්‍රකාශනය
     var today;

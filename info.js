@@ -73,7 +73,7 @@
   <!-- ================= ENGLISH ================= -->
   <div data-lang="en">
 
-    <p class="blessing">May the Buddha's teachings spread throughout the world!</p>
+    <p class="blessing"></p>
 
     <div class="card">
       <p>The Uposatha dates mentioned here are based on the Thai and Sri Lankan uposatha dates. Sometimes Myanmar Uposatha dates may differ by only one day.</p>

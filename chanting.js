@@ -40,6 +40,10 @@
   function splitParasHtml(text) {
     if (!text) return '';
     return String(text).split(/\n\n+/).filter(function (p) { return p.length > 0; }).map(function (p) {
+      /* 【…】 පමණක් ඇති ඡේදය (ඡක්කං / පබ්බං / නිද්දෙසො වැනි අවසාන සටහන්) මැදට පෙන්වයි */
+      if (/^【[^】\n]+】(\n【[^】\n]+】)*$/.test(p)) {
+        return '<p class="c">' + esc(p.replace(/【([^】]+)】/g, '($1)')) + '</p>';
+      }
       var isVerse = /\n/.test(p);
       var cls = isVerse ? 'v' : 'p';
       return '<p class="' + cls + '">' + esc(p) + '</p>';
@@ -349,6 +353,7 @@ body.dark-mode #chOverlay .ch-nm{color:var(--g400)}\
 #chOverlay .ch-pali p{margin:0 0 .5em;white-space:pre-line}\
 #chOverlay .ch-pali p.p{text-indent:2em}\
 #chOverlay .ch-pali p.v{text-indent:0}\
+#chOverlay .ch-pali p.c,#chOverlay .ch-mean p.c{text-align:center;text-indent:0;font-weight:700;opacity:.85;margin:.9em 0}\
 #chOverlay .ch-pali p:last-child{margin-bottom:0}\
 body.dark-mode #chOverlay .ch-pali{color:var(--m200);border-color:var(--m500)}\
 body.dark-mode #chOverlay .ch-pali::before{background:#1a8558}\
