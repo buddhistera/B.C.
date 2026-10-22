@@ -38,13 +38,14 @@
       gtag('js', new Date());
       gtag('config', 'G-ECEGZ86GGK');
     </script>
-    
     <script src="astronomy.browser.min.js?v=1" defer></script>
     <script src="script.js" defer></script>
-    <script src="location.js" defer></script>
     <script src="calculation.js" defer></script>
     <script src="info.js" defer></script>
     <script src="chanting.js" defer></script>
+    <script src="visuals3d.js" defer></script>
+    <script src="sunpage.js" defer></script>
+    <script src="uposatha.js" defer></script>
 
     <title>Buddhist Era | බුද්ධ වර්ෂය</title>
 </head>
@@ -246,15 +247,17 @@
     <button type="button" class="bn-item" onclick="openSunModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 18h17"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 4.5v3M5 8.5l2 2M19 8.5l-2 2M2.5 14h2M19.5 14h2"/></svg><span class="nav-lbl" id="ui-menu-sun">අරුණ</span></button>
     <button type="button" class="bn-item" onclick="openPoyaModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg><span class="nav-lbl" id="ui-menu-poya">උපෝසථ</span></button>
     <button type="button" class="bn-item" onclick="openChanting()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c2 2.2 2.8 3.8 2.8 5.2a2.8 2.8 0 0 1-5.6 0c0-1.4.8-3 2.8-5.2z"/><path d="M4.5 12.5h15c0 3-2.7 5-7.5 5s-7.5-2-7.5-5z"/><path d="M12 17.5v2.5M8 21.5h8"/></svg><span class="nav-lbl" id="ui-menu-chant">සජ්ඣායනා</span></button>
-    <button type="button" class="bn-item" onclick="openVasModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 15a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 8a3.5 3.5 0 0 1 .5 7H7z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/></svg><span class="nav-lbl" id="ui-menu-vas">වස්</span></button>
     <button type="button" class="bn-item" onclick="openCalculation()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8 4.7 4.5 5v12.5c3.5-.3 5.8.2 7.5 1.5 1.7-1.3 4-1.8 7.5-1.5V5C16 4.7 13.7 5.2 12 6.5z"/><path d="M12 6.5V19"/></svg><span class="nav-lbl" id="ui-menu-calc">ගණනය</span></button>
-    <button type="button" class="bn-item nav-more-btn" onclick="toggleMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg><span class="nav-lbl" id="ui-menu-more">තව</span></button>
-    <div class="nav-popup" id="myDropdown">
-        <div class="np-item" onclick="toggleLanguage()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg><span class="nav-lbl" id="ui-lang-lbl">English</span></div>
-        <div class="np-item" onclick="toggleDarkMode()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span class="nav-lbl" id="ui-dark-lbl">Dark Mode</span></div>
-        <div class="np-item" onclick="openInfo()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".7" fill="currentColor"/></svg><span class="nav-lbl" id="ui-menu-contact">තොරතුරු</span></div>
-    </div>
+    <button type="button" class="bn-item" onclick="openInfo()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".7" fill="currentColor"/></svg><span class="nav-lbl" id="ui-menu-contact">තොරතුරු</span></button>
+    <button type="button" class="bn-item bn-compact bn-lang" id="bnLang" onclick="toggleLanguage()" aria-label="භාෂාව / Language"><span class="lang-pill" aria-hidden="true"><span class="lang-opt" data-l="si">සිං</span><span class="lang-opt" data-l="en">en</span></span></button>
+    <button type="button" class="bn-item bn-compact bn-theme" onclick="toggleDarkMode()" aria-label="තේමාව / Theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
 </nav>
+<!-- පැරණි JS වල null error වැළැක්වීමට: නොපෙනෙන ස්ථාන දරන්නන් -->
+<span id="ui-menu-vas" hidden></span>
+<span id="ui-menu-more" hidden></span>
+<span id="ui-lang-lbl" hidden></span>
+<span id="ui-dark-lbl" hidden></span>
+<div id="myDropdown" hidden></div>
 
 </body>
 </html>

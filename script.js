@@ -1,6 +1,14 @@
 // --- Language Settings ---
     let currentLang = localStorage.getItem('appLang') || 'en';
 
+    // මෙනු තීරුවේ භාෂා බොත්තමේ (සිං / en) සක්‍රිය භාෂාව highlight කිරීම
+    function syncLangPill() {
+        document.querySelectorAll('#bnLang .lang-opt').forEach(function (el) {
+            el.classList.toggle('on', el.getAttribute('data-l') === currentLang);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', syncLangPill);
+
     const i18n = {
         si: {
             title: "බුද්ධ වර්ෂය", dateLabel: "දිනය තෝරන්න ( ක්‍රි.ව) ⇓", atikkanta: "අතික්කන්ත\n(ඉකුත් වූ)", avasittha: "අවසිට්ඨ\n(ඉතිරි)",
@@ -628,6 +636,8 @@ scheduleBackgroundPoyaExtension();
     if (darkBtn) {
         darkBtn.innerText = isDark ? t.lightLbl : t.darkLbl;
     }
+
+    syncLangPill();
 
     const langBtn = document.getElementById('ui-lang-lbl');
     if (langBtn) {

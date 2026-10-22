@@ -39,73 +39,61 @@
       <p>✏️ අවශ්‍ය නම් ඔබ සිටින ස්ථානයේ දත්ත ඇතුලත් කර අරුණ මධ්‍යාහ්නය වාර්ෂික සටහන මුද්‍රණය කර ගැනීමට <a href="https://buddhistera.github.io/Dawn-Noon-calculation/" target="_blank" rel="noopener noreferrer">මෙතනින්</a> බලන්න.</p>
       </div>
 
-    <div class="section-heading"><span class="dot"></span>ඇප් එක ලබාගන්නා ආකාරය</div>
-    <div class="platform-grid">
-      <div class="platform-card">
-        <h3>🤖 Android සඳහා</h3>
-        <p>මෙතනින් apk ගොනුව බාගත කර install කරන්න.</p>
-        <a class="platform-btn" href="https://apkpure.com/buddhist-calendar/com.yogasrama.buddhistcalendar">බාගත කරන්න ⬇️</a>
-      </div>
-      <div class="platform-card">
-        <h3>🪟 Windows සඳහා</h3>
-        <p>මෙතනින් apk ගොනුව බාගත කර install කරන්න.</p>
-        <a class="platform-btn" href="https://drive.google.com/file/d/1ORbEqsn1KBrH58p0JDilcN0RARooi4Dy/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">Windows App බාගත කරන්න</a>
-      </div>
-      <div class="platform-card">
-        <h3>🍎 iPhone / Mac OS සඳහා</h3>
-        <p>මෙම web ලිපිනය Safari බ්‍රවුසරයෙන් විවෘත කොට Share → <em>"Add to Home Screen"</em> කරන්න.</p>
-        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
-      </div>
-    </div>
-
-    <div class="section-heading"><span class="dot"></span>ප්‍රයෝජනවත් ඉඟි</div>
-    <div class="card">
-      <ul class="tips">
-        <li><span class="pin">✏️</span><span>අන්තර්ජාල පහසුකම නොමැති ස්ථානයක අරුණෝදය ස්ථානය ලබා ගැනීමට එළිමහනකදී උත්සාහ කිරීමෙන් ඉක්මන් ප්‍රතිඵල ලැබේ.</span></li>
-        <li><span class="pin">✏️</span><span>අර්ථ, නිරුක්ති, වරනැගීම් සහිත වචන 88000 පමණ අඩංගු පාලි සිංහල ශබ්දකෝෂය ලබා ගැනීම සඳහා <a href="https://pali-sinhala-dictionary.github.io/DPSD/" target="_blank" rel="noopener noreferrer">මෙම ලිපිනය</a> භාවිතා කරන්න.</span></li>
-        <li><span class="pin">✏️</span><span>අභිධර්ම මාතික අධ්‍යනය සඳහා <a href="https://pavara9803-ctrl.github.io/Matika/" target="_blank" rel="noopener noreferrer">මෙම ලිපිනය</a> භාවිතා කරන්න.</span></li>
-        <li><span class="pin">✏️</span><span>මියන්මාර් පෝය දිනයන් <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">මෙතනින්</a> බලා ගත හැකිය.</span></li>
-      </ul>
-    </div>
-
+   <div class="section-heading"><span class="dot"></span>ඇප් එක ලබාගන්නා ආකාරය</div>
+<div class="platform-grid">
+  <div class="platform-card">
+    <h3>🤖 Android සඳහා</h3>
+    <p>මෙතනින් apk ගොනුව install කරන්න.</p>
+    <a class="platform-btn" href="https://play.google.com/store/apps/details?id=app.vercel.buddhist_era.twa&pcampaignid=web_share">install</a>
   </div>
 
-  <!-- ================= ENGLISH ================= -->
-  <div data-lang="en">
-
-    <p class="blessing"></p>
-
-    <div class="card">
-      <p>The Uposatha dates mentioned here are based on the Thai and Sri Lankan uposatha dates. Sometimes Myanmar Uposatha dates may differ by only one day.</p>
-      <p>Send your comments and suggestions to the below address.</p>
-      <a class="email-btn" href="mailto:bhamarawali@gmail.com">📧 bhamarawali@gmail.com</a>
+  <div class="platform-card">
+    <h3>🪟 Windows සඳහා</h3>
+    <p>chrome browser මගින් විවෘත කර install කරන්න.</p>
+    <div class="link-row">
+      <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+      <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
     </div>
+  </div>
 
-    <div class="card important">
-      <span class="tag">❄️ Important</span>
-      <p>After you open the app for the first time, go to the <strong>Dawn/Noon</strong> page in the menu and provide your location.</p>
-      <p>⬇️ If necessary, enter the data for your location and print the annual dawn/noon chart <a href="https://buddhistera.github.io/Dawn-Noon-calculation/" target="_blank" rel="noopener noreferrer">here</a>.</p>
-      <p>🔶 To know how to set the Buddhist year, download the pdf <a href="https://docs.google.com/document/d/1r9hgfgWlz970U-r2s6cdAdJhpn2soGnTu8TeP_3Yh1w/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">here</a>.</p>
+  <div class="platform-card">
+    <h3>🍎 iPhone / Mac OS සඳහා</h3>
+    <p>මෙම web ලිපිනය Safari බ්‍රවුසරයෙන් විවෘත කොට Share → <em>"Add to Home Screen"</em> කරන්න.</p>
+    <div class="link-row">
+      <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+      <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
     </div>
+  </div>
+</div>
+  </div><!-- /data-lang="si" -->
 
-    <div class="section-heading"><span class="dot"></span>How to get the app</div>
-    <div class="platform-grid">
-      <div class="platform-card">
-        <h3>🤖 For Android</h3>
-        <p>Download the apk file here and install it.</p>
-        <a class="platform-btn" href="https://apkpure.com/buddhist-calendar/com.yogasrama.buddhistcalendar">Download ⬇️</a>
-      </div>
-      <div class="platform-card">
-        <h3>🪟 For Windows</h3>
-        <p>Open this web address in a Chrome browser and install it by clicking the <em>"install app"</em> icon in the address bar.</p>
+<!-- ================= ENGLISH ================= -->
+<div data-lang="en">
+  <div class="section-heading"><span class="dot"></span>How to get the app</div>
+  <div class="platform-grid">
+    <div class="platform-card">
+      <h3>🤖 For Android</h3>
+      <p>apk file install.</p>
+      <a class="platform-btn" href="https://play.google.com/store/apps/details?id=app.vercel.buddhist_era.twa&pcampaignid=web_share">Download ⬇️</a>
+    </div>
+    <div class="platform-card">
+      <h3>🪟 For Windows</h3>
+      <p>Open this web address in a Chrome browser and install it by clicking the <em>"install app"</em> icon in the address bar.</p>
+      <div class="link-row">
         <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
-      </div>
-      <div class="platform-card">
-        <h3>🍎 For iPhone, Mac OS</h3>
-        <p>Open this web address in Safari browser and Share → <em>"Add to Home Screen"</em>.</p>
-        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+        <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
       </div>
     </div>
+    <div class="platform-card">
+      <h3>🍎 For iPhone, Mac OS</h3>
+      <p>Open this web address in Safari browser and Share → <em>"Add to Home Screen"</em>.</p>
+      <div class="link-row">
+        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+        <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     <div class="section-heading"><span class="dot"></span>Helpful tips</div>
     <div class="card">
@@ -114,8 +102,6 @@
         <li><span class="pin">✏️</span><span>You can check Myanmar Uposatha dates <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">here</a>.</span></li>
       </ul>
     </div>
-
-  </div>
 
   <!-- QR (shared, not language-specific) -->
   <div class="card qr-card">
@@ -389,6 +375,10 @@ body.dark-mode #infoOverlay .qm-input{background:#0e1220;border-color:var(--mint
 body.dark-mode #infoOverlay .qm-gen,body.dark-mode #infoOverlay .qr-dl-btn,body.dark-mode #infoOverlay .qr-share-btn{background:linear-gradient(180deg,#00e5ff,#007bff);color:#fff}
 body.dark-mode #infoOverlay .qr-make-btn{background:rgba(19,23,36,.85);border-color:var(--mint-deep);color:var(--mint-deep)}
 body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
+#infoOverlay .link-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+#infoOverlay .copy-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--mint-line);background:var(--mint-soft);color:var(--mint-deep);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s ease}
+#infoOverlay .copy-btn:hover{background:var(--mint-deep);color:#fff;transform:scale(1.05)}
+#infoOverlay .copy-btn.copied{background:var(--mint-deep);color:#fff}
 `;
 
   /* ---------- QR encoder (offline, byte mode / UTF-8, versions 1-40) ---------- */
@@ -987,8 +977,44 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
     document.documentElement.style.overflow = '';
     document.removeEventListener('keydown', onKey);
   }
+  function copyFallback(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;font-size:16px;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { ta.setSelectionRange(0, text.length); } catch (e) {}
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
 
-  window.openInfo = function () {
+  window.copyLink = function (text, btn) {
+    function done(ok) {
+      if (!btn) return;
+      if (btn._t) clearTimeout(btn._t);
+      if (btn._orig === undefined) btn._orig = btn.textContent;
+      btn.textContent = ok ? '✅' : '❌';
+      if (ok) btn.classList.add('copied');
+      btn._t = setTimeout(function () {
+        btn.textContent = btn._orig;
+        btn.classList.remove('copied');
+      }, 1500);
+      if (!ok) { try { window.prompt('Copy:', text); } catch (e) {} }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () { done(true); },
+        function () { done(copyFallback(text)); }
+      );
+    } else {
+      done(copyFallback(text));
+    }
+  };
+window.openInfo = function () {
     var dd = document.getElementById('myDropdown'); if (dd) dd.style.display = 'none';
     injectStyle();
     var ov = build();

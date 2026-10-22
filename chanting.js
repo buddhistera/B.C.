@@ -642,6 +642,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
   function onPop() { if (pushed) { pushed = false; hide(); } }
   function hide() {
     var ov = document.getElementById('chOverlay'); if (ov) ov.style.display = 'none';
+    if (window.V3D) { try { V3D.chanting(false); } catch (e) {} }
     if (spy) { spy.disconnect(); spy = null; }
     document.documentElement.style.overflow = '';
     document.removeEventListener('keydown', onKey);
@@ -652,6 +653,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     injectStyle();
     var ov = build(typeof tabId === 'string' ? tabId : null);
     ov.style.display = 'block';
+    if (window.V3D) { try { V3D.chanting(true, ov); } catch (e) {} }
     document.documentElement.style.overflow = 'hidden';
     document.addEventListener('keydown', onKey);
     if (!pushed) { try { history.pushState({ ch: 1 }, ''); pushed = true; } catch (e) { pushed = false; } }
