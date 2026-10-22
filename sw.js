@@ -1,4 +1,4 @@
-const CACHE_NAME = 'buddhist-era-v4.1.37';
+const CACHE_NAME = 'buddhist-era-v4.1.38';
 
 const CACHE_ASSETS = [
   '/',
@@ -7,17 +7,22 @@ const CACHE_ASSETS = [
   '/info.js',
   '/style.css',
   '/script.js',
-  '/astronomy.browser.min.js',
-  '/location.js',
+  '/astronomy.browser.min.js?v=1',
   '/chanting.js',
   '/patthana-data.js',
   '/calculation.js',
   '/pirith-data.js',
   '/buddha-recitation.js',
   '/buddha-vandana-data.js',
-  '/icon-192x192.png',
-  '/icon-512x512.png'
+  '/satipatthana-data.js',
+  '/sunpage.js',
+  '/three.min.js?v=1',
+  '/uposatha.js',
+  '/visuals3d.js?v=1',
+  '/icon-192x192.png?v=4',
+  '/icon-512x512.png?v=4'
 ];
+
 
 // INSTALL
 self.addEventListener('install', (event) => {
