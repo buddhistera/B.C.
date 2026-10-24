@@ -18,6 +18,7 @@
     <link rel="apple-touch-icon" href="./icon-192x192.png">
     <link rel="manifest" href="./manifest.json">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cream.css?v=2">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,16 +44,24 @@
     <script src="calculation.js" defer></script>
     <script src="info.js" defer></script>
     <script src="chanting.js" defer></script>
-    <script src="visuals3d.js" defer></script>
+    <script src="visuals3d.js?v=2" defer></script>
     <script src="sunpage.js" defer></script>
     <script src="uposatha.js" defer></script>
 
     <title>Buddhist Era | බුද්ධ වර්ෂය</title>
+<style id="navIconStyle">
+.bn-ic{flex:0 0 42px!important}.bn-ic svg{width:24px;height:24px}.bn-first{position:relative;margin-left:4px}
+.bn-first::before{content:"";position:absolute;left:-3px;top:24%;bottom:24%;width:1px;background:currentColor;opacity:.22}
+.bn-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.th-sun{display:none}body.dark-mode .th-moon{display:none}body.dark-mode .th-sun{display:block}
+</style>
 </head>
 <body>
 
 <div class="app-container">
-    <div class="header" id="ui-title">
+    <header class="hm-hero">
+        <i class="hm-orn" aria-hidden="true"></i>
+        <div class="header" id="ui-title">
         බුද්ධ වර්ෂය
     </div>
 
@@ -70,6 +79,11 @@
             </div>
         </div>
     </div>
+
+    <div class="poya-wrap">
+        <div id="poyaStatus" class="poya-status"></div>
+    </div>
+    </header>
 
     <div id="wheelPickerModal" class="modal-wheel">
         <div class="wheel-picker-container">
@@ -133,11 +147,8 @@
         </div>
     </div>
 
-    <div class="pali-box" id="paliDisplay" style="margin-bottom: 10px; text-align: center;"></div>
+    <div class="pali-box" id="paliDisplay"></div>
             
-    <div class="poya-wrap" style="text-align: center; margin-bottom: 20px;">
-        <div id="poyaStatus" class="poya-status" style="color: #c62828; font-weight: bold; font-size: 0.9em;"></div>
-    </div>
 
     <div id="poyaModal" class="modal">
         <div class="modal-content">
@@ -249,15 +260,37 @@
     <button type="button" class="bn-item" onclick="openChanting()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c2 2.2 2.8 3.8 2.8 5.2a2.8 2.8 0 0 1-5.6 0c0-1.4.8-3 2.8-5.2z"/><path d="M4.5 12.5h15c0 3-2.7 5-7.5 5s-7.5-2-7.5-5z"/><path d="M12 17.5v2.5M8 21.5h8"/></svg><span class="nav-lbl" id="ui-menu-chant">සජ්ඣායනා</span></button>
     <button type="button" class="bn-item" onclick="openCalculation()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8 4.7 4.5 5v12.5c3.5-.3 5.8.2 7.5 1.5 1.7-1.3 4-1.8 7.5-1.5V5C16 4.7 13.7 5.2 12 6.5z"/><path d="M12 6.5V19"/></svg><span class="nav-lbl" id="ui-menu-calc">ගණනය</span></button>
     <button type="button" class="bn-item" onclick="openInfo()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".7" fill="currentColor"/></svg><span class="nav-lbl" id="ui-menu-contact">තොරතුරු</span></button>
-    <button type="button" class="bn-item bn-compact bn-lang" id="bnLang" onclick="toggleLanguage()" aria-label="භාෂාව / Language"><span class="lang-pill" aria-hidden="true"><span class="lang-opt" data-l="si">සිං</span><span class="lang-opt" data-l="en">en</span></span></button>
-    <button type="button" class="bn-item bn-compact bn-theme" onclick="toggleDarkMode()" aria-label="තේමාව / Theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+    <button type="button" class="bn-item bn-ic bn-first" onclick="toggleLanguage()" aria-label="Language" title="Language"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg><span class="bn-sr" id="ui-lang-lbl">English</span></button>
+    <button type="button" class="bn-item bn-ic" onclick="toggleDarkMode()" aria-label="Theme" title="Theme"><svg class="th-moon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><svg class="th-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.9 1.9M16.8 16.8l1.9 1.9M18.7 5.3l-1.9 1.9M7.2 16.8l-1.9 1.9"/></svg><span class="bn-sr" id="ui-dark-lbl">Dark Mode</span></button>
+    <div class="nav-popup" id="myDropdown" aria-hidden="true"></div>
 </nav>
-<!-- පැරණි JS වල null error වැළැක්වීමට: නොපෙනෙන ස්ථාන දරන්නන් -->
 <span id="ui-menu-vas" hidden></span>
-<span id="ui-menu-more" hidden></span>
-<span id="ui-lang-lbl" hidden></span>
-<span id="ui-dark-lbl" hidden></span>
-<div id="myDropdown" hidden></div>
 
+<script>
+/* wheel picker: light-weight 3D drum - only the ~7 rows near the centre are transformed, once per animation frame */
+(function () {
+  var H = 44, R = 96, ids = ['wheelYear', 'wheelMonth', 'wheelDate'], pend = {};
+  function upd(c) {
+    pend[c.id] = 0;
+    var t = c.scrollTop, it = c.children, n = it.length;
+    var a = Math.max(0, Math.floor(t / H) - 3), b = Math.min(n - 1, Math.ceil(t / H) + 3);
+    for (var i = a; i <= b; i++) {
+      var x = (i * H - t) / R; if (x > 1.25) x = 1.25; else if (x < -1.25) x = -1.25;
+      var k = Math.abs(x) / 1.25, s = it[i].style;
+      s.transform = 'perspective(260px) rotateX(' + (-x * 57.3).toFixed(1) + 'deg) scale(' + (1 - k * .22).toFixed(3) + ')';
+      s.opacity = (1 - k * .8).toFixed(2);
+    }
+  }
+  function sched(c) { if (!pend[c.id]) { pend[c.id] = 1; requestAnimationFrame(function () { upd(c); }); } }
+  function init() {
+    ids.forEach(function (id) {
+      var c = document.getElementById(id); if (!c) return;
+      c.addEventListener('scroll', function () { sched(c); }, { passive: true });
+      new MutationObserver(function () { sched(c); }).observe(c, { childList: true });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
 </body>
 </html>

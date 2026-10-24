@@ -28,6 +28,11 @@ function init() {
   wrap('updateMiniMoon', function (d) { mini(d); }); wrap('updateSunTimes', modal);
   wrap('toggleDarkMode', sync); wrap('updateDisplay', sync);
   var iv = $('inputDate'); if (iv && iv.value) mini(sdate(iv.value));
+  // mini moon: repaint a few times + on return/rotate/context-restore (the first paint could land before layout or be lost)
+  function remini() { var e = $('inputDate'); if (e && e.value) mini(sdate(e.value)); }
+  [250, 900, 2500, 6000].forEach(function (ms) { setTimeout(remini, ms); });
+  W.addEventListener('pageshow', remini); W.addEventListener('orientationchange', function () { setTimeout(remini, 350); }); doc.addEventListener('visibilitychange', function () { if (!doc.hidden) remini(); });
+  mr.r.domElement.addEventListener('webglcontextlost', function (e) { e.preventDefault(); }, false); mr.r.domElement.addEventListener('webglcontextrestored', remini, false);
   var sm = $('sunModal'); if (sm && sm.style.display === 'flex') modal();
   sync(); var rz; W.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (bg.mode) fit(true); }, 200); });
   doc.addEventListener('visibilitychange', sync);
@@ -121,7 +126,7 @@ function lotus(mat, padMat) { // returns {g, tl:[{n,b,p}]}
 }
 var VSH = 'varying vec2 u;void main(){u=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}';
 function addMat(f, tr) { return new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending, side: T.DoubleSide, uniforms: tr || U, vertexShader: VSH, fragmentShader: f }); }
-function lights(sc, a) { sc.add(new T.AmbientLight(0xffffff, a)); var d = new T.DirectionalLight(0xffe7a8, .9); d.position.set(-200, 300, 400); sc.add(d); }
+function lights(sc, a) { var A = new T.AmbientLight(0xffffff, a); sc.add(A); var d = new T.DirectionalLight(0xffe7a8, .9); d.position.set(-200, 300, 400); sc.add(d); return { a: A, d: d }; }
 
 function buildMain() {
   var sc = new T.Scene(), o = {}; lights(sc, .8);
@@ -144,7 +149,7 @@ function buildStars(o) {
   o.st = new T.Points(g, m); o.st.position.set(w / 2, h / 2, -300); o.sc.add(o.st);
 }
 function buildHero() {
-  var sc = new T.Scene(), o = {}; lights(sc, .7);
+  var sc = new T.Scene(), o = {}; o.ls = lights(sc, .7);
   var brass = gm(0xd9a53a, 1, .65, .35), gold = gm(0xe6b944, .42, .7, .38), pink = gm(0xf6c6d8, .55, .1, .7), pad = gm(0x4f9a6a, .4, .1, .8), dg = gm(0xf2d478, .2, .3, .6);
   o.lamp = new T.Group(); o.lamp.add(lathe([[0, 0], [17, 0], [19, 3], [11, 7], [6, 14], [5, 22], [9, 29], [19, 33], [29, 40], [31, 47], [27, 50], [22, 48], [0, 46]], brass));
   var wick = new T.Mesh(new T.CylinderGeometry(1, 1.2, 8, 8), gm(0x2a1a0a, 1, 0, 1)); wick.position.y = 50; o.lamp.add(wick);
@@ -198,7 +203,7 @@ function frame(dt) {
     if (o.ss.visible) { var q = o.sl / .9; if (q > 1) { o.ss.visible = false; u.value = 0; } else { u.value = Math.sin(q * Math.PI); o.ss.position.x += dt * 470; o.ss.position.y -= dt * 250; } }
   } else {
     o.wp.rotation.z -= dt * .16; o.wh.rotation.y = Math.sin(t * .4) * .2; // slow clockwise spin
-    var k = 1 + Math.sin(t * 13) * .06 + Math.sin(t * 7.3) * .05 + (Math.random() - .5) * .05; o.lt.intensity = 1.6 * k; o.flame.scale.set(1, k, 1); o.glow.scale.setScalar(.95 + (k - 1));
+    var k = 1 + Math.sin(t * 13) * .06 + Math.sin(t * 7.3) * .05 + (Math.random() - .5) * .05; var dk = isDark(); o.ls.a.intensity = dk ? .1 : .7; o.ls.d.intensity = dk ? .08 : .9; o.lt.intensity = (dk ? 3.2 : 1.6) * k; o.flame.scale.set(1, k, 1); o.glow.scale.setScalar(.95 + (k - 1));
     o.l1.tl.forEach(function (p) { p.o.rotation.x = p.b + Math.sin(t * .5 + p.p) * .07; });
   }
   bg.r.render(o.sc, bg.cam);

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'buddhist-era-v4.1.38';
+const CACHE_NAME = 'buddhist-era-v4.1.39';
 
 const CACHE_ASSETS = [
   '/',
@@ -6,6 +6,7 @@ const CACHE_ASSETS = [
   '/manifest.json',
   '/info.js',
   '/style.css',
+  '/cream.css?v=1',
   '/script.js',
   '/astronomy.browser.min.js?v=1',
   '/chanting.js',
@@ -18,7 +19,14 @@ const CACHE_ASSETS = [
   '/sunpage.js',
   '/three.min.js?v=1',
   '/uposatha.js',
-  '/visuals3d.js?v=1',
+  '/visuals3d.js?v=2',
+  '/bg/waves.webp?v=1',
+  '/bg/flowers.webp?v=1',
+  '/bg/gold.webp?v=1',
+  '/bg/gold-lines.svg ?v=1',
+  '/bg/pearl.webp?v=1',
+  '/bg/damask.webp?v=1',
+  '/bg/swirl.webp?v=1',
   '/icon-192x192.png?v=4',
   '/icon-512x512.png?v=4'
 ];
