@@ -15,6 +15,7 @@
             langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", calcMenu: "📖 ගණනය", navSun: "අරුණ", navPoya: "උපෝසථ", navVas: "වස්", navChant: "සජ්ඣායනා", navCalc: "ගණනය", navMore: "තව", langLbl: "English", darkLbl: "අඳුරු තිරය", lightLbl: "ආලෝකමත් තිරය", infoLbl: "තොරතුරු", contactMenu: "ℹ️ තොරතුරු", poyaTitle: " උපෝසථ දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
             vasTitle: "", contactTitle: " තොරතුරු සහ බාගත කිරීම්", poyaSuffix: " පෝය",
             vas1: "පෙරවස් සමාදන්වීම", vas2: "පෙරවස් පවාරණය", vas3: "පසුවස් සමාදන්වීම", vas4: "පසුවස් පවාරණය",
+            stSamadan: "පෙරවස් සමාදන් වන දිනය", stPavToday: "පෙරවස් පවාරණ දිනය", stPavTomorrow: "හෙට පෙරවස් පවාරණ දිනය",
             animals: ["සප්ප","අස්ස","අජ","කපි","කුක්කුට","සෝන","සූකර","මුසික"," වසභ","ව්‍යග්ග","සස","නාග"],
             seasons: { Hemanta: "හේමන්ත", Gimhana: "ගිම්හාන", Vassana: "වස්සාන", ReHemanta: "නැවත හේමන්ත" },
             paksha: { Kāla: " කාල පක්ඛෙ", Sukka: "සුක්ක පක්ඛෙ" },
@@ -26,6 +27,7 @@
             langBtn: "සිංහල 🇱🇰", sunMenu: "Dawn | Noon ☀️", poyaMenu: " Uposatha Days🌛", vasMenu: "Vassa Season ⛈️", calcMenu: "📖 Calculation", navSun: "Sun", navPoya: "Uposatha", navVas: "Vassa", navChant: "Chanting", navCalc: "Calculate", navMore: "More", langLbl: "සිංහල", darkLbl: "Dark Mode", lightLbl: "Light Mode", infoLbl: "Info", contactMenu: "ℹ️ Info", poyaTitle: " Uposatha Calendar",darkMode: "Dark Mode 🌑",lightMode: "Light Mode 💡",yearLabel: "Year",monthLabel: "Month",dayLabel: "Day",
             vasTitle: "", contactTitle: "Contact & Downloads", poyaSuffix: "",
             vas1: "Entering the Early Rains Retreat", vas2: "Early Vassa Pavāraṇā", vas3: "Entering the Late Rains Retreat ", vas4: "Late Vassa Pavāraṇā ",
+            stSamadan: "Day of Entering the Early Rains Retreat", stPavToday: "Early Vassa Pavāraṇā Day", stPavTomorrow: "Tomorrow is Early Vassa Pavāraṇā Day",
             animals: ["Sappa","Assa","Aja","Kapi","Kukkuṭa","Sona","Sūkara","Musika"," Vasabha","Vyaggha","Sasa","Nāga"],
             seasons: { Hemanta: "Hemanta", Gimhana: "Gimhāna", Vassana: "Vassāna", ReHemanta: "Late Hemanta" },
             paksha: { Kāla: "Kāla pakkhe", Sukka: "Sukka pakkhe" },
@@ -561,11 +563,54 @@ function ensurePoyaDataUpTo(year) {
     extendPoyaDataTo(target);
 }
 
+// ---- දින සහායක ශ්‍රිත ----
+// 'YYYY-MM-DD' → එම දිනයේ ප්‍රාදේශීය (local) මධ්‍යම රාත්‍රිය.
+// new Date('YYYY-MM-DD') UTC ලෙස කියවෙන නිසා, UTC-ට පසුපස කාල කලාප (ඇමරිකාව ආදිය) වල දිනය එක දවසකින් පෙරට යයි; එය මෙයින් වළක්වයි.
+function isoLocal(s) {
+    if (typeof s !== 'string') return new Date(NaN);
+    const a = s.split('-');
+    return new Date(+a[0], +a[1] - 1, +a[2]);
+}
+// 'YYYY-MM-DD' + n දින → 'YYYY-MM-DD' (කාල කලාපයෙන් ස්වායත්ත)
+function addDaysISO(iso, n) {
+    const a = iso.split('-');
+    const t = new Date(Date.UTC(+a[0], +a[1] - 1, +a[2] + n));
+    return t.getUTCFullYear() + '-' + String(t.getUTCMonth() + 1).padStart(2, '0') + '-' + String(t.getUTCDate()).padStart(2, '0');
+}
+
+// පෙරවස් සමාදන්වීම (ඇසළ පුරපසළොස්වකට පසුදා) සහ පෙරවස් පවාරණය (වස්සාන 6 වන පෝය = වප් පුරපසළොස්වක).
+// නීති ස්ථාන openVasModal() / uposatha.js හි vasDates() හා සමානයි. නිවැරදි ප්‍රතිඵලය පමණක් cache කරයි.
+const _vassaCache = {};
+function getEarlyVassa(y) {
+    if (_vassaCache[y]) return _vassaCache[y];
+    const res = { samadan: null, pavarana: null };
+    if (y < MIN_YEAR || y > MAX_YEAR) return res;
+    ensurePoyaDataUpTo(y + 1);
+    const from = y + '-01-01', to = y + '-12-31';
+    let lastGim = null, vasCount = 0;
+    for (let i = _pLowerBound(p => p.d >= from); i < poyaList.length && poyaList[i].d <= to; i++) {
+        const p = poyaList[i];
+        if (p.r === "ගිම්හාන") lastGim = p;
+        else if (p.r === "වස්සාන" && ++vasCount === 6) res.pavarana = p.d;
+    }
+    if (lastGim) res.samadan = addDaysISO(lastGim.d, 1);
+    if (res.samadan && res.pavarana) _vassaCache[y] = res;
+    return res;
+}
+
 function scheduleBackgroundPoyaExtension() {
     if (poyaListComputedUpToYear >= MAX_YEAR) return;
-    const YEARS_PER_CHUNK = 15;
-    const step = () => {
-        extendPoyaDataTo(Math.min(poyaListComputedUpToYear + YEARS_PER_CHUNK, MAX_YEAR));
+    // පෙර: සෑම idle ඇමතුමකදීම වසර 15ක් එකවර ගණනය (දුරකථනයක දී එක් දිගු කාර්යයක් ≈ 0.2–0.5s → scroll/touch හිරවීම).
+    // දැන්: වසරෙන් වසර ගණනය කරමින් idle කාලය (deadline) ඉතිරි නම් පමණක් ඉදිරියට යයි; ප්‍රතිඵල එලෙසම.
+    const step = (deadline) => {
+        let n = 0;
+        do {
+            extendPoyaDataTo(poyaListComputedUpToYear + 1);
+            n++;
+        } while (
+            poyaListComputedUpToYear < MAX_YEAR && n < 15 &&
+            (deadline && typeof deadline.timeRemaining === 'function' ? deadline.timeRemaining() > 6 : n < 2)
+        );
         if (poyaListComputedUpToYear < MAX_YEAR) {
             scheduleNext();
         }
@@ -872,32 +917,31 @@ function calculateAll() {
     const ds = document.getElementById('inputDate').value;
     if (!ds) return;
     
-    const d = new Date(ds); 
-    d.setHours(0,0,0,0);
+    const d = isoLocal(ds);
     const time = d.getTime(); 
     const y = d.getFullYear();
     ensurePoyaDataUpTo(y + 1);
 
-    const vD = new Date(vesakDates[y] || `${y}-05-01`).getTime();
+    const vD = isoLocal(vesakDates[y] || `${y}-05-01`).getTime();
     const bY = (time <= vD) ? (y + 543) : (y + 544);
 
-    const iT = _pLowerBound(p => new Date(p.d).getTime() >= time);
+    const iT = _pLowerBound(p => isoLocal(p.d).getTime() >= time);
     const lastFullMoon = _pLastBefore(iT, p => p.t === "පසළොස්වක");
-    let tithi = lastFullMoon ? Math.round((time - new Date(lastFullMoon.d).getTime()) / 86400000) : 1;
+    let tithi = lastFullMoon ? Math.round((time - isoLocal(lastFullMoon.d).getTime()) / 86400000) : 1;
     if(tithi === 0) tithi = 1;
 
     const nextA = _pFirstFrom(iT, p => p.t === "අමාවක");
     const nextF = _pFirstFrom(iT, p => p.t === "පසළොස්වක");
-    let paksha = (nextA && (!nextF || new Date(nextA.d).getTime() <= new Date(nextF.d).getTime())) ? t.paksha.Kāla : t.paksha.Sukka;
+    let paksha = (nextA && (!nextF || isoLocal(nextA.d).getTime() <= isoLocal(nextF.d).getTime())) ? t.paksha.Kāla : t.paksha.Sukka;
 
     const lastV = time <= vD ? y-1 : y;
-    const lastVD = new Date(vesakDates[lastV]).getTime();
-    const nextVD = new Date(vesakDates[lastV+1]).getTime();
+    const lastVD = isoLocal(vesakDates[lastV]).getTime();
+    const nextVD = isoLocal(vesakDates[lastV+1]).getTime();
     const totM = Math.round((nextVD - lastVD) / 2551442400);
 
     
     const nextFT = _pFirstFrom(iT, p => p.t === "පසළොස්වක");
-    let bM = nextFT ? Math.round((new Date(nextFT.d).getTime() - lastVD) / 2551442400) : 1;
+    let bM = nextFT ? Math.round((isoLocal(nextFT.d).getTime() - lastVD) / 2551442400) : 1;
     bM = (bM <= 0) ? totM : (bM > totM ? totM : bM);
 
     const nextP = poyaList[iT];
@@ -940,7 +984,7 @@ function calculateAll() {
     const lastAmavaka = _pLastBefore(iT, p => p.t === "අමාවක");
 
     if (finalPaksha === t.paksha.Sukka && lastAmavaka) {
-        const amavakaDate = new Date(lastAmavaka.d);
+        const amavakaDate = isoLocal(lastAmavaka.d);
         amavakaDate.setHours(0,0,0,0);
         
         const diffTime = d.getTime() - amavakaDate.getTime();
@@ -961,7 +1005,7 @@ function calculateAll() {
     document.getElementById('bDay').innerText = tithi;
     document.getElementById('paliDisplay').innerText = t.paliTemplate(animal, displayS, displayMonth, finalPaksha, tithiWord, weekDay);
 
-    const _iN = _pLowerBound(p => { let pDate = new Date(p.d); pDate.setHours(0,0,0,0); return pDate >= d; });
+    const _iN = _pLowerBound(p => { let pDate = isoLocal(p.d); pDate.setHours(0,0,0,0); return pDate >= d; });
     let nextPoya = poyaList[_iN];
 
     
@@ -973,7 +1017,7 @@ function calculateAll() {
     let statusAvasitthaD = 0; 
 
     if (nextPoya) {
-        let targetD = new Date(nextPoya.d);
+        let targetD = isoLocal(nextPoya.d);
         targetD.setHours(0,0,0,0);
         statusAvasitthaD = Math.round((targetD.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
 
@@ -1003,14 +1047,27 @@ if (statusAvasitthaD === 0) {
 
 }
 if (nextFullMoon) {
-        let fullMoonD = new Date(nextFullMoon.d);
+        let fullMoonD = isoLocal(nextFullMoon.d);
         fullMoonD.setHours(0,0,0,0);
         currentAvasitthaD = Math.round((fullMoonD.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
     }
 
+    // ---- පෙරවස් සමාදන්වීම / පවාරණය මුල් පිටුවේ දැක්වීම ----
+    // · පෙරවස් සමාදන් වන දිනය (ඇසළ පෝයට පසුදා)     → "පෙරවස් සමාදන් වන දිනය"   ("හෙට ..." ලෙස කලින් නොපෙන්වයි - එදිනට උපෝසථ දිනය පෙන්වීමට)
+    // · පෙරවස් පවාරණ දිනය (උපෝසථ දිනයමයි)            → "පෙරවස් පවාරණ දිනය", පෙර දින "හෙට පෙරවස් පවාරණ දිනය"
+    // පසුවස් සමාදන්වීම / පවාරණය මුල් පිටුවේ නොපෙන්වයි.
+    let vassaKind = '';
+    const vassa = getEarlyVassa(y);
+    if (vassa.samadan === ds) vassaKind = 'samadan';
+    else if (vassa.pavarana === ds) vassaKind = 'pavToday';
+    else if (vassa.pavarana && vassa.pavarana === addDaysISO(ds, 1)) vassaKind = 'pavTomorrow';
+    if (vassaKind) {
+        poyaMessage = vassaKind === 'samadan' ? t.stSamadan : (vassaKind === 'pavToday' ? t.stPavToday : t.stPavTomorrow);
+    }
+
     const poyaDisplayElement = document.getElementById("poyaStatus"); 
     if (poyaDisplayElement) {
-        if (isPoyaDay) {
+        if (isPoyaDay || vassaKind === 'samadan') {
             poyaDisplayElement.innerText = poyaMessage; 
             poyaDisplayElement.style.setProperty('color', '#c62828', 'important');
         } else {
@@ -1545,13 +1602,10 @@ function updateDisplay() {
     let dateText = document.getElementById('dateText');
     
     if (input) {
-        let d = new Date(input);
-        let year = d.getFullYear();
-        let month = String(d.getMonth() + 1).padStart(2, '0');
-        let day = String(d.getDate()).padStart(2, '0');
+        let d = new Date(input);   // (updateMiniMoon සඳහා - පෙර පරිදිම)
         
         if (dateText) {
-            dateText.innerText = year + "-" + month + "-" + day;
+            dateText.innerText = input;   // input.value දැනටමත් YYYY-MM-DD; Date හරහා යැවූ විට UTC- කලාපවල දිනය එක දවසක් පසුපසට යයි
         }
         
         localStorage.setItem('selectedCalendarDate', input);
@@ -1814,7 +1868,7 @@ function updateSinhalaAstroDate() {
     }
 
     if (tithiLabelElement && mainDateInput && mainDateInput.value) {
-        const selectedDateObj = new Date(mainDateInput.value);
+        const selectedDateObj = isoLocal(mainDateInput.value);
         
         let currentTithi = '';
         if (moonPhaseLabel && moonPhaseLabel.innerText && moonPhaseLabel.innerText !== '--') {
@@ -1903,25 +1957,34 @@ function setupAutoDateUpdater() {
         return `${year}-${month}-${day}`;
     }
 
+    // දවස වෙනස් වූ විට පමණක් අද දිනයට මාරු කරයි.
+    // (පෙර: පැයකට වරක් සහ තිරයට ආපසු එන සෑම වරකම, පරිශීලකයා තෝරාගත් දිනය අද දිනයට නැවත සැකසුණි.)
+    let lastToday = getTodayDateString();
+
     function checkAndUpdateDate() {
-        const currentDateString = getTodayDateString();
-
-        if (mainDateInput.value !== currentDateString) {
-
-            mainDateInput.value = currentDateString;
-            
-            const changeEvent = new Event('change', { bubbles: true });
-            mainDateInput.dispatchEvent(changeEvent);
+        const now = getTodayDateString();
+        if (now === lastToday) return;
+        lastToday = now;
+        if (mainDateInput.value !== now) {
+            mainDateInput.value = now;
+            mainDateInput.dispatchEvent(new Event('change', { bubbles: true }));
         }
     }
 
-    setInterval(checkAndUpdateDate, 3600000); 
+    // ඊළඟ ප්‍රාදේශීය මධ්‍යම රාත්‍රියට (+1s) timer එකක් - "හෙට උපෝසථ දිනය" → "උපෝසථ දිනය" මාරුව පැයක් පමණ පමා නොවේ
+    function scheduleMidnightCheck() {
+        const n = new Date();
+        const ms = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 1).getTime() - n.getTime();
+        setTimeout(function () { checkAndUpdateDate(); scheduleMidnightCheck(); }, Math.max(1000, ms));
+    }
+    scheduleMidnightCheck();
 
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === "visible") {
             checkAndUpdateDate();
         }
     });
+    window.addEventListener("pageshow", checkAndUpdateDate);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
