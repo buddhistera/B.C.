@@ -19,23 +19,28 @@ function wrap(n, f) { var o = W[n]; if (typeof o !== 'function') return; W[n] = 
 
 /* ---------- lazy load (never blocks first paint) ---------- */
 function go() { (W.requestIdleCallback || setTimeout)(function () {
-  if (W.THREE) return init(); var s = doc.createElement('script'); s.src = 'three.min.js'; s.onload = init; doc.head.appendChild(s); }); }
+  if (W.THREE) return init(); var ex = doc.querySelector('script[src="three.min.js"]'); if (ex) { ex.addEventListener('load', init); return; } // sunpage/uposatha දැනටමත් load කරමින් නම් දෙවරක් parse නොකරයි
+  var s = doc.createElement('script'); s.src = 'three.min.js'; s.onload = init; doc.head.appendChild(s); }); }
 if (doc.readyState === 'complete') setTimeout(go, 400); else W.addEventListener('load', function () { setTimeout(go, 400); });
 
 function init() {
   T = W.THREE; if (!T) return;
-  try { mrInit(); bgInit(); } catch (e) { return; }
-  wrap('updateMiniMoon', function (d) { mini(d); }); wrap('updateSunTimes', modal);
+  try { bgInit(); } catch (e) { return; }
   wrap('toggleDarkMode', sync); wrap('updateDisplay', sync);
+  sync(); var rz; W.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (bg.mode) fit(true); }, 200); });
+  doc.addEventListener('visibilitychange', sync);
+  loadMoon(function (tex) { try { mrInit(tex); } catch (e) { return; } init2(); }); // lit moon: after the Moon map has loaded (background above does not wait)
+}
+function init2() {
+  wrap('updateMiniMoon', function (d) { var e = $('inputDate'); mini(e && e.value ? sdate(e.value) : d); }); wrap('updateSunTimes', modal);
   var iv = $('inputDate'); if (iv && iv.value) mini(sdate(iv.value));
   // mini moon: repaint a few times + on return/rotate/context-restore (the first paint could land before layout or be lost)
   function remini() { var e = $('inputDate'); if (e && e.value) mini(sdate(e.value)); }
+  W.addEventListener('v3dmoon', function () { remini(); tlKey = ''; modal(); });
   [250, 900, 2500, 6000].forEach(function (ms) { setTimeout(remini, ms); });
   W.addEventListener('pageshow', remini); W.addEventListener('orientationchange', function () { setTimeout(remini, 350); }); doc.addEventListener('visibilitychange', function () { if (!doc.hidden) remini(); });
   mr.r.domElement.addEventListener('webglcontextlost', function (e) { e.preventDefault(); }, false); mr.r.domElement.addEventListener('webglcontextrestored', remini, false);
   var sm = $('sunModal'); if (sm && sm.style.display === 'flex') modal();
-  sync(); var rz; W.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (bg.mode) fit(true); }, 200); });
-  doc.addEventListener('visibilitychange', sync);
 }
 
 /* ---------- procedural lit moon (no texture files) ---------- */
@@ -55,29 +60,62 @@ var MF = 'uniform vec3 uL;uniform mat3 uR;uniform float uEs;varying vec3 vP;' +
 'float m0=max(dot(Nb,L),0.),mu=max(N.z,.05);float lit=m0/(m0+mu)*2.*smoothstep(-.02,.1,dot(N,L));' +
 'gl_FragColor=vec4(base*lit*1.15+base*vec3(.05,.07,.12)*uEs,1.);}';
 
-function mrInit() {
+/* real Moon surface (NASA SVS CGI Moon Kit, LROC colour map — equirectangular, lon 0 at the centre, east to the right, north up).
+   Same lighting model as MF; the surface point is turned into selenographic lon/lat using the real libration. */
+var MOON_SRC = 'moon.jpg';
+var MFT = 'uniform sampler2D uM;uniform vec3 uLb,uVb;uniform mat3 uR;uniform float uEs,uG,uK;uniform vec2 uD;varying vec3 vP;' +
+'float lu(vec2 u){return dot(texture2D(uM,u).rgb,vec3(.299,.587,.114));}' +
+'void main(){vec3 N=normalize(vP),q=uR*N;float la=asin(clamp(q.y,-1.,1.));vec2 uv=vec2(atan(q.x,q.z)/6.2831853+.5,la/3.1415927+.5);' +
+'vec3 base=min(texture2D(uM,uv).rgb*uG,vec3(1.));' +
+'vec3 e=vec3(q.z,0.,-q.x);e/=max(length(e),1e-4);vec3 n=cross(q,e);float dx=uD.x/max(cos(la),.08);' +
+'float hx=lu(uv+vec2(dx,0.))-lu(uv-vec2(dx,0.)),hy=lu(uv+vec2(0.,uD.y))-lu(uv-vec2(0.,uD.y));' +
+'vec3 Nb=normalize(q-uK*(hx*e+hy*n)),L=normalize(uLb);' +
+'float m0=max(dot(Nb,L),0.),mu=max(dot(q,uVb),.05);float lit=m0/(m0+mu)*2.;lit=(lit<1.?lit:1.+(lit-1.)*.3)*smoothstep(-.02,.1,dot(q,L));' + // soft knee: no blown-out white rim on the sunlit edge (like a real photo)
+'gl_FragColor=vec4(base*lit*1.15+base*vec3(.05,.07,.12)*uEs,1.);}';
+function moonMat(u, tex) {
+  if (!tex) return new T.ShaderMaterial({ uniforms: u, vertexShader: MV, fragmentShader: MF, extensions: { derivatives: true } });
+  u.uM = { value: tex }; u.uLb = { value: new T.Vector3() }; u.uVb = { value: new T.Vector3() }; u.uG = { value: MOON_GAIN }; u.uK = { value: MOON_BUMP };
+  u.uD = { value: new T.Vector2(1.5 / tex.image.width, 1.5 / tex.image.height) };
+  return new T.ShaderMaterial({ uniforms: u, vertexShader: MV, fragmentShader: MFT });
+}
+var MOON_GAIN = 1.15, MOON_BUMP = 1.2, moonTx = null, mVer = 0;
+function loadMoon(cb) { // wait a little for the map (cached after the first visit); if it comes later, switch to it then
+  var done = false; function fin(t) { if (done) { if (t) setMoonTex(t); return; } done = true; cb(t); }
+  try { new T.TextureLoader().load(MOON_SRC, function (t) { t.anisotropy = 4; moonTx = t; fin(t); }, undefined, function () { fin(null); }); } catch (e) { fin(null); }
+  setTimeout(function () { fin(null); }, 2500);
+}
+function setMoonTex(t) { if (!mr || mr.tx) return; mr.m.material.dispose(); mr.m.material = moonMat(mr.u, t); mr.tx = true; mVer++; try { W.dispatchEvent(new Event('v3dmoon')); } catch (e) {} }
+function mrInit(tex) {
   var r = new T.WebGLRenderer({ alpha: true, antialias: true }); r.setClearColor(0, 0);
   var u = { uL: { value: new T.Vector3() }, uR: { value: new T.Matrix3() }, uEs: { value: 0 } };
   var s = new T.Scene(), c = new T.OrthographicCamera(-1.02, 1.02, 1.02, -1.02, .1, 10); c.position.z = 3;
-  s.add(new T.Mesh(new T.SphereGeometry(1, 64, 48), new T.ShaderMaterial({ uniforms: u, vertexShader: MV, fragmentShader: MF, extensions: { derivatives: true } })));
-  mr = { r: r, s: s, c: c, u: u, px: 0 };
+  var m = new T.Mesh(new T.SphereGeometry(1, 64, 48), moonMat(u, tex)); s.add(m);
+  mr = { r: r, s: s, c: c, u: u, m: m, px: 0, tx: !!tex };
 }
 function paint(cv, date, t) { // real phase angle + real libration (+ tiny idle sway when t given)
   if (!mr || !cv) return;
   var ph = Astronomy.MoonPhase(date), ill = Astronomy.Illumination('Moon', date).phase_fraction, lb = Astronomy.Libration(date);
   var sw = t ? Math.sin(t * .0006) * 1.4 : 0, a = ph * D;
   mr.u.uL.value.set(Math.sin(a), 0, -Math.cos(a));
-  mr.u.uR.value.setFromMatrix4(new T.Matrix4().makeRotationFromEuler(new T.Euler((lb.elat + sw * .4) * D, -(lb.elon + sw) * D, 0)));
+  if (mr.tx) { // disc centre = sub-Earth point (lon = elon, lat = elat)
+    mr.u.uR.value.setFromMatrix4(new T.Matrix4().makeRotationY((lb.elon + sw) * D).multiply(new T.Matrix4().makeRotationX(-(lb.elat + sw * .4) * D)));
+    mr.u.uLb.value.copy(mr.u.uL.value).applyMatrix3(mr.u.uR.value); mr.u.uVb.value.set(0, 0, 1).applyMatrix3(mr.u.uR.value);
+  } else mr.u.uR.value.setFromMatrix4(new T.Matrix4().makeRotationFromEuler(new T.Euler((lb.elat + sw * .4) * D, -(lb.elon + sw) * D, 0)));
   mr.u.uEs.value = Math.pow(1 - ill, 2);
   var px = Math.round((cv.clientWidth || +cv.getAttribute('data-s') || 50) * dpr(2));
   if (cv.width !== px) cv.width = cv.height = px;
   mr.r.setSize(px, px, false); mr.r.render(mr.s, mr.c);
-  var x = cv.getContext('2d'); x.clearRect(0, 0, px, px); x.drawImage(mr.r.domElement, 0, 0);
+  var x = cv.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, px, px);
+  // දකුණු අර්ධගෝලයේ සිට සඳ බලන විට රූපය 180°කින් හැරී පෙනේ (script.js → isSouthernViewer)
+  var south = false; try { south = typeof W.isSouthernViewer === 'function' && W.isSouthernViewer(); } catch (e) {}
+  if (south) { x.translate(px / 2, px / 2); x.rotate(Math.PI); x.drawImage(mr.r.domElement, -px / 2, -px / 2); x.setTransform(1, 0, 0, 1, 0, 0); }
+  else x.drawImage(mr.r.domElement, 0, 0);
 }
 function mini(d) {
   if (!mr) return; var el = $('miniMoonVisual'); if (!el) return;
   el.className = 'v3d'; var cv = el.firstChild;
   if (!cv || cv.tagName !== 'CANVAS') { el.innerHTML = '<canvas data-s="50"></canvas>'; cv = el.firstChild; cv.style.cssText = 'width:100%;height:100%;display:block'; }
+  el.style.transform = ''; // CSS පසුබැසීමේ හැරවුම ඉවත් කරයි (3D canvas එක ඇතුළතින්ම හරවයි)
   paint(cv, d, 0);
 }
 function modal() {
@@ -271,8 +309,9 @@ function solar(on, ov) {
     earth.rotation.y += dt * .5; mp.rotation.y += dt * .9;                                  // Earth spin; Moon orbits Earth (phases come from the Sun's light)
     cam.position.set(Math.sin(t * .12) * 12, SO.dd * .42, SO.dd * .9); cam.lookAt(0, -1, 0); r.render(sc, cam); })(0);
 }
-W.V3D = { solar: solar, tex: function (n) { if (!T) return null; return n === 's' ? sunTex() : n === 'e' ? earthTex() : moonTex(); },
-  paintMoon: function (cv, d, t) { if (!mr) return false; paint(cv, d, t || 0); return true; }, chanting: function (on, ov) {
+W.V3D = { solar: solar, tex: function (n) { if (!T) return null; return n === 's' ? sunTex() : n === 'e' ? earthTex() : (moonTx || moonTex()); }, ver: function () { return mVer; }, real: function () { return !!(mr && mr.tx); },
+  paintMoon: function (cv, d, t) { if (!mr) return false; paint(cv, d, t || 0); return true; },
+  ready: function () { try { return !!mr && !mr.r.getContext().isContextLost(); } catch (e) { return false; } }, chanting: function (on, ov) {
   if (!bg) return;
   if (on && ov) { heroEl = ov.querySelector('.ch-hero'); if (!heroEl) return; hostMode = 'h'; heroEl.classList.add('v3d'); heroEl.insertBefore(bg.cv, heroEl.firstChild); }
   else { hostMode = ''; if (heroEl) heroEl.classList.remove('v3d'); heroEl = null; doc.body.insertBefore(bg.cv, doc.body.firstChild); }

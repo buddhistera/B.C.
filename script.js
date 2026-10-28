@@ -552,7 +552,11 @@ function extendPoyaDataTo(uptoYear) {
    
     for (let y = MIN_YEAR; y <= poyaListComputedUpToYear; y++) {
         if (vesakDates[y]) continue;
-        const candidates = poyaList.filter(p => p.t === "පසළොස්වක" && p.d >= `${y}-05-04` && p.d <= `${y}-06-04`);
+        // poyaList දිනය අනුව ඇණවුම් කර ඇති නිසා මුළු ලැයිස්තුවම filter නොකර, අදාළ පරාසය පමණක් පීරයි (ප්‍රතිඵලය එලෙසම)
+        const lo = `${y}-05-04`, hi = `${y}-06-04`, candidates = [];
+        for (let i = _pLowerBound(p => p.d >= lo); i < poyaList.length && poyaList[i].d <= hi; i++) {
+            if (poyaList[i].t === "පසළොස්වක") candidates.push(poyaList[i]);
+        }
         const vesak = candidates.find(p => p.m === "වේසාඛ") || candidates[0];
         if (vesak) vesakDates[y] = vesak.d;
     }
@@ -1255,7 +1259,23 @@ function findCrossingBetween(target, sampleA, sampleB) {
     return new Date((lo.getTime() + hi.getTime()) / 2);
 }
 
+// එකම දිනය සඳහා ප්‍රතිඵලය මතක තබා ගනී (sun page විවෘත කිරීමේදී මෙය 2–3 වතාවක් ඇමතුණි).
+// ගණනය කිරීම වෙනස් නැත: ප්‍රතිඵලය dayStart මත පමණක් රඳා පවතින නිසා cache එකෙන් එම අගයම ලැබේ.
+var _tithiDayCache = _tithiDayCache || new Map();
 function findSpecialTithiEventsForDay(dayStart) {
+    if (!_tithiDayCache) _tithiDayCache = new Map();
+    const key = dayStart.getTime();
+    let r = _tithiDayCache.get(key);
+    if (!r) {
+        r = _findSpecialTithiEventsForDayRaw(dayStart);
+        if (_tithiDayCache.size >= 400) _tithiDayCache.delete(_tithiDayCache.keys().next().value);
+        _tithiDayCache.set(key, r);
+    }
+    const cp = d => (d instanceof Date ? new Date(d.getTime()) : d);
+    return { beginTime: cp(r.beginTime), endTime: cp(r.endTime) };
+}
+
+function _findSpecialTithiEventsForDayRaw(dayStart) {
     function rawAngle(d) { return Astronomy.MoonPhase(Astronomy.MakeTime(d)); }
     const dayEnd = new Date(dayStart.getTime() + 24 * 3600000);
     const winStart = new Date(dayStart.getTime() - 8 * 3600000);
@@ -1338,7 +1358,7 @@ function updateSunTimes() {
         return;
     }
 
-    const selectedDate = new Date(dateInput.value);
+    const selectedDate = isoLocal(dateInput.value);   // new Date("YYYY-MM-DD") UTC ලෙස කියවෙයි → UTC- කලාපවල පෙර දිනය වැරදිය
     selectedDate.setHours(12,0,0,0); 
 
     let sunrise = null, solarNoon = null, sunset = null;
@@ -1801,6 +1821,22 @@ function confirmWheelPicker() {
     closeWheelPicker();
 }
 
+// ---- නරඹන්නා දකුණු අර්ධගෝලයේද? ----
+// සඳ රූපය දකුණු අර්ධගෝලයේ සිට බලන විට උත්තර අර්ධගෝලයට සාපේක්ෂව 180°කින් හැරී පෙනේ
+// (වර්ධනය වන සඳ: උත්තරයේ දීප්තිමත් පැත්ත දකුණට, දකුණු අර්ධගෝලයේ වමට; මරියා රටාවද යටිකුරු).
+// ප්‍රමුඛතාව: 1) 'Get My Location' මගින් සුරැකි සැබෑ ස්ථානය, 2) උපාංගයේ කාල කලාපය (ස්ථානය නොදුන් විට), 3) උත්තර (ශ්‍රී ලංකාව).
+const SOUTH_TZ_RE = /^(Australia\/|Antarctica\/|Pacific\/(Auckland|Chatham|Fiji|Tongatapu|Apia|Noumea|Norfolk|Efate|Guadalcanal|Port_Moresby|Pago_Pago|Tahiti|Rarotonga|Niue|Fakaofo|Wallis|Tarawa_S)|Africa\/(Johannesburg|Maseru|Mbabane|Maputo|Harare|Lusaka|Windhoek|Gaborone|Luanda|Lubumbashi|Kinshasa|Brazzaville|Blantyre|Dar_es_Salaam|Nairobi|Bujumbura|Kigali)|Indian\/(Antananarivo|Mauritius|Reunion|Mayotte|Comoro)|Asia\/(Jakarta|Makassar|Jayapura|Dili)|America\/(Sao_Paulo|Argentina\/|Buenos_Aires|Cordoba|Santiago|Punta_Arenas|Lima|La_Paz|Asuncion|Montevideo|Bahia|Fortaleza|Recife|Maceio|Belem|Manaus|Cuiaba|Campo_Grande|Porto_Velho|Rio_Branco|Araguaina|Noronha|Guayaquil)|Atlantic\/(St_Helena|South_Georgia|Stanley))/;
+function isSouthernViewer() {
+    try {
+        const la = parseFloat(localStorage.getItem('userLat'));
+        if (Number.isFinite(la)) return la < 0;
+    } catch (e) {}
+    try {
+        return SOUTH_TZ_RE.test(Intl.DateTimeFormat().resolvedOptions().timeZone || '');
+    } catch (e) {}
+    return false;
+}
+
 function updateMiniMoon(dateObj) {
     const miniMoonVisual = document.getElementById('miniMoonVisual');
     
@@ -1832,6 +1868,8 @@ function updateMiniMoon(dateObj) {
             } else {
                 miniMoonVisual.className = 'new-moon';
             }
+            // CSS පසුබැසීමේ රූපය: දකුණු අර්ධගෝලයේ නරඹන්නෙකුට 180° හරවයි (3D රූපය visuals3d.js විසින් තනිවම හසුරුවයි)
+            miniMoonVisual.style.transform = isSouthernViewer() ? 'rotate(180deg)' : '';
         }
     } catch (e) {
         console.error("Astronomy Engine error:", e);
@@ -1850,7 +1888,11 @@ function updateSinhalaAstroDate() {
     const engMode = typeof isEnglish === "function" ? isEnglish() : false;
 
     const sunModal = document.getElementById("sunModal");
-    const isModalOpen = sunModal && (sunModal.style.display === "flex" || sunModal.style.display === "block");
+    // නව සූර්ය/චන්ද්‍ර පිටුව (sunpage.js → #spOverlay) විවෘතව ඇති විටද "විවෘතයි" ලෙස සලකයි;
+    // නැතිනම් එහි තෝරන ඕනෑම දිනයක් මුල් පිටුවේ දිනයට නැවත සැකසේ (පැරණි #sunModal කිසිවිටක නොපෙන්වන නිසා).
+    const spOverlay = document.getElementById("spOverlay");
+    const isModalOpen = (sunModal && (sunModal.style.display === "flex" || sunModal.style.display === "block")) ||
+                        (spOverlay && spOverlay.style.display === "block");
 
     if (!isModalOpen && mainDateInput && sunDateInput && mainDateInput.value !== sunDateInput.value) {
         try {
@@ -2018,6 +2060,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 if ('serviceWorker' in navigator) {
 
+  // පළමු ස්ථාපනයේදී (මීට පෙර controller නොතිබූ විට) පිටුව දැනටමත් නවතම ගොනුවලින් පූරණය වී ඇති නිසා නැවත load කිරීම අනවශ්‍යයි;
+  // යාවත්කාලීනයකදී පමණක්, ඒ ද එක් වරක් පමණක් reload වේ.
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloadingForSW = false;
+
   window.addEventListener('load', async () => {
 
     try {
@@ -2030,6 +2077,8 @@ if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener(
         'controllerchange',
         () => {
+          if (!hadController || reloadingForSW) return;
+          reloadingForSW = true;
           window.location.reload();
         }
       );

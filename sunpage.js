@@ -8,13 +8,14 @@ var $ = function (i) { return doc.getElementById(i); };
 var en = function () { return typeof isEnglish === 'function' && isEnglish(); };
 var tr = function (s, e) { return en() ? e : s; };
 var P = null, R = null, T = null, pushed = false, busy = false;
+var RC = null, TLT = 0, MC = {}, MCK = []; // RC: 3D renderer kept between opens · TLT: timeline paint token · MC: painted timeline moons (same date → same image)
 
 var TX = { title: ['ඉර හා සඳෙහි පිහිටීම සහ වෙලාවන්', 'Sun & Moon Times'], loc: ['ස්ථානය ලබාගන්න', 'Get My Location'], now: ['දැන්', 'Now'],
   hTimes: ['අරුණෝදය හා මධ්‍යහ්න වෙලාවන්', 'Dawn & Noon Times'], hTimesD: ['තෝරාගත් දිනයේ අරුණෝදය, ඉර උදාව, මධ්‍යහ්නය සහ ඉර බැසීම', 'Dawn, sunrise, noon and sunset for the chosen day'],
   dawn: ['අරුණෝදය', 'Dawn'], sunrise: ['ඉර උදාව', 'Sunrise'], noon: ['මධ්‍යහ්නය', 'Noon'], sunset: ['ඉර බැසීම', 'Sunset'],
   hMoon: ['සඳෙහි පිහිටීම හා වෙලාවන්', 'Moon & Timings'], hMoonD: ['කලාව, දීප්තිය, සඳ උදාව/බැසීම සහ පෝය වේලාවන්', 'Phase, illumination, moonrise/set and poya times'],
   mrise: ['සඳ උදාව', 'Moonrise'], mset: ['සඳ බැසීම', 'Moonset'], pb: ['පෝය ලබන වේලාව', 'Poya Begins'], pe: ['පෝය ගෙවෙන වේලාව', 'Poya Ends'],
-  tlT: ['චන්ද්‍ර කලාවන්', 'Moon Phase Timeline'], lg1: ['පුර පසළොස්වක', 'Full moon'], lg2: ['අමාවක', 'New moon'],
+  tlT: ['චන්ද්‍ර කලාවන්', 'Moon Phase Timeline'], cr: ['සඳ සිතියම: NASA Scientific Visualization Studio (LROC)', "Moon map: NASA's Scientific Visualization Studio (LROC)"], lg1: ['පුර පසළොස්වක', 'Full moon'], lg2: ['අමාවක', 'New moon'],
   hSys: ['ඉර හා සඳෙහි තාත්වික පිහිටීම', 'Sun & Moon around the Earth'], hSysD: ['කාල රේඛාව ඇදීමෙන් වෙලාව වෙනස් කරන්න', 'Drag the timeline to change the time'],
 
   note: ['ඉර හා සඳෙහි සැබෑ දිශාවන් (ඔබේ ස්ථානයට අනුව). දුරවල් සහ ප්‍රමාණ සංකේතාත්මකයි.', 'Real directions of the Sun and Moon for your location. Distances and sizes are not to scale.'] };
@@ -46,7 +47,7 @@ var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6
 '.sp-brow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}' +
 '.sp-btn{flex:1 1 120px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 16px;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22)}.sp-btn:disabled{opacity:.6}' +
 '.sp-btn.gold{color:#3b2200;border:0;background:linear-gradient(135deg,#fcd34d,#e8a317);box-shadow:0 4px 14px rgba(232,163,23,.4)}.sp-btn.sm{flex:0 0 48px;padding:0;height:48px}' +
-'.sp-card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:16px 14px;margin:0 0 16px;box-shadow:var(--sh);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}' +
+'.sp-card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:16px 14px;margin:0 0 16px;box-shadow:var(--sh)}body.dark-mode .sp-card{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}' +
 '.sp-sh{display:flex;gap:12px;align-items:center;margin:0 0 14px}.sp-bd{width:46px;height:46px;border-radius:15px;background:var(--bg2);color:var(--ac);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex:0 0 auto}' +
 '.sp-t2{font-size:1.1rem;font-weight:800;line-height:1.3}.sp-ds{font-size:.8rem;color:var(--mu);margin-top:2px;line-height:1.45}' +
 '.sp-sh>div:nth-child(2){flex:1;min-width:0}.sp-now{flex:0 0 auto;margin-left:auto;width:46px;height:46px;border-radius:50%;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--bg2);color:var(--ac);border:1px solid var(--bd);box-shadow:var(--sh)}.sp-now:active{transform:scale(.93)}' +
@@ -166,10 +167,10 @@ function build() {
   '<section class="sp-card">' + sh('moon', 'hMoon') + '<div class="sp-moonrow"><canvas id="spMoonCv" width="240" height="240"></canvas><div class="sp-mi"><div class="ph" id="spPh"></div><div class="il" id="spIl"></div>' +
   '<div class="sp-kv"><span data-k="mrise"></span><b id="sp_mrise">--</b></div><div class="sp-kv"><span data-k="mset"></span><b id="sp_mset">--</b></div>' +
   '<div class="sp-kv" id="spPbL"><span data-k="pb"></span><b id="sp_pb"></b></div><div class="sp-kv" id="spPeL"><span data-k="pe"></span><b id="sp_pe"></b></div></div></div>' +
-  '<div class="sp-tlh" data-k="tlT"></div><div class="sp-tl" id="spTl"></div><div class="sp-lg"><span><i style="background:#fde047"></i><span data-k="lg1"></span></span><span><i style="background:#a78bfa"></i><span data-k="lg2"></span></span></div></section></div>';
+  '<div class="sp-tlh" data-k="tlT"></div><div class="sp-tl" id="spTl"></div><div class="sp-lg"><span><i style="background:#fde047"></i><span data-k="lg1"></span></span><span><i style="background:#a78bfa"></i><span data-k="lg2"></span></span></div><div class="sp-note" id="spCr" data-k="cr" style="display:none"></div></section></div>';
   var w = W.innerWidth, h = W.innerHeight, cs = ['#fff', '#cfe0ff', '#ffe9b0'], n = [90, 40, 16];
   [].forEach.call(ov.querySelectorAll('.sp-st'), function (e, k) { var s = []; for (var i = 0; i < n[k]; i++) s.push((Math.random() * w | 0) + 'px ' + (Math.random() * h | 0) + 'px ' + cs[(Math.random() * 3) | 0]); e.style.boxShadow = s.join(','); });
-  P = { ov: ov, open: true, t: 43200, live: false, lm: -1, dk: '', iv: 0, mt: 0, tlk: '', tlr: 0, tmp: false, rv: false, pk: '' };
+  P = { ov: ov, open: true, t: 43200, live: false, lm: -1, dk: '', iv: 0, mt: 0, tlk: '', tlr: 0, tmp: false, rv: false, pk: '', rn: 0, bt: 0, r3: false, tlq: null };
   $('spBack').onclick = close;
   $('spDate').onclick = function () { if (typeof openWheelPicker === 'function') openWheelPicker('sunDateInput'); };
   $('spLoc').onclick = fetchLoc;
@@ -187,15 +188,30 @@ function poya() { // same helper + same rule as script.js: midnight-to-midnight 
   var b = null, e = null; try { if (typeof findSpecialTithiEventsForDay === 'function' && typeof Astronomy !== 'undefined') { var ev = findSpecialTithiEventsForDay(dayStart()); b = ev.beginTime; e = ev.endTime; } } catch (x) {}
   $('sp_pb').textContent = fmtD(b); $('sp_pe').textContent = fmtD(e); $('spPbL').style.display = b ? '' : 'none'; $('spPeL').style.display = e ? '' : 'none';
 }
+function south() { try { return (typeof W.isSouthernViewer === 'function' && W.isSouthernViewer() ? 1 : 0) + '|' + (W.V3D && V3D.ver ? V3D.ver() : 0); } catch (e) { return 0; } } // hemisphere + moon-map version
+function moonTl(cv, k) { // same image as V3D.paintMoon(cv, sdt(k), 0); a date already painted (same size/hemisphere) is copied instead of re-rendered
+  var key = k + '|' + cv.width + '|' + south(), c = MC[key];
+  if (c) { var x = cv.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, cv.width, cv.height); x.drawImage(c, 0, 0); return; }
+  V3D.paintMoon(cv, sdt(k), 0); if (!V3D.ready || !V3D.ready()) return;
+  key = k + '|' + cv.width + '|' + south(); c = doc.createElement('canvas'); c.width = cv.width; c.height = cv.height; c.getContext('2d').drawImage(cv, 0, 0);
+  MC[key] = c; MCK.push(key); if (MCK.length > 120) delete MC[MCK.shift()];
+}
 function tl() {
-  var d = ymd(), box = $('spTl'); if (!d || P.tlk === d || !box) return;
-  if (!(W.V3D && V3D.paintMoon && V3D.paintMoon(doc.createElement('canvas'), new Date(), 0))) { if (P.tlr++ < 10) setTimeout(tl, 600); return; }
-  P.tlk = d; box.innerHTML = '';
+  var d = ymd(), box = $('spTl'); if (!d || !P.open || P.tlk === d || !box) return;
+  if (!(W.V3D && V3D.paintMoon && (V3D.ready ? V3D.ready() : V3D.paintMoon(doc.createElement('canvas'), new Date(), 0)))) { if (P.tlr++ < 10) setTimeout(tl, 600); return; }
+  P.tlk = d; box.innerHTML = ''; var px = Math.round(50 * Math.min(W.devicePixelRatio || 1, 2)), q = [], tok = ++TLT;
   for (var n = -14; n <= 15; n++) { var k = addK(d, n), m = mark(k), b = doc.createElement('button'); b.type = 'button'; b.className = 'sp-d' + (n ? '' : ' on') + (m ? ' m' + m : ''); b.setAttribute('data-k', k);
-    b.innerHTML = '<canvas style="width:50px;height:50px"></canvas><b>' + (+k.slice(8)) + '</b>'; box.appendChild(b); V3D.paintMoon(b.firstChild, sdt(k), 0); }
+    b.innerHTML = '<canvas width="' + px + '" height="' + px + '" style="width:50px;height:50px"></canvas><b>' + (+k.slice(8)) + '</b>'; box.appendChild(b); q.push([b.firstChild, k, Math.abs(n)]); }
   box.onclick = function (e) { var x = e.target.closest ? e.target.closest('.sp-d') : null; if (!x) return; var i = $('sunDateInput'); i.value = x.getAttribute('data-k'); i.dispatchEvent(new Event('change')); };
   var on = box.querySelector('.on'); if (on) box.scrollLeft = on.offsetLeft - box.clientWidth / 2 + on.offsetWidth / 2;
+  q.sort(function (a, b) { return a[2] - b[2]; }); // centre (visible) days first
+  var step = function () { if (!P || !P.open || tok !== TLT) return; var t0 = performance.now();
+    do { var it = q.shift(); moonTl(it[0], it[1]); } while (q.length && performance.now() - t0 < 10);
+    if (q.length) requestAnimationFrame(step); };
+  if (P.r3) requestAnimationFrame(step); else P.tlq = step; // on open: wait until the 3D stage is set up (creating it while moons are queued on the GPU stalls)
 }
+function go3d() { if (!P || P.r3) return; P.r3 = true; clearTimeout(P.bt); if (P.tlq) { var f = P.tlq; P.tlq = null; requestAnimationFrame(f); } }
+W.addEventListener('v3dmoon', function () { MC = {}; MCK = []; if (P && P.open) { P.tlk = ''; P.mt = 0; upd(); tl(); } }); // real Moon map arrived late → repaint
 var LC = { dawn: '#c4a1ff', sunrise: '#ffa65c', noon: '#ffe082', sunset: '#ff8a80' };
 function legend() { P.tm = {}; P.lg = null; ['dawn', 'sunrise', 'noon', 'sunset'].forEach(function (k) { P.tm[k] = mins($('sp_' + k).textContent); }); }
 function showLg() { // show a time from 5 minutes before it until 1 minute after, then hide
@@ -208,7 +224,7 @@ function tick() {
   if (P.live) { if (ymd() !== todayStr()) P.live = false; else { P.t = nowSec(); upd(true); } }
 }
 function refresh() {
-  if (!P || !P.open) return; lab();
+  if (!P || !P.open) return; P.rn++; lab();
   ['dawn:sunDawn', 'sunrise:sunSunrise', 'noon:sunNoon', 'sunset:sunSunset', 'mrise:sunMoonrise', 'mset:sunMoonset'].forEach(function (x) { x = x.split(':'); $('sp_' + x[0]).textContent = g(x[1]) || '--'; });
   poya(); $('spSub').textContent = g('sunModalTithiLabel'); $('spPh').textContent = g('moonPhaseLabel'); $('spIl').textContent = g('moonIllumLabel');
   setStat(); if (loc().ok && !LS.getItem('userLocName') && !P.rv) { P.rv = true; revName(); }
@@ -232,7 +248,7 @@ var STINT = [[0, 0xff5a2a], [5, 0xff9a4a], [14, 0xffd890], [35, 0xfff6e6], [90, 
 function upd(light) {
   if (!P || !P.open) return; var d = mom(), l = loc(), full = !light || Math.floor(P.t / 60) !== P.lm; P.lm = Math.floor(P.t / 60);
   var ts = (P.live ? '<i class="sp-live"></i>' : '') + fmtS(P.t); $('spClk').innerHTML = '<div class="d">' + es(ymd()) + '</div><div class="t">' + ts + '</div>'; showLg(); $('spNeed').style.left = (P.t / 864) + '%'; if ($('spSl').value != Math.floor(P.t)) $('spSl').value = Math.floor(P.t);
-  if (full) { var cv = $('spMoonCv'); if (cv && W.V3D && V3D.paintMoon && V3D.paintMoon(cv, d, 0)) P.mt = 0; else if (P.mt++ < 8) setTimeout(function () { upd(); }, 600); }
+  if (full) { $('spCr').style.display = W.V3D && V3D.real && V3D.real() ? '' : 'none'; var cv = $('spMoonCv'); if (cv && W.V3D && V3D.paintMoon && V3D.paintMoon(cv, d, 0)) P.mt = 0; else if (P.mt++ < 8) setTimeout(function () { upd(); }, 600); }
   try {
     var hs = hz('Sun', d, l), hm = hz('Moon', d, l), sa = hs.altitude, ma = hm.altitude, a1 = Math.abs(sa).toFixed(0), a2 = Math.abs(ma).toFixed(0);
     sky(sa, hs.azimuth); place(hs, hm, d, l); if (!full) return;
@@ -244,13 +260,14 @@ function upd(light) {
 }
 
 /* ---------- 3D: Earth fixed in the middle, you on top; Sun & Moon move around it (as we see them) ---------- */
-function need(cb) { if (W.THREE) { T = W.THREE; return cb(); } var s = doc.createElement('script'); s.src = 'three.min.js'; s.onload = function () { T = W.THREE; cb(); }; s.onerror = function () { var b = $('spStage'); if (b) b.style.display = 'none'; }; doc.head.appendChild(s); }
-function start3d() { if (R) return; need(function () { if (!P || !P.open || R) return; try { init3d(); } catch (e) { console.error(e); var b = $('spStage'); if (b) b.style.display = 'none'; } }); }
+function need(cb) { if (W.THREE) { T = W.THREE; return cb(); } var s = doc.querySelector('script[src="three.min.js"]'), nw = !s; if (nw) { s = doc.createElement('script'); s.src = 'three.min.js'; } // one download/parse even if visuals3d.js is loading it too
+  s.addEventListener('load', function () { T = W.THREE; cb(); }); s.addEventListener('error', function () { var b = $('spStage'); if (b) b.style.display = 'none'; }); if (nw) doc.head.appendChild(s); }
+function start3d() { if (R) return go3d(); need(function () { if (!P || !P.open || R) return; try { if (RC && !RC.lost) attach3d(); else { drop3d(); init3d(); } } catch (e) { go3d(); console.error(e); var b = $('spStage'); if (b) b.style.display = 'none'; } }); }
 function glowTex(c) { var cv = doc.createElement('canvas'); cv.width = cv.height = 128; var x = cv.getContext('2d'), gr = x.createRadialGradient(64, 64, 0, 64, 64, 64);
   gr.addColorStop(0, 'rgba(' + c + ',.95)'); gr.addColorStop(.25, 'rgba(' + c + ',.5)'); gr.addColorStop(.55, 'rgba(' + c + ',.15)'); gr.addColorStop(1, 'rgba(' + c + ',0)'); x.fillStyle = gr; x.fillRect(0, 0, 128, 128); return new T.CanvasTexture(cv); }
 function init3d() {
-  var box = $('spStage'), r = new T.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' }), i;
-  r.setPixelRatio(Math.min(W.devicePixelRatio || 1, 2)); r.setClearColor(0x000000, 0); box.insertBefore(r.domElement, box.querySelector('.sp-ew'));
+  var r = new T.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' }), i;
+  r.setClearColor(0x000000, 0);
   var tx = function (n) { try { return (W.V3D && V3D.tex && V3D.tex(n)) || null; } catch (e) { return null; } };
   var sc = new T.Scene(), cam = new T.PerspectiveCamera(40, 1, 1, 3000), te = tx('e'), tm = tx('m');
   cam.position.set(0, 0, CD); cam.lookAt(0, 0, 0);
@@ -259,14 +276,20 @@ function init3d() {
   var gl = new T.Sprite(new T.SpriteMaterial({ map: glowTex('255,200,100'), blending: T.AdditiveBlending, transparent: true, depthWrite: false })); gl.scale.set(24, 24, 1); sun.add(gl);
   var earth = new T.Mesh(new T.SphereGeometry(ER, 48, 36), new T.MeshStandardMaterial({ map: te, color: te ? 0xffffff : 0x2e6db4, roughness: .9, metalness: .05 })); earth.rotation.set(.35, 2.2, 0); sc.add(earth);
   sc.add(new T.Mesh(new T.SphereGeometry(ER * 1.1, 36, 24), new T.MeshBasicMaterial({ color: 0x4a90e2, transparent: true, opacity: .16, side: T.BackSide })));
-  var moon = new T.Mesh(new T.SphereGeometry(2.2, 32, 24), new T.MeshStandardMaterial({ map: tm, color: 0xffe08a, roughness: 1, metalness: 0 })); sc.add(moon);
+  var moon = new T.Mesh(new T.SphereGeometry(2.2, 32, 24), new T.MeshStandardMaterial({ map: tm, color: 0xffe08a, roughness: 1, metalness: 0 })); moon.rotation.y = -Math.PI / 2; sc.add(moon); // real map: near side (lon 0) towards us
   var mg = new T.Sprite(new T.SpriteMaterial({ map: glowTex('255,226,140'), blending: T.AdditiveBlending, transparent: true, depthWrite: false, opacity: 0 })); mg.scale.set(11, 11, 1); moon.add(mg);
   var ml = new T.DirectionalLight(0xffe6a0, 0); sc.add(ml);
   var n = 700, Pp = new Float32Array(n * 3); for (i = 0; i < n; i++) { var u = Math.random(), b = Math.random() * 6.283, q = Math.sqrt(1 - u * u), RR = 900 + Math.random() * 600; Pp[i * 3] = RR * q * Math.cos(b); Pp[i * 3 + 1] = RR * u; Pp[i * 3 + 2] = RR * q * Math.sin(b); }
   var sg = new T.BufferGeometry(); sg.setAttribute('position', new T.BufferAttribute(Pp, 3)); var stars = new T.Points(sg, new T.PointsMaterial({ color: 0xffffff, size: 1.3, sizeAttenuation: false, transparent: true, opacity: 0, depthWrite: false })); sc.add(stars);
-  R = { r: r, sc: sc, cam: cam, sun: sun, sgl: gl, dl: dl, hl: hl, moon: moon, mg: mg, ml: ml, stars: stars };
+  RC = { r: r, sc: sc, cam: cam, sun: sun, sgl: gl, dl: dl, hl: hl, moon: moon, mg: mg, ml: ml, stars: stars };
+  r.domElement.addEventListener('webglcontextlost', function () { if (RC && RC.r === r) RC.lost = true; }, false);
+  attach3d();
+}
+function attach3d() { // reuse the same renderer/scene (no new WebGL context, no shader recompiling, no texture redrawing)
+  var box = $('spStage'), r = RC.r, sc = RC.sc, cam = RC.cam; R = RC;
+  r.setPixelRatio(Math.min(W.devicePixelRatio || 1, 2)); box.insertBefore(r.domElement, box.querySelector('.sp-ew'));
   function fit() { var w = box.clientWidth, h = box.clientHeight; if (!w || !h) return; r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); r.render(sc, cam); }
-  if (W.ResizeObserver) { R.ro = new ResizeObserver(fit); R.ro.observe(box); } fit(); upd();
+  if (W.ResizeObserver) { R.ro = new ResizeObserver(fit); R.ro.observe(box); } fit(); upd(true); go3d();
 }
 function dispAlt(al, r, k) { // drawn altitude. Upper edge touches the line at the listed rise/set time (centre -0.215° apparent); the disc then clears the line within its real crossing time (~0.5° ≈ 2 min), and the extra offset fades out higher up
   var rd = Math.asin(r / k) / D, a0 = -.215, w = .5;
@@ -285,22 +308,29 @@ function place(hs, hm, d, l) {
   R.stars.material.opacity = cl((-sa - 3) / 10, 0, 1);
   R.r.render(R.sc, R.cam);
 }
-function kill3d() { if (!R) return; if (R.ro) R.ro.disconnect(); R.r.dispose(); try { R.r.forceContextLoss(); } catch (e) {} if (R.r.domElement.parentNode) R.r.domElement.parentNode.removeChild(R.r.domElement); R = null; }
+function kill3d() { if (!R) return; if (R.ro) { R.ro.disconnect(); R.ro = null; } if (R.r.domElement.parentNode) R.r.domElement.parentNode.removeChild(R.r.domElement); R = null; } // keep RC for the next open
+function drop3d() { if (!RC) return; try { RC.r.dispose(); RC.r.forceContextLoss(); } catch (e) {} RC = null; }
 
 /* ---------- open / close ---------- */
 function onKey(e) { if (e.key === 'Escape') close(); }
 function onPop() { if (pushed) { pushed = false; hide(); } }
-function hide() { if (!P) return; P.open = false; clearInterval(P.iv); kill3d(); P.ov.style.display = 'none'; doc.documentElement.style.overflow = ''; doc.removeEventListener('keydown', onKey); if (P.tmp) { setGlobals(null, null); P.tmp = false; } try { if (typeof updateSinhalaAstroDate === 'function') updateSinhalaAstroDate(); } catch (e) {} }
+function hide() { if (!P) return; P.open = false; clearInterval(P.iv); clearTimeout(P.bt); kill3d(); P.ov.style.display = 'none'; doc.documentElement.style.overflow = ''; doc.removeEventListener('keydown', onKey); if (P.tmp) { setGlobals(null, null); P.tmp = false; } try { if (typeof updateSinhalaAstroDate === 'function') updateSinhalaAstroDate(); } catch (e) {} }
 function close() { if (pushed) history.back(); else hide(); }
 function open() {
+  if (P && P.open) return;
   var dd = $('myDropdown'); if (dd) dd.style.display = 'none';
   css(); var ov = build(), i = $('sunDateInput'); if (i && !i.value) i.value = todayStr();
   P.live = !!(i && i.value === todayStr()); P.t = P.live ? nowSec() : 43200; $('spSl').value = Math.floor(P.t); P.iv = setInterval(tick, 1000);
   if (!loc().ok) { setGlobals(6.9271, 79.8612); P.tmp = true; } // temporary Colombo so script.js can still compute tithi / times; reset on close
   ov.style.display = 'block'; ov.scrollTop = 0; doc.documentElement.style.overflow = 'hidden'; doc.addEventListener('keydown', onKey);
   try { history.pushState({ sp: 1 }, ''); pushed = true; } catch (e) { pushed = false; }
-  if (typeof updateSunTimes === 'function') { try { updateSunTimes(); } catch (e) {} } refresh(); start3d();
+  lab(); $('spDate').innerHTML = ic('cal', 17) + '<span>' + es(ymd()) + '</span>'; // page + headings appear at once
+  var me = P; afterPaint(function () { if (P !== me || !P.open) return;
+    var n0 = P.rn; if (typeof updateSunTimes === 'function') { try { updateSunTimes(); } catch (e) {} } // its wrapper (below) already runs refresh()
+    if (P.rn === n0) refresh();
+    afterPaint(function () { if (P === me && P.open) start3d(); }); P.bt = setTimeout(go3d, 1500); }); // times first, then the 3D stage, then the moon timeline
 }
+function afterPaint(f) { var done = false, go = function () { if (!done) { done = true; f(); } }; requestAnimationFrame(function () { setTimeout(go, 0); }); setTimeout(go, 250); } // run f once the opened page has been drawn
 function wrap(n, f) { var o = W[n]; if (typeof o !== 'function') return; W[n] = function () { var r = o.apply(this, arguments); try { f.apply(this, arguments); } catch (e) {} return r; }; }
 var oOpen = W.openSunModal;
 W.openSunModal = function () { try { open(); } catch (e) { console.error('sunpage:', e); if (P) hide(); if (typeof oOpen === 'function') return oOpen.apply(this, arguments); } };

@@ -9,6 +9,7 @@ var $ = function (i) { return doc.getElementById(i); };
 var en = function () { return typeof isEnglish === 'function' ? isEnglish() : (typeof currentLang !== 'undefined' && currentLang === 'en'); };
 var tr = function (s, e) { return en() ? e : s; };
 var P = null, B = null, T = null, pushed = false;
+var BC = null; // background renderer/scene kept between opens (no new WebGL context or mandala redraw on every open)
 var low = (navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (W.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
 
 var TX = { title: ['උපෝසථ දින සහ වස් කාලය', 'Uposatha Days & Vassa Period'], hList: ['උපෝසථ දින', 'Uposatha Days'],
@@ -36,7 +37,7 @@ function today0() { var t = new Date(); return new Date(t.getFullYear(), t.getMo
 
 var CSS = '#upOverlay{--cd:rgba(255,253,249,.82);--bd:rgba(120,80,30,.16);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif Sinhala","Noto Serif",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
 'body.dark-mode #upOverlay{--cd:rgba(14,20,52,.66);--bd:rgba(242,212,120,.26);--tx:#e8ecf8;--mu:#aab3d6;--bg2:rgba(242,212,120,.12);--ac:#f2d478;--tl:rgba(255,255,255,.05);--sh:0 8px 28px rgba(0,0,0,.45);background:radial-gradient(ellipse at 50% 0%,#1b2554 0%,#0b1030 45%,#04061a 100%)}' +
-'#upOverlay button{font-family:inherit}.up-sky{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}#upBg{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0}' +
+'#upOverlay button{font-family:inherit}.up-sky{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}#upBg{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0;transition:opacity .45s ease}#upBg.on{opacity:1}' +
 '.up-st{display:none;position:absolute;left:0;top:0;border-radius:50%;background:transparent}body.dark-mode .up-st{display:block}' +
 '.up-st.l1{width:1px;height:1px;animation:upTw 4s ease-in-out infinite}.up-st.l2{width:2px;height:2px;animation:upTw 6s ease-in-out 1.5s infinite}.up-st.l3{width:3px;height:3px;animation:upTw 8s ease-in-out 3s infinite}@keyframes upTw{50%{opacity:.3}}' +
 '.up-wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(30px + env(safe-area-inset-bottom,0px))}.ic{display:inline-block;vertical-align:middle;flex:0 0 auto}' +
@@ -46,7 +47,7 @@ var CSS = '#upOverlay{--cd:rgba(255,253,249,.82);--bd:rgba(120,80,30,.16);--tx:#
 '.up-nx{display:inline-flex;align-items:center;gap:9px;margin:13px auto 0;padding:8px 15px;border-radius:18px;background:rgba(255,255,255,.62);border:1px solid rgba(138,90,20,.22);font-size:.86rem;line-height:1.5;text-align:left;max-width:100%}.up-nx .dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:#d08a14;box-shadow:0 0 0 3px rgba(208,138,20,.25)}' +
 '.up-yr{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px}.up-yb{width:44px;height:44px;border-radius:50%;border:1px solid rgba(138,90,20,.3);background:rgba(255,255,255,.6);color:#6b3a10;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}.up-yb:disabled{opacity:.35}' +
 '.up-yv{min-width:120px;font-size:1.5rem;font-weight:800;color:#3b2412;font-variant-numeric:tabular-nums}.up-go{display:inline-flex;align-items:center;gap:7px;margin:10px 4px 0;padding:9px 16px;border-radius:999px;font-weight:700;font-size:.86rem;cursor:pointer;color:#3b2200;border:0;background:linear-gradient(135deg,#fcd34d,#e8a317);box-shadow:0 4px 12px rgba(200,140,20,.32)}.up-go.gl{color:#6b3a10;background:rgba(255,255,255,.6);border:1px solid rgba(138,90,20,.3);box-shadow:none}' +
-'.up-card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:16px 14px;margin:0 0 16px;box-shadow:var(--sh);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}' +
+'.up-card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:16px 14px;margin:0 0 16px;box-shadow:var(--sh)}body.dark-mode .up-card{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}' + // light theme: card is 82% opaque over a 17%-opacity mandala → blur was invisible but re-ran every frame
 '.up-sh{display:flex;gap:12px;align-items:center;margin:0 0 14px}.up-bd{width:46px;height:46px;border-radius:15px;background:var(--bg2);color:var(--ac);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex:0 0 auto}.up-t2{font-size:1.12rem;font-weight:800;line-height:1.3}.up-ds{font-size:.8rem;color:var(--mu);margin-top:2px;line-height:1.45}' +
 '.up-sb{margin:16px 0 10px;padding:9px 12px;border-radius:12px;font-weight:800;font-size:.92rem;background:#C8E6C9;color:#1B5E20;border-left:5px solid #d4af37;box-shadow:0 2px 6px rgba(0,0,0,.08)}body.dark-mode .up-sb{background:rgba(200,230,201,.1);color:#c8e6c9;border:1px solid rgba(0,229,255,.15);border-left:5px solid #d4af37}.up-sb:first-child{margin-top:0}' +
 '.up-row{display:flex;align-items:center;gap:12px;padding:11px 12px;margin:0 0 9px;border-radius:14px;background:var(--tl);border:1px solid var(--bd);transition:opacity .2s}' +
@@ -71,10 +72,16 @@ CSS += '#upOverlay{--sbg:#fffaf2}body.dark-mode #upOverlay{--sbg:#141b45}' +
 function css() { if ($('upStyle')) return; var s = doc.createElement('style'); s.id = 'upStyle'; s.textContent = CSS; doc.head.appendChild(s); }
 
 /* ---------- data: same rules as script.js (renderPoyaList / openVasModal) ---------- */
+function yearSlice(y) { // = poyaList.filter(p => p.d.startsWith(y)) and its first index, without scanning all ~27k entries
+  var s = String(y);
+  if (typeof _pLowerBound !== 'function') return { yp: poyaList.filter(function (p) { return p.d.startsWith(s); }), fi: poyaList.findIndex(function (p) { return p.d.startsWith(s); }) };
+  var a = _pLowerBound(function (p) { return p.d >= s; }), b = a; while (b < poyaList.length && poyaList[b].d.startsWith(s)) b++;
+  return { yp: poyaList.slice(a, b), fi: b > a ? a : -1 };
+}
 function yearRows(y) {
-  var t = i18n[currentLang], out = [], yp = poyaList.filter(function (p) { return p.d.startsWith(y); }); if (!yp.length) return out;
+  var t = i18n[currentLang], out = [], ys = yearSlice(y), yp = ys.yp; if (!yp.length) return out;
   var early = yp.filter(function (p) { return p.r === 'හේමන්ත' && ld(p.d).getMonth() < 6; }), cnt = { 'හේමන්ත': 8 - early.length + 1, 'ගිම්හාන': 1, 'වස්සාන': 1, 'නැවත හේමන්ත': 1 }, last = '';
-  var fi = poyaList.findIndex(function (p) { return p.d.startsWith(y); }), prev = fi > 0 ? ld(poyaList[fi - 1].d) : null;
+  var fi = ys.fi, prev = fi > 0 ? ld(poyaList[fi - 1].d) : null;
   yp.forEach(function (p) {
     var dt = ld(p.d), rs = p.r; if (rs === 'හේමන්ත' && dt.getMonth() >= 10) rs = 'නැවත හේමන්ත';
     var c = cnt[rs]; cnt[rs]++;
@@ -89,7 +96,7 @@ function yearRows(y) {
   return out;
 }
 function vasDates(y) { // identical selection rules to openVasModal(); returns local Date objects (or null)
-  var yp = poyaList.filter(function (p) { return p.d.startsWith(y); }), gim = yp.filter(function (p) { return p.r === 'ගිම්හාන'; }), vas = yp.filter(function (p) { return p.r === 'වස්සාන'; }), r = [null, null, null, null], d;
+  var yp = yearSlice(y).yp, gim = yp.filter(function (p) { return p.r === 'ගිම්හාන'; }), vas = yp.filter(function (p) { return p.r === 'වස්සාන'; }), r = [null, null, null, null], d;
   if (gim.length > 0) { d = ld(gim[gim.length - 1].d); d.setDate(d.getDate() + 1); r[0] = d; }
   if (vas.length >= 6) r[1] = ld(vas[5].d);
   if (vas.length >= 2) { d = ld(vas[1].d); d.setDate(d.getDate() + 1); r[2] = d; }
@@ -98,7 +105,7 @@ function vasDates(y) { // identical selection rules to openVasModal(); returns l
 }
 
 /* ---------- page ---------- */
-function mainYear() { var v = ($('inputDate') || {}).value, d = v ? new Date(v) : new Date(); return isNaN(d.getTime()) ? new Date().getFullYear() : d.getFullYear(); }
+function mainYear() { var v = ($('inputDate') || {}).value, d = v ? ld(v) : new Date(); return isNaN(d.getTime()) ? new Date().getFullYear() : d.getFullYear(); }
 function build() {
   var ov = $('upOverlay'); if (!ov) { ov = doc.createElement('div'); ov.id = 'upOverlay'; doc.body.appendChild(ov); }
   ov.innerHTML = '<div class="up-sky"><i class="up-st l1"></i><i class="up-st l2"></i><i class="up-st l3"></i></div>' +
@@ -135,7 +142,7 @@ function render(jump) {
   try { ensurePoyaDataUpTo(y + 1); ensurePoyaDataUpTo(t0.getFullYear() + 1); } catch (e) {}
   $('upY').textContent = y; $('upPrev').disabled = y <= (typeof MIN_YEAR !== 'undefined' ? MIN_YEAR : 1900); $('upNext').disabled = y >= (typeof MAX_YEAR !== 'undefined' ? MAX_YEAR : 3000); $('upYr').style.display = y === t0.getFullYear() ? 'none' : '';
   // hero: next uposatha (from today, any year)
-  var np = poyaList.find(function (p) { return p.d >= ts; });
+  var np = typeof _pLowerBound === 'function' ? poyaList[_pLowerBound(function (p) { return p.d >= ts; })] : poyaList.find(function (p) { return p.d >= ts; });
   if (np) { var nd = ld(np.d), k = days(t0, nd), nm = np.t; if (en()) nm = nm.replace('පසළොස්වක', 'Full Moon').replace('අමාවක', ' New Moon'); nextD = np.d;
     $('upNxT').textContent = tr(TX.next[0], TX.next[1]) + ': ' + md(nd) + ' · ' + nm + i18n[currentLang].poyaSuffix + ' — ' + (k === 0 ? tr('අද', 'today') : tr('තව දින ' + k + ' යි', 'in ' + k + ' day' + (k > 1 ? 's' : ''))); } else $('upNxT').textContent = '';
   // list
@@ -181,20 +188,26 @@ function mandalaTex() {
   var t = new T.CanvasTexture(c); t.anisotropy = 4; return t;
 }
 function dustTex() { var c = doc.createElement('canvas'); c.width = c.height = 32; var x = c.getContext('2d'), g = x.createRadialGradient(16, 16, 0, 16, 16, 16); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(.4, 'rgba(255,255,255,.4)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(0, 0, 32, 32); return new T.CanvasTexture(c); }
-function need(cb) { if (W.THREE) { T = W.THREE; return cb(); } var s = doc.createElement('script'); s.src = 'three.min.js'; s.onload = function () { T = W.THREE; cb(); }; doc.head.appendChild(s); }
-function startBg() { if (B) return; need(function () { if (!P || !P.open || B) return; try { initBg(); } catch (e) { console.error(e); } }); }
+function need(cb) { if (W.THREE) { T = W.THREE; return cb(); } var s = doc.querySelector('script[src="three.min.js"]'), nw = !s; if (nw) { s = doc.createElement('script'); s.src = 'three.min.js'; } s.addEventListener('load', function () { T = W.THREE; cb(); }); if (nw) doc.head.appendChild(s); }
+function startBg() { if (B) return; need(function () { if (!P || !P.open || B) return; try { if (BC && !BC.lost) attachBg(); else { dropBg(); initBg(); } } catch (e) { console.error(e); } }); }
 function initBg() {
-  var r = new T.WebGLRenderer({ alpha: true, antialias: false, powerPreference: 'low-power' }); r.setClearColor(0, 0); r.setPixelRatio(Math.min(W.devicePixelRatio || 1, 1.5)); r.domElement.id = 'upBg'; P.ov.insertBefore(r.domElement, P.ov.querySelector('.up-wrap'));
+  var r = new T.WebGLRenderer({ alpha: true, antialias: false, powerPreference: 'low-power' }); r.setClearColor(0, 0); r.domElement.id = 'upBg';
   var sc = new T.Scene(), cam = new T.OrthographicCamera(0, 1, 1, 0, -10, 10), tex = mandalaTex(), geo = new T.PlaneGeometry(1, 1);
   function mk(o) { var m = new T.Mesh(geo, new T.MeshBasicMaterial({ map: tex, transparent: true, opacity: o, depthWrite: false })); m.userData.o = o; sc.add(m); return m; }
   var m1 = mk(.17), m2 = mk(.11), m3 = mk(.07), n = 70, Pp = new Float32Array(n * 3), Sp = [];
   for (var i = 0; i < n; i++) { Pp[i * 3] = Math.random(); Pp[i * 3 + 1] = Math.random(); Pp[i * 3 + 2] = 0; Sp.push(.01 + Math.random() * .03); }
   var pg = new T.BufferGeometry(); pg.setAttribute('position', new T.BufferAttribute(Pp, 3));
   var pm = new T.PointsMaterial({ size: 5, map: dustTex(), transparent: true, opacity: .55, depthWrite: false, sizeAttenuation: false, blending: T.AdditiveBlending }), dust = new T.Points(pg, pm); sc.add(dust);
-  B = { r: r, sc: sc, cam: cam, m1: m1, m2: m2, m3: m3, dust: dust, pm: pm, Sp: Sp, w: 0, h: 0, t: 0, raf: 0, last: 0 };
+  BC = { r: r, sc: sc, cam: cam, m1: m1, m2: m2, m3: m3, dust: dust, pm: pm, Sp: Sp, w: 0, h: 0, t: 0, raf: 0, last: 0 };
+  r.domElement.addEventListener('webglcontextlost', function () { if (BC && BC.r === r) BC.lost = true; }, false);
+  attachBg();
+}
+function attachBg() {
+  B = BC; var r = B.r, cam = B.cam, m1 = B.m1, m2 = B.m2, m3 = B.m3, el = r.domElement; B.last = 0;
+  r.setPixelRatio(Math.min(W.devicePixelRatio || 1, 1.5)); el.classList.remove('on'); P.ov.insertBefore(el, P.ov.querySelector('.up-wrap'));
   function fit() { var w = W.innerWidth, h = W.innerHeight; if (!w || !h) return; B.w = w; B.h = h; r.setSize(w, h, false); cam.right = w; cam.top = h; cam.updateProjectionMatrix(); var L = Math.max(w, h);
     m1.scale.set(L * 1.15, L * 1.15, 1); m2.scale.set(L * .62, L * .62, 1); m3.scale.set(L * .34, L * .34, 1); tint(); frame(0); }
-  B.fit = fit; fit(); W.addEventListener('resize', fit);
+  B.fit = fit; fit(); W.addEventListener('resize', fit); requestAnimationFrame(function () { el.classList.add('on'); }); // fade in
   if (!low) (function L(ts) { B.raf = requestAnimationFrame(L); if (doc.hidden || ts - B.last < 33) return; var dt = B.last ? Math.min((ts - B.last) / 1000, .1) : .033; B.last = ts; frame(dt); })(0);
 }
 function tint() { if (!B) return; var dk = doc.body.classList.contains('dark-mode'), c = dk ? 0xf2d478 : 0x8a5a14, k = dk ? 1 : 1.05; [B.m1, B.m2, B.m3].forEach(function (m) { m.material.color.set(c); m.material.opacity = m.userData.o * k; }); B.pm.color.set(dk ? 0xffe9a8 : 0xb8860b); }
@@ -207,7 +220,8 @@ function frame(dt) {
   // dust positions are stored 0..1 → scale to pixels via the points' scale
   B.dust.scale.set(w, h, 1); a.needsUpdate = true; B.r.render(B.sc, B.cam);
 }
-function killBg() { if (!B) return; cancelAnimationFrame(B.raf); W.removeEventListener('resize', B.fit); B.r.dispose(); try { B.r.forceContextLoss(); } catch (e) {} if (B.r.domElement.parentNode) B.r.domElement.parentNode.removeChild(B.r.domElement); B = null; }
+function killBg() { if (!B) return; cancelAnimationFrame(B.raf); B.raf = 0; W.removeEventListener('resize', B.fit); if (B.r.domElement.parentNode) B.r.domElement.parentNode.removeChild(B.r.domElement); B = null; } // BC kept for the next open
+function dropBg() { if (!BC) return; try { BC.r.dispose(); BC.r.forceContextLoss(); } catch (e) {} BC = null; }
 
 /* ---------- A4 landscape JPG download (black & white / colour) ----------
    Draws the whole year (same rows as the page: yearRows + vasDates) straight onto a canvas — no extra library.
@@ -357,10 +371,12 @@ function onPop() { if (pushed) { pushed = false; hide(); } }
 function hide() { if (!P) return; P.open = false; killBg(); P.ov.style.display = 'none'; doc.documentElement.style.overflow = ''; doc.removeEventListener('keydown', onKey); }
 function close() { if (pushed) history.back(); else hide(); }
 function open(toVas) {
+  if (P && P.open) { if (toVas) scrollTo($('upVas')); return; }
   try { if (typeof closeMenu === 'function') closeMenu(); } catch (e) {}
   css(); var ov = build(); ov.style.display = 'block'; ov.scrollTop = 0; doc.documentElement.style.overflow = 'hidden'; doc.addEventListener('keydown', onKey);
   try { history.pushState({ up: 1 }, ''); pushed = true; } catch (e) { pushed = false; }
-  render(!toVas); startBg(); if (toVas) setTimeout(function () { scrollTo($('upVas')); }, 150);
+  render(!toVas); var me = P; requestAnimationFrame(function () { setTimeout(function () { if (P === me && P.open) startBg(); }, 60); }); // list is drawn first, the moving background follows
+  if (toVas) setTimeout(function () { scrollTo($('upVas')); }, 150);
 }
 function wrap(n, f) { var o = W[n]; if (typeof o !== 'function') return; W[n] = function () { var r = o.apply(this, arguments); try { f.apply(this, arguments); } catch (e) {} return r; }; }
 var oPoya = W.openPoyaModal, oVas = W.openVasModal;
