@@ -4,7 +4,7 @@
 // Offline Support + Automatic Cache Update
 // ============================================================
 
-const CACHE_NAME = 'buddhist-era-v4.1.42';
+const CACHE_NAME = 'buddhist-era-v4.1.43';
 
 const CACHE_ASSETS = [
   '/',
@@ -27,7 +27,7 @@ const CACHE_ASSETS = [
   '/sunpage.js',
   '/three.min.js?v=1',
   '/uposatha.js',
-  '/visuals3d.js?v=2',
+  '/visuals3d.js?v=3',
 
   '/bg/waves.webp?v=1',
   '/bg/flowers.webp?v=1',
@@ -36,6 +36,7 @@ const CACHE_ASSETS = [
   '/bg/pearl.webp?v=1',
   '/bg/damask.webp?v=1',
   '/bg/swirl.webp?v=1',
+  '/moon.jpg?v=1',
 
   '/icon-192x192.png?v=4',
   '/icon-512x512.png?v=4'
