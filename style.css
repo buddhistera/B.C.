@@ -1,4 +1,8 @@
+/* Buddhist Era — merged stylesheet (base + cream & gold theme). Assets in bg/ */
 :root { 
+    --ff-sans: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
+    --ff-serif: 'Noto Serif Sinhala', 'Noto Serif', serif;
+    
     --gold: #d4af37; 
     --bg: #fffff0; 
     --text: #3e2723; 
@@ -29,14 +33,14 @@ body {
 }
 
 body { 
-    font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif; 
+    font-family: var(--ff-sans); 
     display: flex; 
     justify-content: center; 
     align-items: flex-start;
     background-color: #e0e0e0;
     -webkit-font-smoothing: antialiased;
     transition: background 0.5s ease;
-    padding-bottom: calc(var(--nav-h) + var(--safe-b) + 20px) !important;
+    padding-bottom: calc(var(--nav-h) + var(--safe-b) + 20px);
     box-sizing: border-box;
 }
 
@@ -54,7 +58,7 @@ body {
     flex-direction: column; 
     box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
     position: relative; 
-    overflow: visible !important;
+    overflow: visible;
     background-image: linear-gradient(rgba(255,255,255,0.96), rgba(255,255,255,0.96)), 
                   linear-gradient(to right, 
                       #0033aa 20%, 
@@ -70,14 +74,14 @@ body {
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 
                 -4px -4px 8px rgba(255, 255, 255, 0.8),
                 inset 1px 1px 2px rgba(255, 255, 255, 0.9),
-                inset -1px -1px 2px rgba(0, 0, 0, 0.05) !important;
+                inset -1px -1px 2px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
 }
 
 .buddhist-calendar-row {
-    display: flex !important;
-    flex-direction: row !important; 
+    display: flex;
+    flex-direction: row; 
     justify-content: space-between;
     align-items: stretch;
     width: 100%;
@@ -144,7 +148,7 @@ body {
 
 .bg-atikkanta { background-color: #E8F2FF; border: 1px solid #F7F7F7; }
 .bg-avasittha { background-color: #E8F2FF; border: 1px solid #F7F7F7; }
-.main-bg-y, .main-bg-m, .main-bg-d { background: transparent !important; border: none !important; }
+.main-bg-y, .main-bg-m, .main-bg-d { background: transparent; border: none; }
 
 .header { 
     background: 
@@ -230,7 +234,7 @@ body {
 
 .vas-card {
     background: #4D1821;
-    border-left: 5px solid var(--dark-red) !important;
+    border-left: 5px solid var(--dark-red);
     margin: 12px 0;
     padding: 12px;
     border-radius: 8px;
@@ -248,8 +252,8 @@ body {
 .date-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; width: 100%; box-sizing: border-box; }
 .custom-date-container {
     position: relative;    
-    width: 145px !important; 
-    flex: none !important;     
+    width: 145px; 
+    flex: none;     
     display: flex;
     align-items: center;
     background: #e0e0e0;
@@ -268,7 +272,7 @@ body {
 
 #miniMoonVisual {
     width: 50px; height: 50px; border-radius: 50%; position: relative; overflow: hidden; transition: all 0.3s ease; box-sizing: border-box; background-color: #000000; 
-    box-shadow: 0 0 25px 8px rgba(0, 0, 0, 0.9) !important; filter: blur(0.4px); flex-shrink: 0;
+    box-shadow: 0 0 25px 8px rgba(0, 0, 0, 0.9); filter: blur(0.4px); flex-shrink: 0;
 }
 #miniMoonVisual.full-moon { background-color: #fde047; }
 #miniMoonVisual.phase-moon { background-color: #000000; }
@@ -308,17 +312,17 @@ body {
 .close-btn { cursor: pointer; font-size: 24px; color: #777; }
 
 .season-banner {
-    width: 100%; box-sizing: border-box; background: #C8E6C9 !important; color: #1B5E20 !important; font-weight: bold; font-size: 0.95em; padding: 10px 12px; margin: 15px 0 10px 0; border-left: 5px solid var(--gold); border-radius: 8px;
-    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.8), 2px 2px 5px rgba(0,0,0,0.05) !important; display: block;
+    width: 100%; box-sizing: border-box; background: #C8E6C9; color: #1B5E20; font-weight: bold; font-size: 0.95em; padding: 10px 12px; margin: 15px 0 10px 0; border-left: 5px solid var(--gold); border-radius: 8px;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.8), 2px 2px 5px rgba(0,0,0,0.05); display: block;
 }
 
 .poya-item-compact, .list-item {
-    background: #fdfdfd !important; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 10px;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.8), inset 1px 1px 2px rgba(255, 255, 255, 0.9), inset -1px -1px 2px rgba(0, 0, 0, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.5) !important; transition: all 0.3s ease;
+    background: #fdfdfd; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 10px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.8), inset 1px 1px 2px rgba(255, 255, 255, 0.9), inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.5); transition: all 0.3s ease;
 }
 
-.list-item.next-poya-bg { background: #B8FAF9 !important; border: 1px solid #a5d6a7 !important; border-left: 6px solid #2e7d32 !important; }
+.list-item.next-poya-bg { background: #B8FAF9; border: 1px solid #a5d6a7; border-left: 6px solid #2e7d32; }
 .poya-info { line-height: 1.2; }
 .poya-date { font-weight: bold; font-size: 1em; display: block; }
 .poya-name { font-size: 0.8em; color: #666; }
@@ -337,8 +341,8 @@ body {
 .bg-lin { background: #333333; } 
 .bg-and { background: #3DDC84; color: #073042; }
 
-.full-moon-bg { background-color: rgba(255, 235, 59, 0.2) !important; border: 1px solid #d4af37 !important; }
-.new-moon-bg { background-color: rgba(0, 0, 0, 0.15) !important; color: inherit; }
+.full-moon-bg { background-color: rgba(255, 235, 59, 0.2); border: 1px solid #d4af37; }
+.new-moon-bg { background-color: rgba(0, 0, 0, 0.15); color: inherit; }
 
 /* ============================================================
    SUN TIMES MODAL — scrollable, only shown via inline style
@@ -364,8 +368,8 @@ body {
 .sun-container { 
     width: 95%; 
     max-width: 460px; 
-    min-height: auto !important;
-    height: auto !important;
+    min-height: auto;
+    height: auto;
     background: #e0e0e0; 
     padding: 55px 22px 24px; 
     border-radius: 40px; 
@@ -387,26 +391,26 @@ body {
 }
 
 .sun-close-btn {
-    position: absolute !important;
-    top: 14px !important;
-    right: 16px !important;
-    width: 42px !important;
-    height: 42px !important;
-    background-color: #ff4d4d !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 50% !important;
-    font-size: 24px !important;
-    font-weight: bold !important;
-    font-family: Arial, sans-serif !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-    z-index: 10 !important;
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 42px;
+    height: 42px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: var(--ff-sans);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    padding: 0;
+    line-height: 1;
+    z-index: 10;
 }
 .sun-close-btn:hover { background-color: #ff1a1a !important; transform: scale(1.08); }
 
@@ -422,10 +426,10 @@ body {
 .dawn-badge, .sunrise-badge, .noon-badge, .sunset-badge { border-left: 4px solid var(--dark-red, #8B0000); }
 .moonrise-badge, .moonset-badge { border-left: 4px solid #003399; }
 .sun-label { font-size: 0.75rem; color: #546e7a; font-weight: 600; margin-bottom: 4px; text-transform: uppercase; }
-.sun-time { font-size: 1.05rem; font-weight: bold; color: #003399; font-family: 'monospace', sans-serif; }
+.sun-time { font-size: 1.05rem; font-weight: bold; color: #003399; font-family: var(--ff-sans); font-variant-numeric: tabular-nums; }
 .dawn-badge .sun-time, .sunrise-badge .sun-time, .noon-badge .sun-time, .sunset-badge .sun-time { color: var(--dark-red, #8B0000); }
 .poya-time-line { font-size: 0.8rem; color: #546e7a; text-align: center; margin: 3px 0; font-weight: 500; }
-.poya-time-line span:last-child { color: #b8860b; font-weight: 600; font-family: 'monospace', sans-serif; }
+.poya-time-line span:last-child { color: #b8860b; font-weight: 600; font-family: var(--ff-sans); font-variant-numeric: tabular-nums; }
 .sun-astro-card { width: 100%; box-sizing: border-box; border: 2px solid #8d6e46; border-radius: 20px; padding: 14px 16px; margin-top: 5px; background: #e0e0e0; }
 .sun-astro-title { text-align: center; font-size: 0.88rem; font-weight: 700; color: #6d4c26; margin-bottom: 8px; line-height: 1.3; }
 .sun-astro-subtitle { text-align: center; font-size: 0.85rem; color: #3e2723; font-weight: 600; margin-bottom: 10px; }
@@ -433,7 +437,7 @@ body {
 .sun-astro-moon-row .poya-time-line { flex: 1; margin: 0; }
 .moon-phase-container { background: #e0e0e0; border-radius: 25px; padding: 20px; display: flex; align-items: center; justify-content: center; gap: 25px; box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff; margin-top: 10px; }
 .moon-visual-wrapper { display: flex; align-items: center; justify-content: center; width: 105px; height: 105px; }
-#moonVisual { width: 90px !important; height: 90px !important; border-radius: 50%; transition: box-shadow 0.4s ease; }
+#moonVisual { width: 90px; height: 90px; border-radius: 50%; transition: box-shadow 0.4s ease; }
 .moon-details { display: flex; flex-direction: column; justify-content: center; }
 .moon-phase-title { font-size: 1.1rem; font-weight: bold; color: #3e2723; margin-bottom: 4px; }
 .moon-illumination { font-size: 0.85rem; color: #616161; font-weight: 500; }
@@ -492,17 +496,17 @@ body.dark-mode {
     --border-glow: rgba(0, 229, 255, 0.3);
     --border-purple: rgba(179, 136, 255, 0.3);
     --text: #ffffff;
-    background: transparent !important;
-    color: var(--text-main) !important;
+    background: transparent;
+    color: var(--text-main);
 }
 
 body.dark-mode::before {
     content: '';
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
-    background: linear-gradient(-45deg, #090a10, #101426, #1a0f29, #090a10) !important;
-    background-size: 400% 400% !important;
-    animation: gradientBG 15s ease infinite !important;
+    background: linear-gradient(-45deg, #090a10, #101426, #1a0f29, #090a10);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
     z-index: -2;
     pointer-events: none;
 }
@@ -514,11 +518,11 @@ body.dark-mode::before {
 }
 
 body.dark-mode .app-container {
-    background: #131724 !important;
-    background-image: none !important;
-    border: 2px solid var(--border-purple) !important;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(179, 136, 255, 0.05) !important;
-    overflow: visible !important;
+    background: #131724;
+    background-image: none;
+    border: 2px solid var(--border-purple);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(179, 136, 255, 0.05);
+    overflow: visible;
 }
 
 body.dark-mode .app-container::before {
@@ -548,23 +552,23 @@ body.dark-mode .app-container::before {
 }
 
 body.dark-mode .header {
-    background: linear-gradient(to right, #1a1025, #2a1b40) !important;
-    border-bottom: 1px solid var(--border-purple) !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
-    text-shadow: 0 0 10px rgba(179, 136, 255, 0.5) !important;
+    background: linear-gradient(to right, #1a1025, #2a1b40);
+    border-bottom: 1px solid var(--border-purple);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    text-shadow: 0 0 10px rgba(179, 136, 255, 0.5);
     position: relative;
     z-index: 10;
 }
 
 body.dark-mode .menu-dropdown {
-    background: #131724 !important;
-    border: 1px solid var(--accent-purple) !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(179, 136, 255, 0.2) !important;
-    z-index: 9999 !important;
+    background: #131724;
+    border: 1px solid var(--accent-purple);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(179, 136, 255, 0.2);
+    z-index: 9999;
 }
 body.dark-mode .menu-dropdown div {
-    color: var(--text-main) !important;
-    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    color: var(--text-main);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 body.dark-mode .menu-dropdown div:hover {
     background: rgba(179, 136, 255, 0.15) !important;
@@ -581,107 +585,107 @@ body.dark-mode .section {
 
 body.dark-mode .side-panel, 
 body.dark-mode .data-item {
-    background-color: var(--bg-card) !important;
-    border: 1px solid rgba(0, 229, 255, 0.2) !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+    background-color: var(--bg-card);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 body.dark-mode .panel-header {
-    color: var(--accent-cyan) !important;
-    border-bottom: 1px solid rgba(0, 229, 255, 0.3) !important;
+    color: var(--accent-cyan);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.3);
 }
 
 body.dark-mode .val-text, 
 body.dark-mode .label-text {
-    color: var(--text-main) !important;
+    color: var(--text-main);
 }
 
 body.dark-mode .main-panel {
-    background: linear-gradient(135deg, #2a1b40 0%, #121e33 100%) !important;
-    border: 1px solid var(--accent-purple) !important;
-    box-shadow: 0 0 20px rgba(179, 136, 255, 0.2) !important;
+    background: linear-gradient(135deg, #2a1b40 0%, #121e33 100%);
+    border: 1px solid var(--accent-purple);
+    box-shadow: 0 0 20px rgba(179, 136, 255, 0.2);
 }
 
 body.dark-mode .main-val-text {
-    color: #d4af37 !important;
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8) !important;
+    color: #d4af37;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
 }
 
 body.dark-mode .pali-box {
-    background: rgba(15, 23, 42, 0.9) !important;
-    border: 1px solid rgba(0, 229, 255, 0.3) !important;
-    color: #d4af37 !important;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.5) !important;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    color: #d4af37;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
 }
 
 body.dark-mode .modal-content, 
 body.dark-mode .sun-container, 
 body.dark-mode .wheel-picker-container {
-    background: rgba(19, 23, 36, 0.98) !important;
-    border: 1px solid var(--border-purple) !important;
-    box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 20px rgba(179, 136, 255, 0.2) !important;
-    color: var(--text-main) !important;
+    background: rgba(19, 23, 36, 0.98);
+    border: 1px solid var(--border-purple);
+    box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 20px rgba(179, 136, 255, 0.2);
+    color: var(--text-main);
 }
 
 body.dark-mode .modal-header {
-    border-bottom: 1px solid rgba(0, 229, 255, 0.4) !important;
-    color: var(--accent-cyan) !important;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.4);
+    color: var(--accent-cyan);
 }
 
 body.dark-mode .list-item, 
 body.dark-mode .season-banner {
-    background: var(--bg-card) !important;
-    border: 1px solid rgba(0, 229, 255, 0.15) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
-    color: var(--text-main) !important;
+    background: var(--bg-card);
+    border: 1px solid rgba(0, 229, 255, 0.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    color: var(--text-main);
 }
 
 body.dark-mode .list-item.next-poya-bg {
-    background: rgba(0, 230, 118, 0.15) !important;
-    border: 1px solid var(--accent-green) !important;
-    border-left: 6px solid var(--accent-green) !important;
+    background: rgba(0, 230, 118, 0.15);
+    border: 1px solid var(--accent-green);
+    border-left: 6px solid var(--accent-green);
 }
 
 body.dark-mode .list-item span[style*="color: var(--text)"] {
-    color: var(--accent-purple) !important;
+    color: var(--accent-purple);
     text-shadow: 0 0 8px rgba(179, 136, 255, 0.5);
 }
 
 body.dark-mode .list-item .poya-name {
-    color: var(--accent-cyan) !important;
+    color: var(--accent-cyan);
 }
 
 body.dark-mode .poya-name,
 body.dark-mode .label,
 body.dark-mode .vas-label {
-    color: var(--text-muted) !important;
+    color: var(--text-muted);
 }
 
 body.dark-mode .sun-badge {
-    background: var(--bg-card) !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05) !important;
-    border: 1px solid rgba(0, 229, 255, 0.2) !important;
+    background: var(--bg-card);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    border: 1px solid rgba(0, 229, 255, 0.2);
 }
-body.dark-mode .sun-time { color: var(--accent-cyan) !important; }
+body.dark-mode .sun-time { color: var(--accent-cyan); }
 body.dark-mode .dawn-badge .sun-time, 
 body.dark-mode .sunrise-badge .sun-time, 
 body.dark-mode .noon-badge .sun-time, 
-body.dark-mode .sunset-badge .sun-time { color: var(--accent-green) !important; }
+body.dark-mode .sunset-badge .sun-time { color: var(--accent-green); }
 
 body.dark-mode .moon-phase-container {
-    background: var(--bg-card) !important;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5) !important;
-    border: 1px solid rgba(179, 136, 255, 0.2) !important;
+    background: var(--bg-card);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    border: 1px solid rgba(179, 136, 255, 0.2);
 }
 body.dark-mode .sun-astro-card {
-    background: var(--bg-card) !important;
-    border: 1px solid rgba(179, 136, 255, 0.3) !important;
+    background: var(--bg-card);
+    border: 1px solid rgba(179, 136, 255, 0.3);
 }
 body.dark-mode .sun-astro-title, 
 body.dark-mode .sun-astro-subtitle, 
 body.dark-mode .sun-h3,
 body.dark-mode .moon-phase-title {
-    color: var(--text-main) !important;
+    color: var(--text-main);
 }
 body.dark-mode .moon-illumination,
 body.dark-mode .loc-coords,
@@ -689,309 +693,70 @@ body.dark-mode #locationStatus {
     color: var(--text-muted) !important;
 }
 body.dark-mode .sun-input {
-    background: #0d1117 !important;
-    color: var(--text-main) !important;
-    border-color: #30363d !important;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.8) !important;
+    background: #0d1117;
+    color: var(--text-main);
+    border-color: #30363d;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
 }
 body.dark-mode .sun-btn-location {
-    background: var(--bg-card) !important;
-    color: var(--accent-cyan) !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
-    border: 1px solid rgba(0, 229, 255, 0.3) !important;
+    background: var(--bg-card);
+    color: var(--accent-cyan);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border: 1px solid rgba(0, 229, 255, 0.3);
 }
 
-body.dark-mode .wheel-item { color: var(--text-muted) !important; }
-body.dark-mode .wheel-item.wheel-selected { color: var(--accent-cyan) !important; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); }
+body.dark-mode .wheel-item { color: var(--text-muted); }
+body.dark-mode .wheel-item.wheel-selected { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); }
 body.dark-mode .wheel-selection-band {
-    background: rgba(0, 229, 255, 0.1) !important;
-    border-top: 1px solid var(--accent-cyan) !important;
-    border-bottom: 1px solid var(--accent-cyan) !important;
+    background: rgba(0, 229, 255, 0.1);
+    border-top: 1px solid var(--accent-cyan);
+    border-bottom: 1px solid var(--accent-cyan);
 }
 body.dark-mode .wheel-picker-close {
-    background: var(--bg-card) !important;
-    color: var(--text-main) !important;
-    border: 1px solid var(--accent-purple) !important;
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--accent-purple);
 }
 
 body.dark-mode .custom-date-container {
     background-color: #0d1117 !important;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.8) !important;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
     border: 1px solid rgba(0, 229, 255, 0.3) !important;
 }
 body.dark-mode #dateText {
-    color: var(--accent-cyan) !important;
+    color: var(--accent-cyan);
     text-shadow: 0 0 5px rgba(0, 229, 255, 0.5);
 }
 body.dark-mode #miniMoonVisual {
-    background-color: #000000 !important;
-    box-shadow: 0 0 20px 4px rgba(179, 136, 255, 0.5) !important;
+    background-color: #000000;
+    box-shadow: 0 0 20px 4px rgba(179, 136, 255, 0.5);
 }
 body.dark-mode #miniMoonVisual.full-moon {
-    background-color: #fde047 !important;
-    box-shadow: 0 0 20px 8px rgba(253, 224, 71, 0.6) !important;
+    background-color: #fde047;
+    box-shadow: 0 0 20px 8px rgba(253, 224, 71, 0.6);
 }
 
 body.dark-mode .vas-card {
-    background: #1a1025 !important;
-    border-left: 5px solid var(--accent-purple) !important;
+    background: #1a1025;
+    border-left: 5px solid var(--accent-purple);
 }
 body.dark-mode .vas-date-badge {
-    background: var(--accent-purple) !important;
-    color: #fff !important;
-}
-
-/* =========================================================
-/* =========================================================
-   PWA INSTALL BANNER — Mint Edition
-   ========================================================= */
-
-#pwa-install-banner {
-    position: fixed;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 100px);
-    left: 50%;
-    transform: translateX(-50%);
-
-    /* ✅ Mint gradient — Bottom nav එකේ වර්ණ පටිපාටියට ගැලපේ */
-    background: linear-gradient(135deg, #dcf5ea 0%, #b7ead6 45%, #8fd8bc 100%);
-    color: #134e3a;
-
-    padding: 14px 14px 14px 16px;
-    border-radius: 18px;
-
-    box-shadow:
-        0 15px 40px rgba(30, 143, 108, 0.30),
-        0 0 35px rgba(95, 227, 182, 0.35),
-        inset 0 1px 3px rgba(255, 255, 255, 0.75);
-
-    border: 1px solid #8fd8bc;
-
-    display: none;
-    align-items: center;
-    gap: 12px;
-
-    z-index: 2500;
-
-    max-width: calc(100% - 32px);
-    width: 420px;
-
-    animation: pwaBannerSlideUp 0.4s ease-out;
-
-    font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
-}
-#pwa-install-banner.show { display: flex; }
-
-@keyframes pwaBannerSlideUp {
-    from { transform: translate(-50%, 100px); opacity: 0; }
-    to   { transform: translate(-50%, 0); opacity: 1; }
+    background: var(--accent-purple);
+    color: #fff;
 }
 
 /* ── අයිකනය — mint වළල්ල ─────────────────────────────── */
-#pwa-install-banner .pwa-banner-icon {
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0;
-    border-radius: 13px;
-    background: linear-gradient(135deg, #1E8F6C, #14a374);
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow:
-        0 4px 12px rgba(30, 143, 108, 0.35),
-        inset 0 1px 2px rgba(255, 255, 255, 0.30);
-}
-#pwa-install-banner .pwa-banner-icon svg { width: 22px; height: 22px; }
 
 /* ── පෙළ ──────────────────────────────────────────────── */
-#pwa-install-banner .pwa-banner-text {
-    flex: 1;
-    min-width: 0;
-}
-#pwa-install-banner .pwa-banner-title {
-    font-size: 13.5px;
-    font-weight: 700;
-    margin: 0 0 3px;
-    color: #134e3a;
-    line-height: 1.3;
-}
-#pwa-install-banner .pwa-banner-sub {
-    font-size: 11px;
-    margin: 0;
-    color: #3d7060;
-    line-height: 1.35;
-}
 
 /* ── බටන් ────────────────────────────────────────────── */
-#pwa-install-banner .pwa-banner-actions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-}
-#pwa-install-banner button {
-    white-space: nowrap;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-}
-#pwa-install-banner .pwa-install-btn {
-    background: linear-gradient(135deg, #1E8F6C, #16a375);
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 9px 18px;
-    border-radius: 12px;
-    box-shadow:
-        0 4px 12px rgba(30, 143, 108, 0.40),
-        inset 0 1px 2px rgba(255, 255, 255, 0.25);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-#pwa-install-banner .pwa-install-btn:hover {
-    box-shadow:
-        0 6px 16px rgba(30, 143, 108, 0.50),
-        inset 0 1px 2px rgba(255, 255, 255, 0.30);
-}
-#pwa-install-banner .pwa-install-btn:active { transform: scale(0.95); }
-
-#pwa-install-banner .pwa-dismiss-btn {
-    background: transparent;
-    color: #3d7060;
-    font-size: 22px;
-    line-height: 1;
-    padding: 4px 7px;
-    border-radius: 8px;
-    transition: background 0.15s ease;
-}
-#pwa-install-banner .pwa-dismiss-btn:active { background: rgba(30, 143, 108, 0.15); }
-
-/* ── iOS "Add to Home Screen" popover ─────────────────── */
-#pwa-ios-tip {
-    position: fixed;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 210px);
-    left: 50%;
-    transform: translateX(-50%);
-
-    /* ✅ Mint tinted background */
-    background: #f0fbf6;
-    color: #134e3a;
-
-    padding: 16px 18px;
-    border-radius: 16px;
-
-    box-shadow:
-        0 15px 40px rgba(30, 143, 108, 0.25),
-        0 0 25px rgba(95, 227, 182, 0.25);
-    border: 1.5px solid #8fd8bc;
-
-    max-width: calc(100% - 32px);
-    width: 320px;
-
-    font-size: 13px;
-    line-height: 1.55;
-
-    z-index: 2600;
-
-    display: none;
-    font-family: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
-}
-#pwa-ios-tip.show { display: block; animation: pwaBannerSlideUp 0.35s ease-out; }
-#pwa-ios-tip strong { color: #1E8F6C; }
-#pwa-ios-tip p { margin: 6px 0 0; color: #2c5f4d; }
-#pwa-ios-tip .pwa-share-icon { font-weight: 700; color: #1E8F6C; }
-#pwa-ios-tip .pwa-ios-tip-close {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    line-height: 1;
-    color: #3d7060;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 6px;
-    transition: background 0.15s ease;
-}
-#pwa-ios-tip .pwa-ios-tip-close:hover { background: rgba(30, 143, 108, 0.12); }
 
 /* =========================================================
    DARK MODE — Mint (Neon Mint Glow)
    ========================================================= */
 
-body.dark-mode #pwa-install-banner {
-    background: linear-gradient(135deg, #12201a 0%, #0d2e24 50%, #1a4d3c 100%);
-    border-color: #2fbf8f;
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.65),
-        0 0 40px rgba(60, 220, 160, 0.30),
-        inset 0 1px 2px rgba(95, 227, 182, 0.15);
-}
-body.dark-mode #pwa-install-banner .pwa-banner-title {
-    color: #5fe3b6;
-    text-shadow: 0 0 10px rgba(95, 227, 182, 0.35);
-}
-body.dark-mode #pwa-install-banner .pwa-banner-sub {
-    color: #6fb59c;
-}
-body.dark-mode #pwa-install-banner .pwa-banner-icon {
-    background: linear-gradient(135deg, #1E8F6C, #14a374);
-    color: #ffffff;
-    box-shadow:
-        0 4px 14px rgba(60, 220, 160, 0.45),
-        inset 0 1px 2px rgba(255, 255, 255, 0.20);
-}
-body.dark-mode #pwa-install-banner .pwa-install-btn {
-    background: linear-gradient(135deg, #16a375, #1ed897);
-    color: #052e22;
-    font-weight: 800;
-    box-shadow:
-        0 4px 14px rgba(60, 220, 160, 0.45),
-        inset 0 1px 2px rgba(255, 255, 255, 0.30);
-}
-body.dark-mode #pwa-install-banner .pwa-install-btn:hover {
-    box-shadow:
-        0 6px 20px rgba(60, 220, 160, 0.55),
-        inset 0 1px 2px rgba(255, 255, 255, 0.35);
-}
-body.dark-mode #pwa-install-banner .pwa-dismiss-btn { color: #6fb59c; }
-body.dark-mode #pwa-install-banner .pwa-dismiss-btn:active {
-    background: rgba(60, 220, 160, 0.16);
-}
-
-body.dark-mode #pwa-ios-tip {
-    background: rgba(18, 32, 26, 0.98);
-    border-color: #2fbf8f;
-    color: #d6f5e8;
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.75),
-        0 0 30px rgba(60, 220, 160, 0.25);
-}
-body.dark-mode #pwa-ios-tip strong { color: #5fe3b6; }
-body.dark-mode #pwa-ios-tip p { color: #a9d9c5; }
-body.dark-mode #pwa-ios-tip .pwa-share-icon { color: #5fe3b6; }
-body.dark-mode #pwa-ios-tip .pwa-ios-tip-close { color: #6fb59c; }
-body.dark-mode #pwa-ios-tip .pwa-ios-tip-close:hover {
-    background: rgba(60, 220, 160, 0.16);
-}
-
 /* ── Mobile ───────────────────────────────────────────── */
-@media (max-width: 420px) {
-    #pwa-install-banner {
-        bottom: calc(env(safe-area-inset-bottom, 0px) + 96px);
-        padding: 12px;
-        gap: 10px;
-        width: calc(100% - 24px);
-    }
-    #pwa-install-banner .pwa-banner-title { font-size: 12.5px; }
-    #pwa-install-banner .pwa-banner-sub   { font-size: 10px; }
-    #pwa-install-banner .pwa-install-btn  { padding: 8px 14px; font-size: 12px; }
 
-    #pwa-ios-tip {
-        bottom: calc(env(safe-area-inset-bottom, 0px) + 200px);
-        width: calc(100% - 24px);
-    }
-}
 
 /* ============================================================
    BOTTOM NAVIGATION — FULL WIDTH + TRANSPARENT (GLASS)
@@ -1068,7 +833,7 @@ body.dark-mode #pwa-ios-tip .pwa-ios-tip-close:hover {
     transition: background .2s ease, color .2s ease;
 }
 .lang-opt.on { background: #1E8F6C; color: #fff; }
-#myDropdown { display: none !important; }
+#myDropdown { display: none; }
 
 body.dark-mode .bottom-nav {
     background: rgba(18, 32, 26, 0.72);
@@ -1089,12 +854,7 @@ body.dark-mode .lang-opt.on { background: #2fbf8f; color: #0b1a14; }
 /* ============================================================
    RESPONSIVE
    ============================================================ */
-@media (max-width: 420px) {
-    #pwa-install-banner { padding: 12px; gap: 10px; }
-    #pwa-install-banner .pwa-banner-title { font-size: 12.5px; }
-    #pwa-install-banner .pwa-banner-sub { font-size: 10px; }
-    #pwa-install-banner .pwa-install-btn { padding: 8px 12px; font-size: 12px; }
-}
+
 @media (max-width: 340px) {
     .bottom-nav { padding-left: 3px; padding-right: 3px; gap: 0; }
     .nav-lbl { font-size: 8px; letter-spacing: 0; }
@@ -1120,10 +880,10 @@ body.dark-mode .lang-opt.on { background: #2fbf8f; color: #0b1a14; }
 
     html, body { width: 100%; }
     body {
-        padding-top: 0 !important;
-        padding-left: var(--safe-l) !important;
-        padding-right: var(--safe-r) !important;
-        padding-bottom: calc(var(--nav-h) + var(--safe-b) + 12px) !important;
+        padding-top: 0;
+        padding-left: var(--safe-l);
+        padding-right: var(--safe-r);
+        padding-bottom: calc(var(--nav-h) + var(--safe-b) + 12px);
     }
 
     .app-container {
@@ -1148,14 +908,14 @@ body.dark-mode .lang-opt.on { background: #2fbf8f; color: #0b1a14; }
         grid-column: 2; grid-row: 2 / span 2;
         align-self: stretch;
         display: flex; flex-direction: column; justify-content: center;
-        margin: 8px 10px 8px 0 !important;
+        margin: 8px 10px 8px 0;
         padding: 10px;
         font-size: 0.95em;
         line-height: 1.5;
     }
     .poya-wrap {
         grid-column: 1 / -1; grid-row: 4;
-        margin-bottom: 6px !important;
+        margin-bottom: 6px;
     }
     .side-panel { padding: 5px 3px; gap: 2px; }
     .main-panel { padding: 5px; gap: 4px; }
@@ -1195,15 +955,6 @@ body.dark-mode .lang-opt.on { background: #2fbf8f; color: #0b1a14; }
     .wheel-col { padding: 66px 0; }
     .wheel-selection-band { top: 66px; }
     .wheel-ok-btn { margin-top: 10px; padding: 11px; }
-
-    /* install banners */
-    #pwa-install-banner {
-        bottom: calc(var(--safe-b) + 8px);
-        width: 440px;
-    }
-    #pwa-ios-tip {
-        bottom: calc(var(--safe-b) + 80px);
-    }
 }
 
 /* Very short landscape (small phones) */
@@ -1213,14 +964,16 @@ body.dark-mode .lang-opt.on { background: #2fbf8f; color: #0b1a14; }
 }
 
 
-/* ===== Three.js visuals (visuals3d.js) ===== */
+/* ===== Three.js visuals (visuals3d.js): Chanting header lamp + wheel, Calculation header, lit moon ===== */
 #v3dBg{position:fixed;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;display:none}
 .ch-hero #v3dBg{position:absolute;z-index:0}
 #chOverlay .ch-hero>*:not(canvas){position:relative;z-index:1}
 #chOverlay .ch-hero.v3d .ch-lamp{visibility:hidden}
-body.v3d-on .app-container{position:relative;z-index:1;background:rgba(19,23,36,.74)!important}
-#miniMoonVisual.v3d{background:transparent!important;filter:none;box-shadow:0 0 18px 3px rgba(240,230,190,.35)!important}
-body.dark-mode #miniMoonVisual.v3d{background:transparent!important;box-shadow:0 0 22px 5px rgba(200,190,255,.35)!important}
+#gnOverlay .hero-orbit.hero-3d{position:relative;width:100%;aspect-ratio:900/420;height:auto;overflow:hidden}
+#gnOverlay .hero-3d canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+@media(max-width:600px){#gnOverlay .hero-orbit.hero-3d{aspect-ratio:16/10}}
+#miniMoonVisual.v3d{background:transparent;filter:none;box-shadow:0 0 18px 3px rgba(240,230,190,.35)}
+body.dark-mode #miniMoonVisual.v3d{background:transparent;box-shadow:0 0 22px 5px rgba(200,190,255,.35)}
 .tl-wrap{margin:12px 0 4px}
 .tl-title{font-size:.8em;font-weight:700;opacity:.8;margin:0 0 4px 4px}
 .tl-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 6px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
@@ -1234,6 +987,153 @@ body.dark-mode #miniMoonVisual.v3d{background:transparent!important;box-shadow:0
 
 .sun-astro-title::after{content:"";display:block;height:2px;width:78%;margin:7px auto 0;border-radius:2px;background:linear-gradient(90deg,transparent,#d4a017 30%,#f2d478 50%,#d4a017 70%,transparent)}
 
-#gnOverlay .hero-orbit.hero-3d{position:relative;width:100%;aspect-ratio:900/420;height:auto;overflow:hidden}
-#gnOverlay .hero-3d canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
-@media(max-width:600px){#gnOverlay .hero-orbit.hero-3d{aspect-ratio:16/10}}
+
+/* ============================================================
+   CREAM & GOLD THEME (formerly cream.css)
+   ============================================================ */
+/* cream.css — cream & gold redesign (main page, sunpage light hero, chanting). Load AFTER style.css. Assets in bg/ */
+:root{--cr:#fbf4e4;--cr2:#f3e6c8;--gl1:#fff1b8;--gl2:#e2b34a;--gl3:#b4801c;--gl4:#7a5210;--br:#4a2d0a}
+
+/* embossed gold lettering (shared) */
+.emb,body #ui-title.header,body:not(.dark-mode) #spOverlay .sp-hero h1,body:not(.dark-mode) #upOverlay .up-hero h1,body:not(.dark-mode) #chOverlay .ch-hero h1{
+ background:linear-gradient(180deg,#fff3c2 0%,#e8bd55 34%,#b07c16 62%,#e9c768 100%)!important;-webkit-background-clip:text;background-clip:text!important;
+ -webkit-text-fill-color:transparent;color:transparent;text-shadow:none;
+ filter:drop-shadow(0 -1px 0 rgba(255,250,225,.95)) drop-shadow(0 1.5px 0 #7a5210) drop-shadow(0 4px 5px rgba(90,55,10,.35))}
+body.dark-mode #ui-title.header{filter:drop-shadow(0 1px 0 #5a3a08) drop-shadow(0 0 10px rgba(255,200,90,.45))}
+
+/* ---------- MAIN PAGE ---------- */
+body:not(.dark-mode){background:var(--cr);background-image:linear-gradient(rgba(251,244,228,.9),rgba(251,244,228,.9)),url(bg/damask.webp);background-size:auto,380px auto;background-attachment:fixed;display:block}
+body .app-container{max-width:768px;margin:0 auto;border-radius:0;background:transparent;background-image:none;box-shadow:none;border:0;padding:calc(10px + var(--safe-t)) 12px 6px}
+body.dark-mode .app-container{background:transparent;border:0;box-shadow:none}
+body.dark-mode .app-container::before{display:none}
+.hm-hero{position:relative;overflow:hidden;border-radius:28px;margin:0 0 14px;padding:16px 14px 14px;text-align:center;color:var(--br);isolation:isolate;
+ background:linear-gradient(180deg,rgba(255,248,230,.7),rgba(246,230,196,.5)),url(bg/waves.webp) 30% 40%/cover;border:1px solid rgba(180,128,28,.45);
+ box-shadow:0 14px 30px rgba(120,80,20,.2),inset 0 1px 0 rgba(255,255,255,.8),inset 0 0 0 5px rgba(255,248,228,.5),inset 0 0 0 6px rgba(190,140,40,.35)}
+.hm-hero::after,.hm-orn{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:url(bg/gold-lines.svg) center/100% 100% no-repeat;filter:drop-shadow(0 2px 3px rgba(100,65,10,.3))}
+.hm-orn{background-image:url(bg/flowers.webp);background-size:cover;background-position:right center;opacity:.2;mix-blend-mode:multiply;filter:none;-webkit-mask-image:linear-gradient(90deg,transparent 35%,#000);mask-image:linear-gradient(90deg,transparent 35%,#000)}
+.hm-hero .header{background:none;border:0;box-shadow:none;border-radius:0;padding:14px 8px 6px;font-family:var(--ff-serif);font-size:2.1rem;font-weight:800;letter-spacing:.02em;position:relative;z-index:2}
+.hm-hero .header::after{content:"";display:block;height:2px;width:62%;margin:8px auto 0;background:linear-gradient(90deg,transparent,#b4801c 25%,#ffe9a0 50%,#b4801c 75%,transparent)}
+.hm-hero .section{border:0;background:none;box-shadow:none;padding:6px 8px}
+.hm-hero .label,.hm-hero #ui-label-date{color:var(--gl4);font-weight:700}
+.hm-hero .tithi-astro-date{color:var(--gl4)}
+body:not(.dark-mode) .custom-date-container{background:linear-gradient(180deg,#fffaf0,#f4e6c4);border:1px solid #c8991f;box-shadow:inset 0 2px 4px rgba(120,80,20,.18),0 1px 0 #fff}
+body:not(.dark-mode) #dateText{color:var(--br)}
+body:not(.dark-mode) #miniMoonVisual{box-shadow:0 0 0 3px #e2b34a,0 4px 12px rgba(90,55,10,.4);filter:none}
+.poya-wrap{margin:8px auto 0;padding:9px 14px;border-radius:18px;max-width:92%;background:linear-gradient(180deg,rgba(255,252,240,.85),rgba(244,228,190,.8));border:1px solid #c8991f;box-shadow:inset 0 1px 0 #fff,0 4px 12px rgba(100,65,10,.18);position:relative;z-index:2}
+.poya-wrap:empty,.poya-wrap:has(#poyaStatus:empty){display:none}
+.hm-hero .poya-status{color:#7a3410;font-weight:800;font-size:.95em;line-height:1.6}
+
+body:not(.dark-mode) .side-panel{background:linear-gradient(180deg,#fffdf6,#f6ebd0);border:1px solid #d7b160;box-shadow:0 4px 10px rgba(120,80,20,.13),inset 0 1px 0 #fff}
+body:not(.dark-mode) .panel-header{color:var(--gl4);border-bottom:1px solid rgba(180,128,28,.4)}
+body:not(.dark-mode) .main-panel{background:linear-gradient(150deg,#fff1bd 0%,#e4b94f 45%,#b88420 75%,#efd27a 100%);border:1px solid #9a6c12;box-shadow:0 6px 14px rgba(120,80,20,.3),inset 0 1px 2px rgba(255,255,255,.8)}
+body:not(.dark-mode) .main-val-text{color:#3d2406;text-shadow:0 1px 0 rgba(255,250,215,.9),0 -1px 0 rgba(60,35,5,.45)}
+body:not(.dark-mode) .label-text{color:#4a2d0a}
+.buddhist-calendar-row{padding:4px 0 12px}
+
+.pali-box{margin:0 0 14px;padding:24px 20px;border-radius:24px;position:relative;overflow:hidden;font-family:var(--ff-serif);min-height:96px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+body:not(.dark-mode) .pali-box{background:linear-gradient(rgba(255,246,228,.7),rgba(250,228,196,.5)),url(bg/pearl.webp) center/cover;color:#5a3410;border:1px solid #c8991f;box-shadow:0 8px 20px rgba(120,80,20,.18),inset 0 0 0 5px rgba(255,250,236,.65),inset 0 0 0 6px rgba(190,140,40,.4)}
+body.dark-mode .pali-box{background:linear-gradient(rgba(14,16,34,.84),rgba(14,16,34,.92)),url(bg/pearl.webp) center/cover;border:1px solid rgba(242,212,120,.4);color:#f2d478}
+
+/* main page – dark hero */
+body.dark-mode .hm-hero{color:#f5e6bf;background:linear-gradient(rgba(10,12,32,.88),rgba(14,16,40,.95)),url(bg/waves.webp) 30% 40%/cover;border-color:rgba(242,212,120,.4);box-shadow:0 14px 34px rgba(0,0,0,.55),inset 0 0 0 5px rgba(8,10,28,.5),inset 0 0 0 6px rgba(242,212,120,.3)}
+body.dark-mode .hm-orn{mix-blend-mode:screen;opacity:.07}
+body.dark-mode .hm-hero .label,body.dark-mode .hm-hero #ui-label-date{color:#f2d478}
+body.dark-mode .custom-date-container{background:rgba(255,255,255,.07);border:1px solid rgba(242,212,120,.4)}
+body.dark-mode .poya-wrap{background:rgba(8,10,30,.6);border-color:rgba(242,212,120,.45);box-shadow:inset 0 0 12px rgba(242,212,120,.08)}
+body.dark-mode .hm-hero .poya-status{color:#ffd978}
+body.dark-mode .side-panel,body.dark-mode .data-item{border-color:rgba(242,212,120,.28)}
+body.dark-mode .panel-header{color:#f2d478;border-bottom-color:rgba(242,212,120,.35)}
+body.dark-mode .main-panel{border-color:#d4af37;box-shadow:0 0 20px rgba(242,212,120,.18)}
+
+/* bottom menu */
+body:not(.dark-mode) .bottom-nav{background:linear-gradient(180deg,rgba(255,250,236,.92),rgba(243,228,194,.94));border-top:0;border-radius:26px 26px 0 0;box-shadow:0 -8px 24px rgba(120,80,20,.2),inset 0 1px 0 #fff;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.bottom-nav::before{content:"";position:absolute;left:18px;right:18px;top:0;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#b4801c 18%,#ffe9a0 50%,#b4801c 82%,transparent)}
+body:not(.dark-mode) .bn-item{color:#8a5a14}
+body:not(.dark-mode) .bn-item:hover,body:not(.dark-mode) .bn-item:active,body:not(.dark-mode) .bn-item.active{background:linear-gradient(180deg,#fff0b5,#e6bb55);color:#3d2406;box-shadow:inset 0 1px 0 #fff,0 2px 6px rgba(120,80,20,.3)}
+body.dark-mode .bottom-nav{background:linear-gradient(180deg,rgba(18,20,46,.9),rgba(8,10,28,.94));border-top:0;border-radius:26px 26px 0 0}
+body.dark-mode .bn-item{color:#d9b55a}
+body.dark-mode .bn-item:hover,body.dark-mode .bn-item:active,body.dark-mode .bn-item.active{background:rgba(242,212,120,.16);color:#ffe28a}
+
+/* ---------- SUN PAGE (light mode) ---------- */
+body:not(.dark-mode) #spOverlay{background:linear-gradient(rgba(252,247,236,.9),rgba(252,247,236,.94)),url(bg/damask.webp) center top/360px auto,#fbf6ee}
+body:not(.dark-mode) #spOverlay .sp-hero{color:var(--br);border:1px solid rgba(180,128,28,.5);background:linear-gradient(rgba(255,248,228,.5),rgba(255,240,205,.36)),url(bg/gold.webp) center/cover;box-shadow:0 12px 26px rgba(120,80,20,.22),inset 0 0 0 5px rgba(255,248,228,.5),inset 0 0 0 6px rgba(190,140,40,.35)}
+body:not(.dark-mode) #spOverlay .sp-hero h1::after{background:linear-gradient(90deg,transparent,#8a5a10 28%,#fff0b0 50%,#8a5a10 72%,transparent)}
+body:not(.dark-mode) #spOverlay .sp-hero p{color:#4a2d0a;font-weight:600;text-shadow:0 1px 0 rgba(255,250,230,.6)}
+body:not(.dark-mode) #spOverlay .sp-back{color:#6b430c;background:rgba(255,248,228,.7);border-color:rgba(180,128,28,.5)}
+
+/* ---------- CHANTING ---------- */
+body:not(.dark-mode) #chOverlay{--m950:#3a2306;--m900:#4e300a;--m800:#6b4410;--m700:#8a5a14;--m600:#a8741c;--m500:#c08a28;--m400:#d4a54a;--m300:#e3c27c;--m200:#efd9a4;--m100:#f6e8c6;--m50:#fbf3df;
+ --bg:#fbf5e6;--card:#fffdf7;--elev:#fdf8ec;--subtle:#f5ebd2;--tint:#f1e4c4;--pali-bg:#fbf1d8;--tx:#2b1b08;--tx2:#4d3716;--muted:#8a7248;--bd:#e6d6ac;--bd2:#d4bd84;--sh:0 4px 14px rgba(120,80,20,.12);--shs:0 1px 4px rgba(120,80,20,.1);
+ background:linear-gradient(rgba(251,245,230,.9),rgba(251,245,230,.92)),url(bg/swirl.webp) center top/620px auto,#fbf5e6}
+body:not(.dark-mode) #chOverlay .ch-hero{color:var(--br);background:linear-gradient(rgba(255,248,228,.45),rgba(250,236,200,.4)),url(bg/flowers.webp) center/cover;border-bottom:1px solid rgba(180,128,28,.4)}
+body:not(.dark-mode) #chOverlay .ch-hero::after{background:linear-gradient(90deg,transparent,#b4801c,#ffe9a0,#b4801c,transparent)}
+body:not(.dark-mode) #chOverlay .ch-hero p{color:#4a2d0a;opacity:1;font-weight:600}
+body.dark-mode #chOverlay .ch-hero{background:radial-gradient(ellipse 85% 75% at 50% 24%,rgba(255,176,64,.2),rgba(80,40,10,.12) 55%,transparent 80%),linear-gradient(180deg,rgba(7,6,10,.86),rgba(12,10,16,.9) 70%,rgba(18,13,10,.92)),url(bg/flowers.webp) center/cover}
+body.dark-mode #chOverlay .ch-hero::before{content:"";position:absolute;left:50%;top:6%;width:120%;height:90%;transform:translateX(-50%);z-index:0;pointer-events:none;background:radial-gradient(ellipse 50% 50% at 50% 26%,rgba(255,190,80,.42),rgba(255,140,40,.14) 45%,transparent 72%);animation:chFlick 3.2s ease-in-out infinite}
+@keyframes chFlick{0%,100%{opacity:.85}20%{opacity:1}35%{opacity:.78}55%{opacity:.98}75%{opacity:.84}}
+body.dark-mode #chOverlay .ch-hero h1{color:#ffe3a0;text-shadow:0 0 14px rgba(255,180,70,.6),0 2px 6px rgba(0,0,0,.8)}
+@media (prefers-reduced-motion:reduce){body.dark-mode #chOverlay .ch-hero::before{animation:none}}
+body.dark-mode .hm-hero .header{background:none;border:0;box-shadow:none}
+
+/* poya countdown: plain silver lettering at the very bottom of the hero, no badge (colour is set inline by script.js, so use text-fill) */
+.poya-wrap,body.dark-mode .poya-wrap{display:block;width:100%;max-width:100%;margin:6px 0 0!important;padding:4px 8px 0;background:none;border:0;box-shadow:none;position:relative;z-index:2}
+.poya-wrap:empty,.poya-wrap:has(#poyaStatus:empty){display:none}
+.hm-hero .poya-status{font-size:1.15em;font-weight:800!important;letter-spacing:.02em;line-height:1.5;background:linear-gradient(180deg,#fff 0%,#e1e5ec 38%,#b4bcc8 68%,#f1f3f7 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+ filter:drop-shadow(1px 0 0 #3d2406) drop-shadow(-1px 0 0 #3d2406) drop-shadow(0 1px 0 #3d2406) drop-shadow(0 -1px 0 #3d2406) drop-shadow(0 2px 3px rgba(60,35,5,.35))}
+body.dark-mode .hm-hero .poya-status{filter:drop-shadow(0 1px 1px rgba(0,0,0,.85)) drop-shadow(0 0 8px rgba(210,220,240,.3))}
+
+/* uposatha hero (light) */
+body:not(.dark-mode) #upOverlay .up-hero{color:var(--br);border:1px solid rgba(180,128,28,.5);background:linear-gradient(rgba(255,248,228,.5),rgba(255,240,205,.36)),url(bg/gold.webp) center/cover;box-shadow:0 12px 26px rgba(120,80,20,.22),inset 0 0 0 5px rgba(255,248,228,.5),inset 0 0 0 6px rgba(190,140,40,.35)}
+body:not(.dark-mode) #upOverlay .up-hero h1::after{background:linear-gradient(90deg,transparent,#8a5a10 28%,#fff0b0 50%,#8a5a10 72%,transparent)}
+
+/* landscape */
+@media (orientation:landscape) and (max-height:600px){
+ body .app-container{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:12px;align-items:start;max-width:none;width:100%;margin:0;padding:calc(6px + var(--safe-t)) calc(10px + var(--safe-r)) 4px calc(10px + var(--safe-l))}
+ .hm-hero{grid-column:1/-1;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:14px;align-items:center;padding:10px 16px;margin:0 0 10px;border-radius:24px}
+ .hm-hero .header{grid-column:1/-1;grid-row:1;font-size:1.7rem;padding:6px 6px 2px;text-align:center}
+ .hm-hero .header::after{margin-top:4px}
+ .hm-hero .date-section-wrapper{grid-column:1/-1;grid-row:2;padding:2px 6px}
+ .hm-hero .poya-wrap{grid-column:1/-1;grid-row:3;margin:2px 0 0!important;text-align:center}
+ .buddhist-calendar-row{grid-column:1;grid-row:2;padding:0}
+ .pali-box{grid-column:2;grid-row:2;margin:0;padding:12px 14px;align-self:stretch;min-height:0}
+ #upOverlay .up-wrap,#spOverlay .sp-wrap{max-width:none;padding-left:calc(14px + env(safe-area-inset-left,0px));padding-right:calc(14px + env(safe-area-inset-right,0px))}
+}
+
+/* uposatha: "වස් කාලය" button to the left (JPG stays right) */
+#upOverlay .up-hb #upToVas{grid-column:1;justify-self:start}
+
+/* ---------- WHEEL DATE PICKER: cream + gold, 3D drum ---------- */
+body .modal-wheel{background:rgba(58,38,12,.45)}
+body:not(.dark-mode) .wheel-picker-container{background:linear-gradient(rgba(255,250,236,.93),rgba(245,231,200,.95)),url(bg/damask.webp) center/300px auto;border:1px solid #c8991f;box-shadow:0 26px 54px rgba(60,35,5,.45),inset 0 0 0 5px rgba(255,249,232,.7),inset 0 0 0 6px rgba(190,140,40,.45)}
+body:not(.dark-mode) .wheel-picker-close{background:linear-gradient(180deg,#fffaf0,#f1e1ba);color:#6b430c;border:1px solid #c8991f;box-shadow:0 4px 12px rgba(60,35,5,.35),inset 0 1px 0 #fff}
+.wheel-columns{border-radius:18px;padding:0 2px;gap:2px;box-sizing:border-box}
+.wheel-item{white-space:nowrap;transition:none;backface-visibility:hidden}
+.wheel-item.wheel-selected{font-size:1.15em;font-weight:800}
+.wheel-col{overscroll-behavior:contain;touch-action:pan-y}
+body .modal-wheel{-webkit-backdrop-filter:none;backdrop-filter:none}
+body:not(.dark-mode) .wheel-columns{background:linear-gradient(180deg,#cdb67c 0%,#ecdcb2 20%,#fffbf0 50%,#ecdcb2 80%,#cdb67c 100%);box-shadow:inset 0 8px 12px rgba(100,68,12,.4),inset 0 -8px 12px rgba(100,68,12,.4),inset 0 0 0 1px rgba(180,128,28,.5),0 1px 0 #fff}
+.wheel-columns::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:18px;background:linear-gradient(180deg,rgba(40,25,5,.28) 0%,transparent 26%,transparent 74%,rgba(40,25,5,.28) 100%)}
+.wheel-col{position:relative;z-index:1}
+.wheel-selection-band{z-index:3;left:3px;right:3px}
+body:not(.dark-mode) .wheel-selection-band{background:linear-gradient(180deg,rgba(255,243,176,.6),rgba(228,182,78,.32) 50%,rgba(255,238,160,.55));border-top:1.5px solid #c8991f;border-bottom:1.5px solid #c8991f;border-radius:10px;box-shadow:0 2px 7px rgba(120,80,20,.35),inset 0 1px 0 rgba(255,255,255,.9)}
+body:not(.dark-mode) .wheel-item{color:#a38a5a}
+body:not(.dark-mode) .wheel-item.wheel-selected{color:#3d2406;text-shadow:0 1px 0 rgba(255,250,220,.95),0 -1px 0 rgba(90,55,10,.25)}
+body:not(.dark-mode) .wheel-ok-btn{background:linear-gradient(180deg,#f9e089,#dcab36 52%,#b9801a);color:#3d2406;text-shadow:0 1px 0 rgba(255,244,190,.85);border:1px solid #9a6c12;box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 6px 14px rgba(120,80,20,.4)}
+/* dark mode */
+body.dark-mode .wheel-picker-container{background:linear-gradient(rgba(14,17,40,.97),rgba(8,10,28,.98));border:1px solid rgba(242,212,120,.5);box-shadow:0 0 40px rgba(0,0,0,.8),0 0 20px rgba(242,212,120,.15),inset 0 0 0 5px rgba(8,10,28,.6),inset 0 0 0 6px rgba(242,212,120,.28)}
+body.dark-mode .wheel-columns{background:linear-gradient(180deg,#04050c 0%,#141936 25%,#222a52 50%,#141936 75%,#04050c 100%);box-shadow:inset 0 0 0 1px rgba(242,212,120,.28)}
+body.dark-mode .wheel-columns::before{background:linear-gradient(180deg,rgba(0,0,0,.45) 0%,transparent 28%,transparent 72%,rgba(0,0,0,.45) 100%)}
+body.dark-mode .wheel-item{color:#9aa0c0}
+body.dark-mode .wheel-item.wheel-selected{color:#ffe28a;text-shadow:0 0 10px rgba(255,200,90,.55)}
+body.dark-mode .wheel-selection-band{background:linear-gradient(180deg,rgba(242,212,120,.2),rgba(242,212,120,.08) 50%,rgba(242,212,120,.2));border-top:1px solid #f2d478;border-bottom:1px solid #f2d478;border-radius:10px}
+body.dark-mode .wheel-picker-close{border:1px solid #f2d478;color:#f2d478}
+body.dark-mode .wheel-ok-btn{background:linear-gradient(180deg,#f2d478,#b8891c);color:#2a1a04;box-shadow:0 6px 14px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.5)}
+
+/* ---------- DARK MODE: Sun & Uposatha headers = only the background image, darkened (no colour tints) ---------- */
+html body.dark-mode #spOverlay .sp-hero,
+html body.dark-mode #upOverlay .up-hero{background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url(bg/gold.webp) center/cover}
+
+/* ---------- Chanting header title: silver lettering (visible on the wheel / lamp in both themes) ---------- */
+html body.dark-mode #chOverlay .ch-hero h1,
+html body:not(.dark-mode) #chOverlay .ch-hero h1{background:linear-gradient(180deg,#fff 0%,#e1e5ec 38%,#b4bcc8 68%,#f1f3f7 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important;text-shadow:none!important;
+ filter:drop-shadow(1px 0 0 #2b2f38) drop-shadow(-1px 0 0 #2b2f38) drop-shadow(0 1px 0 #2b2f38) drop-shadow(0 -1px 0 #2b2f38) drop-shadow(0 2px 4px rgba(0,0,0,.55))!important}

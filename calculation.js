@@ -1093,7 +1093,7 @@
 
   <h3>මෙම අධිමාස 7 බෙදී යන ආකාරය</h3>
   <div class="calc-box">
-    <p style="text-align:center; font-family:'Courier New', monospace;">228 ÷ 7 = 32 <sup>4</sup>⁄<sub>7</sub></p>
+    <p style="text-align:center; font-family:Noto Sans Sinhala, sans-serif;">228 ÷ 7 = 32 <sup>4</sup>⁄<sub>7</sub></p>
     <p>ඒ අනුව චන්ද්‍ර මාස 32ට වරක් හෝ 33ට වරක් අධිමාස යෙදිය යුතුය. අධිමාස වගු පරීක්ෂා කිරීමේදී වසර 19ට, මාස 32න් වාර තුනක් සහ මාස 33න් වාර සතරක් වන ආකාරයකට වර්ෂ සම්පූර්ණ වී ඇත.</p>
     <ul style="list-style:none; padding-left:0; text-align:center;">
       <li>33 × 4 = <strong>132</strong></li>
@@ -1766,11 +1766,11 @@
         <circle cx="300" cy="300" r="130" fill="url(#earthGlow)"/>
         <circle cx="300" cy="300" r="175" fill="none" stroke="#c9a227" stroke-width="1.2" stroke-dasharray="6 8" opacity="0.55"/>
 
-        <text x="300" y="52" text-anchor="middle" fill="#ffd966" font-size="17" font-weight="bold" font-family="Georgia, serif">Śukla Pakṣa (Waxing)</text>
-        <text x="300" y="72" text-anchor="middle" fill="#e8c97a" font-size="12" font-family="Georgia, serif">from New Moon to Full Moon</text>
+        <text x="300" y="52" text-anchor="middle" fill="#ffd966" font-size="17" font-weight="bold" font-family="Noto Serif, serif">Śukla Pakṣa (Waxing)</text>
+        <text x="300" y="72" text-anchor="middle" fill="#e8c97a" font-size="12" font-family="Noto Serif, serif">from New Moon to Full Moon</text>
 
-        <text x="300" y="558" text-anchor="middle" fill="#c8d0d8" font-size="17" font-weight="bold" font-family="Georgia, serif">Kāḷa Pakṣa (Waning)</text>
-        <text x="300" y="578" text-anchor="middle" fill="#a8b0b8" font-size="12" font-family="Georgia, serif">from Full Moon to New Moon</text>
+        <text x="300" y="558" text-anchor="middle" fill="#c8d0d8" font-size="17" font-weight="bold" font-family="Noto Serif, serif">Kāḷa Pakṣa (Waning)</text>
+        <text x="300" y="578" text-anchor="middle" fill="#a8b0b8" font-size="12" font-family="Noto Serif, serif">from Full Moon to New Moon</text>
 
         <path d="M 420 175 Q 300 80 180 175" fill="none" stroke="#ffd966" stroke-width="2" opacity="0.7" marker-end="url(#arrowGold)"/>
         <defs>
@@ -1784,29 +1784,29 @@
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <circle r="26" fill="none" stroke="#333" stroke-width="0.5"/>
         </g>
-        <text x="475" y="352" text-anchor="middle" fill="#c0c8d0" font-size="13" font-weight="bold" font-family="Georgia, serif">New Moon</text>
-        <text x="475" y="369" text-anchor="middle" fill="#8890a0" font-size="10.5" font-family="Georgia, serif">Day 0</text>
+        <text x="475" y="352" text-anchor="middle" fill="#c0c8d0" font-size="13" font-weight="bold" font-family="Noto Serif, serif">New Moon</text>
+        <text x="475" y="369" text-anchor="middle" fill="#8890a0" font-size="10.5" font-family="Noto Serif, serif">Day 0</text>
 
         <!-- Top-right: Waxing crescent -->
         <g transform="translate(425 175)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipRight)"><circle cx="32" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="452" y="140" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Georgia, serif">1st waxing day</text>
+        <text x="452" y="140" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Noto Serif, serif">1st waxing day</text>
 
         <!-- Top: First quarter -->
         <g transform="translate(300 125)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipRight)"><circle cx="26" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="300" y="88" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Georgia, serif">8th waxing day</text>
+        <text x="300" y="88" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Noto Serif, serif">8th waxing day</text>
 
         <!-- Top-left: Waxing gibbous -->
         <g transform="translate(175 175)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipRight)"><circle cx="13" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="148" y="140" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Georgia, serif">14th waxing day</text>
+        <text x="148" y="140" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Noto Serif, serif">14th waxing day</text>
 
         <!-- Left: Full Moon -->
         <g transform="translate(125 300)">
@@ -1814,29 +1814,29 @@
           <circle r="15" fill="#fffbe0" opacity="0.7"/>
           <circle r="8" fill="#fffef0" opacity="0.5"/>
         </g>
-        <text x="125" y="352" text-anchor="middle" fill="#ffd966" font-size="13" font-weight="bold" font-family="Georgia, serif">Full Moon</text>
-        <text x="125" y="369" text-anchor="middle" fill="#d4a860" font-size="10.5" font-family="Georgia, serif">Day 15</text>
+        <text x="125" y="352" text-anchor="middle" fill="#ffd966" font-size="13" font-weight="bold" font-family="Noto Serif, serif">Full Moon</text>
+        <text x="125" y="369" text-anchor="middle" fill="#d4a860" font-size="10.5" font-family="Noto Serif, serif">Day 15</text>
 
         <!-- Bottom-left: Waning gibbous -->
         <g transform="translate(175 425)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipLeft)"><circle cx="-13" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="148" y="472" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Georgia, serif">14th waning day</text>
+        <text x="148" y="472" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Noto Serif, serif">14th waning day</text>
 
         <!-- Bottom: Last quarter -->
         <g transform="translate(300 475)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipLeft)"><circle cx="-26" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="300" y="522" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Georgia, serif">8th waning day</text>
+        <text x="300" y="522" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Noto Serif, serif">8th waning day</text>
 
         <!-- Bottom-right: Waning crescent -->
         <g transform="translate(425 425)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipLeft)"><circle cx="-32" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="452" y="472" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Georgia, serif">1st waning day</text>
+        <text x="452" y="472" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Noto Serif, serif">1st waning day</text>
 
         <!-- Earth -->
         <circle cx="300" cy="300" r="58" fill="url(#earthGrad)" stroke="#fdf5e8" stroke-width="2"/>
@@ -1844,7 +1844,7 @@
         <ellipse cx="317" cy="320" rx="15" ry="11" fill="#2d6a4f" opacity="0.65"/>
         <ellipse cx="322" cy="270" rx="10" ry="7" fill="#2d6a4f" opacity="0.55"/>
         <ellipse cx="285" cy="325" rx="12" ry="8" fill="#2d6a4f" opacity="0.55"/>
-        <text x="300" y="305" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="Georgia, serif">Earth</text>
+        <text x="300" y="305" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="Noto Serif, serif">Earth</text>
       </svg>
     </div>
 
@@ -1882,80 +1882,80 @@
 <polygon points="474.0,176.2 487.1,183.3 479.7,190.0" fill="#f2d478"/>
 <polygon points="226.0,423.8 212.9,416.7 220.3,410.0" fill="#f2d478"/>
 <circle cx="521.2" cy="263.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 521.2 248.6 A 15 15 0 0 1 521.2 278.6 A 14.67 15 0 0 0 521.2 248.6 Z" fill="#fdfbd3"/>
-<text x="544.2" y="267.6" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">1. Paṭhamaṃ</text>
+<text x="544.2" y="267.6" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">1. Paṭhamaṃ</text>
 <circle cx="509.9" cy="228.8" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 509.9 213.8 A 15 15 0 0 1 509.9 243.8 A 13.70 15 0 0 0 509.9 213.8 Z" fill="#fdfbd3"/>
-<text x="532.9" y="232.8" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">2. Dutiyaṃ</text>
+<text x="532.9" y="232.8" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">2. Dutiyaṃ</text>
 <circle cx="491.6" cy="197.1" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 491.6 182.1 A 15 15 0 0 1 491.6 212.1 A 12.14 15 0 0 0 491.6 182.1 Z" fill="#fdfbd3"/>
-<text x="514.6" y="201.1" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">3. Tatiyaṃ</text>
+<text x="514.6" y="201.1" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">3. Tatiyaṃ</text>
 <circle cx="467.1" cy="169.9" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 467.1 154.9 A 15 15 0 0 1 467.1 184.9 A 10.04 15 0 0 0 467.1 154.9 Z" fill="#fdfbd3"/>
-<text x="490.1" y="173.9" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">4. Catutthaṃ</text>
+<text x="490.1" y="173.9" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">4. Catutthaṃ</text>
 <circle cx="437.5" cy="148.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 437.5 133.4 A 15 15 0 0 1 437.5 163.4 A 7.50 15 0 0 0 437.5 133.4 Z" fill="#fdfbd3"/>
-<text x="460.5" y="152.4" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">5. Pañcamaṃ</text>
+<text x="460.5" y="152.4" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">5. Pañcamaṃ</text>
 <circle cx="404.1" cy="133.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 404.1 118.6 A 15 15 0 0 1 404.1 148.6 A 4.64 15 0 0 0 404.1 118.6 Z" fill="#fdfbd3"/>
 <line x1="404.1" y1="118.6" x2="404.1" y2="111.6" stroke="#6b6b85" stroke-width="1"/>
-<text x="404.1" y="107.6" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">6. Chaṭṭhamaṃ</text>
+<text x="404.1" y="107.6" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">6. Chaṭṭhamaṃ</text>
 <circle cx="368.3" cy="126.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 368.3 111.0 A 15 15 0 0 1 368.3 141.0 A 1.57 15 0 0 0 368.3 111.0 Z" fill="#fdfbd3"/>
 <line x1="368.3" y1="111.0" x2="368.3" y2="82.0" stroke="#6b6b85" stroke-width="1"/>
-<text x="368.3" y="78.0" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">7. Sattamaṃ</text>
+<text x="368.3" y="78.0" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">7. Sattamaṃ</text>
 <circle cx="331.7" cy="126.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 331.7 111.0 A 15 15 0 0 1 331.7 141.0 A 1.57 15 0 0 1 331.7 111.0 Z" fill="#fdfbd3"/>
 <line x1="331.7" y1="111.0" x2="331.7" y2="104.0" stroke="#6b6b85" stroke-width="1"/>
-<text x="331.7" y="100.0" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">8. Aṭṭhamaṃ</text>
+<text x="331.7" y="100.0" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">8. Aṭṭhamaṃ</text>
 <circle cx="295.9" cy="133.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 295.9 118.6 A 15 15 0 0 1 295.9 148.6 A 4.64 15 0 0 1 295.9 118.6 Z" fill="#fdfbd3"/>
 <line x1="295.9" y1="118.6" x2="295.9" y2="89.6" stroke="#6b6b85" stroke-width="1"/>
-<text x="295.9" y="85.6" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">9. Navamaṃ</text>
+<text x="295.9" y="85.6" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">9. Navamaṃ</text>
 <circle cx="262.5" cy="148.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 262.5 133.4 A 15 15 0 0 1 262.5 163.4 A 7.50 15 0 0 1 262.5 133.4 Z" fill="#fdfbd3"/>
-<text x="239.5" y="152.4" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">10. Dasamaṃ</text>
+<text x="239.5" y="152.4" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">10. Dasamaṃ</text>
 <circle cx="232.9" cy="169.9" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 232.9 154.9 A 15 15 0 0 1 232.9 184.9 A 10.04 15 0 0 1 232.9 154.9 Z" fill="#fdfbd3"/>
-<text x="209.9" y="173.9" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">11. Ekādasamaṃ</text>
+<text x="209.9" y="173.9" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">11. Ekādasamaṃ</text>
 <circle cx="208.4" cy="197.1" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 208.4 182.1 A 15 15 0 0 1 208.4 212.1 A 12.14 15 0 0 1 208.4 182.1 Z" fill="#fdfbd3"/>
-<text x="185.4" y="201.1" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">12. Dvādasamaṃ</text>
+<text x="185.4" y="201.1" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">12. Dvādasamaṃ</text>
 <circle cx="190.1" cy="228.8" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 190.1 213.8 A 15 15 0 0 1 190.1 243.8 A 13.70 15 0 0 1 190.1 213.8 Z" fill="#fdfbd3"/>
-<text x="167.1" y="232.8" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">13. Terasamaṃ</text>
+<text x="167.1" y="232.8" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">13. Terasamaṃ</text>
 <circle cx="178.8" cy="263.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 178.8 248.6 A 15 15 0 0 1 178.8 278.6 A 14.67 15 0 0 1 178.8 248.6 Z" fill="#fdfbd3"/>
-<text x="155.8" y="267.6" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">14. Cuddasamaṃ</text>
+<text x="155.8" y="267.6" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">14. Cuddasamaṃ</text>
 <circle cx="175.0" cy="300.0" r="15" fill="#fdfbd3" stroke="#7a7a90" stroke-width="1"/>
-<text x="152.0" y="304.0" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">15. Paṇṇarasamaṃ</text>
+<text x="152.0" y="304.0" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">15. Paṇṇarasamaṃ</text>
 <circle cx="178.8" cy="336.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 178.8 321.4 A 15 15 0 0 1 178.8 351.4 A 14.67 15 0 0 1 178.8 321.4 Z" fill="#fdfbd3" transform="translate(357.6 0) scale(-1 1)"/>
-<text x="155.8" y="340.4" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">1. Paṭhamaṃ</text>
+<text x="155.8" y="340.4" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">1. Paṭhamaṃ</text>
 <circle cx="190.1" cy="371.2" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 190.1 356.2 A 15 15 0 0 1 190.1 386.2 A 13.70 15 0 0 1 190.1 356.2 Z" fill="#fdfbd3" transform="translate(380.3 0) scale(-1 1)"/>
-<text x="167.1" y="375.2" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">2. Dutiyaṃ</text>
+<text x="167.1" y="375.2" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">2. Dutiyaṃ</text>
 <circle cx="208.4" cy="402.9" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 208.4 387.9 A 15 15 0 0 1 208.4 417.9 A 12.14 15 0 0 1 208.4 387.9 Z" fill="#fdfbd3" transform="translate(416.8 0) scale(-1 1)"/>
-<text x="185.4" y="406.9" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">3. Tatiyaṃ</text>
+<text x="185.4" y="406.9" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">3. Tatiyaṃ</text>
 <circle cx="232.9" cy="430.1" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 232.9 415.1 A 15 15 0 0 1 232.9 445.1 A 10.04 15 0 0 1 232.9 415.1 Z" fill="#fdfbd3" transform="translate(465.8 0) scale(-1 1)"/>
-<text x="209.9" y="434.1" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">4. Catutthaṃ</text>
+<text x="209.9" y="434.1" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">4. Catutthaṃ</text>
 <circle cx="262.5" cy="451.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 262.5 436.6 A 15 15 0 0 1 262.5 466.6 A 7.50 15 0 0 1 262.5 436.6 Z" fill="#fdfbd3" transform="translate(525.0 0) scale(-1 1)"/>
-<text x="239.5" y="455.6" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">5. Pañcamaṃ</text>
+<text x="239.5" y="455.6" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">5. Pañcamaṃ</text>
 <circle cx="295.9" cy="466.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 295.9 451.4 A 15 15 0 0 1 295.9 481.4 A 4.64 15 0 0 1 295.9 451.4 Z" fill="#fdfbd3" transform="translate(591.8 0) scale(-1 1)"/>
 <line x1="295.9" y1="481.4" x2="295.9" y2="487.4" stroke="#6b6b85" stroke-width="1"/>
-<text x="295.9" y="502.4" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">6. Chaṭṭhamaṃ</text>
+<text x="295.9" y="502.4" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">6. Chaṭṭhamaṃ</text>
 <circle cx="331.7" cy="474.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 331.7 459.0 A 15 15 0 0 1 331.7 489.0 A 1.57 15 0 0 1 331.7 459.0 Z" fill="#fdfbd3" transform="translate(663.4 0) scale(-1 1)"/>
 <line x1="331.7" y1="489.0" x2="331.7" y2="517.0" stroke="#6b6b85" stroke-width="1"/>
-<text x="331.7" y="532.0" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">7. Sattamaṃ</text>
+<text x="331.7" y="532.0" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">7. Sattamaṃ</text>
 <circle cx="368.3" cy="474.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 368.3 459.0 A 15 15 0 0 1 368.3 489.0 A 1.57 15 0 0 0 368.3 459.0 Z" fill="#fdfbd3" transform="translate(736.6 0) scale(-1 1)"/>
 <line x1="368.3" y1="489.0" x2="368.3" y2="495.0" stroke="#6b6b85" stroke-width="1"/>
-<text x="368.3" y="510.0" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">8. Aṭṭhamaṃ</text>
+<text x="368.3" y="510.0" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">8. Aṭṭhamaṃ</text>
 <circle cx="404.1" cy="466.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 404.1 451.4 A 15 15 0 0 1 404.1 481.4 A 4.64 15 0 0 0 404.1 451.4 Z" fill="#fdfbd3" transform="translate(808.2 0) scale(-1 1)"/>
 <line x1="404.1" y1="481.4" x2="404.1" y2="509.4" stroke="#6b6b85" stroke-width="1"/>
-<text x="404.1" y="524.4" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">9. Navamaṃ</text>
+<text x="404.1" y="524.4" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">9. Navamaṃ</text>
 <circle cx="437.5" cy="451.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 437.5 436.6 A 15 15 0 0 1 437.5 466.6 A 7.50 15 0 0 0 437.5 436.6 Z" fill="#fdfbd3" transform="translate(875.0 0) scale(-1 1)"/>
-<text x="460.5" y="455.6" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">10. Dasamaṃ</text>
+<text x="460.5" y="455.6" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">10. Dasamaṃ</text>
 <circle cx="467.1" cy="430.1" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 467.1 415.1 A 15 15 0 0 1 467.1 445.1 A 10.04 15 0 0 0 467.1 415.1 Z" fill="#fdfbd3" transform="translate(934.2 0) scale(-1 1)"/>
-<text x="490.1" y="434.1" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">11. Ekādasamaṃ</text>
+<text x="490.1" y="434.1" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">11. Ekādasamaṃ</text>
 <circle cx="491.6" cy="402.9" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 491.6 387.9 A 15 15 0 0 1 491.6 417.9 A 12.14 15 0 0 0 491.6 387.9 Z" fill="#fdfbd3" transform="translate(983.2 0) scale(-1 1)"/>
-<text x="514.6" y="406.9" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">12. Dvādasamaṃ</text>
+<text x="514.6" y="406.9" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">12. Dvādasamaṃ</text>
 <circle cx="509.9" cy="371.2" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 509.9 356.2 A 15 15 0 0 1 509.9 386.2 A 13.70 15 0 0 0 509.9 356.2 Z" fill="#fdfbd3" transform="translate(1019.7 0) scale(-1 1)"/>
-<text x="532.9" y="375.2" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">13. Terasamaṃ</text>
+<text x="532.9" y="375.2" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">13. Terasamaṃ</text>
 <circle cx="521.2" cy="336.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 521.2 321.4 A 15 15 0 0 1 521.2 351.4 A 14.67 15 0 0 0 521.2 321.4 Z" fill="#fdfbd3" transform="translate(1042.4 0) scale(-1 1)"/>
-<text x="544.2" y="340.4" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">14. Cuddasamaṃ</text>
+<text x="544.2" y="340.4" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">14. Cuddasamaṃ</text>
 <circle cx="525.0" cy="300.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/>
-<text x="548.0" y="304.0" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">15. Paṇṇarasamaṃ</text>
+<text x="548.0" y="304.0" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">15. Paṇṇarasamaṃ</text>
 <circle cx="350" cy="300" r="40" fill="#1e5faa" stroke="#fdf5e8" stroke-width="2"/>
 <ellipse cx="338" cy="288" rx="13" ry="9" fill="#2d6a4f" opacity=".65"/><ellipse cx="362" cy="313" rx="10" ry="7" fill="#2d6a4f" opacity=".6"/>
-<text x="350" y="304" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="Georgia,'Noto Serif',serif">Earth</text>
+<text x="350" y="304" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="Noto Serif,serif">Earth</text>
 <rect x="298" y="212" width="104" height="26" rx="7" fill="#15152a" stroke="#f2d478" stroke-width="1.2"/>
-<text x="350" y="230" text-anchor="middle" fill="#f2d478" font-size="12.5" font-weight="bold" font-family="Georgia,'Noto Serif',serif">Śukla Pakṣa</text>
+<text x="350" y="230" text-anchor="middle" fill="#f2d478" font-size="12.5" font-weight="bold" font-family="Noto Serif,serif">Śukla Pakṣa</text>
 <rect x="298" y="368" width="104" height="26" rx="7" fill="#15152a" stroke="#c8d0d8" stroke-width="1.2"/>
-<text x="350" y="386" text-anchor="middle" fill="#c8d0d8" font-size="12.5" font-weight="bold" font-family="Georgia,'Noto Serif',serif">Kāḷa Pakṣa</text>
+<text x="350" y="386" text-anchor="middle" fill="#c8d0d8" font-size="12.5" font-weight="bold" font-family="Noto Serif,serif">Kāḷa Pakṣa</text>
 </svg></div></div>
   <p style="text-align:center;font-size:.85em;opacity:.75;margin-top:-6px">↔ Swipe the diagram sideways if needed</p>
   <p>The diagram above shows that, day by day, the moonlight (or the shadow) increases by <strong>12°</strong> of longitude, and it shows the days of each pakṣa. These days are called <strong>'tithi'</strong>. They are numbered in order from <em class="pali">'Paṭhamaṃ'</em> (first) to <em class="pali">'Paṇṇarasamaṃ'</em> (fifteenth).</p>
@@ -2223,7 +2223,7 @@
 
   <h3>How These 7 Adhimāsa Months Distribute</h3>
   <div class="calc-box">
-    <p style="text-align:center; font-family:'Courier New', monospace;">228 ÷ 7 = 32 <sup>4</sup>⁄<sub>7</sub></p>
+    <p style="text-align:center; font-family:Noto Sans Sinhala, sans-serif;">228 ÷ 7 = 32 <sup>4</sup>⁄<sub>7</sub></p>
     <p>Accordingly, an <em class="pali">Adhimāsa</em> should be applied once every 32 or 33 lunar months. Examination of the <em class="pali">Adhimāsa</em> tables shows that over 19 years, there are 3 occurrences at 32-month intervals and 4 occurrences at 33-month intervals:</p>
     <ul style="list-style:none; padding-left:0; text-align:center;">
       <li>33 × 4 = <strong>132</strong></li>
@@ -2979,11 +2979,11 @@
         <circle cx="300" cy="300" r="130" fill="url(#earthGlowEn)"/>
         <circle cx="300" cy="300" r="175" fill="none" stroke="#c9a227" stroke-width="1.2" stroke-dasharray="6 8" opacity="0.55"/>
 
-        <text x="300" y="52" text-anchor="middle" fill="#ffd966" font-size="17" font-weight="bold" font-family="Georgia, serif">Śukla Pakṣa (Waxing)</text>
-        <text x="300" y="72" text-anchor="middle" fill="#e8c97a" font-size="12" font-family="Georgia, serif">from New Moon to Full Moon</text>
+        <text x="300" y="52" text-anchor="middle" fill="#ffd966" font-size="17" font-weight="bold" font-family="Noto Serif, serif">Śukla Pakṣa (Waxing)</text>
+        <text x="300" y="72" text-anchor="middle" fill="#e8c97a" font-size="12" font-family="Noto Serif, serif">from New Moon to Full Moon</text>
 
-        <text x="300" y="558" text-anchor="middle" fill="#c8d0d8" font-size="17" font-weight="bold" font-family="Georgia, serif">Kāḷa Pakṣa (Waning)</text>
-        <text x="300" y="578" text-anchor="middle" fill="#a8b0b8" font-size="12" font-family="Georgia, serif">from Full Moon to New Moon</text>
+        <text x="300" y="558" text-anchor="middle" fill="#c8d0d8" font-size="17" font-weight="bold" font-family="Noto Serif, serif">Kāḷa Pakṣa (Waning)</text>
+        <text x="300" y="578" text-anchor="middle" fill="#a8b0b8" font-size="12" font-family="Noto Serif, serif">from Full Moon to New Moon</text>
 
         <path d="M 420 175 Q 300 80 180 175" fill="none" stroke="#ffd966" stroke-width="2" opacity="0.7" marker-end="url(#arrowGoldEn)"/>
         <path d="M 180 425 Q 300 520 420 425" fill="none" stroke="#95a5a6" stroke-width="2" opacity="0.7" marker-end="url(#arrowGrayEn)"/>
@@ -2993,59 +2993,59 @@
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <circle r="26" fill="none" stroke="#333" stroke-width="0.5"/>
         </g>
-        <text x="475" y="352" text-anchor="middle" fill="#c0c8d0" font-size="13" font-weight="bold" font-family="Georgia, serif">New Moon</text>
-        <text x="475" y="369" text-anchor="middle" fill="#8890a0" font-size="10.5" font-family="Georgia, serif">Day 0</text>
+        <text x="475" y="352" text-anchor="middle" fill="#c0c8d0" font-size="13" font-weight="bold" font-family="Noto Serif, serif">New Moon</text>
+        <text x="475" y="369" text-anchor="middle" fill="#8890a0" font-size="10.5" font-family="Noto Serif, serif">Day 0</text>
 
         <g transform="translate(425 175)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipRightEn)"><circle cx="32" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="452" y="140" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Georgia, serif">1st waxing day</text>
+        <text x="452" y="140" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Noto Serif, serif">1st waxing day</text>
 
         <g transform="translate(300 125)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipRightEn)"><circle cx="26" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="300" y="88" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Georgia, serif">8th waxing day</text>
+        <text x="300" y="88" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Noto Serif, serif">8th waxing day</text>
 
         <g transform="translate(175 175)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipRightEn)"><circle cx="13" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="148" y="140" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Georgia, serif">14th waxing day</text>
+        <text x="148" y="140" text-anchor="middle" fill="#fdfbd3" font-size="11" font-family="Noto Serif, serif">14th waxing day</text>
 
         <g transform="translate(125 300)">
           <circle r="26" fill="#fdfbd3" stroke="#ffd966" stroke-width="2"/>
           <circle r="15" fill="#fffbe0" opacity="0.7"/>
           <circle r="8" fill="#fffef0" opacity="0.5"/>
         </g>
-        <text x="125" y="352" text-anchor="middle" fill="#ffd966" font-size="13" font-weight="bold" font-family="Georgia, serif">Full Moon</text>
-        <text x="125" y="369" text-anchor="middle" fill="#d4a860" font-size="10.5" font-family="Georgia, serif">Day 15</text>
+        <text x="125" y="352" text-anchor="middle" fill="#ffd966" font-size="13" font-weight="bold" font-family="Noto Serif, serif">Full Moon</text>
+        <text x="125" y="369" text-anchor="middle" fill="#d4a860" font-size="10.5" font-family="Noto Serif, serif">Day 15</text>
 
         <g transform="translate(175 425)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipLeftEn)"><circle cx="-13" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="148" y="472" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Georgia, serif">14th waning day</text>
+        <text x="148" y="472" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Noto Serif, serif">14th waning day</text>
 
         <g transform="translate(300 475)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipLeftEn)"><circle cx="-26" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="300" y="522" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Georgia, serif">8th waning day</text>
+        <text x="300" y="522" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Noto Serif, serif">8th waning day</text>
 
         <g transform="translate(425 425)">
           <circle r="26" fill="#0d0d1a" stroke="#c9a227" stroke-width="1.5"/>
           <g clip-path="url(#moonClipLeftEn)"><circle cx="-32" cy="0" r="26" fill="#fdfbd3"/></g>
         </g>
-        <text x="452" y="472" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Georgia, serif">1st waning day</text>
+        <text x="452" y="472" text-anchor="middle" fill="#c8d0d8" font-size="11" font-family="Noto Serif, serif">1st waning day</text>
 
         <circle cx="300" cy="300" r="58" fill="url(#earthGradEn)" stroke="#fdf5e8" stroke-width="2"/>
         <ellipse cx="283" cy="283" rx="19" ry="13" fill="#2d6a4f" opacity="0.65"/>
         <ellipse cx="317" cy="320" rx="15" ry="11" fill="#2d6a4f" opacity="0.65"/>
         <ellipse cx="322" cy="270" rx="10" ry="7" fill="#2d6a4f" opacity="0.55"/>
         <ellipse cx="285" cy="325" rx="12" ry="8" fill="#2d6a4f" opacity="0.55"/>
-        <text x="300" y="305" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="Georgia, serif">Earth</text>
+        <text x="300" y="305" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="Noto Serif, serif">Earth</text>
       </svg>
     </div>
 
@@ -3083,80 +3083,80 @@
 <polygon points="474.0,176.2 487.1,183.3 479.7,190.0" fill="#f2d478"/>
 <polygon points="226.0,423.8 212.9,416.7 220.3,410.0" fill="#f2d478"/>
 <circle cx="521.2" cy="263.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 521.2 248.6 A 15 15 0 0 1 521.2 278.6 A 14.67 15 0 0 0 521.2 248.6 Z" fill="#fdfbd3"/>
-<text x="544.2" y="267.6" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">1. Paṭhamaṃ</text>
+<text x="544.2" y="267.6" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">1. Paṭhamaṃ</text>
 <circle cx="509.9" cy="228.8" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 509.9 213.8 A 15 15 0 0 1 509.9 243.8 A 13.70 15 0 0 0 509.9 213.8 Z" fill="#fdfbd3"/>
-<text x="532.9" y="232.8" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">2. Dutiyaṃ</text>
+<text x="532.9" y="232.8" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">2. Dutiyaṃ</text>
 <circle cx="491.6" cy="197.1" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 491.6 182.1 A 15 15 0 0 1 491.6 212.1 A 12.14 15 0 0 0 491.6 182.1 Z" fill="#fdfbd3"/>
-<text x="514.6" y="201.1" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">3. Tatiyaṃ</text>
+<text x="514.6" y="201.1" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">3. Tatiyaṃ</text>
 <circle cx="467.1" cy="169.9" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 467.1 154.9 A 15 15 0 0 1 467.1 184.9 A 10.04 15 0 0 0 467.1 154.9 Z" fill="#fdfbd3"/>
-<text x="490.1" y="173.9" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">4. Catutthaṃ</text>
+<text x="490.1" y="173.9" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">4. Catutthaṃ</text>
 <circle cx="437.5" cy="148.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 437.5 133.4 A 15 15 0 0 1 437.5 163.4 A 7.50 15 0 0 0 437.5 133.4 Z" fill="#fdfbd3"/>
-<text x="460.5" y="152.4" text-anchor="start" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">5. Pañcamaṃ</text>
+<text x="460.5" y="152.4" text-anchor="start" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">5. Pañcamaṃ</text>
 <circle cx="404.1" cy="133.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 404.1 118.6 A 15 15 0 0 1 404.1 148.6 A 4.64 15 0 0 0 404.1 118.6 Z" fill="#fdfbd3"/>
 <line x1="404.1" y1="118.6" x2="404.1" y2="111.6" stroke="#6b6b85" stroke-width="1"/>
-<text x="404.1" y="107.6" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">6. Chaṭṭhamaṃ</text>
+<text x="404.1" y="107.6" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">6. Chaṭṭhamaṃ</text>
 <circle cx="368.3" cy="126.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 368.3 111.0 A 15 15 0 0 1 368.3 141.0 A 1.57 15 0 0 0 368.3 111.0 Z" fill="#fdfbd3"/>
 <line x1="368.3" y1="111.0" x2="368.3" y2="82.0" stroke="#6b6b85" stroke-width="1"/>
-<text x="368.3" y="78.0" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">7. Sattamaṃ</text>
+<text x="368.3" y="78.0" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">7. Sattamaṃ</text>
 <circle cx="331.7" cy="126.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 331.7 111.0 A 15 15 0 0 1 331.7 141.0 A 1.57 15 0 0 1 331.7 111.0 Z" fill="#fdfbd3"/>
 <line x1="331.7" y1="111.0" x2="331.7" y2="104.0" stroke="#6b6b85" stroke-width="1"/>
-<text x="331.7" y="100.0" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">8. Aṭṭhamaṃ</text>
+<text x="331.7" y="100.0" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">8. Aṭṭhamaṃ</text>
 <circle cx="295.9" cy="133.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 295.9 118.6 A 15 15 0 0 1 295.9 148.6 A 4.64 15 0 0 1 295.9 118.6 Z" fill="#fdfbd3"/>
 <line x1="295.9" y1="118.6" x2="295.9" y2="89.6" stroke="#6b6b85" stroke-width="1"/>
-<text x="295.9" y="85.6" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">9. Navamaṃ</text>
+<text x="295.9" y="85.6" text-anchor="middle" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">9. Navamaṃ</text>
 <circle cx="262.5" cy="148.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 262.5 133.4 A 15 15 0 0 1 262.5 163.4 A 7.50 15 0 0 1 262.5 133.4 Z" fill="#fdfbd3"/>
-<text x="239.5" y="152.4" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">10. Dasamaṃ</text>
+<text x="239.5" y="152.4" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">10. Dasamaṃ</text>
 <circle cx="232.9" cy="169.9" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 232.9 154.9 A 15 15 0 0 1 232.9 184.9 A 10.04 15 0 0 1 232.9 154.9 Z" fill="#fdfbd3"/>
-<text x="209.9" y="173.9" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">11. Ekādasamaṃ</text>
+<text x="209.9" y="173.9" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">11. Ekādasamaṃ</text>
 <circle cx="208.4" cy="197.1" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 208.4 182.1 A 15 15 0 0 1 208.4 212.1 A 12.14 15 0 0 1 208.4 182.1 Z" fill="#fdfbd3"/>
-<text x="185.4" y="201.1" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">12. Dvādasamaṃ</text>
+<text x="185.4" y="201.1" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">12. Dvādasamaṃ</text>
 <circle cx="190.1" cy="228.8" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 190.1 213.8 A 15 15 0 0 1 190.1 243.8 A 13.70 15 0 0 1 190.1 213.8 Z" fill="#fdfbd3"/>
-<text x="167.1" y="232.8" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">13. Terasamaṃ</text>
+<text x="167.1" y="232.8" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">13. Terasamaṃ</text>
 <circle cx="178.8" cy="263.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 178.8 248.6 A 15 15 0 0 1 178.8 278.6 A 14.67 15 0 0 1 178.8 248.6 Z" fill="#fdfbd3"/>
-<text x="155.8" y="267.6" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">14. Cuddasamaṃ</text>
+<text x="155.8" y="267.6" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">14. Cuddasamaṃ</text>
 <circle cx="175.0" cy="300.0" r="15" fill="#fdfbd3" stroke="#7a7a90" stroke-width="1"/>
-<text x="152.0" y="304.0" text-anchor="end" fill="#f2d478" font-size="14" font-family="Georgia,'Noto Serif',serif">15. Paṇṇarasamaṃ</text>
+<text x="152.0" y="304.0" text-anchor="end" fill="#f2d478" font-size="14" font-family="Noto Serif,serif">15. Paṇṇarasamaṃ</text>
 <circle cx="178.8" cy="336.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 178.8 321.4 A 15 15 0 0 1 178.8 351.4 A 14.67 15 0 0 1 178.8 321.4 Z" fill="#fdfbd3" transform="translate(357.6 0) scale(-1 1)"/>
-<text x="155.8" y="340.4" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">1. Paṭhamaṃ</text>
+<text x="155.8" y="340.4" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">1. Paṭhamaṃ</text>
 <circle cx="190.1" cy="371.2" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 190.1 356.2 A 15 15 0 0 1 190.1 386.2 A 13.70 15 0 0 1 190.1 356.2 Z" fill="#fdfbd3" transform="translate(380.3 0) scale(-1 1)"/>
-<text x="167.1" y="375.2" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">2. Dutiyaṃ</text>
+<text x="167.1" y="375.2" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">2. Dutiyaṃ</text>
 <circle cx="208.4" cy="402.9" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 208.4 387.9 A 15 15 0 0 1 208.4 417.9 A 12.14 15 0 0 1 208.4 387.9 Z" fill="#fdfbd3" transform="translate(416.8 0) scale(-1 1)"/>
-<text x="185.4" y="406.9" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">3. Tatiyaṃ</text>
+<text x="185.4" y="406.9" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">3. Tatiyaṃ</text>
 <circle cx="232.9" cy="430.1" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 232.9 415.1 A 15 15 0 0 1 232.9 445.1 A 10.04 15 0 0 1 232.9 415.1 Z" fill="#fdfbd3" transform="translate(465.8 0) scale(-1 1)"/>
-<text x="209.9" y="434.1" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">4. Catutthaṃ</text>
+<text x="209.9" y="434.1" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">4. Catutthaṃ</text>
 <circle cx="262.5" cy="451.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 262.5 436.6 A 15 15 0 0 1 262.5 466.6 A 7.50 15 0 0 1 262.5 436.6 Z" fill="#fdfbd3" transform="translate(525.0 0) scale(-1 1)"/>
-<text x="239.5" y="455.6" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">5. Pañcamaṃ</text>
+<text x="239.5" y="455.6" text-anchor="end" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">5. Pañcamaṃ</text>
 <circle cx="295.9" cy="466.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 295.9 451.4 A 15 15 0 0 1 295.9 481.4 A 4.64 15 0 0 1 295.9 451.4 Z" fill="#fdfbd3" transform="translate(591.8 0) scale(-1 1)"/>
 <line x1="295.9" y1="481.4" x2="295.9" y2="487.4" stroke="#6b6b85" stroke-width="1"/>
-<text x="295.9" y="502.4" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">6. Chaṭṭhamaṃ</text>
+<text x="295.9" y="502.4" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">6. Chaṭṭhamaṃ</text>
 <circle cx="331.7" cy="474.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 331.7 459.0 A 15 15 0 0 1 331.7 489.0 A 1.57 15 0 0 1 331.7 459.0 Z" fill="#fdfbd3" transform="translate(663.4 0) scale(-1 1)"/>
 <line x1="331.7" y1="489.0" x2="331.7" y2="517.0" stroke="#6b6b85" stroke-width="1"/>
-<text x="331.7" y="532.0" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">7. Sattamaṃ</text>
+<text x="331.7" y="532.0" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">7. Sattamaṃ</text>
 <circle cx="368.3" cy="474.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 368.3 459.0 A 15 15 0 0 1 368.3 489.0 A 1.57 15 0 0 0 368.3 459.0 Z" fill="#fdfbd3" transform="translate(736.6 0) scale(-1 1)"/>
 <line x1="368.3" y1="489.0" x2="368.3" y2="495.0" stroke="#6b6b85" stroke-width="1"/>
-<text x="368.3" y="510.0" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">8. Aṭṭhamaṃ</text>
+<text x="368.3" y="510.0" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">8. Aṭṭhamaṃ</text>
 <circle cx="404.1" cy="466.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 404.1 451.4 A 15 15 0 0 1 404.1 481.4 A 4.64 15 0 0 0 404.1 451.4 Z" fill="#fdfbd3" transform="translate(808.2 0) scale(-1 1)"/>
 <line x1="404.1" y1="481.4" x2="404.1" y2="509.4" stroke="#6b6b85" stroke-width="1"/>
-<text x="404.1" y="524.4" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">9. Navamaṃ</text>
+<text x="404.1" y="524.4" text-anchor="middle" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">9. Navamaṃ</text>
 <circle cx="437.5" cy="451.6" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 437.5 436.6 A 15 15 0 0 1 437.5 466.6 A 7.50 15 0 0 0 437.5 436.6 Z" fill="#fdfbd3" transform="translate(875.0 0) scale(-1 1)"/>
-<text x="460.5" y="455.6" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">10. Dasamaṃ</text>
+<text x="460.5" y="455.6" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">10. Dasamaṃ</text>
 <circle cx="467.1" cy="430.1" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 467.1 415.1 A 15 15 0 0 1 467.1 445.1 A 10.04 15 0 0 0 467.1 415.1 Z" fill="#fdfbd3" transform="translate(934.2 0) scale(-1 1)"/>
-<text x="490.1" y="434.1" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">11. Ekādasamaṃ</text>
+<text x="490.1" y="434.1" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">11. Ekādasamaṃ</text>
 <circle cx="491.6" cy="402.9" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 491.6 387.9 A 15 15 0 0 1 491.6 417.9 A 12.14 15 0 0 0 491.6 387.9 Z" fill="#fdfbd3" transform="translate(983.2 0) scale(-1 1)"/>
-<text x="514.6" y="406.9" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">12. Dvādasamaṃ</text>
+<text x="514.6" y="406.9" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">12. Dvādasamaṃ</text>
 <circle cx="509.9" cy="371.2" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 509.9 356.2 A 15 15 0 0 1 509.9 386.2 A 13.70 15 0 0 0 509.9 356.2 Z" fill="#fdfbd3" transform="translate(1019.7 0) scale(-1 1)"/>
-<text x="532.9" y="375.2" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">13. Terasamaṃ</text>
+<text x="532.9" y="375.2" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">13. Terasamaṃ</text>
 <circle cx="521.2" cy="336.4" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/><path d="M 521.2 321.4 A 15 15 0 0 1 521.2 351.4 A 14.67 15 0 0 0 521.2 321.4 Z" fill="#fdfbd3" transform="translate(1042.4 0) scale(-1 1)"/>
-<text x="544.2" y="340.4" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">14. Cuddasamaṃ</text>
+<text x="544.2" y="340.4" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">14. Cuddasamaṃ</text>
 <circle cx="525.0" cy="300.0" r="15" fill="#1c1c2e" stroke="#7a7a90" stroke-width="1"/>
-<text x="548.0" y="304.0" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Georgia,'Noto Serif',serif">15. Paṇṇarasamaṃ</text>
+<text x="548.0" y="304.0" text-anchor="start" fill="#c8d0d8" font-size="14" font-family="Noto Serif,serif">15. Paṇṇarasamaṃ</text>
 <circle cx="350" cy="300" r="40" fill="#1e5faa" stroke="#fdf5e8" stroke-width="2"/>
 <ellipse cx="338" cy="288" rx="13" ry="9" fill="#2d6a4f" opacity=".65"/><ellipse cx="362" cy="313" rx="10" ry="7" fill="#2d6a4f" opacity=".6"/>
-<text x="350" y="304" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="Georgia,'Noto Serif',serif">Earth</text>
+<text x="350" y="304" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="Noto Serif,serif">Earth</text>
 <rect x="298" y="212" width="104" height="26" rx="7" fill="#15152a" stroke="#f2d478" stroke-width="1.2"/>
-<text x="350" y="230" text-anchor="middle" fill="#f2d478" font-size="12.5" font-weight="bold" font-family="Georgia,'Noto Serif',serif">Śukla Pakṣa</text>
+<text x="350" y="230" text-anchor="middle" fill="#f2d478" font-size="12.5" font-weight="bold" font-family="Noto Serif,serif">Śukla Pakṣa</text>
 <rect x="298" y="368" width="104" height="26" rx="7" fill="#15152a" stroke="#c8d0d8" stroke-width="1.2"/>
-<text x="350" y="386" text-anchor="middle" fill="#c8d0d8" font-size="12.5" font-weight="bold" font-family="Georgia,'Noto Serif',serif">Kāḷa Pakṣa</text>
+<text x="350" y="386" text-anchor="middle" fill="#c8d0d8" font-size="12.5" font-weight="bold" font-family="Noto Serif,serif">Kāḷa Pakṣa</text>
 </svg></div></div>
   <p style="text-align:center;font-size:.85em;opacity:.75;margin-top:-6px">↔ Swipe the diagram sideways if needed</p>
   <p>The diagram above shows that, day by day, the moonlight (or the shadow) increases by <strong>12°</strong> of longitude, and it shows the days of each pakṣa. These days are called <strong>'tithi'</strong>. They are numbered in order from <em class="pali">'Paṭhamaṃ'</em> (first) to <em class="pali">'Paṇṇarasamaṃ'</em> (fifteenth).</p>
@@ -3308,7 +3308,7 @@
 
   <h3>How These 7 Adhimāsa Months Distribute</h3>
   <div class="calc-box">
-    <p style="text-align:center; font-family:'Courier New', monospace;">228 ÷ 7 = 32 <sup>4</sup>⁄<sub>7</sub></p>
+    <p style="text-align:center; font-family:Noto Sans Sinhala, sans-serif;">228 ÷ 7 = 32 <sup>4</sup>⁄<sub>7</sub></p>
     <p>Accordingly, an <em class="pali">Adhimāsa</em> should be applied once every 32 or 33 lunar months. Examination of the <em class="pali">Adhimāsa</em> tables shows that over 19 years, there are 3 occurrences at 32-month intervals and 4 occurrences at 33-month intervals:</p>
     <ul style="list-style:none; padding-left:0; text-align:center;">
       <li>33 × 4 = <strong>132</strong></li>
@@ -3870,7 +3870,7 @@ body.dark-mode #gnOverlay .num-cell .n{color: var(--gold-400);}
   margin: 18px 0;
   border: 1px solid var(--border-medium);
   box-shadow: var(--shadow-xs);}
-#gnOverlay .calc-box .formula{font-family: 'Courier New', monospace;
+#gnOverlay .calc-box .formula{font-family: Noto Sans Sinhala, sans-serif;
   background: var(--bg-card);
   border: 1px dashed var(--burgundy-600);
   border-radius: 8px;
@@ -3997,13 +3997,13 @@ body.dark-mode #gnOverlay .paksha-card table td:first-child{color: var(--gold-40
 
 /* ===== overlay container ===== */
 #gnOverlay{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;min-height:0;z-index:5000;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:0;scroll-padding-top:76px;display:block;text-align:left}
-#gnOverlay .gn-close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:5100;width:44px;height:44px;border-radius:50%;border:2px solid var(--burgundy-600);background:var(--bg-elevated);color:var(--burgundy-700);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:26px;line-height:1;font-family:Arial,sans-serif;box-shadow:var(--shadow-md);transition:all .25s ease}
+#gnOverlay .gn-close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:5100;width:44px;height:44px;border-radius:50%;border:2px solid var(--burgundy-600);background:var(--bg-elevated);color:var(--burgundy-700);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:26px;line-height:1;font-family:Noto Sans Sinhala,sans-serif;box-shadow:var(--shadow-md);transition:all .25s ease}
 #gnOverlay .gn-close:hover{background:var(--burgundy-700);color:#fdf5e8;transform:rotate(90deg)}
 body.dark-mode #gnOverlay .gn-close{color:var(--gold-300)}
 #gnOverlay .topbar-inner{padding-right:64px}
 /* ===== English overrides ===== */
-#gnOverlay.lang-en{--font-sans:'Noto Serif',Georgia,serif;--font-serif:'Noto Serif',Georgia,serif;line-height:1.85}
-#gnOverlay.lang-en .pali,#gnOverlay.lang-en .iast{font-family:'Noto Serif','Noto Serif Devanagari',Georgia,serif}
+#gnOverlay.lang-en{--font-sans:'Noto Serif',Noto Serif,serif;--font-serif:'Noto Serif',Noto Serif,serif;line-height:1.85}
+#gnOverlay.lang-en .pali,#gnOverlay.lang-en .iast{font-family:'Noto Serif','Noto Serif Devanagari',Noto Serif,serif}
 #gnOverlay.lang-en em.pali{font-style:italic;color:var(--burgundy-700);font-weight:500}
 body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
 #gnOverlay.lang-en .hero .subtitle,#gnOverlay.lang-en .year-card .name,#gnOverlay.lang-en .num-cell .p,#gnOverlay.lang-en footer .bless{font-style:italic}
@@ -4081,6 +4081,7 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
   function hide() {
     var ov = document.getElementById('gnOverlay');
     if (ov) ov.style.display = 'none';
+    if (window.V3D && V3D.solar) { try { V3D.solar(false); } catch (e) {} }
     document.documentElement.style.overflow = '';
     document.removeEventListener('keydown', onKey);
   }
@@ -4090,6 +4091,7 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
     injectStyle();
     var ov = build();
     ov.style.display = 'block';
+    if (window.V3D && V3D.solar) { try { V3D.solar(true, ov); } catch (e) {} }
     ov.scrollTop = 0;
     document.documentElement.style.overflow = 'hidden';
     document.addEventListener('keydown', onKey);

@@ -144,51 +144,13 @@ function timeline(k) { // 3D lit moons for ~a lunar month around the selected da
 /* ---------- background / hero scene (one shared renderer) ---------- */
 function gm(c, o, m, r) { return new T.MeshStandardMaterial({ color: c, metalness: m, roughness: r, transparent: true, opacity: o, side: T.DoubleSide }); }
 function lathe(p, mat) { return new T.Mesh(new T.LatheGeometry(p.map(function (a) { return new T.Vector2(a[0], a[1]); }), 36), mat); }
-function dagoba(mat) { // unit height 1; stupa + pillars
-  var g = new T.Group(), p = [[0, 0], [1.45, 0], [1.45, .04], [1.2, .04], [1.2, .08], [1, .08], [1, .12], [.9, .12]];
-  for (var i = 1; i <= 9; i++) { var a = i / 9 * Math.PI / 2; p.push([.9 * Math.cos(a), .12 + .55 * Math.sin(a)]); }
-  p.push([.17, .67], [.17, .75], [.22, .75], [.22, .79], [.12, .79], [.1, .86], [.08, .95], [.06, 1.05], [.02, 1.14], [0, 1.2]);
-  g.add(lathe(p, mat));
-  for (var s = -1; s <= 1; s += 2) for (var j = 0; j < 3; j++) { var ph = .45 - j * .08, x = s * (1.75 + j * .45);
-    var c = new T.Mesh(new T.CylinderGeometry(.04, .045, ph, 8), mat); c.position.set(x, ph / 2, 0); g.add(c);
-    var k = new T.Mesh(new T.BoxGeometry(.14, .05, .14), mat); k.position.set(x, ph + .025, 0); g.add(k); }
-  return g;
-}
-function lotus(mat, padMat) { // returns {g, tl:[{n,b,p}]}
-  var g = new T.Group(), tl = [], pg = new T.SphereGeometry(1, 10, 8);
-  [[8, 1.15, .95, 0], [6, .8, .8, .3], [5, .35, .62, .6]].forEach(function (R) { for (var i = 0; i < R[0]; i++) {
-    var pv = new T.Group(), t = new T.Group(), m = new T.Mesh(pg, mat); pv.rotation.y = i / R[0] * Math.PI * 2 + R[3];
-    m.scale.set(.24, .8 * R[2], .07); m.position.y = .8 * R[2]; t.add(m); t.rotation.x = R[1]; pv.add(t); g.add(pv); tl.push({ o: t, b: R[1], p: i * .7 + R[3] }); } });
-  var pad = new T.Mesh(new T.CylinderGeometry(1.6, 1.6, .04, 24), padMat); pad.position.y = -.05; g.add(pad);
-  g.rotation.x = .45; return { g: g, tl: tl };
-}
 var VSH = 'varying vec2 u;void main(){u=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}';
 function addMat(f, tr) { return new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending, side: T.DoubleSide, uniforms: tr || U, vertexShader: VSH, fragmentShader: f }); }
 function lights(sc, a) { var A = new T.AmbientLight(0xffffff, a); sc.add(A); var d = new T.DirectionalLight(0xffe7a8, .9); d.position.set(-200, 300, 400); sc.add(d); return { a: A, d: d }; }
 
-function buildMain() {
-  var sc = new T.Scene(), o = {}; lights(sc, .8);
-  var gold = gm(0xe6b944, .08, .3, .6), pink = gm(0xf6c6d8, .17, .1, .7), pad = gm(0x4f9a6a, .07, .1, .8);
-  o.dg = dagoba(gold); o.dg.position.z = -100; sc.add(o.dg);
-  o.l1 = lotus(pink, pad); o.l2 = lotus(pink, pad); sc.add(o.l1.g, o.l2.g);
-  o.ss = new T.Mesh(new T.PlaneGeometry(110, 2), addMat('uniform float o;varying vec2 u;void main(){gl_FragColor=vec4(1.,.97,.9,u.x*u.x*o*(1.-abs(u.y-.5)*2.));}', { o: { value: 0 } })); o.ss.visible = false; o.sl = 9; sc.add(o.ss);
-  o.sc = sc; return o;
-}
-function buildStars(o) {
-  if (o.st) { o.sc.remove(o.st); o.st.geometry.dispose(); }
-  var w = bg.w, h = bg.h, R = Math.hypot(w, h) / 2, n = Math.min(low ? 500 : 1000, Math.round(w * h / 1300)), P = new Float32Array(n * 3), Z = new Float32Array(n), Ph = new Float32Array(n), C = new Float32Array(n * 3);
-  var tint = [[1, 1, 1], [.8, .88, 1], [1, .92, .75]];
-  for (var i = 0; i < n; i++) { P[i * 3] = (Math.random() * 2 - 1) * R; P[i * 3 + 1] = (Math.random() * 2 - 1) * R; Z[i] = .8 + Math.pow(Math.random(), 3) * 2.6; Ph[i] = Math.random();
-    var t = tint[(Math.random() * 3) | 0]; C.set(t, i * 3); }
-  var g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(P, 3)); g.setAttribute('sz', new T.BufferAttribute(Z, 1)); g.setAttribute('ph', new T.BufferAttribute(Ph, 1)); g.setAttribute('col', new T.BufferAttribute(C, 3));
-  var m = new T.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { t: U.t, pr: { value: bg.r.getPixelRatio() } },
-    vertexShader: 'attribute float sz;attribute float ph;attribute vec3 col;uniform float t;uniform float pr;varying vec3 c;varying float a;void main(){c=col;a=.55+.45*sin(t*(.8+ph*.5)+ph*40.);gl_PointSize=sz*pr*(.8+.2*a);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-    fragmentShader: 'varying vec3 c;varying float a;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(c,a*smoothstep(.5,.0,d));}' });
-  o.st = new T.Points(g, m); o.st.position.set(w / 2, h / 2, -300); o.sc.add(o.st);
-}
 function buildHero() {
   var sc = new T.Scene(), o = {}; o.ls = lights(sc, .7);
-  var brass = gm(0xd9a53a, 1, .65, .35), gold = gm(0xe6b944, .42, .7, .38), pink = gm(0xf6c6d8, .55, .1, .7), pad = gm(0x4f9a6a, .4, .1, .8), dg = gm(0xf2d478, .2, .3, .6);
+  var brass = gm(0xd9a53a, 1, .65, .35), gold = gm(0xe6b944, .42, .7, .38);
   o.lamp = new T.Group(); o.lamp.add(lathe([[0, 0], [17, 0], [19, 3], [11, 7], [6, 14], [5, 22], [9, 29], [19, 33], [29, 40], [31, 47], [27, 50], [22, 48], [0, 46]], brass));
   var wick = new T.Mesh(new T.CylinderGeometry(1, 1.2, 8, 8), gm(0x2a1a0a, 1, 0, 1)); wick.position.y = 50; o.lamp.add(wick);
   o.flame = new T.Mesh(new T.PlaneGeometry(18, 34), addMat('uniform float t;varying vec2 u;void main(){vec2 p=vec2((u.x-.5)*2.,u.y);float w=mix(.6,.0,pow(p.y,.9));float n=sin(t*9.+p.y*7.)*.07*p.y+sin(t*5.3+p.y*3.)*.05*p.y;float d=abs(p.x-n)/max(w,.001);float a=smoothstep(1.,.3,d)*(1.-smoothstep(.75,1.,p.y));vec3 c=mix(vec3(1.,.5,.08),vec3(1.,.95,.7),smoothstep(.8,0.,d)*(1.-p.y));gl_FragColor=vec4(c,a);}'));
@@ -209,53 +171,45 @@ function buildHero() {
   var hd = new T.Mesh(new T.RingGeometry(R * .075, R * .2, 40), dk); hd.position.z = R * .01; o.wp.add(hd);
   for (var j = 0; j < 12; j++) bead(j * Math.PI / 6, .245, .02, .024);
   o.wh.position.z = -70; sc.add(o.wh);
-  o.dg = dagoba(dg); o.dg.position.z = -90; sc.add(o.dg); o.l1 = lotus(pink, pad); sc.add(o.l1.g); o.sc = sc; return o;
+  o.sc = sc; return o;
 }
 function bgInit() {
-  var r = new T.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' }); r.setClearColor(0, 0); r.setPixelRatio(dpr(1.5));
-  bg = { r: r, cv: r.domElement, cam: new T.OrthographicCamera(0, 1, 1, 0, -2000, 2000), w: 0, h: 0, t: 0, raf: 0, last: 0, mode: '', n: 0, cov: false };
-  bg.cv.id = 'v3dBg'; S.m = buildMain(); S.h = buildHero(); doc.body.insertBefore(bg.cv, doc.body.firstChild);
+  var r = new T.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' }); r.setClearColor(0, 0); r.setPixelRatio(dpr(low ? 1 : 1.5));
+  bg = { r: r, cv: r.domElement, cam: new T.OrthographicCamera(0, 1, 1, 0, -2000, 2000), w: 0, h: 0, t: 0, raf: 0, last: 0, mode: '', n: 0, cov: false,
+    vis: true, min: low ? 28 : 0, ema: 0, io: null };
+  bg.cv.id = 'v3dBg'; S.h = buildHero(); doc.body.insertBefore(bg.cv, doc.body.firstChild);
 }
 function fit(force) {
   var w = bg.mode === 'h' && heroEl ? heroEl.clientWidth : W.innerWidth, h = bg.mode === 'h' && heroEl ? heroEl.clientHeight : W.innerHeight;
   if (!w || !h) return; if (!force && w === bg.w && h === bg.h) return; bg.w = w; bg.h = h;
   bg.r.setSize(w, h, false); var c = bg.cam; c.left = 0; c.right = w; c.top = h; c.bottom = 0; c.updateProjectionMatrix();
   var o = S[bg.mode]; if (!o) return;
-  if (bg.mode === 'm') { var H = Math.min(h * .26, 220); o.dg.scale.setScalar(H); o.dg.position.set(w / 2, 0, -100);
-    o.l1.g.scale.setScalar(Math.min(w * .09, 46)); o.l1.g.position.set(w * .14, 38, -50); o.l2.g.scale.setScalar(Math.min(w * .07, 36)); o.l2.g.position.set(w * .86, 30, -50);
-    buildStars(o);
-  } else { var lampEl = heroEl.querySelector('.ch-lamp'), hr = heroEl.getBoundingClientRect(), lr = lampEl ? lampEl.getBoundingClientRect() : { left: hr.left + w / 2, width: 0, bottom: hr.top + 80 };
+  { var lampEl = heroEl.querySelector('.ch-lamp'), hr = heroEl.getBoundingClientRect(), lr = lampEl ? lampEl.getBoundingClientRect() : { left: hr.left + w / 2, width: 0, bottom: hr.top + 80 };
     var lx = lr.left + lr.width / 2 - hr.left, ly = h - (lr.bottom - hr.top);
     o.lamp.position.set(lx, ly, 0); var Rr = Math.min(82, w * .27) / 100; o.wh.scale.setScalar(Rr); o.wh.position.set(lx, ly + 26, -70);
-    o.lt.position.set(0, 66, 60); o.dg.scale.setScalar(Math.min(h * .55, 90)); o.dg.position.set(w * .86, 0, -90);
-    o.l1.g.scale.setScalar(Math.min(w * .06, 24)); o.l1.g.position.set(w * .12, 22, -40); }
+    o.lt.position.set(0, 66, 60); }
 }
 function frame(dt) {
   var o = S[bg.mode], t = bg.t += dt; U.t.value = t; if (!o) return;
-  if (bg.mode === 'm') {
-    if (++bg.n % 20 === 0) { var m = $('sunModal'), a = $('spOverlay'), u = $('upOverlay'); bg.cov = !!((m && m.style.display === 'flex') || (a && a.style.display === 'block') || (u && u.style.display === 'block')); } if (bg.cov) return;
-    if (o.st) o.st.rotation.z = t * .003;
-    [o.l1, o.l2].forEach(function (L, j) { L.g.position.y += Math.sin(t * .8 + j) * .03; L.tl.forEach(function (p) { p.o.rotation.x = p.b + Math.sin(t * .5 + p.p) * .07; }); });
-    o.sl += dt; var u = o.ss.material.uniforms.o;
-    if (o.sl > 9 + (bg.n % 7)) { o.sl = 0; o.ss.rotation.z = -.5; o.ss.position.set(Math.random() * bg.w * .8, bg.h * (.55 + Math.random() * .4), -250); o.ss.visible = !low; }
-    if (o.ss.visible) { var q = o.sl / .9; if (q > 1) { o.ss.visible = false; u.value = 0; } else { u.value = Math.sin(q * Math.PI); o.ss.position.x += dt * 470; o.ss.position.y -= dt * 250; } }
-  } else {
+  {
     o.wp.rotation.z -= dt * .16; o.wh.rotation.y = Math.sin(t * .4) * .2; // slow clockwise spin
-    var k = 1 + Math.sin(t * 13) * .06 + Math.sin(t * 7.3) * .05 + (Math.random() - .5) * .05; var dk = isDark(); o.ls.a.intensity = dk ? .1 : .7; o.ls.d.intensity = dk ? .08 : .9; o.lt.intensity = (dk ? 3.2 : 1.6) * k; o.flame.scale.set(1, k, 1); o.glow.scale.setScalar(.95 + (k - 1));
-    o.l1.tl.forEach(function (p) { p.o.rotation.x = p.b + Math.sin(t * .5 + p.p) * .07; });
+    var k = 1 + Math.sin(t * 13) * .06 + Math.sin(t * 7.3) * .05 + Math.sin(t * 29.7) * .025; var dk = isDark(); o.ls.a.intensity = dk ? .1 : .7; o.ls.d.intensity = dk ? .08 : .9; o.lt.intensity = (dk ? 3.2 : 1.6) * k; o.flame.scale.set(1, k, 1); o.glow.scale.setScalar(.95 + (k - 1));
   }
   bg.r.render(o.sc, bg.cam);
 }
-function start() { if (bg.raf) return; bg.last = 0;
-  (function L(ts) { bg.raf = requestAnimationFrame(L); if (ts - bg.last < 33) return; var dt = bg.last ? (ts - bg.last) / 1000 : .033; bg.last = ts; frame(Math.min(dt, .1)); })(0); }
+/* Frame pacing: the old "skip if < 33ms" test dropped a frame whenever a vsync timestamp landed a hair under 33.3ms (60Hz) → 50ms hitches = visible stutter.
+   Now: every display frame; only if the device really can't hold ~40fps does it fall back to a steady ~30fps (28ms threshold, safe against that jitter). */
+function start() { if (bg.raf || !bg.vis) return; bg.last = 0; bg.ema = 0; bg.n = 0;
+  (function L(ts) { bg.raf = requestAnimationFrame(L); if (!ts) return;
+    var d = bg.last ? ts - bg.last : 0; if (d && d < bg.min) return; bg.last = ts;
+    if (d) { bg.n++; bg.ema = bg.ema ? bg.ema * .92 + Math.min(d, 50) * .08 : d; if (!bg.min && bg.n > 60 && bg.ema > 26) bg.min = 28; }
+    frame(d ? Math.min(d / 1000, .1) : .016); })(0); }
 function stop() { cancelAnimationFrame(bg.raf); bg.raf = 0; }
 function sync() {
-  if (!bg) return;   var want = hostMode === 'h' && heroEl ? 'h' : (isDark() ? 'm' : '');
-  doc.body.classList.toggle('v3d-on', want === 'm');
+  if (!bg) return;   var want = hostMode === 'h' && heroEl ? 'h' : ''; // 3D only in the Chanting header (lamp + Dhamma wheel); page background 3D was removed
   if (!want || doc.hidden) { stop(); bg.mode = want; bg.cv.style.display = want ? 'block' : 'none'; return; }
-  if (want === 'm' && bg.cv.parentNode !== doc.body) doc.body.insertBefore(bg.cv, doc.body.firstChild);
   bg.mode = want; bg.cv.style.display = 'block'; fit(true);
-  if (low && want === 'm') { stop(); frame(0.01); } else start(); // hero always animates (small canvas)
+  start(); // hero animates (small canvas)
 }
 
 /* ---------- calculation page hero: Sun–Earth–Moon system (replaces the SVG, which stays as fallback) ---------- */
@@ -313,7 +267,11 @@ W.V3D = { solar: solar, tex: function (n) { if (!T) return null; return n === 's
   paintMoon: function (cv, d, t) { if (!mr) return false; paint(cv, d, t || 0); return true; },
   ready: function () { try { return !!mr && !mr.r.getContext().isContextLost(); } catch (e) { return false; } }, chanting: function (on, ov) {
   if (!bg) return;
-  if (on && ov) { heroEl = ov.querySelector('.ch-hero'); if (!heroEl) return; hostMode = 'h'; heroEl.classList.add('v3d'); heroEl.insertBefore(bg.cv, heroEl.firstChild); }
+  if (bg.io) { bg.io.disconnect(); bg.io = null; } bg.vis = true;
+  if (on && ov) { heroEl = ov.querySelector('.ch-hero'); if (!heroEl) return; hostMode = 'h'; heroEl.classList.add('v3d'); heroEl.insertBefore(bg.cv, heroEl.firstChild);
+    // කියවන විට header එක scroll වී පිටතට ගිය පසු WebGL render නවතයි (දැන් නැවතත් නොපෙනෙන canvas එක සෑම frame එකකම render වෙමින් scroll එකට බාධා කරයි)
+    if (W.IntersectionObserver) { bg.io = new IntersectionObserver(function (e) { var v = e[e.length - 1].isIntersecting; if (v === bg.vis) return; bg.vis = v;
+      if (!v) stop(); else if (bg.mode === 'h' && !doc.hidden) start(); }, { root: ov, threshold: 0 }); bg.io.observe(heroEl); } }
   else { hostMode = ''; if (heroEl) heroEl.classList.remove('v3d'); heroEl = null; doc.body.insertBefore(bg.cv, doc.body.firstChild); }
   sync(); } };
 })();

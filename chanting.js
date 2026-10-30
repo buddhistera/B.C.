@@ -182,19 +182,49 @@ function attachChPinch(ov) {
 }
 
   /* ----------------- ප්‍රාතිමෝක්ෂ දත්ත → පොදු ආකෘතිය ----------------- */
+  /* section එකක් කාඩ්පත් (unit) වලට කැපීම:
+     - rules + වග්ග ඇති විට : [ආරම්භය] , [වග්ගයක් බැගින්] , [අවසානය + end]
+     - text  split:'title'   : title_si ඇති කොටසකින් අලුත් කාඩ්පතක්
+             split:'part'    : (පෙරනිමිය) සෑම කොටසකටම කාඩ්පතක්
+             split:'none'    : මුළු section එකම එක කාඩ්පතක්
+       role:'end' කොටස් සෑම විටම පෙර කාඩ්පතටම එකතු වේ */
+  function pmUnits(sec) {
+    var P = sec.parts, out = [], cur = null;
+    if (sec.kind === 'rules') {
+      if (!P.some(function (p) { return p.vagga; })) return [P];
+      P.forEach(function (p) {
+        if (p.role === 'open') { out.push([p]); cur = null; return; }
+        if (!cur) { cur = []; out.push(cur); }
+        cur.push(p);
+        if (p.role === 'rule' && p.vagga) cur = null;
+      });
+      return out;
+    }
+    var body = P.filter(function (p) { return p.role !== 'end'; }).length;
+    var mode = sec.split || (body > 1 ? 'part' : 'none');
+    if (mode === 'none') return [P];
+    P.forEach(function (p) {
+      var start = !cur || (mode === 'title' ? !!p.title_si : p.role !== 'end');
+      if (start) { cur = []; out.push(cur); }
+      cur.push(p);
+    });
+    return out;
+  }
   function adaptPatimokkha() {
     if (typeof PATIMOKKHA_DATA === 'undefined' || !Array.isArray(PATIMOKKHA_DATA)) return null;
-    var groups = [], items = [];
+    var groups = [], items = [], lastCat = null;
     PATIMOKKHA_DATA.forEach(function (sec) {
-      groups.push({ id: sec.id, label: { si: sec.title_si, en: sec.title_en }, short: { si: sec.si, en: sec.en }, count: sec.count });
-      /* role:"end" කොටසක් ඇත්නම් split නොකර, එම කොටසම pm-end ලෙස පෙන්වයි */
-      var hasEnd = sec.parts.some(function (p) { return p.role === 'end'; });
-      var split = sec.kind !== 'rules' && sec.parts.length > 1 && !hasEnd;
-      var units = split ? sec.parts.map(function (p) { return [p]; }) : [sec.parts];
+      var g = { id: sec.id, label: { si: sec.title_si, en: sec.title_en }, short: { si: sec.si, en: sec.en }, count: sec.count,
+        countLabel: sec.count_si ? { si: sec.count_si, en: sec.count_en } : null };
+      if (sec.cat && sec.cat !== lastCat) { g.cat = { si: sec.cat_si, en: sec.cat_en }; lastCat = sec.cat; }
+      groups.push(g);
+      var units = pmUnits(sec);
+      var titled = sec.kind !== 'rules' && units.length > 1;
       units.forEach(function (parts, idx) {
-        var p0 = parts[0];
+        var p0 = parts[0], vp = parts.filter(function (x) { return x.vagga; })[0];
         items.push({ id: 'pm-' + sec.id + '-' + idx, group: sec.id, pm: true, kind: sec.kind, parts: parts,
-          title: split ? { si: p0.title_si, en: p0.title_en } : null,
+          title: titled && p0.title_si ? { si: p0.title_si, en: p0.title_en || p0.title_si } : null,
+          vagga: vp ? vp.vagga : null,
           intro: idx === 0 && sec.intro_si ? { si: sec.intro_si, en: sec.intro_en } : null,
           note: idx === units.length - 1 && sec.note_si ? { si: sec.note_si, en: sec.note_en } : null });
       });
@@ -203,7 +233,7 @@ function attachChPinch(ov) {
       id: 'patimokkha',
       title: { si: 'භික්ඛු ප්‍රාතිමෝක්ඛය', en: 'Bhikkhu Pātimokkha' },
       subtitle: { si: 'ශික්ෂාපද 227', en: '227 Training Rules' },
-      navLabel: { si: 'බණවර', en: 'Sections' },
+      navLabel: { si: 'පටුන', en: 'Contents' },
       navMode: 'groups',
       intro: { pali: 'නමෝ තස්ස භගවතෝ අරහතෝ සම්මාසම්බුද්ධස්ස !!!', translit: 'Namo tassa bhagavato arahato sammāsambuddhassa !!!' },
       groups: groups, items: items
@@ -211,30 +241,73 @@ function attachChPinch(ov) {
   }
 
   /* ---- ප්‍රාතිමෝක්ෂ කාඩ්පත: පාලි සියල්ල එකට, තේරුම බටනයෙන් දිගහැරේ ---- */
+  /* \n\n මගින් ඡේද වෙන් වේ. තනි පේළියක් ඇති දිගු ඡේදයකට indent (ගද්‍ය); පේළි කිහිපයක් ඇති කොටස් (ගාථා) indent නොලබයි. justify CSS මගින් */
+  function pmPara(cls, txt) {
+    var out = '';
+    String(txt || '').split(/\n\n+/).forEach(function (b) {
+      if (!b.trim()) return;
+      var c = cls || ((!/\n/.test(b) && b.length > 60) ? 'pp' : '');
+      out += '<p' + (c ? ' class="' + c + '"' : '') + '>' + esc(b) + '</p>';
+    });
+    return out;
+  }
+  function pmFoot(list, si) {
+    var out = '';
+    (list || []).forEach(function (n) {
+      var t = si ? n.note : (n.note_en || '');
+      if (t) out += '<p class="pm-fn">‘' + esc(n.at) + '’ – ' + esc(t) + '</p>';
+    });
+    return out;
+  }
   function pmBlocks(it, si, mean) {
     var h = '';
     it.parts.forEach(function (p) {
-      var t = mean ? (si ? p.si : p.en) : (si ? p.pali : p.translit);
-      if (it.kind === 'rules' && p.role === 'rule') {
-        h += '<p class="pm-rule"><span class="pm-n">' + esc(p.n) + '.</span><span>' + esc(t) + '</span></p>'; return;
+      var t = (mean ? (si ? p.si : p.en) : (si ? p.pali : p.translit)) || '';
+      var end = p.role === 'end', seg = '';
+      if (mean && !si && p.rubric_en) seg += pmPara('pm-rub', p.rubric_en);
+      if (t.trim()) {
+        if (it.kind === 'rules' && p.role === 'rule') {
+          seg += '<p class="pm-rule"><span class="pm-n">' + esc(p.n) + '.</span><span class="pm-rt">' + esc(t) + '</span></p>';
+        } else seg += pmPara(end ? 'pm-end' : '', t);
       }
-      t.split(/\n\n+/).forEach(function (b) {
-        var cls = (!mean && p.role === 'end') ? ' class="pm-end"' : '';
-        h += '<p' + cls + '>' + esc(b) + '</p>';
-      });
+      if (mean) {
+        seg += pmFoot(p.notes_si, si);
+        if (si && p.gloss_si) seg += '<p class="pm-fn">' + esc(p.gloss_si) + '</p>';
+        if (si && p.source_si) seg += '<p class="pm-fn">' + esc(p.source_si) + '</p>';
+        var pn = si ? p.note_si : p.note_en;
+        if (pn) seg += '<p class="pm-fn">' + esc(pn) + '</p>';
+      } else seg += pmFoot(p.notes_pali, si);
+      if (seg) {
+        var spk = si ? p.speaker_si : (p.speaker_en || p.speaker_si);
+        h += (spk ? '<p class="pm-spk">' + esc(spk) + '</p>' : '') + seg;
+      }
+      if (p.vagga) {                                     /* වග්ග අවසානය — මැදට */
+        var v = p.vagga, vt = mean ? (si ? v.si : v.en) : (si ? v.pali : v.translit);
+        if (vt) h += '<p class="pm-end pm-vend">' + esc(vt) + '</p>';
+      }
     });
     return h;
+  }
+  function pmVaggaHead(v, si) {
+    var name = si ? v.name_si : v.name_en, cnt = si ? v.count_si : v.count_en;
+    return '<div class="pm-vh"><span class="pm-vn">' + esc(v.num) + '</span><b>' + esc(name) + '</b>' +
+      '<small>' + esc(cnt) + ' (' + esc(v.from) + '–' + esc(v.to) + ')</small></div>';
   }
   function pmItemHtml(it) {
     var si = lang() === 'si';
     var h = '<article class="ch-card" data-a="' + esc(it.id) + '" data-k="g-' + esc(it.group) + '">';
+    if (it.vagga && it.vagga.num != null) h += pmVaggaHead(it.vagga, si);
     if (it.title) h += '<div class="pm-sub">' + esc(si ? it.title.si : it.title.en) + '</div>';
     if (it.intro) h += '<p class="pm-intro">' + br(si ? it.intro.si : it.intro.en) + '</p>';
-    h += '<div class="pm-pali">' + pmBlocks(it, si, false) +
-      '<div class="pm-row"><button type="button" class="pm-more" aria-expanded="false" onclick="chPmToggle(this)">' +
-      T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button></div></div>' +
-      '<div class="pm-meaning' + (si ? '' : ' en') + '">' + pmBlocks(it, si, true) + '</div>';
-    if (it.note) h += '<p class="pm-intro">' + br(si ? it.note.si : it.note.en) + '</p>';
+    var pali = pmBlocks(it, si, false), mean = pmBlocks(it, si, true);
+    if (pali || mean) {
+      h += '<div class="pm-pali">' + pali;
+      if (mean) h += '<div class="pm-row"><button type="button" class="pm-more" aria-expanded="false" onclick="chPmToggle(this)">' +
+        T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button></div>';
+      h += '</div>';
+      if (mean) h += '<div class="pm-meaning' + (si ? '' : ' en') + '">' + mean + '</div>';
+    }
+    if (it.note) h += '<p class="pm-intro">' + br(si ? it.note.si : (it.note.en || it.note.si)) + '</p>';
     return h + '</article>';
   }
   window.chPmToggle = function (b) {
@@ -244,7 +317,16 @@ function attachChPinch(ov) {
   };
 
   /* --------------------------- loading ---------------------------- */
+  var LOADING = {};   // තවම පූරණය වන මොඩියුල — prefetch සහ click දෙකම එකම script එක දෙවරක් load නොකරයි
   function loadModule(tab) {
+    if (MODS[tab.id]) return Promise.resolve(MODS[tab.id]);
+    if (LOADING[tab.id]) return LOADING[tab.id];
+    var p = loadModuleRaw(tab);
+    LOADING[tab.id] = p;
+    p.catch(function () { delete LOADING[tab.id]; });
+    return p;
+  }
+  function loadModuleRaw(tab) {
     return new Promise(function (resolve, reject) {
       if (MODS[tab.id]) return resolve(MODS[tab.id]);
       function done() {
@@ -268,14 +350,14 @@ function attachChPinch(ov) {
 --g700:#8a6508;--g600:#b8860b;--g500:#d4a017;--g400:#e6b944;--g300:#f2d478;--g200:#f9e9b8;--g100:#fdf5db;\
 --bg:#f3fcf7;--card:#ffffff;--elev:#f8fdfa;--subtle:#e8f8f0;--tint:#e0f5e8;--pali-bg:#edfaf3;\
 --tx:#0a2018;--tx2:#2a4a3a;--muted:#608a76;--bd:#c8e6d5;--bd2:#a0d4b8;--sh:0 4px 14px rgba(8,63,42,.10);--shs:0 1px 4px rgba(8,63,42,.08);\
---serif:"Noto Serif Sinhala","Noto Sans Sinhala",Georgia,serif;--sans:"Noto Sans Sinhala","Segoe UI",sans-serif}\
+--serif:"Noto Serif Sinhala","Noto Sans Sinhala",Noto Serif,serif;--sans:"Noto Sans Sinhala","Segoe UI",sans-serif}\
 body.dark-mode #chOverlay{--bg:#061410;--card:#0a2118;--elev:#0e2c20;--subtle:#123828;--tint:#123828;--pali-bg:#113325;\
 --tx:#e0f5e8;--tx2:#a8d4b8;--muted:#6a9a80;--bd:#1a4830;--bd2:#2a6042;--sh:0 4px 14px rgba(0,0,0,.5);--shs:0 1px 4px rgba(0,0,0,.45);\
 --g700:#e6b944;--g600:#f2d478;--g500:#f9e9b8;--g400:#fdf5db;--m700:#68cba3;--m600:#98ddbd;--m500:#c8edd8;--m800:#98ddbd;--m900:#c8edd8}\
 #chOverlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:5000;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;\
 background:var(--bg);color:var(--tx);font-family:var(--sans);line-height:1.9;font-size:16px;text-align:left}\
 #chOverlay *{box-sizing:border-box}\
-#chOverlay .ch-close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);right:10px;z-index:5100;width:42px;height:42px;border-radius:50%;border:2px solid var(--m700);background:var(--card);color:var(--m700);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:26px;line-height:1;font-family:Arial,sans-serif;box-shadow:0 5px 16px rgba(0,0,0,.25);transition:all .25s ease}\
+#chOverlay .ch-close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 8px);right:10px;z-index:5100;width:42px;height:42px;border-radius:50%;border:2px solid var(--m700);background:var(--card);color:var(--m700);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:26px;line-height:1;font-family:Noto Sans Sinhala,sans-serif;box-shadow:0 5px 16px rgba(0,0,0,.25);transition:all .25s ease}\
 #chOverlay .ch-close:hover{background:var(--m700);color:#fff;transform:rotate(90deg)}\
 /* zoom badge */\
 #chOverlay .ch-zoom-badge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.75);background:rgba(8,63,42,.88);color:#fff;font-family:var(--sans);font-weight:800;font-size:1.15rem;padding:12px 26px;border-radius:34px;box-shadow:0 10px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.15);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:5200;letter-spacing:1.5px;border:1.5px solid rgba(255,255,255,.25)}\
@@ -319,12 +401,12 @@ body.dark-mode #chOverlay .ch-head h2{color:var(--g400)}\
 body.dark-mode #chOverlay .ch-namo{background:linear-gradient(135deg,var(--subtle),var(--elev))}\
 #chOverlay .ch-namo-pali{font-family:var(--serif);font-size:1.12rem;font-weight:700;color:var(--m900);line-height:1.9}\
 body.dark-mode #chOverlay .ch-namo-pali{color:var(--g400)}\
-#chOverlay .ch-namo-tr{font-family:Georgia,serif;font-style:italic;font-size:.92rem;color:var(--g700);margin-top:2px}\
+#chOverlay .ch-namo-tr{font-family:Noto Serif,serif;font-style:italic;font-size:.92rem;color:var(--g700);margin-top:2px}\
 #chOverlay .ch-namo-line{width:110px;height:2px;background:linear-gradient(90deg,transparent,var(--g500),transparent);margin:14px auto}\
 #chOverlay .ch-namo-t{font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--m800);margin:6px 0;line-height:1.9}\
 #chOverlay .ch-gold-namo{text-align:center;padding:20px 14px;margin:6px 0 16px;border-radius:16px;border:2px solid var(--g600);background:linear-gradient(135deg,var(--g300),var(--g400) 55%,var(--g500));box-shadow:var(--sh)}\
 #chOverlay .ch-gold-namo .p{font-family:var(--serif);font-size:1.18rem;font-weight:800;color:#3d2c00;line-height:1.9}\
-#chOverlay .ch-gold-namo .t{font-family:Georgia,serif;font-style:italic;font-size:.92rem;color:#5c4300;margin-top:4px}\
+#chOverlay .ch-gold-namo .t{font-family:Noto Serif,serif;font-style:italic;font-size:.92rem;color:#5c4300;margin-top:4px}\
 body.dark-mode #chOverlay .ch-gold-namo{background:linear-gradient(135deg,#8a6508,#b8860b 55%,#d4a017);border-color:#e6b944}\
 body.dark-mode #chOverlay .ch-gold-namo .p{color:#fff8e1}\
 body.dark-mode #chOverlay .ch-gold-namo .t{color:#ffe9a8}\
@@ -342,7 +424,7 @@ body.dark-mode #chOverlay .ch-num{background:linear-gradient(135deg,#136c48,#22a
 #chOverlay .ch-names{flex:1;min-width:0;text-align:center}\
 #chOverlay .ch-nm{font-family:var(--serif);font-weight:700;color:var(--m800);font-size:1.08rem;line-height:1.5}\
 body.dark-mode #chOverlay .ch-nm{color:var(--g400)}\
-#chOverlay .ch-nm2{font-family:Georgia,serif;font-style:italic;font-weight:600;color:var(--g700);font-size:.88rem;margin-top:2px}\
+#chOverlay .ch-nm2{font-family:Noto Serif,serif;font-style:italic;font-weight:600;color:var(--g700);font-size:.88rem;margin-top:2px}\
 #chOverlay .ch-nm3{font-size:.8rem;color:var(--muted);font-weight:600;margin-top:1px}\
 #chOverlay .ch-gl{font-size:.8rem;color:var(--muted);font-weight:600}\
 #chOverlay .ch-box{position:relative;border-radius:12px;margin:20px 0 10px;white-space:pre-line;word-break:break-word;text-align:justify}\
@@ -364,7 +446,7 @@ body.dark-mode #chOverlay .ch-pali::before{background:#1a8558}\
 #chOverlay .ch-mean p.v{text-indent:0}\
 #chOverlay .ch-mean p:last-child{margin-bottom:0}\
 body.dark-mode #chOverlay .ch-mean::before{background:#136c48}\
-#chOverlay .ch-mean.en{font-family:Georgia,"Noto Serif",serif;font-size:.97rem;line-height:1.85}\
+#chOverlay .ch-mean.en{font-family:Noto Serif,serif;font-size:.97rem;line-height:1.85}\
 #chOverlay .ch-gatha{background:linear-gradient(135deg,#fdf5db,#f9e9b8);border:2px solid var(--g500);border-radius:14px;padding:16px 12px;text-align:center;font-family:var(--serif);font-style:italic;font-weight:600;color:#8a6508;margin:16px 0 2px;line-height:2.1;font-size:.95rem;white-space:pre-line;box-shadow:inset 0 0 22px rgba(212,160,23,.12)}\
 body.dark-mode #chOverlay .ch-gatha{background:linear-gradient(135deg,#3a2810,#4a3418);color:#f2d478;border-color:#b8860b}\
 /* misc */\
@@ -376,25 +458,45 @@ body.dark-mode #chOverlay .ch-gatha{background:linear-gradient(135deg,#3a2810,#4
 #chOverlay .ch-foot p{font-family:var(--serif);margin:0 auto 10px;max-width:640px;line-height:1.95;font-size:.98rem}\
 #chOverlay .ch-foot .th{opacity:.92;font-size:.92rem}\
 /* pātimokkha */\
-#chOverlay .pm-sub{font-family:var(--serif);font-weight:700;color:var(--m800);font-size:1.02rem;margin:0 0 10px;line-height:1.6}\
+#chOverlay .pm-sub{font-family:var(--serif);font-weight:700;color:var(--m800);font-size:1.02rem;margin:0 0 10px;line-height:1.6;text-align:center}\
 body.dark-mode #chOverlay .pm-sub{color:var(--g400)}\
-#chOverlay .pm-intro{font-size:.88rem;color:var(--muted);line-height:1.8;margin:0 0 10px;white-space:pre-line}\
-#chOverlay .pm-pali{background:var(--pali-bg);border:1.5px dashed var(--m600);border-radius:12px;padding:14px 15px 8px;font-family:var(--serif);font-weight:600;color:var(--m900);font-size:1rem;line-height:2.1;word-break:break-word}\
+#chOverlay .pm-intro{font-size:.88rem;color:var(--muted);line-height:1.8;margin:0 0 10px;white-space:pre-line;text-align:justify}\
+#chOverlay .pm-pali{background:var(--pali-bg);border:1.5px dashed var(--m600);border-radius:12px;padding:14px 15px 8px;font-family:var(--serif);font-weight:600;color:var(--m900);font-size:1rem;line-height:2.1;word-break:break-word;text-align:justify}\
 body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
 #chOverlay .pm-pali p{margin:0 0 .55em;white-space:pre-line}\
 #chOverlay .pm-rule{display:flex;gap:.55em}\
 #chOverlay .pm-n{flex:none;min-width:1.9em;font-weight:800;color:var(--m700)}\
-#chOverlay .pm-pali .pm-end{text-align:center;color:var(--m700);font-weight:800}\
+#chOverlay .pm-pali p.pp,#chOverlay .pm-meaning p.pp{text-indent:2em}\
+#chOverlay .pm-end{text-align:center;color:var(--m700);font-weight:800;text-indent:0}\
+#chOverlay .pm-meaning .pm-end{font-weight:700}\
+#chOverlay .pm-vend{margin-top:.7em}\
+#chOverlay .pm-rt{flex:1 1 auto;min-width:0;text-align:justify}\
+#chOverlay .pm-spk{font-family:var(--sans);font-size:.78rem;font-weight:800;color:var(--m700);margin:.5em 0 .1em;text-align:left;letter-spacing:.2px}\
+#chOverlay .pm-fn{font-family:var(--sans);font-size:.8rem;font-weight:500;line-height:1.7;color:var(--muted);margin:.2em 0 .5em;text-align:left}\
+#chOverlay .pm-rub{font-family:var(--sans);font-style:italic;color:var(--muted);font-size:.9rem;line-height:1.75}\
+#chOverlay .pm-vh{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;margin:0 0 14px}\
+#chOverlay .pm-vn{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--m800),var(--m500));color:#fff;font-weight:800;font-size:.95rem;border:2px solid var(--g500);box-shadow:0 3px 10px rgba(19,108,72,.25)}\
+#chOverlay .pm-vh b{font-family:var(--serif);font-size:1.08rem;color:var(--m800);line-height:1.5}\
+body.dark-mode #chOverlay .pm-vh b{color:var(--g400)}\
+#chOverlay .pm-vh small{font-size:.76rem;font-weight:700;color:var(--muted)}\
+#chOverlay .pm-cat{margin:38px 0 -8px;text-align:center;position:relative}\
+#chOverlay .pm-cat:first-child,#chOverlay .ch-namo+.pm-cat{margin-top:24px}\
+#chOverlay .pm-cat span{display:inline-block;font-family:var(--serif);font-weight:800;font-size:.95rem;letter-spacing:.3px;color:var(--m800);padding:5px 18px;border-top:2px solid var(--g500);border-bottom:2px solid var(--g500)}\
+body.dark-mode #chOverlay .pm-cat span{color:var(--g400)}\
+#chOverlay .ch-lbl.ch-cat{background:transparent;color:var(--muted);border-left:2px dotted var(--m600);border-radius:0;margin-left:6px}\
 #chOverlay .pm-row{display:flex;justify-content:flex-end;margin:2px 0 4px}\
 #chOverlay .pm-more{background:none;border:1.3px solid var(--m700);color:var(--m700);padding:2px 12px;border-radius:30px;font-family:var(--sans);font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;line-height:1.7}\
 #chOverlay .pm-more .pm-arr{font-size:.62em;display:inline-block;transition:transform .2s}\
 #chOverlay .pm-more[aria-expanded=true] .pm-arr{transform:rotate(180deg)}\
-#chOverlay .pm-meaning{display:none;margin-top:12px;padding:4px 4px 2px 13px;border-left:4px solid var(--m700);font-size:.95rem;line-height:1.95;color:var(--tx)}\
+#chOverlay .pm-meaning{display:none;margin-top:12px;padding:4px 4px 2px 13px;border-left:4px solid var(--m700);font-size:.95rem;line-height:1.95;color:var(--tx);text-align:justify}\
 #chOverlay .pm-meaning.open{display:block}\
 #chOverlay .ch-mean-wrap{display:none}\
 #chOverlay .ch-mean-wrap.open{display:block}\
-#chOverlay .pm-meaning.en{font-family:Georgia,"Noto Serif",serif;font-size:.97rem;line-height:1.85}\
+#chOverlay .pm-meaning.en{font-family:Noto Serif,serif;font-size:.97rem;line-height:1.85}\
 #chOverlay .pm-meaning p{margin:0 0 .7em;white-space:pre-line}\
+/* overlay විවෘතව ඇති විට පිටුව පිටුපස ඇති animation නවතයි (ඒවා සෑම frame එකකම repaint වී ධර්ම චක්‍රයත් සමඟ තරග කරයි) */\
+body.ch-open::before,body.ch-open .app-container::before{animation-play-state:paused!important}\
+#chOverlay .ch-hero.v3d .ch-flame,#chOverlay .ch-hero.v3d .ch-glow{animation:none}\
 @media (min-width:720px){#chOverlay .ch-card{padding:24px 28px}#chOverlay .ch-main{padding:22px 18px 40px}#chOverlay .ch-pali{font-size:1.06rem;padding:20px 24px}}';
 
   function injectStyle() {
@@ -470,8 +572,9 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     return '<article class="ch-card" data-a="' + esc(it.id) + '" data-k="' + esc(key) + '">' + head + body + '</article>';
   }
 
-  function render(mod) {
+  function renderParts(mod) {
     var si = lang() === 'si';
+    var rows = [];
     var html = '<div class="ch-head"><h2>' + esc(L(mod.title)) + '</h2>' + (mod.subtitle ? '<p>' + esc(L(mod.subtitle)) + '</p>' : '') + '</div>';
 
     // 1. Intro (නමස්කාරය)
@@ -509,27 +612,32 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
       var multi = mod.groups && mod.groups.length > 1;
       var lastGroup = null;
       mod.items.forEach(function (it) {
+        var gh = '';
         if (multi && it.group !== lastGroup) {
           lastGroup = it.group;
           var gp = mod.groups.filter(function (g) { return g.id === it.group; })[0];
-          if (gp) html += '<div class="ch-group" data-a="g-' + esc(gp.id) + '"><h3>' + esc(L(gp.label)) + '</h3>' +
-            (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' rules') + '</span>' : '') + '</div>' +
+          if (gp) gh = (gp.cat ? '<div class="pm-cat" data-a="c-' + esc(gp.id) + '"><span>' + esc(L(gp.cat)) + '</span></div>' : '') +
+            '<div class="ch-group" data-a="g-' + esc(gp.id) + '"><h3>' + esc(L(gp.label)) + '</h3>' +
+            (gp.countLabel ? '<span>' + esc(L(gp.countLabel)) + '</span>'
+              : (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' rules') + '</span>' : '')) + '</div>' +
             (gp.namo ? '<div class="ch-gold-namo"><div class="p">' + esc(gp.namo.pali) + '</div>' + (!si && gp.namo.translit ? '<div class="t">' + esc(gp.namo.translit) + '</div>' : '') + '</div>' : '');
         }
-        html += itemHtml(mod, it);
+        rows.push({ g: gh, it: it });
       });
     }
 
     // 5. Ending (අවසාන කොටස)
+    var tail = '';
     if (mod.ending) {
-      html += '<div class="ch-namo" style="margin-top:20px">' +
+      tail += '<div class="ch-namo" style="margin-top:20px">' +
         '<div class="ch-namo-pali" style="font-size:1.05rem;line-height:2.2">' +
         br(si ? mod.ending.pali : (mod.ending.translit || mod.ending.pali)) + '</div>' +
         '</div>';
     }
 
-    return html + footerHtml(mod);
+    return { head: html, rows: rows, tail: tail + footerHtml(mod) };
   }
+  function rowHtml(mod, r) { return r.g + itemHtml(mod, r.it); }
 
   function footerHtml(mod) {
     var si = lang() === 'si', html = '';
@@ -548,6 +656,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     if (mod.navLabel) chips += '<span class="ch-lbl">' + esc(L(mod.navLabel)) + '</span>';
     if (mod.navMode === 'groups') {
       mod.groups.forEach(function (g) {
+        if (g.cat) chips += '<span class="ch-lbl ch-cat">' + esc(L(g.cat)) + '</span>';
         chips += '<button type="button" class="ch-chip" data-go="g-' + esc(g.id) + '" data-k="g-' + esc(g.id) + '">' + esc(L(g.short || g.label)) +
           (g.count != null ? ' <span class="ch-nb">' + esc(g.count) + '</span>' : '') + '</button>';
       });
@@ -569,7 +678,9 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
   }
 
   function scrollToAnchor(ov, a) {
-    var el = ov.querySelector('[data-a="' + a + '"]');
+    var sel = '[data-a="' + a + '"]';
+    while (pending && !ov.querySelector(sel)) appendChunk(CHUNK_BYTES);   /* තවම නොපෙන්වූ කාඩ්පතකට පැනීමේදී, එතෙක් පමණක් එකතු කරයි */
+    var el = ov.querySelector(sel);
     if (!el) return;
     var off = stickyOffsets(ov);
     var top = el.getBoundingClientRect().top - ov.getBoundingClientRect().top + ov.scrollTop - off;
@@ -592,10 +703,49 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
         nav.scrollTo({ left: chip.offsetLeft - nav.clientWidth / 2 + chip.offsetWidth / 2, behavior: 'smooth' });
       });
     }, { root: ov, threshold: 0, rootMargin: '-' + off + 'px 0px -60% 0px' });
-    ov.querySelectorAll('.ch-card').forEach(function (c) { spy.observe(c); });
+    observeNew(ov.querySelector('.ch-main'));
+  }
+
+  /* ---- progressive rendering: පළමු තිර කිහිපය එකවර, ඉතිරිය idle වේලාවල කොටස් වශයෙන් ----
+     (කලින්: කාඩ්පත් 100+ ක සියලු පාළි/සිංහල පෙළ එකවර layout කළ නිසා tab මාරුවේදී main thread එක තත්පරයක් පමණ අවහිර විය) */
+  var FIRST_BYTES = 14000, CHUNK_BYTES = 9000;
+  var renderTok = 0, pending = null, prefetched = false;
+  var idle = window.requestIdleCallback ? function (f) { requestIdleCallback(f, { timeout: 150 }); } : function (f) { setTimeout(f, 40); };
+
+  function observeNew(main) {
+    if (!spy || !main) return;
+    main.querySelectorAll('.ch-card:not([data-spy])').forEach(function (c) { c.setAttribute('data-spy', '1'); spy.observe(c); });
+  }
+  function appendChunk(budget) {          /* true = සියල්ල එක් කර අවසන් */
+    var p = pending; if (!p) return true;
+    var h = '', n = 0;
+    while (p.i < p.rows.length && n < budget) { var s = rowHtml(p.mod, p.rows[p.i++]); h += s; n += s.length; }
+    var done = p.i >= p.rows.length;
+    if (done) { h += p.tail; pending = null; }
+    if (h) p.main.insertAdjacentHTML('beforeend', h);
+    observeNew(p.main);
+    return done;
+  }
+  function pump(tok) {
+    idle(function () {
+      if (tok !== renderTok) return;
+      if (!pending || appendChunk(CHUNK_BYTES)) prefetchTabs(); else pump(tok);
+    });
+  }
+  /* වෙනත් tab වල දත්ත ගොනු (300–450KB) පසුබිමේ, එකිනෙක, idle වේලාවල load කරයි → tab මාරුව ක්ෂණික */
+  function prefetchTabs() {
+    if (prefetched) return; prefetched = true;
+    var c = navigator.connection;
+    if (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return;
+    var q = TABS.filter(function (t) { return !MODS[t.id]; });
+    (function next() {
+      var t = q.shift(); if (!t) return;
+      setTimeout(function () { idle(function () { loadModule(t).then(next, next); }); }, 700);
+    })();
   }
 
   function showTab(ov, id, keepScroll) {
+    renderTok++; pending = null;
     var tab = tabById(id); cur = tab.id;
     try { localStorage.setItem(STORE_KEY, cur); } catch (e) {}
     ov.querySelectorAll('.ch-tab').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-t') === cur); });
@@ -607,10 +757,15 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     main.innerHTML = '<div class="ch-load"><b>🪔</b>' + T('පූරණය වෙමින්...', 'Loading...') + '</div>';
     loadModule(tab).then(function (mod) {
       if (cur !== tab.id) return;
-      main.innerHTML = render(mod);
+      var tok = ++renderTok, parts = renderParts(mod);
+      pending = { mod: mod, rows: parts.rows, tail: parts.tail, i: 0, main: main };
+      if (spy) { spy.disconnect(); spy = null; }   /* පරණ tab එකේ observer එක; setupSpy නව එකක් සාදයි */
+      main.innerHTML = parts.head;
+      var all = appendChunk(FIRST_BYTES);
       buildNav(ov, mod);
       if (!keepScroll) ov.scrollTop = Math.min(ov.scrollTop, ov.querySelector('.ch-hero').offsetHeight);
       setupSpy(ov);
+      if (all) prefetchTabs(); else pump(tok);
     }).catch(function () {
       if (cur !== tab.id) return;
       main.innerHTML = '<div class="ch-load"><b>⚠️</b>' + T('බලාපොරොත්තු වන්න', 'coming soon.') +
@@ -642,6 +797,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
   function onPop() { if (pushed) { pushed = false; hide(); } }
   function hide() {
     var ov = document.getElementById('chOverlay'); if (ov) ov.style.display = 'none';
+    document.body.classList.remove('ch-open'); renderTok++; pending = null;
     if (window.V3D) { try { V3D.chanting(false); } catch (e) {} }
     if (spy) { spy.disconnect(); spy = null; }
     document.documentElement.style.overflow = '';
@@ -653,6 +809,7 @@ body.dark-mode #chOverlay .pm-pali{color:var(--m200);border-color:var(--m500)}\
     injectStyle();
     var ov = build(typeof tabId === 'string' ? tabId : null);
     ov.style.display = 'block';
+    document.body.classList.add('ch-open');
     if (window.V3D) { try { V3D.chanting(true, ov); } catch (e) {} }
     document.documentElement.style.overflow = 'hidden';
     document.addEventListener('keydown', onKey);

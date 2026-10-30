@@ -330,7 +330,7 @@ body.dark-mode #infoOverlay .buddhist-flag{box-shadow:
 @media (prefers-reduced-motion: reduce){#infoOverlay .buddhist-flag span:nth-child(6)::before{animation: none;}
 }
 #infoOverlay{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:5000;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;display:block;padding-top:calc(34px + env(safe-area-inset-top,0px))}
-#infoOverlay .info-close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:5100;width:44px;height:44px;border-radius:50%;border:2px solid var(--mint-deep);background:var(--mint-card);color:var(--mint-deep);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:26px;line-height:1;font-family:Arial,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:all .25s ease}
+#infoOverlay .info-close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:5100;width:44px;height:44px;border-radius:50%;border:2px solid var(--mint-deep);background:var(--mint-card);color:var(--mint-deep);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:26px;line-height:1;font-family:Noto Sans Sinhala,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:all .25s ease}
 #infoOverlay .info-close:hover{background:var(--mint-deep);color:#fff;transform:rotate(90deg)}
 #infoOverlay .qr-label-row{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;margin-top:12px;padding:0 54px}
 #infoOverlay .qr-label-row .qr-label{margin-top:0}
