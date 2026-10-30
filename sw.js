@@ -4,7 +4,7 @@
 // Offline Support + Automatic Cache Update
 // ============================================================
 
-const CACHE_NAME = 'buddhist-era-v4.1.43';
+const CACHE_NAME = 'buddhist-era-v4.1.44';
 
 const CACHE_ASSETS = [
   '/',
@@ -13,7 +13,6 @@ const CACHE_ASSETS = [
 
   '/info.js',
   '/style.css',
-  '/cream.css?v=1',
   '/script.js',
 
   '/astronomy.browser.min.js?v=1',
@@ -24,10 +23,11 @@ const CACHE_ASSETS = [
   '/buddha-recitation.js',
   '/buddha-vandana-data.js',
   '/satipatthana-data.js',
+  '/patimokkha-data.js',
   '/sunpage.js',
   '/three.min.js?v=1',
   '/uposatha.js',
-  '/visuals3d.js?v=3',
+  '/visuals3d.js?v=4',
 
   '/bg/waves.webp?v=1',
   '/bg/flowers.webp?v=1',
