@@ -2799,8 +2799,8 @@ const PATIMOKKHA_DATA = [
     "n": 74
    },
    {
-    "pali": "න උදකෙ අගිලානො උච්චාරං වා පස්සාවං වා ඛෙළං වා කරිස්සාමීති සික්ඛා කරණීයා. 2",
-    "translit": "Na udake agilāno uccāraṃ vā passāvaṃ vā kheḷaṃ vā karissāmīti sikkhā karaṇīyā. 2",
+    "pali": "න උදකෙ අගිලානො උච්චාරං වා පස්සාවං වා ඛෙළං වා කරිස්සාමීති සික්ඛා කරණීයා.",
+    "translit": "Na udake agilāno uccāraṃ vā passāvaṃ vā kheḷaṃ vā karissāmīti sikkhā karaṇīyā.",
     "si": "නො ගිලන්ව ජලයෙහි වැසිකිළි හෝ කැසිකිළි හෝ කෙළ ගැසීම හෝ නො කරන්නෙමි'යි හික්මිය යුතු ය.",
     "en": "\"I shall not, unless sick, defecate, urinate or spit in water\" is a training to be observed.",
     "role": "rule",
@@ -3086,12 +3086,21 @@ const PATIMOKKHA_DATA = [
   "title_en": "Resolving the Rains Retreat (Vassa)",
   "intro_si": "වස් එළඹෙන දිනයෙහි විහාරය පිරිසිදු කොට පූර්ව කෘත්‍ය සිදු කොට උක්කුටිකයෙන් හිඳ ඇඳිලි බැඳ තෙවරක් නමස්කාරය ප්‍රකාශ කොට;",
   "intro_en": "On the day the Rains Retreat begins, after cleaning the monastery and completing the preliminary duties, squat with joined palms, pay homage three times, and say three times:",
+  "split": "title",
   "parts": [
    {
-    "pali": "\"ඉමස්මිං විහාරෙ ඉමං තෙමාසං වස්සං උපෙමි. ඉධ වස්සං උපෙමි\"\n\n\"සචෙ මෙ කොචි අන්තරායො න භවිස්සති සත්තාහබ්භන්තරෙ පුන නිවත්තිස්සාමි\"",
-    "translit": "\"Imasmiṃ vihāre imaṃ temāsaṃ vassaṃ upemi. Idha vassaṃ upemi\"\n\n\"Sace me koci antarāyo na bhavissati sattāhabbhantare puna nivattissāmi\"",
-    "si": "\"මේ විහාරයෙහි මේ තෙමස වස් එළඹෙමි. මෙහි වස් එළඹෙමි\"\nයි තෙවරක් ප්‍රකාශ කළ යුතු ය.\n\nවස් අධිෂ්ඨානය කළ භික්‍ෂුවක් යම් හෙයකින් වස් විසූ ආවාසයෙන් යම් කරුණක් නිසා පිටත් ව යන්නේ නම් නැවත සත් දිනක් ඇතුළත පැමිණෙමි යි මෙසේ අධිෂ්ඨාන කළ යුතු ය.\nඉදින් යම් කිසි අනතුරක් නො වුණේ නම් සත්වන දින අරුණට පළමු නැවත පැමිණෙමි.",
-    "en": "\"In this monastery I enter the Rains Retreat for these three months. Here I enter the Rains Retreat.\"\nThis is to be said three times.\n\nIf a monk who has resolved the Rains Retreat must leave the dwelling for some reason, he resolves to return within seven days:\n\"If there is no obstacle, I shall return before dawn on the seventh day.\""
+    "pali": "\"ඉමස්මිං විහාරෙ ඉමං තෙමාසං වස්සං උපෙමි. ඉධ වස්සං උපෙමි\"",
+    "translit": "\"Imasmiṃ vihāre imaṃ temāsaṃ vassaṃ upemi. Idha vassaṃ upemi\"",
+    "si": "\"මේ විහාරයෙහි මේ තෙමස වස් එළඹෙමි. මෙහි වස් එළඹෙමි\"\nයි තෙවරක් ප්‍රකාශ කළ යුතු ය.",
+    "en": "\"In this monastery I enter the Rains Retreat for these three months. Here I enter the Rains Retreat.\"\nThis is to be said three times."
+   },
+   {
+    "title_si": "පිටතට යන විට කළ යුතු අධිෂ්ඨානය",
+    "title_en": "The resolution to be made when going out",
+    "pali": "\"සචෙ මෙ කොචි අන්තරායො න භවිස්සති සත්තාහබ්භන්තරෙ පුන නිවත්තිස්සාමි\"",
+    "translit": "\"Sace me koci antarāyo na bhavissati sattāhabbhantare puna nivattissāmi\"",
+    "si": "වස් අධිෂ්ඨානය කළ භික්‍ෂුවක් යම් හෙයකින් වස් විසූ ආවාසයෙන් යම් කරුණක් නිසා පිටත් ව යන්නේ නම් නැවත සත් දිනක් ඇතුළත පැමිණෙමි යි මෙසේ අධිෂ්ඨාන කළ යුතු ය.\nඉදින් යම් කිසි අනතුරක් නො වුණේ නම් සත්වන දින අරුණට පළමු නැවත පැමිණෙමි.",
+    "en": "If a monk who has resolved the Rains Retreat must leave the dwelling for some reason, he resolves to return within seven days:\n\"If there is no obstacle, I shall return before dawn on the seventh day.\""
    }
   ],
   "cat": "uposatha",

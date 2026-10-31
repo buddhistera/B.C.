@@ -236,6 +236,9 @@ function attachChPinch(ov) {
       navLabel: { si: 'පටුන', en: 'Contents' },
       navMode: 'groups',
       intro: { pali: 'නමෝ තස්ස භගවතෝ අරහතෝ සම්මාසම්බුද්ධස්ස !!!', translit: 'Namo tassa bhagavato arahato sammāsambuddhassa !!!' },
+      footer: { credit: {
+        si: '© කිතුල්ගොඩ අරණ්‍ය සේනාසනය, භික්ෂු ප්‍රාතිමෝක්ෂය.',
+        en: '© Kitulgoda Aranya Senasanaya, Bhikkhu Pātimokkha.' } },
       groups: groups, items: items
     };
   }
@@ -457,6 +460,7 @@ body.dark-mode #chOverlay .ch-gatha{background:linear-gradient(135deg,#3a2810,#4
 #chOverlay .ch-foot .ls{font-size:1.4rem;letter-spacing:12px;opacity:.9;margin-bottom:8px}\
 #chOverlay .ch-foot p{font-family:var(--serif);margin:0 auto 10px;max-width:640px;line-height:1.95;font-size:.98rem}\
 #chOverlay .ch-foot .th{opacity:.92;font-size:.92rem}\
+#chOverlay .ch-foot .cr{margin-top:14px;padding-top:10px;border-top:1px solid currentColor;opacity:.75;font-size:.78rem;line-height:1.7}\
 /* pātimokkha */\
 #chOverlay .pm-sub{font-family:var(--serif);font-weight:700;color:var(--m800);font-size:1.02rem;margin:0 0 10px;line-height:1.6;text-align:center}\
 body.dark-mode #chOverlay .pm-sub{color:var(--g400)}\
@@ -645,7 +649,8 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     html += '<div class="ch-foot"><div class="ls">🪔 🪔 🪔</div>';
     if (ft && ft.bless) html += '<p>' + br(L(ft.bless)) + '</p>';
     else html += '<p>' + T('සියලු සත්ත්වයෝ නිවනින් සැනසීම ලබත්වා! ', 'May all beings be well and happy! ') + '</p>';
-    html += '<div class="th">' + esc(ft && ft.thanks ? L(ft.thanks) : T('බුද්ධ සාසනං චිරං තිට්ඨතු !', 'Buddha Sāsanaṃ ciraṃ tiṭṭhatu!')) + '</div></div>';
+    html += '<div class="th">' + esc(ft && ft.thanks ? L(ft.thanks) : T('බුද්ධ සාසනං චිරං තිට්ඨතු !', 'Buddha Sāsanaṃ ciraṃ tiṭṭhatu!')) + '</div>' +
+      (ft && ft.credit ? '<div class="cr">' + esc(L(ft.credit)) + '</div>' : '') + '</div>';
     return html;
   }
 
