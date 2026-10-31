@@ -4,7 +4,7 @@
 // Offline Support + Automatic Cache Update
 // ============================================================
 
-const CACHE_NAME = 'buddhist-era-v4.1.44';
+const CACHE_NAME = 'buddhist-era-v4.1.45';
 
 const CACHE_ASSETS = [
   '/',
