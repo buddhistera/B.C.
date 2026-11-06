@@ -4,7 +4,7 @@
 // Offline Support + Automatic Cache Update + Lie-Fi Fix
 // ============================================================
 
-const CACHE_NAME = 'buddhist-era-v4.1.48';
+const CACHE_NAME = 'buddhist-era-v4.1.49';
 
 const CACHE_ASSETS = [
   '/', '/index.html', '/manifest.json',
