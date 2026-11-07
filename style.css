@@ -1,12 +1,12 @@
 /* Buddhist Era — merged stylesheet (base + cream & gold theme). Assets in bg/ */
-:root { 
+:root {
     --ff-sans: 'Noto Sans Sinhala', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
     --ff-serif: 'Noto Serif Sinhala', 'Noto Serif', serif;
-    
-    --gold: #d4af37; 
-    --bg: #fffff0; 
-    --text: #3e2723; 
-    --blue: #003399; 
+
+    --gold: #d4af37;
+    --bg: #fffff0;
+    --text: #3e2723;
+    --blue: #003399;
     --dark-red: #8B0000;
     --orange: #FF6600;
     --nav-h: 70px;
@@ -25,17 +25,17 @@ html, body {
     touch-action: auto; /* pan-x pan-y වෙනුවට auto */
 }
 html { height: 100%; }
-body { 
-    min-height: 100vh; 
+body {
+    min-height: 100vh;
     min-height: 100dvh;
     /* පහලට ඇද්දම refresh වෙන්න දෙන්න */
     -webkit-overflow-scrolling: touch;
 }
 
-body { 
-    font-family: var(--ff-sans); 
-    display: flex; 
-    justify-content: center; 
+body {
+    font-family: var(--ff-sans);
+    display: flex;
+    justify-content: center;
     align-items: flex-start;
     background-color: #e0e0e0;
     -webkit-font-smoothing: antialiased;
@@ -47,31 +47,31 @@ body {
 /* =========================================
    LIGHT MODE STYLES
    ========================================= */
-.app-container { 
-    background: white; 
-    width: 100%; 
-    max-width: 768px; 
+.app-container {
+    background: white;
+    width: 100%;
+    max-width: 768px;
     min-height: auto;
     margin: 10px;
-    border-radius: 24px; 
-    display: flex; 
-    flex-direction: column; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
-    position: relative; 
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    position: relative;
     overflow: visible;
-    background-image: linear-gradient(rgba(255,255,255,0.96), rgba(255,255,255,0.96)), 
-                  linear-gradient(to right, 
-                      #0033aa 20%, 
-                      #ffcc00 20% 40%, 
-                      #cc0000 40% 60%, 
-                      #ffffff 60% 80%, 
+    background-image: linear-gradient(rgba(255,255,255,0.96), rgba(255,255,255,0.96)),
+                  linear-gradient(to right,
+                      #0033aa 20%,
+                      #ffcc00 20% 40%,
+                      #cc0000 40% 60%,
+                      #ffffff 60% 80%,
                       #ff6600 80%
                   );
     transition: all 0.5s ease;
 }
 
 .side-panel, .main-panel, .data-item, .vas-card, .pali-box, .poya-item-compact {
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1),
                 -4px -4px 8px rgba(255, 255, 255, 0.8),
                 inset 1px 1px 2px rgba(255, 255, 255, 0.9),
                 inset -1px -1px 2px rgba(0, 0, 0, 0.05);
@@ -81,7 +81,7 @@ body {
 
 .buddhist-calendar-row {
     display: flex;
-    flex-direction: row; 
+    flex-direction: row;
     justify-content: space-between;
     align-items: stretch;
     width: 100%;
@@ -91,13 +91,13 @@ body {
 }
 
 .panel-header {
-    font-size: 0.75em;          
-    font-weight: bold;          
+    font-size: 0.75em;
+    font-weight: bold;
     color: #333;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15); 
-    padding-bottom: 4px;        
-    margin-bottom: 8px;         
-    display: block;             
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    display: block;
     text-align: center;
 }
 
@@ -108,7 +108,7 @@ body {
     text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 4px; 
+    gap: 4px;
     box-sizing: border-box;
     background: #fdfdfd;
 }
@@ -119,10 +119,10 @@ body {
     padding: 8px;
     text-align: center;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 8px;
     box-sizing: border-box;
-    background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa7c11 100%); 
+    background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa7c11 100%);
     border: 1px solid #b8860b;
     box-shadow: inset 0 1px 3px rgba(255,255,255,0.5);
 }
@@ -139,9 +139,9 @@ body {
 .label-text { font-size: 0.7em; color: #3e2723; font-weight: bold; }
 .val-text { font-size: 1.1em; font-weight: bold; color: #000; }
 
-.main-val-text { 
-    font-size: 1.6em; 
-    font-weight: bold; 
+.main-val-text {
+    font-size: 1.6em;
+    font-weight: bold;
     color: #111111;
     text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5), 0px -1px 0px rgba(0, 0, 0, 0.7);
 }
@@ -150,30 +150,30 @@ body {
 .bg-avasittha { background-color: #E8F2FF; border: 1px solid #F7F7F7; }
 .main-bg-y, .main-bg-m, .main-bg-d { background: transparent; border: none; }
 
-.header { 
-    background: 
+.header {
+    background:
         linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 45%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.1) 100%),
-        linear-gradient(to right, #001a4d 0%, #997a00 25%, #660000 50%, #993d00 75%, #001a4d 100%); 
-    color: #ffffff; 
-    padding: 20px; 
-    text-align: center; 
-    font-size: 1.4em; 
-    font-weight: bold; 
+        linear-gradient(to right, #001a4d 0%, #997a00 25%, #660000 50%, #993d00 75%, #001a4d 100%);
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: bold;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 -1px 1px rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.25);
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-    position: relative; 
+    position: relative;
     z-index: 100;
     border-radius: 24px 24px 0 0;
 }
 
-.menu-dots { 
-    position: absolute; 
-    right: 15px; 
+.menu-dots {
+    position: absolute;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer; 
-    font-size: 28px; 
+    cursor: pointer;
+    font-size: 28px;
     color: white;
     transition: 0.3s;
     z-index: 101;
@@ -181,17 +181,17 @@ body {
 }
 .menu-dots:hover { opacity: 0.8; transform: translateY(-50%) scale(1.1); }
 
-.menu-dropdown { 
-    display: none; 
-    position: absolute; 
-    right: 10px; 
-    top: 55px; 
-    background: rgba(255, 255, 255, 0.98); 
-    border-radius: 12px; 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
-    min-width: 200px; 
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 55px;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    min-width: 200px;
     z-index: 9999;
-    overflow: hidden; 
+    overflow: hidden;
     border: 2px solid var(--gold);
     animation: menuFade 0.2s ease-out;
 }
@@ -201,12 +201,12 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.menu-dropdown div { 
-    padding: 14px 20px; 
-    color: var(--text); 
-    cursor: pointer; 
-    border-bottom: 1px solid #eee; 
-    font-size: 1em; 
+.menu-dropdown div {
+    padding: 14px 20px;
+    color: var(--text);
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    font-size: 1em;
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -219,17 +219,17 @@ body {
 .label { font-size: 0.8em; color: #777; display: block; margin-bottom: 5px; }
 .value { font-size: 1.5em; font-weight: bold; color: var(--text); }
 
-.pali-box { 
-    background: #fffde7; 
-    padding: 20px; 
-    text-align: center; 
-    font-size: 1.1em; 
-    line-height: 1.8; 
-    white-space: pre-wrap; 
-    color: #5d4037; 
-    font-weight: 500; 
-    border-radius: 10px; 
-    margin: 0 10px; 
+.pali-box {
+    background: #fffde7;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.1em;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    color: #5d4037;
+    font-weight: 500;
+    border-radius: 10px;
+    margin: 0 10px;
 }
 
 .vas-card {
@@ -251,9 +251,9 @@ body {
 
 .date-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; width: 100%; box-sizing: border-box; }
 .custom-date-container {
-    position: relative;    
-    width: 145px; 
-    flex: none;     
+    position: relative;
+    width: 145px;
+    flex: none;
     display: flex;
     align-items: center;
     background: #e0e0e0;
@@ -271,7 +271,7 @@ body {
 #inputDate::-webkit-calendar-picker-indicator, .sun-input::-webkit-calendar-picker-indicator { display: none; -webkit-appearance: none; }
 
 #miniMoonVisual {
-    width: 50px; height: 50px; border-radius: 50%; position: relative; overflow: hidden; transition: all 0.3s ease; box-sizing: border-box; background-color: #000000; 
+    width: 50px; height: 50px; border-radius: 50%; position: relative; overflow: hidden; transition: all 0.3s ease; box-sizing: border-box; background-color: #000000;
     box-shadow: 0 0 25px 8px rgba(0, 0, 0, 0.9); filter: blur(0.4px); flex-shrink: 0;
 }
 #miniMoonVisual.full-moon { background-color: #fde047; }
@@ -283,28 +283,28 @@ body {
    NOTE: .show class trigger නොමැත — JS එක style.display = 'flex'
          ලෙස set කරන විට පමණක් open වේ (original behavior).
    ============================================================ */
-.modal { 
-    display: none; 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.55); 
-    z-index: 3000; 
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.55);
+    z-index: 3000;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    justify-content: center; 
+    justify-content: center;
     align-items: flex-start;
     padding: calc(var(--safe-t) + 16px) 12px calc(var(--nav-h) + var(--safe-b) + 20px);
     box-sizing: border-box;
 }
-.modal-content { 
-    background: white; 
-    width: 100%; 
-    max-width: 460px; 
-    border-radius: 15px; 
-    padding: 20px; 
-    position: relative; 
-    box-shadow: 4px 4px 15px rgba(0,0,0,0.2), -4px -4px 15px rgba(255,255,255,0.8); 
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 4px 4px 15px rgba(0,0,0,0.2), -4px -4px 15px rgba(255,255,255,0.8);
     flex-shrink: 0;
     margin-top: 10px;
 }
@@ -336,9 +336,9 @@ body {
 .badge { display: flex; align-items: center; padding: 8px 10px; border-radius: 8px; text-decoration: none; color: white; font-size: 11px; font-weight: bold; transition: 0.2s; box-shadow: 2px 2px 5px rgba(0,0,0,0.2), inset 1px 1px 2px rgba(255,255,255,0.2); }
 .badge:hover { transform: translateY(-2px); }
 .badge svg, .badge img { width: 18px; height: 18px; margin-right: 8px; }
-.bg-win { background: #0078d4; } 
-.bg-mac { background: #000000; } 
-.bg-lin { background: #333333; } 
+.bg-win { background: #0078d4; }
+.bg-mac { background: #000000; }
+.bg-lin { background: #333333; }
 .bg-and { background: #3DDC84; color: #073042; }
 
 .full-moon-bg { background-color: rgba(255, 235, 59, 0.2); border: 1px solid #d4af37; }
@@ -347,37 +347,37 @@ body {
 /* ============================================================
    SUN TIMES MODAL — scrollable, only shown via inline style
    ============================================================ */
-.modal-sun { 
-    display: none; 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%; 
-    background: rgba(0, 0, 0, 0.15); 
+.modal-sun {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.15);
     -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px); 
+    backdrop-filter: blur(4px);
     z-index: 3000;
-    overflow-y: auto; 
+    overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: calc(var(--safe-t) + 20px) 12px calc(var(--nav-h) + var(--safe-b) + 20px);
     box-sizing: border-box;
-    justify-content: center; 
-    align-items: flex-start; 
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.sun-container { 
-    width: 95%; 
-    max-width: 460px; 
+.sun-container {
+    width: 95%;
+    max-width: 460px;
     min-height: auto;
     height: auto;
-    background: #e0e0e0; 
-    padding: 55px 22px 24px; 
-    border-radius: 40px; 
-    box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff; 
-    position: relative; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: flex-start; 
+    background: #e0e0e0;
+    padding: 55px 22px 24px;
+    border-radius: 40px;
+    box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     gap: 14px;
     animation: slideUp 0.4s ease-out;
     flex-shrink: 0;
@@ -447,29 +447,29 @@ body {
    Custom Wheel Date Picker — ORIGINAL (no .show trigger!)
    JS එක style.display = 'flex' ලෙස set කරන විට පමණක් පෙනේ.
    ===================================================================== */
-.modal-wheel { 
-    display: none; 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%; 
-    background: rgba(0, 0, 0, 0.45); 
+.modal-wheel {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.45);
     -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px); 
-    z-index: 3200; 
-    justify-content: center; 
-    align-items: center; 
+    backdrop-filter: blur(3px);
+    z-index: 3200;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
     box-sizing: border-box;
 }
-.wheel-picker-container { 
-    width: 90%; 
-    max-width: 340px; 
-    background: #ffffff; 
-    border-radius: 24px; 
-    padding: 20px 16px 16px; 
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35); 
-    position: relative; 
-    animation: slideUp 0.25s ease-out; 
+.wheel-picker-container {
+    width: 90%;
+    max-width: 340px;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 20px 16px 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    position: relative;
+    animation: slideUp 0.25s ease-out;
 }
 .wheel-picker-close { position: absolute; top: -50px; right: 4px; width: 40px; height: 40px; background: #ffffff; color: #3e2723; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
 .wheel-columns { display: flex; justify-content: space-between; gap: 6px; position: relative; height: 220px; }
@@ -583,7 +583,7 @@ body.dark-mode .section {
     z-index: 1;
 }
 
-body.dark-mode .side-panel, 
+body.dark-mode .side-panel,
 body.dark-mode .data-item {
     background-color: var(--bg-card);
     border: 1px solid rgba(0, 229, 255, 0.2);
@@ -595,7 +595,7 @@ body.dark-mode .panel-header {
     border-bottom: 1px solid rgba(0, 229, 255, 0.3);
 }
 
-body.dark-mode .val-text, 
+body.dark-mode .val-text,
 body.dark-mode .label-text {
     color: var(--text-main);
 }
@@ -618,8 +618,8 @@ body.dark-mode .pali-box {
     box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
 }
 
-body.dark-mode .modal-content, 
-body.dark-mode .sun-container, 
+body.dark-mode .modal-content,
+body.dark-mode .sun-container,
 body.dark-mode .wheel-picker-container {
     background: rgba(19, 23, 36, 0.98);
     border: 1px solid var(--border-purple);
@@ -632,7 +632,7 @@ body.dark-mode .modal-header {
     color: var(--accent-cyan);
 }
 
-body.dark-mode .list-item, 
+body.dark-mode .list-item,
 body.dark-mode .season-banner {
     background: var(--bg-card);
     border: 1px solid rgba(0, 229, 255, 0.15);
@@ -667,9 +667,9 @@ body.dark-mode .sun-badge {
     border: 1px solid rgba(0, 229, 255, 0.2);
 }
 body.dark-mode .sun-time { color: var(--accent-cyan); }
-body.dark-mode .dawn-badge .sun-time, 
-body.dark-mode .sunrise-badge .sun-time, 
-body.dark-mode .noon-badge .sun-time, 
+body.dark-mode .dawn-badge .sun-time,
+body.dark-mode .sunrise-badge .sun-time,
+body.dark-mode .noon-badge .sun-time,
 body.dark-mode .sunset-badge .sun-time { color: var(--accent-green); }
 
 body.dark-mode .moon-phase-container {
@@ -681,8 +681,8 @@ body.dark-mode .sun-astro-card {
     background: var(--bg-card);
     border: 1px solid rgba(179, 136, 255, 0.3);
 }
-body.dark-mode .sun-astro-title, 
-body.dark-mode .sun-astro-subtitle, 
+body.dark-mode .sun-astro-title,
+body.dark-mode .sun-astro-subtitle,
 body.dark-mode .sun-h3,
 body.dark-mode .moon-phase-title {
     color: var(--text-main);
@@ -843,11 +843,11 @@ body.dark-mode .bottom-nav {
     box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.5);
 }
 body.dark-mode .bn-item { color: #6fb59c; }
-body.dark-mode .bn-item:hover, 
-body.dark-mode .bn-item:active, 
-body.dark-mode .bn-item.active { 
-    background: rgba(60, 220, 160, .16); 
-    color: #5fe3b6; 
+body.dark-mode .bn-item:hover,
+body.dark-mode .bn-item:active,
+body.dark-mode .bn-item.active {
+    background: rgba(60, 220, 160, .16);
+    color: #5fe3b6;
 }
 body.dark-mode .lang-opt.on { background: #2fbf8f; color: #0b1a14; }
 
@@ -1009,8 +1009,9 @@ body.dark-mode .app-container::before{display:none}
 .hm-hero{position:relative;overflow:hidden;border-radius:28px;margin:0 0 14px;padding:16px 14px 14px;text-align:center;color:var(--br);isolation:isolate;
  background:linear-gradient(180deg,rgba(255,248,230,.7),rgba(246,230,196,.5)),url(bg/waves.webp) 30% 40%/cover;border:1px solid rgba(180,128,28,.45);
  box-shadow:0 14px 30px rgba(120,80,20,.2),inset 0 1px 0 rgba(255,255,255,.8),inset 0 0 0 5px rgba(255,248,228,.5),inset 0 0 0 6px rgba(190,140,40,.35)}
-.hm-hero::after,.hm-orn{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:url(bg/gold-lines.svg) center/100% 100% no-repeat;filter:drop-shadow(0 2px 3px rgba(100,65,10,.3))}
-.hm-orn{background-image:url(bg/flowers.webp);background-size:cover;background-position:right center;opacity:.2;mix-blend-mode:multiply;filter:none;-webkit-mask-image:linear-gradient(90deg,transparent 35%,#000);mask-image:linear-gradient(90deg,transparent 35%,#000)}
+.hm-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:url(bg/gold-lines.svg) center/100% 100% no-repeat;filter:drop-shadow(0 2px 3px rgba(100,65,10,.3))}
+/* header පසුබිම = waves රූපය පමණයි — flowers ස්ථරය (.hm-orn) පෙන්වන්නේ නැත */
+.hm-orn{display:none!important}
 .hm-hero .header{background:none;border:0;box-shadow:none;border-radius:0;padding:14px 8px 6px;font-family:var(--ff-serif);font-size:2.1rem;font-weight:800;letter-spacing:.02em;position:relative;z-index:2}
 .hm-hero .header::after{content:"";display:block;height:2px;width:62%;margin:8px auto 0;background:linear-gradient(90deg,transparent,#b4801c 25%,#ffe9a0 50%,#b4801c 75%,transparent)}
 .hm-hero .section{border:0;background:none;box-shadow:none;padding:6px 8px}
@@ -1036,7 +1037,6 @@ body.dark-mode .pali-box{background:linear-gradient(rgba(14,16,34,.84),rgba(14,1
 
 /* main page – dark hero */
 body.dark-mode .hm-hero{color:#f5e6bf;background:linear-gradient(rgba(10,12,32,.88),rgba(14,16,40,.95)),url(bg/waves.webp) 30% 40%/cover;border-color:rgba(242,212,120,.4);box-shadow:0 14px 34px rgba(0,0,0,.55),inset 0 0 0 5px rgba(8,10,28,.5),inset 0 0 0 6px rgba(242,212,120,.3)}
-body.dark-mode .hm-orn{mix-blend-mode:screen;opacity:.07}
 body.dark-mode .hm-hero .label,body.dark-mode .hm-hero #ui-label-date{color:#f2d478}
 body.dark-mode .custom-date-container{background:rgba(255,255,255,.07);border:1px solid rgba(242,212,120,.4)}
 body.dark-mode .poya-wrap{background:rgba(8,10,30,.6);border-color:rgba(242,212,120,.45);box-shadow:inset 0 0 12px rgba(242,212,120,.08)}
