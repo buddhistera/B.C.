@@ -10,13 +10,18 @@ var en = function () { return typeof isEnglish === 'function' ? isEnglish() : (t
 var tr = function (s, e) { return en() ? e : s; };
 var P = null, pushed = false;
 var low = (navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (W.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
+/* iPhone / iPad (iPadOS "desktop" mode ද ඇතුළුව) — iOS හි <a download> ක්‍රමය විශ්වාස කළ නොහැක (විශේෂයෙන් Home Screen ඇප් ලෙස) */
+var IOS = /iP(hone|ad|od)/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 var TX = { title: ['උපෝසථ දින සහ වස් කාලය', 'Uposatha Days & Vassa Period'], hList: ['උපෝසථ දින', 'Uposatha Days'],
   hListD: ['පසළොස්වක සහ අමාවක පෝය දින', 'Full-moon and new-moon uposatha days'],
   hVas: ['වස් කාල තොරතුරු', 'Vassa Period'], hVasD: ['පෙරවස් සහ පසුවස් සමාදන්වීම හා පවාරණ දින', 'Entering and Pavāraṇā dates of the early and late rains retreats'],
   early: ['පෙරවස්', 'Early Vassa'], late: ['පසුවස්', 'Late Vassa'], next: ['මීළඟ උපෝසථය', 'Next Uposatha'], today: ['අද', 'Today'], nxt: ['ඊළඟ', 'Next'],
   toVas: ['වස් කාලය', 'Vassa'], thisYear: ['මෙම වර්ෂයට', 'This year'], nodata: ['දත්ත නොමැත', 'No data'],
-  dlBtn: ['JPG', 'JPG'], dlAria: ['JPG ලෙස බාගත කරන්න', 'Download as JPG'], dlPick: ['බාගත කළ යුතු ආකාරය තෝරන්න', 'Choose how to download'], dlBw: ['කළු සුදු', 'Black & White'], dlCol: ['වර්ණයෙන්', 'In colour'], dlCan: ['අවලංගු කරන්න', 'Cancel'] };
+  dlBtn: ['JPG', 'JPG'], dlAria: ['JPG ලෙස බාගත කරන්න', 'Download as JPG'], dlPick: ['බාගත කළ යුතු ආකාරය තෝරන්න', 'Choose how to download'], dlBw: ['කළු සුදු', 'Black & White'], dlCol: ['වර්ණයෙන්', 'In colour'], dlCan: ['අවලංගු කරන්න', 'Cancel'],
+  pvTitle: ['JPG රූපය සූදානම්', 'Your JPG is ready'], pvShare: ['💾 සුරකින්න / බෙදාගන්න', '💾 Save / Share'], pvClose: ['වසන්න', 'Close'],
+  pvHint: ['"සුරකින්න / බෙදාගන්න" ඔබා "Save Image" තෝරන්න. නැතහොත් රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" තෝරන්න.', 'Tap "Save / Share" and choose "Save Image", or long-press the image and choose "Save to Photos".'],
+  pvHint2: ['රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" (ඡායාරූපවලට සුරකින්න) තෝරන්න.', 'Long-press the image and choose "Save to Photos".'] };
 var IC = { moon: '<path d="M20 14.6A8.4 8.4 0 1 1 9.4 4a6.7 6.7 0 0 0 10.6 10.6z"/>', cloud: '<path d="M7 15a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 8a3.5 3.5 0 0 1 .5 7H7z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/>',
   chev: '<path d="M14.5 5.5 8 12l6.5 6.5"/>', chevR: '<path d="M9.5 5.5 16 12l-6.5 6.5"/>', globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/>', down: '<path d="M6 9l6 6 6-6"/>', dl: '<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/>' };
 function ic(n, s) { s = s || 18; return '<svg class="ic" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + '</svg>'; }
@@ -66,7 +71,13 @@ CSS += '#upOverlay{--sbg:#fffaf2}body.dark-mode #upOverlay{--sbg:#141b45}' +
 '.up-shc{position:relative;width:100%;max-width:520px;background:var(--sbg);color:var(--tx);border-radius:22px 22px 0 0;padding:18px 16px calc(16px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.3)}.up-shh{font-weight:800;font-size:1.02rem;text-align:center;margin:0 0 14px}' +
 '.up-shbt{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;margin:0 0 10px;border-radius:14px;border:1px solid var(--bd);background:var(--tl);color:var(--tx);font-weight:800;font-size:1rem;cursor:pointer}.up-shbt:active{transform:scale(.98)}' +
 '.up-sw{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1px solid #888}.up-sw.bw{background:linear-gradient(90deg,#fff 50%,#111 50%)}.up-sw.co{background:linear-gradient(135deg,#fcd34d,#c62828 50%,#43a047)}' +
-'.up-shx{display:block;width:100%;padding:12px;margin:2px 0 0;border:0;background:transparent;color:var(--mu);font-weight:700;font-size:.95rem;cursor:pointer}';
+'.up-shx{display:block;width:100%;padding:12px;margin:2px 0 0;border:0;background:transparent;color:var(--mu);font-weight:700;font-size:.95rem;cursor:pointer}' +
+/* iPhone: සෑදූ JPG පෙන්වන preview පුවරුව */
+'.up-pv{position:fixed;left:0;top:0;right:0;bottom:0;z-index:6;display:none;align-items:center;justify-content:center;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px))}.up-pv.on{display:flex}' +
+'.up-pvc{position:relative;width:100%;max-width:640px;max-height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--sbg);color:var(--tx);border-radius:20px;padding:16px;box-shadow:0 10px 40px rgba(0,0,0,.4)}' +
+'.up-pvc img{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--bd);background:#fff;-webkit-touch-callout:default !important;-webkit-user-select:auto !important;user-select:auto !important;pointer-events:auto}' +
+'.up-pvh{font-size:.84rem;color:var(--mu);text-align:center;margin:12px 4px 12px;line-height:1.55}' +
+'.up-shbt.up-pvs{justify-content:center;border:0;background:linear-gradient(135deg,#8a3a12,#5a1f0d);color:#fdf1d6;box-shadow:0 4px 12px rgba(90,31,13,.35)}body.dark-mode .up-shbt.up-pvs{background:linear-gradient(135deg,#b4531c,#8a3a12)}';
 
 function css() { if ($('upStyle')) return; var s = doc.createElement('style'); s.id = 'upStyle'; s.textContent = CSS; doc.head.appendChild(s); }
 
@@ -118,16 +129,21 @@ function build() {
   '<div class="up-sheet" id="upSheet"><div class="up-shb" id="upShB"></div><div class="up-shc"><div class="up-shh" data-k="dlPick"></div>' +
   '<button class="up-shbt" id="upDlBw" type="button"><i class="up-sw bw"></i><span data-k="dlBw"></span></button>' +
   '<button class="up-shbt" id="upDlCol" type="button"><i class="up-sw co"></i><span data-k="dlCol"></span></button>' +
-  '<button class="up-shx" id="upDlX" type="button" data-k="dlCan"></button></div></div>';
+  '<button class="up-shx" id="upDlX" type="button" data-k="dlCan"></button></div></div>' +
+  '<div class="up-pv" id="upPv" role="dialog" aria-modal="true"><div class="up-shb" id="upPvB"></div><div class="up-pvc"><div class="up-shh" data-k="pvTitle"></div>' +
+  '<img id="upPvImg" alt="Uposatha JPG"><p class="up-pvh" id="upPvH"></p>' +
+  '<button class="up-shbt up-pvs" id="upPvShare" type="button"><span data-k="pvShare"></span></button>' +
+  '<button class="up-shx" id="upPvX" type="button" data-k="pvClose"></button></div></div>';
   var w = W.innerWidth, h = W.innerHeight, cs = ['#fff', '#cfe0ff', '#ffe9b0'], n = [90, 40, 16];
   [].forEach.call(ov.querySelectorAll('.up-st'), function (e, k) { var s = []; for (var i = 0; i < n[k]; i++) s.push((Math.random() * w | 0) + 'px ' + (Math.random() * h | 0) + 'px ' + cs[(Math.random() * 3) | 0]); e.style.boxShadow = s.join(','); });
-  P = { ov: ov, open: true, y: mainYear(), sc: 0 };
+  P = { ov: ov, open: true, y: mainYear(), sc: 0, pvUrl: null };
   $('upBack').onclick = close;
   $('upPrev').onclick = function () { setYear(P.y - 1); }; $('upNext').onclick = function () { setYear(P.y + 1); }; $('upYr').onclick = function () { setYear(new Date().getFullYear()); };
   $('upToVas').onclick = function () { scrollTo($('upVas')); };
   $('upDl').onclick = function () { $('upSheet').classList.add('on'); };
   $('upShB').onclick = $('upDlX').onclick = closeSheet;
   $('upDlBw').onclick = function () { dlJpg(false); }; $('upDlCol').onclick = function () { dlJpg(true); };
+  $('upPvB').onclick = $('upPvX').onclick = closePreview;
   ov.addEventListener('scroll', function () { P.sc = ov.scrollTop; }, { passive: true });
   return ov;
 }
@@ -300,25 +316,71 @@ function drawSheet(y, list, v, color) {
   return cv;
 }
 
+/* ---------- iPhone / iPad සඳහා සුරැකීම ----------
+   හේතුව: iOS Safari / Home Screen ඇප් එකේ <a download> + data: URL ක්‍රමය නිහඬවම අසාර්ථක වේ
+   (විශේෂයෙන් font load කිරීමෙන් පසු async ලෙස click() කළ විට). ඒ නිසා iOS හි:
+   1) JPG එක Blob එකක් ලෙස සාදා preview පුවරුවක පෙන්වයි,
+   2) "සුරකින්න / බෙදාගන්න" බොත්තම (නව touch එකක්) → iOS Share sheet → "Save Image",
+   3) Share කළ නොහැකි පැරණි iOS වල රූපය දිගු වේලාවක් ඔබා "Save to Photos". */
+function urlToBlob(u) {
+  try { var p = u.split(','), b = atob(p[1]), n = b.length, a = new Uint8Array(n); while (n--) a[n] = b.charCodeAt(n); return new Blob([a], { type: 'image/jpeg' }); } catch (e) { return null; }
+}
+function toJpegBlob(cv, q, cb) {
+  if (cv.toBlob) { cv.toBlob(function (b) { cb(b || urlToBlob(cv.toDataURL('image/jpeg', q))); }, 'image/jpeg', q); return; }
+  cb(urlToBlob(cv.toDataURL('image/jpeg', q)));
+}
+function freeCanvas(cv) { try { cv.width = cv.height = 0; } catch (e) {} } // iOS: canvas මතකය වහාම නිදහස් කරයි (දෙවන වරටත් සාදන්න හැකි වීමට)
+
+function closePreview() {
+  var pv = $('upPv'); if (pv) pv.classList.remove('on');
+  var im = $('upPvImg'); if (im) im.removeAttribute('src');
+  if (P && P.pvUrl) { try { URL.revokeObjectURL(P.pvUrl); } catch (e) {} P.pvUrl = null; }
+}
+function showPreview(blob, name) {
+  if (!P) return; closePreview();
+  var url = URL.createObjectURL(blob), file = null; P.pvUrl = url;
+  $('upPvImg').src = url;
+  try { file = new File([blob], name, { type: 'image/jpeg' }); } catch (e) { file = null; }
+  var can = !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] }));
+  var sb = $('upPvShare'); sb.style.display = can ? '' : 'none';
+  sb.onclick = can ? function () { navigator.share({ files: [file], title: name }).catch(function () {}); } : null;
+  $('upPvH').textContent = can ? tr(TX.pvHint[0], TX.pvHint[1]) : tr(TX.pvHint2[0], TX.pvHint2[1]);
+  lab(); $('upPv').classList.add('on');
+}
+
 function dlJpg(color) {
   closeSheet(); if (!P) return;
-  var y = P.y, list = yearRows(y), btn = $('upDl');
+  var y = P.y, list = yearRows(y), btn = $('upDl'), name = 'Uposatha_' + y + (color ? '_Colour' : '_BW') + '.jpg';
   if (!list.length) { alert(tr(TX.nodata[0], TX.nodata[1])); return; }
   if (btn) btn.disabled = true;
+  var fail = function (e) { if (e) console.error('uposatha jpg:', e); alert(tr('JPG සෑදීමට නොහැකි විය. නැවත උත්සාහ කරන්න.', 'Could not create the JPG. Please try again.')); };
+  var done = function () { if (btn) btn.disabled = false; };
   var go = function () {
+    var cv;
+    try { cv = drawSheet(y, list, vasDates(y), !!color); } catch (e) { fail(e); done(); return; }
+    if (IOS) {
+      try {
+        toJpegBlob(cv, .92, function (b) {
+          freeCanvas(cv);
+          if (b) { try { showPreview(b, name); } catch (e) { fail(e); } } else fail();
+          done();
+        });
+      } catch (e) { freeCanvas(cv); fail(e); done(); }
+      return;
+    }
     try {
-      var url = drawSheet(y, list, vasDates(y), !!color).toDataURL('image/jpeg', .95), a = doc.createElement('a');
-      a.href = url; a.download = 'Uposatha_' + y + (color ? '_Colour' : '_BW') + '.jpg'; doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
-    } catch (e) { console.error('uposatha jpg:', e); alert(tr('JPG සෑදීමට නොහැකි විය. නැවත උත්සාහ කරන්න.', 'Could not create the JPG. Please try again.')); }
-    if (btn) btn.disabled = false;
+      var url = cv.toDataURL('image/jpeg', .95), a = doc.createElement('a');
+      a.href = url; a.download = name; doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
+    } catch (e) { fail(e); }
+    freeCanvas(cv); done();
   };
   try { if (doc.fonts && doc.fonts.load) Promise.all([doc.fonts.load('400 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('700 40px "Noto Serif Sinhala"', 'අඉ1A')]).then(go, go); else go(); } catch (e) { go(); }
 }
 
 /* ---------- open / close ---------- */
-function onKey(e) { if (e.key === 'Escape') { var sh = $('upSheet'); if (sh && sh.classList.contains('on')) closeSheet(); else close(); } }
+function onKey(e) { if (e.key === 'Escape') { var pv = $('upPv'), sh = $('upSheet'); if (pv && pv.classList.contains('on')) closePreview(); else if (sh && sh.classList.contains('on')) closeSheet(); else close(); } }
 function onPop() { if (pushed) { pushed = false; hide(); } }
-function hide() { if (!P) return; P.open = false; P.ov.style.display = 'none'; doc.documentElement.style.overflow = ''; doc.removeEventListener('keydown', onKey); }
+function hide() { if (!P) return; closePreview(); P.open = false; P.ov.style.display = 'none'; doc.documentElement.style.overflow = ''; doc.removeEventListener('keydown', onKey); }
 function close() { if (pushed) history.back(); else hide(); }
 function open(toVas) {
   if (P && P.open) { if (toVas) scrollTo($('upVas')); return; }

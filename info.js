@@ -5,8 +5,12 @@
 (function () {
   'use strict';
 
-  // --- OFFLINE QR - mint color #1E8F6C, base64 embedded ---
-  var QR_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPgAAAD4CAIAAABOs7xcAAAE8UlEQVR4nO3d0W3kNhRA0TjYPlJhgJQSIBVuJUoDYQAuSJOae87vGpJm9oIfzzT19TzPb/Dpfj/9APAdhE6C0EkQOglCJ0HoJAidhB+jf/jj7z+/8zl+2c+//pn6+dnPNbr+6Dqrfn7Wqs+16vqnjD6XFZ0EoZMgdBKEToLQSRA6CUInYThHH1k19501O8ddNed++7x8t7f0YEUnQegkCJ0EoZMgdBKEToLQSZieo4+smu+umsvOzrlXWbXPe3Sdt+wjv60HKzoJQidB6CQInQShkyB0EoROwrI5+lvs3j+9ai6+ah/8yO5987exopMgdBKEToLQSRA6CUInQegkfOwc/bbzWHb71M+1ihWdBKGTIHQShE6C0EkQOglCJ2HZHP22uezs87z9PJnb3NaDFZ0EoZMgdBKEToLQSRA6CUInYXqO/pZ58O796Kv2eZ86p2XV87+lBys6CUInQegkCJ0EoZMgdBKETsLX8zynn+Fb7T53fPd7RnfPv2/bR76KFZ0EoZMgdBKEToLQSRA6CUInYbgf/bb93Lvnvrvn6yO7r39qv/htPVjRSRA6CUInQegkCJ0EoZMgdBK2n49+ap466+3PP7L7nJbR9W9776kVnQShkyB0EoROgtBJEDoJQidheK6L/d////OzTu0LP3VOy23/v1Z0EoROgtBJEDoJQidB6CQInYTt56Of2n+8al/1qf3it933LfP4ESs6CUInQegkCJ0EoZMgdBKETsJ1+9FnnZpDj+x+X+nu94zOOvVe1dnnsaKTIHQShE6C0EkQOglCJ0HoJAzPRz81L989l111nVNz+ppV378VnQShkyB0EoROgtBJEDoJQifh2H70kdv2bc+67VyUkdv+3sB+dFhA6CQInQShkyB0EoROgtBJGO5H3+22OffIqfNVds+Vd3/Pp94nOmJFJ0HoJAidBKGTIHQShE6C0EmYnqPfNv9edd+3vO9z9jqzTt131mwPVnQShE6C0EkQOglCJ0HoJAidhOG5Lquc2n+8223nlsxatQ9+9/tNVz2PFZ0EoZMgdBKEToLQSRA6CUInYbgf/dR5I6Pr3HYey6r7nvKW/eurvjcrOglCJ0HoJAidBKGTIHQShE7CcI6+ex5823suZ69z2+8TTu13330e/Kr7WtFJEDoJQidB6CQInQShkyB0Eobnuuw+9+PUeS+3ne++223740+dz2NFJ0HoJAidBKGTIHQShE6C0EnYfj76Kbedy37bOein7nvq9ypWdBKEToLQSRA6CUInQegkCJ2E6fPRbzOam37qvvlV15+1+z2ju79/KzoJQidB6CQInQShkyB0EoROwnCOPnLqXI7d8+xP3bd92+edter5regkCJ0EoZMgdBKEToLQSRA6CdNz9BHnqPyaU/cd2f13CKfOs7eikyB0EoROgtBJEDoJQidB6CQsm6Pf5tQ8fmT3uS6zbnuv6u73v1rRSRA6CUInQegkCJ0EoZMgdBI+do6+6ryUU+e3jJw672XVfU+ds25FJ0HoJAidBKGTIHQShE6C0ElYNke/7XySVfPpWbvnyqv2qe/+vcGIc11gI6GTIHQShE6C0EkQOglCJ2F6jr77vJFVdu97nvWW+fTsz++e94/Yjw7/QegkCJ0EoZMgdBKEToLQSfh6nuf0M8B2VnQShE6C0EkQOglCJ0HoJAidhH8Bj4VGTcq0UyoAAAAASUVORK5CYII=";
+  // --- OFFLINE QR (https://buddhist-era.vercel.app) — මෙම ගොනුවේ ඇති QRCore මගින්ම සාදයි (mint #1E8F6C) ---
+  var QR_DATA_URL = '';
+
+  // --- Google Play Store (යෙදුම ඇගයීමට / Rate the app) ---
+  var PLAY_ID  = 'app.vercel.buddhist_era.twa';
+  var PLAY_WEB = 'https://play.google.com/store/apps/details?id=' + PLAY_ID;
 
   var HTML = `<div class="wrap">
 
@@ -35,65 +39,105 @@
 
     <div class="card important">
       <span class="tag">❄️ වැදගත්</span>
-      <p>ඔබ පළමු වරට ඇප් එක ඕපන් කළ පසු මෙනු එකේ ඇති <strong>අරුණ</strong> පිටුවට ගොස් ස්ථානය ලබාදෙන්න.</p>
+      <p>ඔබ පළමු වරට යෙදුම විවෘත කළ පසු මෙනු එකේ ඇති <strong>අරුණ</strong> පිටුවට ගොස් ස්ථානය ලබාදෙන්න.</p>
       <p>✏️ අවශ්‍ය නම් ඔබ සිටින ස්ථානයේ දත්ත ඇතුලත් කර අරුණ මධ්‍යාහ්නය වාර්ෂික සටහන මුද්‍රණය කර ගැනීමට <a href="https://buddhistera.github.io/Dawn-Noon-calculation/" target="_blank" rel="noopener noreferrer">මෙතනින්</a> බලන්න.</p>
+    </div>
+
+    <div class="card rate-card">
+      <h3>⭐ යෙදුම ඇගයීමට ලක් කරන්න</h3>
+      <p>මෙම යෙදුම ඔබට ප්‍රයෝජනවත් නම්, Google Play Store එකේ තරු ලබා දී කෙටි අදහසක් ලියන්න. එමගින් තවත් අයට මෙම යෙදුම සොයා ගැනීමට උපකාර වේ.</p>
+      <div class="rate-stars" aria-hidden="true">
+        <a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a>
+      </div>
+      <a class="rate-btn" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer">Play Store එකේ ඇගයීමක් කරන්න</a>
+    </div>
+
+    <div class="section-heading"><span class="dot"></span>යෙදුම ලබාගන්නා ආකාරය</div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <h3>🤖 Android සඳහා</h3>
+        <p>Google Play Store එකෙන් install කරන්න.</p>
+        <a class="platform-btn" href="https://play.google.com/store/apps/details?id=app.vercel.buddhist_era.twa&pcampaignid=web_share">install</a>
       </div>
 
-   <div class="section-heading"><span class="dot"></span>ඇප් එක ලබාගන්නා ආකාරය</div>
-<div class="platform-grid">
-  <div class="platform-card">
-    <h3>🤖 Android සඳහා</h3>
-    <p>මෙතනින් apk ගොනුව install කරන්න.</p>
-    <a class="platform-btn" href="https://play.google.com/store/apps/details?id=app.vercel.buddhist_era.twa&pcampaignid=web_share">install</a>
-  </div>
+      <div class="platform-card">
+        <h3>🪟 Windows සඳහා</h3>
+        <p>මෙම web ලිපිනය Chrome බ්‍රවුසරයෙන් විවෘත කර, ලිපින තීරුවේ ඇති <em>"install app"</em> අයිකනය ඔබා install කරන්න.</p>
+        <div class="link-row">
+          <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+          <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
+        </div>
+      </div>
 
-  <div class="platform-card">
-    <h3>🪟 Windows සඳහා</h3>
-    <p>chrome browser මගින් විවෘත කර install කරන්න.</p>
-    <div class="link-row">
-      <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
-      <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
+      <div class="platform-card">
+        <h3>🍎 iPhone / Mac OS සඳහා</h3>
+        <p>මෙම web ලිපිනය Safari බ්‍රවුසරයෙන් විවෘත කොට Share → <em>"Add to Home Screen"</em> කරන්න.</p>
+        <div class="link-row">
+          <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+          <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="platform-card">
-    <h3>🍎 iPhone / Mac OS සඳහා</h3>
-    <p>මෙම web ලිපිනය Safari බ්‍රවුසරයෙන් විවෘත කොට Share → <em>"Add to Home Screen"</em> කරන්න.</p>
-    <div class="link-row">
-      <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
-      <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
+    <div class="section-heading"><span class="dot"></span>ප්‍රයෝජනවත් ඉඟි</div>
+    <div class="card">
+      <ul class="tips">
+        <li><span class="pin">✏️</span><span>අරුණ සඳහා ස්ථානය ලබා ගැනීමේදී, අන්තර්ජාල සම්බන්ධතාවක් නැති තැනක එළිමහනේ සිට උත්සාහ කළහොත් ඉක්මනින් ප්‍රතිඵල ලැබේ.</span></li>
+        <li><span class="pin">✏️</span><span>මියන්මාර් උපෝසථ දින <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">මෙතනින්</a> බලාගත හැකිය.</span></li>
+      </ul>
     </div>
-  </div>
-</div>
   </div><!-- /data-lang="si" -->
 
-<!-- ================= ENGLISH ================= -->
-<div data-lang="en">
-  <div class="section-heading"><span class="dot"></span>How to get the app</div>
-  <div class="platform-grid">
-    <div class="platform-card">
-      <h3>🤖 For Android</h3>
-      <p>apk file install.</p>
-      <a class="platform-btn" href="https://play.google.com/store/apps/details?id=app.vercel.buddhist_era.twa&pcampaignid=web_share">Download ⬇️</a>
+  <!-- ================= ENGLISH ================= -->
+  <div data-lang="en">
+
+    <p class="blessing">May the Buddha Sāsana shine throughout the world!</p>
+
+    <div class="card">
+      <p>The Poya days shown here are based on the Thai and Sri Lankan Uposatha days. Myanmar Uposatha days may sometimes differ from these by just one day.</p>
+      <p>Please send your comments and suggestions to the address below.</p>
+      <a class="email-btn" href="mailto:bhamarawali@gmail.com">📧 bhamarawali@gmail.com</a>
     </div>
-    <div class="platform-card">
-      <h3>🪟 For Windows</h3>
-      <p>Open this web address in a Chrome browser and install it by clicking the <em>"install app"</em> icon in the address bar.</p>
-      <div class="link-row">
-        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
-        <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
+
+    <div class="card important">
+      <span class="tag">❄️ Important</span>
+      <p>After opening the app for the first time, go to the <strong>Sun</strong> page in the menu and set your location.</p>
+      <p>✏️ If needed, you can enter the details of your location and print an annual Dawn &amp; Noon chart from <a href="https://buddhistera.github.io/Dawn-Noon-calculation/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+    </div>
+
+    <div class="card rate-card">
+      <h3>⭐ Rate the app</h3>
+      <p>If you find this app useful, please give it a star rating and a short review on the Google Play Store. It helps others discover the app.</p>
+      <div class="rate-stars" aria-hidden="true">
+        <a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a>
+      </div>
+      <a class="rate-btn" data-rate href="${PLAY_WEB}" target="_blank" rel="noopener noreferrer">Rate on Play Store</a>
+    </div>
+
+    <div class="section-heading"><span class="dot"></span>How to get the app</div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <h3>🤖 For Android</h3>
+        <p>Install it from the Google Play Store.</p>
+        <a class="platform-btn" href="https://play.google.com/store/apps/details?id=app.vercel.buddhist_era.twa&pcampaignid=web_share">Download ⬇️</a>
+      </div>
+      <div class="platform-card">
+        <h3>🪟 For Windows</h3>
+        <p>Open this web address in a Chrome browser and install it by clicking the <em>"install app"</em> icon in the address bar.</p>
+        <div class="link-row">
+          <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+          <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
+        </div>
+      </div>
+      <div class="platform-card">
+        <h3>🍎 For iPhone, Mac OS</h3>
+        <p>Open this web address in Safari browser and Share → <em>"Add to Home Screen"</em>.</p>
+        <div class="link-row">
+          <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+          <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
+        </div>
       </div>
     </div>
-    <div class="platform-card">
-      <h3>🍎 For iPhone, Mac OS</h3>
-      <p>Open this web address in Safari browser and Share → <em>"Add to Home Screen"</em>.</p>
-      <div class="link-row">
-        <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
-        <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
-      </div>
-    </div>
-  </div>
-</div>
 
     <div class="section-heading"><span class="dot"></span>Helpful tips</div>
     <div class="card">
@@ -102,6 +146,7 @@
         <li><span class="pin">✏️</span><span>You can check Myanmar Uposatha dates <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">here</a>.</span></li>
       </ul>
     </div>
+  </div><!-- /data-lang="en" -->
 
   <!-- QR (shared, not language-specific) -->
   <div class="card qr-card">
@@ -180,17 +225,17 @@ to   { opacity: 1; transform: translateY(0); }
     inset: 0;
     background-image: linear-gradient(
       0deg,
-      #0b3a99 0%,                     
+      #0b3a99 0%,
       #1a52c9 4%,
-      #ffdc26 10%,                    
+      #ffdc26 10%,
       #ffc400 14%,
-      #ed2f36 20%,                    
+      #ed2f36 20%,
       #c9101a 24%,
-      #ffffff 30%,                    
+      #ffffff 30%,
       #e8e8e8 34%,
-      #fda83c 40%,                    
+      #fda83c 40%,
       #ee7f0c 44%,
-      #0b3a99 50%,                    
+      #0b3a99 50%,
       #1a52c9 54%,
       #ffdc26 60%,
       #ffc400 64%,
@@ -200,11 +245,11 @@ to   { opacity: 1; transform: translateY(0); }
       #e8e8e8 84%,
       #fda83c 90%,
       #ee7f0c 94%,
-      #0b3a99 100%                    
+      #0b3a99 100%
     );
-    background-size: 100% 200%;        
+    background-size: 100% 200%;
     background-repeat: no-repeat;
-    background-position: 0% 100%;      
+    background-position: 0% 100%;
     animation: info-prabhasvaraMove 14s linear infinite;
     will-change: background-position;}
 @keyframes info-prabhasvaraMove{
@@ -379,6 +424,27 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
 #infoOverlay .copy-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--mint-line);background:var(--mint-soft);color:var(--mint-deep);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s ease}
 #infoOverlay .copy-btn:hover{background:var(--mint-deep);color:#fff;transform:scale(1.05)}
 #infoOverlay .copy-btn.copied{background:var(--mint-deep);color:#fff}
+#infoOverlay .rate-card{text-align:center;background:linear-gradient(180deg,var(--mint-card),var(--saffron-soft));border-color:var(--saffron-line)}
+#infoOverlay .rate-card::before{background:linear-gradient(90deg,#F5B83D,var(--saffron))}
+#infoOverlay .rate-card h3{font-family:'Noto Serif Sinhala',serif;font-size:17px;margin:0 0 8px;color:var(--ink)}
+#infoOverlay .rate-stars{display:flex;justify-content:center;gap:4px;margin:4px 0 14px}
+#infoOverlay .rate-star{font-size:32px;line-height:1;color:#F5B83D;text-decoration:none;padding:2px 3px;
+    text-shadow:0 2px 6px rgba(201,133,46,.35);transition:transform .15s ease;animation:info-starPop .5s ease both}
+#infoOverlay .rate-star:nth-child(2){animation-delay:.08s}
+#infoOverlay .rate-star:nth-child(3){animation-delay:.16s}
+#infoOverlay .rate-star:nth-child(4){animation-delay:.24s}
+#infoOverlay .rate-star:nth-child(5){animation-delay:.32s}
+#infoOverlay .rate-star:active{transform:scale(1.3)}
+@keyframes info-starPop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+#infoOverlay .rate-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:12px;
+    background:linear-gradient(180deg,#F5B83D,#C9852E);color:#fff;text-decoration:none;font-weight:700;font-size:14.5px;
+    box-shadow:0 10px 20px -10px rgba(201,133,46,.6);transition:transform .15s ease}
+#infoOverlay .rate-btn:active{transform:scale(.97)}
+body.dark-mode #infoOverlay .rate-card{border-color:var(--saffron-line) !important}
+body.dark-mode #infoOverlay .rate-card::before{background:linear-gradient(90deg,#F5B83D,#ffd54f) !important}
+body.dark-mode #infoOverlay .rate-star{color:#ffd54f;text-shadow:0 0 10px rgba(255,213,79,.45)}
+body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,#f5a623);color:#1a1025}
+@media (prefers-reduced-motion: reduce){#infoOverlay .rate-star{animation:none}}
 `;
 
   /* ---------- QR encoder (offline, byte mode / UTF-8, versions 1-40) ---------- */
@@ -689,6 +755,24 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
 
   var QM_SITE = 'https://buddhist-era.vercel.app';
 
+  /* වෙබ් අඩවියේ QR කේතය (PNG data URL) — එක් වරක් සාදා මතක තබා ගනී */
+  function siteQrUrl() {
+    if (QR_DATA_URL) return QR_DATA_URL;
+    var qr = QRCore.encode(QM_SITE, 'M');
+    if (!qr) return '';
+    var quiet = 2, scale = 8, px = (qr.size + quiet * 2) * scale;
+    var cv = document.createElement('canvas');
+    cv.width = cv.height = px;
+    var ctx = cv.getContext('2d');
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, px, px);
+    ctx.fillStyle = '#1E8F6C';
+    for (var y = 0; y < qr.size; y++) for (var x = 0; x < qr.size; x++) {
+      if (qr.modules[y][x]) ctx.fillRect((x + quiet) * scale, (y + quiet) * scale, scale, scale);
+    }
+    QR_DATA_URL = cv.toDataURL('image/png');
+    return QR_DATA_URL;
+  }
+
   /* දැනට ඇති (embedded) QR කේතය තියුණු 1024px canvas එකක් ලෙස සාදයි */
   function qmStaticCanvas(cb) {
     var img = new Image();
@@ -702,14 +786,14 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
       cb(cv);
     };
     img.onerror = function () { cb(null); };
-    img.src = QR_DATA_URL;
+    img.src = siteQrUrl();
   }
 
   function qmDownloadStatic() {
     qmStaticCanvas(function (cv) {
       if (cv) { qmSave(cv, 'buddhist-era-qr.png'); return; }
       var a = document.createElement('a');
-      a.href = QR_DATA_URL; a.download = 'buddhist-era-qr.png';
+      a.href = siteQrUrl(); a.download = 'buddhist-era-qr.png';
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
     });
   }
@@ -926,6 +1010,25 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
     });
   }
 
+  /* ---------- Play Store ඇගයීම (Rate the app) ----------
+     Android: Play Store යෙදුමම කෙලින්ම විවෘත කරයි (intent://).
+     Play Store යෙදුම නැත්නම් web පිටුවට යයි (browser_fallback_url).
+     අනෙකුත් උපාංග: Play Store web පිටුව නව tab එකක විවෘත වේ. */
+  function rateApp(e) {
+    var ua = navigator.userAgent || '';
+    if (!/android/i.test(ua)) return; // සාමාන්‍ය link එක (target=_blank) ක්‍රියා කරයි
+    if (e) e.preventDefault();
+    window.location.href = 'intent://details?id=' + PLAY_ID +
+      '#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' +
+      encodeURIComponent(PLAY_WEB) + ';end';
+  }
+
+  function initRate(ov) {
+    ov.querySelectorAll('[data-rate]').forEach(function (a) {
+      a.addEventListener('click', rateApp);
+    });
+  }
+
   var pushed = false;
 
   function lang() {
@@ -943,8 +1046,8 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
   function drawQR(ov) {
     var box = ov.querySelector('#qrcode');
     if (!box) return;
-    // 100% OFFLINE - mint color embedded, no external script
-    box.innerHTML = '<img src="' + QR_DATA_URL + '" alt="QR Code" width="176" height="176" style="display:block; width:176px; height:176px; image-rendering:pixelated; border-radius:8px;">';
+    // 100% OFFLINE - QRCore මගින් සාදයි, බාහිර script නැත
+    box.innerHTML = '<img src="' + siteQrUrl() + '" alt="QR Code" width="176" height="176" style="display:block; width:176px; height:176px; image-rendering:pixelated; border-radius:8px;">';
   }
 
   function build() {
@@ -965,6 +1068,7 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
     ov.scrollTop = 0;
     drawQR(ov);
     initMaker(ov, l);
+    initRate(ov);
     return ov;
   }
 
