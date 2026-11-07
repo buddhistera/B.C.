@@ -16,7 +16,7 @@ const CACHE_ASSETS = [
   '/bg/waves.webp?v=1', '/bg/flowers.webp?v=1', '/bg/gold.webp?v=1',
   '/bg/gold-lines.svg?v=1', '/bg/pearl.webp?v=1', '/bg/damask.webp?v=1',
   '/bg/swirl.webp?v=1', '/moon.jpg?v=1',
-  '/icon-192x192.png?v=4', '/icon-512x512.png?v=4'
+  '/icon-192x192.png?v=5', '/icon-512x512.png?v=5'
 ];
 
 const TIMEOUT_MS = 3500;
