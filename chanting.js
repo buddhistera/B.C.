@@ -12,8 +12,8 @@
      ------------------------------------------------------------------ */
   var TABS = [
     { id: 'recitation',   icon: '🗓️', title: { si: 'බුද්ධ වර්ෂය',    en: 'Buddha Year' },  src: 'buddha-recitation.js' },
-    { id: 'vandana',      icon: '🙏', title: { si: 'බුද්ධ වන්දනාව',  en: 'Buddha Vandanā' }, src: 'buddha-vandana-data.js' },
-    { id: 'pirith',       icon: '📖', title: { si: 'පිරිත්',        en: 'Pirith' },       src: 'pirith-data.js' },
+    { id: 'vandana',      icon: '🙏', title: { si: 'බුද්ධ වන්දනාව',  en: ' Daily Chanting' }, src: 'buddha-vandana-data.js' },
+    { id: 'pirith',       icon: '📖', title: { si: 'පිරිත්',        en: 'Paritta' },       src: 'pirith-data.js' },
     { id: 'patimokkha',   icon: '🪷', title: { si: 'ප්‍රාතිමෝක්ෂය',   en: 'Pātimokkha' },   src: 'patimokkha-data.js', adapt: adaptPatimokkha },
     { id: 'patthana',     icon: '✨', title: { si: 'පට්ඨානය',       en: 'Paṭṭhāna' },     src: 'patthana-data.js' },
     { id: 'satipatthana', icon: '🧘', title: { si: 'සතිපට්ඨාන',     en: 'Satipaṭṭhāna' }, src: 'satipatthana-data.js' }
@@ -620,11 +620,12 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
         if (multi && it.group !== lastGroup) {
           lastGroup = it.group;
           var gp = mod.groups.filter(function (g) { return g.id === it.group; })[0];
+          /* ස්වර්ණ නමස්කාර කොටුව: සිංහලෙන් → සිංහල අකුරින් පාළිය පමණයි; English → Roman පාළිය පමණයි */
           if (gp) gh = (gp.cat ? '<div class="pm-cat" data-a="c-' + esc(gp.id) + '"><span>' + esc(L(gp.cat)) + '</span></div>' : '') +
             '<div class="ch-group" data-a="g-' + esc(gp.id) + '"><h3>' + esc(L(gp.label)) + '</h3>' +
             (gp.countLabel ? '<span>' + esc(L(gp.countLabel)) + '</span>'
               : (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' rules') + '</span>' : '')) + '</div>' +
-            (gp.namo ? '<div class="ch-gold-namo"><div class="p">' + esc(gp.namo.pali) + '</div>' + (!si && gp.namo.translit ? '<div class="t">' + esc(gp.namo.translit) + '</div>' : '') + '</div>' : '');
+            (gp.namo ? '<div class="ch-gold-namo"><div class="p">' + esc(si ? gp.namo.pali : (gp.namo.translit || gp.namo.pali)) + '</div></div>' : '');
         }
         rows.push({ g: gh, it: it });
       });
