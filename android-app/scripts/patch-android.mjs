@@ -48,6 +48,8 @@ if (!g.includes('signingConfigs')) {
     }$1buildTypes {`);
   must(/buildTypes\s*\{\s*release\s*\{/.test(g), 'buildTypes.release not found');
   g = g.replace(/(buildTypes\s*\{\s*release\s*\{)/, `$1\n            if (System.getenv("KS_FILE")) { signingConfig = signingConfigs.release }`);
+  // පරීක්ෂණ (debug) ඇප් එක Play Store ඇප් එක ඉවත් නොකර වෙනම install කළ හැකි වීමට: app.vercel.buddhist_era.twa.debug
+  if (!/\bdebug\s*\{/.test(g)) g = g.replace(/(buildTypes\s*\{)/, `$1\n        debug {\n            applicationIdSuffix = ".debug"\n            versionNameSuffix = "-test"\n        }`);
 }
 writeFileSync(gf, g);
 
