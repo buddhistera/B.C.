@@ -562,6 +562,11 @@
   /* ------------------------------------------------------------------ */
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  /* හින්දි: දත්ත ඉංග්‍රීසි (රෝම පාළි) වගුවෙන්; පාළිය දේවනාගරී අකුරින් (pali-script.js), වෙනත් පෙළ lang/hi.js වෙතින් */
+  var HI = false;
+  function X(s) { return (HI && typeof tx === 'function') ? tx(s) : s; }
+  function XF(s) { var a = arguments; return String(X(s)).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1]; }); }
+  function PV(s) { return (HI && window.PaliScript) ? PaliScript.fromIAST(s, 'deva') : s; }
 
   function monthName(monthSi, lang) {
     var adhi = monthSi.indexOf('අධි') === 0;
@@ -617,7 +622,7 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
     // 1. බුද්ධ චරිත අර්ථය
     out.push(si
       ? '<p></strong> අපගේ භාග්‍යවතුන් වහන්සේ දීපංකර බුදුන්ගේ පාමුල සිට දාන, සීල, නෙක්ඛම්ම, පඤ්ඤා, විරිය, ඛන්ති, සච්ච, අධිට්ඨාන, මෙත්තා, උපෙක්ඛා යන දස පාරමී, දස උපපාරමී, දස පරමත්ථ පාරමී වශයෙන් පාරමිතා තිහක් පුරා, වෙස්සන්තර අත්බවෙහි උපත ලැබ මහා පංච මහා පරිත්‍යාගයන් කොට, තුසිත දෙව්ලොව උපන්නේ ය. සතර මහා දිව්‍ය රාජයන්ගේ ආරාධනය අනුව මහා පංච මහා විලෝකනයන් විලෝකනය කොට, සුද්ධෝදන මහරජු නිසා මහාමායා දේවියගේ කුසෙහි පිළිසිඳ ගත්තේ ය. දස මසක ඇවෑමෙන් මවගේ කුසින් බිහි වී, විසි නව වැනි වියේදී මහාභිනිෂ්ක්‍රමණය කොට, වසර හයක් මහා පධන් වීර්යය කොට, තිස් පස්වන වියේ වෙසක් පුන් පොහෝ දින සම්මා සම්බෝධිය අවබෝධ කොට, වසර හතළිස් පහක් වැඩ සිට, සප්ප (සර්ප) සංවත්සරයේ වෙසක් පුන් පොහෝ දින අඟහරුවාදා පිරිනිවන් පා වදාළ සේක. ඒ අර්හත් සම්මා සම්බුද්ධ භාග්‍යවතුන් වහන්සේගේ සාසනය වසර පන්දහසක් පවතින්නේ ය.</p>'
-      : '<p></strong> From the feet of Dīpaṅkara Buddha onward, our Blessed One fulfilled thirty pāramīs — the ten pāramīs (giving, virtue, renunciation, wisdom, energy, patience, truthfulness, resolution, loving-kindness, equanimity), the ten upapāramīs and the ten paramattha-pāramīs. Born in the Vessantara existence he made the five great renunciations, and was then reborn in the Tusita realm. At the request of the four great deva-kings he made the five great investigations, took conception in the womb of Queen Mahāmāyā through King Suddhodana, and after ten months was born. In his twenty-ninth year he made the Great Renunciation, strove for six years, and in his thirty-fifth year, on the Vesākha full-moon day, awakened to perfect enlightenment. After teaching for forty-five years, in the Sappa (Snake) year on the Vesākha full-moon day, a Tuesday, he attained parinibbāna. The Dispensation of that Blessed One, the Arahant, the Fully Enlightened Buddha, will endure for five thousand years.</p>');
+      : X('<p></strong> From the feet of Dīpaṅkara Buddha onward, our Blessed One fulfilled thirty pāramīs — the ten pāramīs (giving, virtue, renunciation, wisdom, energy, patience, truthfulness, resolution, loving-kindness, equanimity), the ten upapāramīs and the ten paramattha-pāramīs. Born in the Vessantara existence he made the five great renunciations, and was then reborn in the Tusita realm. At the request of the four great deva-kings he made the five great investigations, took conception in the womb of Queen Mahāmāyā through King Suddhodana, and after ten months was born. In his twenty-ninth year he made the Great Renunciation, strove for six years, and in his thirty-fifth year, on the Vesākha full-moon day, awakened to perfect enlightenment. After teaching for forty-five years, in the Sappa (Snake) year on the Vesākha full-moon day, a Tuesday, he attained parinibbāna. The Dispensation of that Blessed One, the Arahant, the Fully Enlightened Buddha, will endure for five thousand years.</p>'));
     // 2. ගෙවුණු / ඉතිරි
     function span(o, sep) {
       var p = [];
@@ -626,45 +631,46 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
         if (o.m > 0) p.push('මාස ' + o.m + 'ක්ද');
         if (o.d > 0) p.push('දින ' + o.d + 'ක්ද');
       } else {
-        if (o.y > 0) p.push(o.y + (o.y === 1 ? ' year' : ' years'));
-        if (o.m > 0) p.push(o.m + (o.m === 1 ? ' month' : ' months'));
-        if (o.d > 0) p.push(o.d + (o.d === 1 ? ' day' : ' days'));
+        if (o.y > 0) p.push(XF(o.y === 1 ? '{0} year' : '{0} years', o.y));
+        if (o.m > 0) p.push(XF(o.m === 1 ? '{0} month' : '{0} months', o.m));
+        if (o.d > 0) p.push(XF(o.d === 1 ? '{0} day' : '{0} days', o.d));
       }
       return p;
     }
     var a = span(st.atk), v = span(st.avs);
     out.push(si
       ? '<p>' + (a.length ? 'දැන් ' + a.join(' ') + ' ගෙවී ගොස් ඇත.' : 'තවම කිසිදු කාලයක් ගෙවී නොමැත.') + '</p>'
-      : '<p>' + (a.length ? 'Now ' + a.join(', ') + ' have elapsed.' : 'No time has yet elapsed.') + '</p>');
+      : '<p>' + (a.length ? XF('Now {0} have elapsed.', a.join(', ')) : X('No time has yet elapsed.')) + '</p>');
     out.push(si
       ? '<p>' + (v.length ? v.join(' ') + ' ඉතිරිව ඇත.' : 'ඉතිරිව කිසිදු කාලයක් නොමැත.') + '</p>'
-      : '<p>' + (v.length ? v.join(', ') + ' remain.' : 'No time remains.') + '</p>');
+      : '<p>' + (v.length ? XF('{0} remain.', v.join(', ')) : X('No time remains.')) + '</p>');
     // 3. අද දිනය
-    var wk = (si ? ['ඉරිදා','සඳුදා','අඟහරුවාදා','බදාදා','බ්‍රහස්පතින්දා','සිකුරාදා','සෙනසුරාදා'] : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'])[st.weekIdx];
+    var wk = (si ? ['ඉරිදා','සඳුදා','අඟහරුවාදා','බදාදා','බ්‍රහස්පතින්දා','සිකුරාදා','සෙනසුරාදා'] : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].map(X))[st.weekIdx];
     var ord = si
       ? ['','පළමු','දෙවන','තුන්වන','සිව්වන','පස්වන','හයවන','හත්වන','අටවන','නවවන','දසවන','එකොළොස්වන','දොළොස්වන','තෙළෙස්වන','තුදුස්වන','පසළොස්වන']
-      : ['','first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth','eleventh','twelfth','thirteenth','fourteenth','fifteenth'];
+      : ['','first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth','eleventh','twelfth','thirteenth','fourteenth','fifteenth'].map(X);
     if (si) {
       out.push('<p>මෙය <strong>' + names.animal + '</strong> සංවත්සරයයි; <strong>' + names.utu + '</strong> ඍතුවයි; මේ ඍතුවෙහි <strong>' + names.month + '</strong> මාසයේ ' +
         (st.paksha === 'sukka' ? 'සුක්ක (පුර)' : ' කාල (අව)') + ' පක්ෂයේ <strong>' + ord[st.tithi] + '</strong> දිනය (තිථිය) <strong>' + wk + '</strong> යැයි දත යුතුය.</p>');
     } else {
-      out.push('<p>This is the <strong>' + names.animal + '</strong> saṃvacchara (year), the <strong>' + names.utu + '</strong> season. In this season, in the month of <strong>' + names.month + '</strong>, on the <strong>' + ord[st.tithi] + '</strong> day (tithi) of the ' +
-        (st.paksha === 'sukka' ? 'Sukka (waxing)' : 'Kāla (waning)') + ' pakkha, a <strong>' + wk + '</strong> — thus it should be understood.</p>');
+      out.push('<p>' + XF('This is the <strong>{0}</strong> saṃvacchara (year), the <strong>{1}</strong> season. In this season, in the month of <strong>{2}</strong>, on the <strong>{3}</strong> day (tithi) of the {4} pakkha, a <strong>{5}</strong> — thus it should be understood.',
+        names.animal, names.utu, names.month, ord[st.tithi], X(st.paksha === 'sukka' ? 'Sukka (waxing)' : 'Kāla (waning)'), wk) + '</p>');
     }
     return out.join('');
   }
 
   function renderHtml(lang) {
     injectCss();
+    HI = lang === 'hi'; if (HI) lang = 'en';     /* හින්දි = ඉංග්‍රීසි වගුව + දේවනාගරී පාළිය + හින්දි පෙළ */
     var si = lang === 'si';
     var st = getState();
-    if (!st) return '<div class="ch-load"><b>⚠️</b>' + (si ? 'දිනය ලබා ගත නොහැකි විය.' : 'Could not read the selected date.') + '</div>';
+    if (!st) return '<div class="ch-load"><b>⚠️</b>' + (si ? 'දිනය ලබා ගත නොහැකි විය.' : X('Could not read the selected date.')) + '</div>';
 
     var W = D.W[lang];
-    var animal = D.ANI[lang][st.animalIdx];
+    var animal = PV(D.ANI[lang][st.animalIdx]);
     var utuK = seasonKey(st.season);
-    var utu = D.UTU[lang][utuK];
-    var month = monthName(st.monthSi, lang);
+    var utu = PV(D.UTU[lang][utuK]);
+    var month = PV(monthName(st.monthSi, lang));
     var tithi = D.TITHI[lang][st.tithi];
     var week = D.WEEK[lang][st.weekIdx];
     var pak = si ? (st.paksha === 'sukka' ? 'සුක්ක පක්ඛෙ' : 'කාල පක්ඛෙ') : (st.paksha === 'sukka' ? 'sukka-pakkhe' : 'kāla-pakkhe');
@@ -674,11 +680,11 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
     if (si) {
       today = W.ayam + ' ' + animal + ' ' + W.samvac + ' ' + utu + ' ' + W.utu + ', ' + W.asmim + ' ' + month + ' ' + W.masassa + ' ' + pak + ' ' + tithi + ' ' + week.slice(0, -1) + 'මිදන්ති ' + W.dattha + '.';
     } else {
-      today = W.ayam + ' ' + animal + ' ' + W.samvac + ' ' + utu + '-' + W.utu + ', ' + W.asmim + ' ' + month + '-' + W.masassa + ' ' + pak + ' ' + tithi.toLowerCase() + ' ' + week.slice(0, -1) + 'midanti ' + W.dattha + '.';
+      today = PV(W.ayam + ' ' + D.ANI[lang][st.animalIdx] + ' ' + W.samvac + ' ' + D.UTU[lang][utuK] + '-' + W.utu + ', ' + W.asmim + ' ' + monthName(st.monthSi, lang) + '-' + W.masassa + ' ' + pak + ' ' + tithi.toLowerCase() + ' ' + week.slice(0, -1) + 'midanti ' + W.dattha + '.');
     }
 
-    var atk = countPhrase(st.atk.y, st.atk.m, st.atk.d, lang, 'atk');
-    var avs = countPhrase(st.avs.y, st.avs.m, st.avs.d, lang, 'avs');
+    var atk = PV(countPhrase(st.atk.y, st.atk.m, st.atk.d, lang, 'atk'));
+    var avs = PV(countPhrase(st.avs.y, st.avs.m, st.avs.d, lang, 'avs'));
 
     // දිනය (ප්‍රධාන ඇප් එකේ දිනයම, කියවීමට පමණි)
     var p = st.dateStr.split('-'), gd = new Date(+p[0], +p[1] - 1, +p[2]);
@@ -687,10 +693,11 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
     var EN_M = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     var EN_W = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     var dateTxt = si ? (gd.getFullYear() + ' ' + SI_M[gd.getMonth()] + ' ' + gd.getDate() + ', ' + SI_W[gd.getDay()])
-                     : (EN_W[gd.getDay()] + ', ' + gd.getDate() + ' ' + EN_M[gd.getMonth()] + ' ' + gd.getFullYear());
+                     : (X(EN_W[gd.getDay()]) + ', ' + gd.getDate() + ' ' + X(EN_M[gd.getMonth()]) + ' ' + gd.getFullYear());
 
     var labels = si ? { t: 'අදට නියමිත බුද්ධ වර්ෂය', y: 'වර්ෂය', m: 'මාසය', d: 'දිනය', an: 'සංවච්ඡරය', ut: 'සෘතුව', mo: 'මාසය', poya: 'උපෝසථ දිනය', nam: 'නමස්කාරය', pal: '📜 පාළි සජ්ඣායනය', mea: '🇱🇰 සිංහල අර්ථය' }
                     : { t: 'Buddhist Era for the selected date', y: 'Year', m: 'Month', d: 'Day', an: 'Year (animal)', ut: 'Season', mo: 'Month', poya: 'Uposatha day', nam: 'NAMAKĀRA', pal: '📜 Pāḷi recitation', mea: '🌐 Meaning' };
+    if (HI) for (var lk in labels) labels[lk] = X(labels[lk]);
 
     var html = '';
     html += '<div class="rc-card"><h3>' + labels.t + '</h3><div class="rc-date">' + esc(dateTxt) + '</div>' +
@@ -700,12 +707,12 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
 
     // නමස්කාරය (සජ්ඣායනයට ඉහළින්)
             html += '<div class="ch-namo">' +
-      '<div class="rc-namo-line">' + esc(D.NAMO[lang]) + '</div></div>';
+      '<div class="rc-namo-line">' + esc(PV(D.NAMO[lang])) + '</div></div>';
 
     // පාළි සජ්ඣායනය
     html += '<article class="ch-card"><div class="ch-box ch-pali rc-pali" style="white-space:normal" data-l="' + labels.pal + '">' +
-      '<p>' + esc(D.STORY[lang]) + '</p>' +
-      '<p>' + esc(W.idani) + ' ' + esc(atk) + '.</p>' +
+      '<p>' + esc(PV(D.STORY[lang])) + '</p>' +
+      '<p>' + esc(PV(W.idani)) + ' ' + esc(atk) + '.</p>' +
       '<p>' + esc(cap(avs)) + '.</p>' +
       '<p class="rc-today">' + esc(today) + '</p></div>';
 

@@ -1,5 +1,49 @@
 // --- Language Settings ---
+// භාෂා: si = සිංහල, en = English, hi = हिन्दी (देवनागरी).
+// හින්දි ක්‍රමය (gettext ආකාරය): කේතයේ ඇති ඉංග්‍රීසි පෙළම "යතුර" ලෙස යොදා lang/hi.js හි HI_DICT
+// වෙතින් හින්දි පෙළ ලබා ගනී → පරිවර්තනයක් නැති තැනක ඉංග්‍රීසිය ස්වයංක්‍රීයව පෙනේ (ඇප් එක කැඩෙන්නේ නැත).
+// lang/hi.js සහ pali-script.js load වන්නේ හින්දි තෝරාගත් අයට පමණි (අනෙක් අයට අමතර බරක් නැත).
+    const APP_LANGS = ['si', 'en', 'hi'];
+    const LANG_NAMES = { si: 'සිංහල', en: 'English', hi: 'हिन्दी' };
+    const LANG_FILES = { hi: ['pali-script.js?v=1', 'lang/hi.js?v=1'] };
     let currentLang = localStorage.getItem('appLang') || 'en';
+    if (APP_LANGS.indexOf(currentLang) < 0) currentLang = 'en';
+    try { document.documentElement.lang = currentLang; } catch (e) {}
+
+    // ඉංග්‍රීසි පෙළ → දැනට තෝරා ඇති භාෂාව (හින්දි නම් HI_DICT; නැත්නම් ඉංග්‍රීසියම)
+    function tx(s) {
+        if (currentLang !== 'hi' || s == null) return s;
+        const D = window.HI_DICT; if (!D) return s;
+        const v = D[s]; if (v != null) return v;
+        const k = String(s).trim();
+        if (k !== s && D[k] != null) return String(s).replace(k, D[k]);
+        if (k.indexOf('\n') >= 0) {                     // පේළි කිහිපයක පෙළ: පේළියෙන් පේළිය
+            let hit = false;
+            const r = String(s).split('\n').map(function (p) { const t = p.trim(); if (t && D[t] != null) { hit = true; return p.replace(t, D[t]); } return p; });
+            if (hit) return r.join('\n');
+        }
+        if (window.__i18nMiss) window.__i18nMiss[k] = 1;   // පරීක්ෂණ සඳහා: පරිවර්තනය නැති පෙළ
+        return s;
+    }
+    // {0} {1} ආදිය සහිත පෙළ:  txf('{0} days to {1} Uposatha', 5, 'Full Moon')
+    function txf(s) { const a = arguments; return String(tx(s)).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1]; }); }
+    function isHindi() { return currentLang === 'hi'; }
+    function langLocale() { return currentLang === 'si' ? 'si-LK' : currentLang === 'hi' ? 'hi-IN' : 'en-US'; }
+    // රෝම (IAST) පාළිය → හින්දියේදී දේවනාගරී අකුරින් (අනෙක් භාෂාවලදී එලෙසම)
+    function paliHi(s) { return (currentLang === 'hi' && window.PaliScript) ? PaliScript.fromIAST(s, 'deva') : s; }
+    // සිංහල අකුරු පාළිය → හින්දියේදී දේවනාගරී
+    function paliSiHi(s) { return (currentLang === 'hi' && window.PaliScript) ? PaliScript.convert(s, 'sinh', 'deva') : s; }
+    function langReady(l) { return l !== 'hi' || !!(window.HI_DICT && window.PaliScript); }
+    function loadLang(l, cb) {
+        const files = (LANG_FILES[l] || []).slice();
+        (function next() {
+            if (langReady(l)) return cb(true);
+            const f = files.shift(); if (!f) return cb(false);
+            const sc = document.createElement('script');
+            sc.src = f; sc.onload = next; sc.onerror = function () { cb(false); };
+            document.head.appendChild(sc);
+        })();
+    }
 
     // මෙනු තීරුවේ භාෂා බොත්තමේ (සිං / en) සක්‍රිය භාෂාව highlight කිරීම
     function syncLangPill() {
@@ -12,7 +56,7 @@
     const i18n = {
         si: {
             title: "බුද්ධ වර්ෂය", dateLabel: "දිනය තෝරන්න ( ක්‍රි.ව) ⇓", atikkanta: "අතික්කන්ත\n(ඉකුත් වූ)", avasittha: "අවසිට්ඨ\n(ඉතිරි)",
-            langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", calcMenu: "📖 ගණනය", navSun: "අරුණ", navPoya: "උපෝසථ", navVas: "වස්", navChant: "සජ්ඣායනා", navCalc: "ගණනය", navMore: "තව", langLbl: "English", darkLbl: "අඳුරු තිරය", lightLbl: "ආලෝකමත් තිරය", infoLbl: "තොරතුරු", contactMenu: "ℹ️ තොරතුරු", poyaTitle: " උපෝසථ දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
+            langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", calcMenu: "📖 ගණනය", navSun: "අරුණ", navPoya: "උපෝසථ", navVas: "වස්", navChant: "සජ්ඣායනා", navCalc: "ගණනය", navMore: "තව", langLbl: "භාෂාව", darkLbl: "අඳුරු තිරය", lightLbl: "ආලෝකමත් තිරය", infoLbl: "තොරතුරු", contactMenu: "ℹ️ තොරතුරු", poyaTitle: " උපෝසථ දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
             vasTitle: "", contactTitle: " තොරතුරු සහ බාගත කිරීම්", poyaSuffix: " පෝය",
             vas1: "පෙරවස් සමාදන්වීම", vas2: "පෙරවස් පවාරණය", vas3: "පසුවස් සමාදන්වීම", vas4: "පසුවස් පවාරණය",
             stSamadan: "පෙරවස් සමාදන් වන දිනය", stPavToday: "පෙරවස් පවාරණ දිනය", stPavTomorrow: "හෙට පෙරවස් පවාරණ දිනය",
@@ -24,7 +68,7 @@
         },
         en: {
             title: "Buddhist Era", dateLabel: "Select Date (C.E.) ⇓", atikkanta: "Atikkanta\n(Elapsed)", avasittha: "Avasiṭṭha\n(remaining)",
-            langBtn: "සිංහල 🇱🇰", sunMenu: "Dawn | Noon ☀️", poyaMenu: " Uposatha Days🌛", vasMenu: "Vassa Season ⛈️", calcMenu: "📖 Calculation", navSun: "Sun", navPoya: "Uposatha", navVas: "Vassa", navChant: "Chanting", navCalc: "Calculate", navMore: "More", langLbl: "සිංහල", darkLbl: "Dark Mode", lightLbl: "Light Mode", infoLbl: "Info", contactMenu: "ℹ️ Info", poyaTitle: " Uposatha Calendar",darkMode: "Dark Mode 🌑",lightMode: "Light Mode 💡",yearLabel: "Year",monthLabel: "Month",dayLabel: "Day",
+            langBtn: "සිංහල 🇱🇰", sunMenu: "Dawn | Noon ☀️", poyaMenu: " Uposatha Days🌛", vasMenu: "Vassa Season ⛈️", calcMenu: "📖 Calculation", navSun: "Sun", navPoya: "Uposatha", navVas: "Vassa", navChant: "Chanting", navCalc: "Calculate", navMore: "More", langLbl: "Language", darkLbl: "Dark Mode", lightLbl: "Light Mode", infoLbl: "Info", contactMenu: "ℹ️ Info", poyaTitle: " Uposatha Calendar",darkMode: "Dark Mode 🌑",lightMode: "Light Mode 💡",yearLabel: "Year",monthLabel: "Month",dayLabel: "Day",
             vasTitle: "", contactTitle: "Contact & Downloads", poyaSuffix: "",
             vas1: "Entering the Early Rains Retreat", vas2: "Early Vassa Pavāraṇā", vas3: "Entering the Late Rains Retreat ", vas4: "Late Vassa Pavāraṇā ",
             stSamadan: "Day of Entering the Early Rains Retreat", stPavToday: "Early Vassa Pavāraṇā Day", stPavTomorrow: "Tomorrow is Early Vassa Pavāraṇā Day",
@@ -34,7 +78,23 @@
             week: ["Ravivāraṃ","Candavāraṃ","Bhummavāraṃ","Budhavāraṃ","Guruvāraṃ","Sukkavāraṃ","Soravāraṃ"],
             paliTemplate: (a, s, m, p, t, w) => `Ayaṃ\n${a} saṃvacchare\n${s} utu asmiṃ utumhi\n${m} māsassa\n${p}\n${t}\n${w}\nidanti daṭṭhabbaṃ.`
         }
-    };   
+    };
+    // හින්දි: ඉංග්‍රීසි වගුවෙන්ම සාදයි — UI පෙළ HI_DICT වෙතින්, පාළි වචන දේවනාගරී අකුරින්
+    function buildHiI18n() {
+        const e = i18n.en, h = {};
+        if (!langReady('hi')) { i18n.hi = e; return; }
+        const keep = currentLang; currentLang = 'hi';
+        try {
+            for (const k in e) if (typeof e[k] === 'string') h[k] = tx(e[k]);
+            h.animals = e.animals.map(paliHi);
+            h.week = e.week.map(paliHi);
+            h.seasons = { Hemanta: paliHi(e.seasons.Hemanta), Gimhana: paliHi(e.seasons.Gimhana), Vassana: paliHi(e.seasons.Vassana), ReHemanta: tx(e.seasons.ReHemanta) };
+            h.paksha = { Kāla: paliHi(e.paksha.Kāla), Sukka: paliHi(e.paksha.Sukka) };
+            h.paliTemplate = function () { return paliHi(e.paliTemplate.apply(null, arguments)); };
+        } finally { currentLang = keep; }
+        i18n.hi = h;
+    }
+    buildHiI18n();
 
 // Poya chain overrides 1900-3000
 // රීතිය: ඕනෑම පෝයන් දෙකක් අතර පරතරය 14 හෝ 15 පමණි. 14 වන්නේ සෘතුවේ 3 සහ 7 පමණි;
@@ -650,9 +710,41 @@ scheduleBackgroundPoyaExtension();
         }
     }
 
-    function toggleLanguage() {
-        currentLang = (currentLang === 'si') ? 'en' : 'si';
+    // භාෂා තේරීම: toggleLanguage() → භාෂා ලැයිස්තුව;  toggleLanguage('hi') → එම භාෂාවට මාරු වේ
+    function openLangPicker() {
+        let p = document.getElementById('langPick');
+        if (!p) {
+            p = document.createElement('div'); p.id = 'langPick'; p.setAttribute('role', 'dialog');
+            p.innerHTML = '<div class="lp-bg"></div><div class="lp-box">' + APP_LANGS.map(function (k) {
+                return '<button type="button" class="lp-opt" data-l="' + k + '" lang="' + k + '">' + LANG_NAMES[k] + '</button>'; }).join('') + '</div>';
+            p.addEventListener('click', function (e) {
+                const b = e.target.closest ? e.target.closest('.lp-opt') : null;
+                if (b) window.toggleLanguage(b.getAttribute('data-l')); else closeLangPicker();
+            });
+            document.body.appendChild(p);
+        }
+        p.querySelectorAll('.lp-opt').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-l') === currentLang); b.disabled = false; });
+        p.classList.add('on');
+    }
+    function closeLangPicker() { const p = document.getElementById('langPick'); if (p) p.classList.remove('on'); }
+
+    function toggleLanguage(l) {
+        if (typeof l !== 'string') { openLangPicker(); return; }
+        if (APP_LANGS.indexOf(l) < 0 || l === currentLang) { closeLangPicker(); return; }
+        if (!langReady(l)) {
+            const b = document.querySelector('#langPick .lp-opt[data-l="' + l + '"]'); if (b) b.disabled = true;
+            loadLang(l, function (ok) {
+                if (b) b.disabled = false;
+                if (ok) window.toggleLanguage(l);
+                else alert(currentLang === 'si' ? 'භාෂා ගොනුව ලබා ගත නොහැකි විය. අන්තර්ජාලය පරීක්ෂා කරන්න.' : 'Could not load the language file. Please check your connection.');
+            });
+            return;
+        }
+        closeLangPicker();
+        currentLang = l;
         localStorage.setItem('appLang', currentLang);
+        try { document.documentElement.lang = currentLang; } catch (e) {}
+        if (l === 'hi') buildHiI18n();
         updateUI();
         calculateAll();    
         updateSunTimes(); 
@@ -698,9 +790,11 @@ scheduleBackgroundPoyaExtension();
     document.getElementById('ui-label-atikkanta').innerText = t.atikkanta;
     document.getElementById('ui-label-avasittha').innerText = t.avasittha;
 
-    const shortY = currentLang === 'si' ? 'ව' : 'Y';
-    const shortM = currentLang === 'si' ? 'මා' : 'M';
-    const shortD = currentLang === 'si' ? 'දි' : 'D';
+    const shortY = currentLang === 'si' ? 'ව' : tx('Y');
+    const shortM = currentLang === 'si' ? 'මා' : tx('M');
+    const shortD = currentLang === 'si' ? 'දි' : tx('D');
+    const okBtn = document.getElementById('ui-wheel-ok'); if (okBtn) okBtn.innerText = currentLang === 'si' ? 'හරි' : tx('OK');
+    const locBtn = document.getElementById('getLocationBtn'); if (locBtn) locBtn.innerText = '📍 ' + (currentLang === 'si' ? 'ස්ථානය ලබාගන්න' : tx('Get My Location'));
 
     document.getElementById('ui-short-y1').innerText = shortY;
     document.getElementById('ui-short-m1').innerText = shortM;
@@ -799,9 +893,9 @@ function renderPoyaList() {
             let diffInDays = Math.round(diffInTime / (1000 * 3600 * 24));
 
             if (diffInDays === 14) {
-                poyaType = (currentLang === 'si' ? "චාතුද්දසී" : "Cātuddasī");
+                poyaType = (currentLang === 'si' ? "චාතුද්දසී" : paliHi("Cātuddasī"));
             } else if (diffInDays === 15) {
-                poyaType = (currentLang === 'si' ? "පණ්ණරසී" : "Paṇṇarasī");
+                poyaType = (currentLang === 'si' ? "පණ්ණරසී" : paliHi("Paṇṇarasī"));
             } else {
                 poyaType = "Error"; 
                 isError = true;
@@ -816,8 +910,8 @@ function renderPoyaList() {
         let poyaNameDisplay = p.t;
         if (currentLang !== 'si') {
             poyaNameDisplay = poyaNameDisplay
-                .replace("පසළොස්වක", "Full Moon")
-                .replace("අමාවක", " New Moon");
+                .replace("පසළොස්වක", tx("Full Moon"))
+                .replace("අමාවක", " " + tx("New Moon"));
         }
 
         
@@ -843,7 +937,7 @@ function renderPoyaList() {
 
         let displayDate = currentLang === 'si' 
             ? sinhalaMonths[dt.getMonth()] + " " + dt.getDate() 
-            : dt.getDate() + " " + dt.toLocaleString('en-US', { month: 'long' });
+            : dt.getDate() + " " + dt.toLocaleString(langLocale(), { month: 'long' });
        
         html += `
             <div ${scrollIdAttribute} class="list-item ${poyaClass}">
@@ -885,15 +979,15 @@ function renderPoyaList() {
     if(gim.length > 0) { 
         let d1 = new Date(gim[gim.length-1].d); 
         d1.setDate(d1.getDate()+1); 
-        p1 = d1.toLocaleDateString(currentLang==='si'?'si-LK':'en-US', opt); 
+        p1 = d1.toLocaleDateString(langLocale(), opt); 
     }
-    if(vas.length >= 6) p2 = new Date(vas[5].d).toLocaleDateString(currentLang==='si'?'si-LK':'en-US', opt);
+    if(vas.length >= 6) p2 = new Date(vas[5].d).toLocaleDateString(langLocale(), opt);
     if(vas.length >= 2) { 
         let d3 = new Date(vas[1].d); 
         d3.setDate(d3.getDate()+1); 
-        p3 = d3.toLocaleDateString(currentLang==='si'?'si-LK':'en-US', opt); 
+        p3 = d3.toLocaleDateString(langLocale(), opt); 
     }
-    if(vas.length >= 8) p4 = new Date(vas[7].d).toLocaleDateString(currentLang==='si'?'si-LK':'en-US', opt);
+    if(vas.length >= 8) p4 = new Date(vas[7].d).toLocaleDateString(langLocale(), opt);
 
     
     document.getElementById("vasContent").innerHTML = `
@@ -954,8 +1048,8 @@ function calculateAll() {
     const todayP = (poyaList[_iD] && poyaList[_iD].d === ds) ? poyaList[_iD] : undefined;
     let poyaName = "";
     if (todayP) {
-        if (currentLang === 'en') {
-            poyaName = (todayP.t === "පසළොස්වක") ? "Full Moon" : "Amāvaka";
+        if (currentLang !== 'si') {
+            poyaName = (todayP.t === "පසළොස්වක") ? tx("Full Moon") : tx("New Moon");
         } else {
             poyaName = todayP.t;
         }
@@ -980,7 +1074,8 @@ function calculateAll() {
     const animal = t.animals[bY % 12];
 
     const sMonth = nextP ? nextP.m : "වේසාඛ"; 
-    const displayMonth = (currentLang === 'en') ? (monthMap[sMonth] || sMonth) : sMonth;
+    const displayMonth = (currentLang === 'si') ? sMonth
+        : (monthMap[sMonth] ? paliHi(monthMap[sMonth]) : (currentLang === 'hi' ? paliSiHi(sMonth) : sMonth));
 
     let paliIndex = tithi; 
     let finalPaksha = paksha; 
@@ -999,7 +1094,7 @@ function calculateAll() {
 
         const tithiWord = currentLang === 'si' 
         ? (tithiPaliS[paliIndex] || "පණ්ණරසමං") 
-        : (tithiPaliE[paliIndex] || "Paṇṇarasamaṃ");
+        : paliHi(tithiPaliE[paliIndex] || "Paṇṇarasamaṃ");
 
     const weekDay = t.week[d.getDay()];
 
@@ -1029,7 +1124,7 @@ if (statusAvasitthaD === 0) {
     isPoyaDay = true;
     // ප්‍රධාන කවුන්ටරයේ පෝය දිනයේදී නිශ්චිත තිථි නාමය (අමාවක/පසළොස්වක) වෙනුවට
     // "උපෝසථ දිනය" ලෙසම පෙන්වයි - දෙකේදීම (අමාවක සහ පසළොස්වක) එකම ලෙබලය.
-    poyaMessage = (currentLang === 'si') ? "උපෝසථ දිනය" : "Uposatha Day";
+    poyaMessage = (currentLang === 'si') ? "උපෝසථ දිනය" : tx("Uposatha Day");
 } else {
     if (currentLang === 'si') {
         
@@ -1040,11 +1135,11 @@ if (statusAvasitthaD === 0) {
         }
     } else {
         
-        let poyaNameEN = nextPoya.t.replace("පසළොස්වක", "Full Moon").replace("අමාවක", "New Moon");
+        let poyaNameEN = tx(nextPoya.t.replace("පසළොස්වක", "Full Moon").replace("අමාවක", "New Moon"));
         if (statusAvasitthaD === 1) {
-            poyaMessage = `Tomorrow is ${poyaNameEN} Uposatha Day`;
+            poyaMessage = txf('Tomorrow is {0} Uposatha Day', poyaNameEN);
         } else {
-            poyaMessage = `${statusAvasitthaD} days to ${poyaNameEN} Uposatha`;
+            poyaMessage = txf('{0} days to {1} Uposatha', statusAvasitthaD, poyaNameEN);
         }
     }
 }
@@ -1130,8 +1225,9 @@ function updateDarkModeBtnText() {
 let userLatitude = null;
 let userLongitude = null;
 
+// සිංහල නොවන (English / हिन्दी) පිරිසැලසුම — හින්දි පෙළ tx() මගින් ලැබේ
 function isEnglish() {
-    return typeof currentLang !== 'undefined' && currentLang === 'en';
+    return typeof currentLang !== 'undefined' && currentLang !== 'si';
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -1185,11 +1281,11 @@ function checkAndLoadSavedLocation() {
             
             if (savedLocName) {
                 statusText.innerHTML = isEnglish()
-                    ? `📍 Location: <b>${savedLocName}</b><br><span class="loc-coords">(${latFmt}°, ${lngFmt}°)</span>`
+                    ? `📍 ${tx("Location")}: <b>${savedLocName}</b><br><span class="loc-coords">(${latFmt}°, ${lngFmt}°)</span>`
                     : `📍 ස්ථානය: <b>${savedLocName}</b><br><span class="loc-coords">(${latFmt}°, ${lngFmt}°)</span>`;
             } else {
                 statusText.innerHTML = isEnglish()
-                    ? `📍 Location: <b>${latFmt}°, ${lngFmt}°</b>`
+                    ? `📍 ${tx("Location")}: <b>${latFmt}°, ${lngFmt}°</b>`
                     : `📍 ස්ථානය: <b>${latFmt}°, ${lngFmt}°</b>`;
             }
         }
@@ -1198,7 +1294,7 @@ function checkAndLoadSavedLocation() {
     } else {
         if (statusText) {
             statusText.innerText = isEnglish()
-                ? "ℹ️ Please click 'Get My Location' button."
+                ? "ℹ️ " + tx("Please click the 'Get My Location' button.")
                 : "ℹ️ කරුණාකර 'Get My Location' බොත්තම ඔබන්න.";
         }
     }
@@ -1215,11 +1311,11 @@ function showCoordinatesOnly(statusText) {
         const latFmt = parseFloat(lat).toFixed(4);
         const lngFmt = parseFloat(lng).toFixed(4);
         statusText.innerHTML = isEnglish()
-            ? `📍 Location: <b>${latFmt}°, ${lngFmt}°</b>`
+            ? `📍 ${tx("Location")}: <b>${latFmt}°, ${lngFmt}°</b>`
             : `📍 ස්ථානය: <b>${latFmt}°, ${lngFmt}°</b>`;
     } else {
         statusText.innerText = isEnglish()
-            ? "ℹ️ Please click 'Get My Location' button."
+            ? "ℹ️ " + tx("Please click the 'Get My Location' button.")
             : "ℹ️ කරුණාකර 'Get My Location' බොත්තම ඔබන්න.";
     }
 }
@@ -1336,15 +1432,15 @@ function updateSunTimes() {
     if (!dateInput || !dateInput.value) return;
 
     const engMode = isEnglish();
-    if (document.getElementById('lblDawn')) document.getElementById('lblDawn').innerText = engMode ? "Dawn" : "අරුණෝදය";
-    if (document.getElementById('lblSunrise')) document.getElementById('lblSunrise').innerText = engMode ? "Sunrise" : "ඉර උදාව";
-    if (document.getElementById('lblNoon')) document.getElementById('lblNoon').innerText = engMode ? "Noon" : "මධ්‍යහ්නය";
-    if (document.getElementById('lblSunset')) document.getElementById('lblSunset').innerText = engMode ? "Sunset" : "ඉර බැසීම";
-    if (document.getElementById('lblMoonrise')) document.getElementById('lblMoonrise').innerText = engMode ? "Moonrise" : "සඳ උදාව";
-    if (document.getElementById('lblMoonset')) document.getElementById('lblMoonset').innerText = engMode ? "Moonset" : "සඳ බැසීම";
-    if (document.getElementById('lblPoyaBegin')) document.getElementById('lblPoyaBegin').innerText = engMode ? "Poya Begins" : "පෝය ලබන වේලාව";
-    if (document.getElementById('lblPoyaEnd')) document.getElementById('lblPoyaEnd').innerText = engMode ? "Poya Ends" : "පෝය ගෙවෙන වේලාව";
-    if (document.getElementById('lblAstroTitle')) document.getElementById('lblAstroTitle').innerText = engMode ? "Astronomical Position, Tithi & Timings of the Moon" : "තාරකා විද්‍යානුකූලව සඳෙහි පිහිටීම, තිථිය සහ වෙලාවන්";
+    if (document.getElementById('lblDawn')) document.getElementById('lblDawn').innerText = engMode ? tx("Dawn") : "අරුණෝදය";
+    if (document.getElementById('lblSunrise')) document.getElementById('lblSunrise').innerText = engMode ? tx("Sunrise") : "ඉර උදාව";
+    if (document.getElementById('lblNoon')) document.getElementById('lblNoon').innerText = engMode ? tx("Noon") : "මධ්‍යහ්නය";
+    if (document.getElementById('lblSunset')) document.getElementById('lblSunset').innerText = engMode ? tx("Sunset") : "ඉර බැසීම";
+    if (document.getElementById('lblMoonrise')) document.getElementById('lblMoonrise').innerText = engMode ? tx("Moonrise") : "සඳ උදාව";
+    if (document.getElementById('lblMoonset')) document.getElementById('lblMoonset').innerText = engMode ? tx("Moonset") : "සඳ බැසීම";
+    if (document.getElementById('lblPoyaBegin')) document.getElementById('lblPoyaBegin').innerText = engMode ? tx("Poya Begins") : "පෝය ලබන වේලාව";
+    if (document.getElementById('lblPoyaEnd')) document.getElementById('lblPoyaEnd').innerText = engMode ? tx("Poya Ends") : "පෝය ගෙවෙන වේලාව";
+    if (document.getElementById('lblAstroTitle')) document.getElementById('lblAstroTitle').innerText = engMode ? tx("Astronomical Position, Tithi & Timings of the Moon") : "තාරකා විද්‍යානුකූලව සඳෙහි පිහිටීම, තිථිය සහ වෙලාවන්";
 
     const lat = userLatitude || localStorage.getItem('userLat');
     const lng = userLongitude || localStorage.getItem('userLng');
@@ -1352,7 +1448,7 @@ function updateSunTimes() {
     if (!lat || !lng) {
         if (statusText) {
             statusText.innerText = engMode 
-                ? "Please click 'Get My Location' button first." 
+                ? tx("Please click the 'Get My Location' button first.") 
                 : "කරුණාකර මුලින්ම 'Get My Location' බොත්තම ඔබන්න.";
         }
         return;
@@ -1457,7 +1553,7 @@ function updateSunTimes() {
 
     const formatTime = (dateObj) => {
         if(!dateObj || isNaN(dateObj.getTime())) {
-            return engMode ? "No Rise/Set" : "නොමැත";
+            return engMode ? tx("No Rise/Set") : "නොමැත";
         }
         let hours = dateObj.getHours();
         let minutes = dateObj.getMinutes();
@@ -1526,10 +1622,10 @@ function updateSunTimes() {
     let tithiIndex = (stableTithiIndex !== null) ? stableTithiIndex : Math.floor(phaseAngle / 12);
     
     if (tithiIndex < 15) {
-        phaseName = engMode ? (tithiIndex === 14 ? "Full Moon" : `Waxing ${tithiIndex + 1}`) : tithiSukha[tithiIndex];
+        phaseName = engMode ? (tithiIndex === 14 ? tx("Full Moon") : txf("Waxing {0}", tithiIndex + 1)) : tithiSukha[tithiIndex];
     } else {
         let waningIndex = tithiIndex - 15;
-        phaseName = engMode ? (waningIndex === 14 ? "New Moon" : `Waning ${waningIndex + 1}`) : tithiKāla[waningIndex];
+        phaseName = engMode ? (waningIndex === 14 ? tx("New Moon") : txf("Waning {0}", waningIndex + 1)) : tithiKāla[waningIndex];
     }
 
     // ==========================================================
@@ -1539,7 +1635,7 @@ function updateSunTimes() {
     if (astroSubtitleEl) {
         if (engMode) {
             const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
-            astroSubtitleEl.innerText = selectedDate.toLocaleDateString('en-US', dateOptions) + (phaseName ? `, ${phaseName}` : '');
+            astroSubtitleEl.innerText = selectedDate.toLocaleDateString(langLocale(), dateOptions) + (phaseName ? `, ${phaseName}` : '');
         } else {
             const traditionalMonths = [
                 "දුරුතු", "නවම්", "මැදින්", "බක්", "වෙසක්", "පොසොන්",
@@ -1596,7 +1692,7 @@ function updateSunTimes() {
     if (moonPhaseLabel) moonPhaseLabel.innerText = phaseName;
     
     const moonIllumLabel = document.getElementById('moonIllumLabel');
-    if (moonIllumLabel) moonIllumLabel.innerText = engMode ? `Illumination: ${percentage}%` : `දීප්තිය: ${percentage}%`;
+    if (moonIllumLabel) moonIllumLabel.innerText = engMode ? txf('Illumination: {0}%', percentage) : `දීප්තිය: ${percentage}%`;
 
     if (typeof updateSinhalaAstroDate === "function") {
         updateSinhalaAstroDate();
@@ -1669,7 +1765,7 @@ let wheelCurrentMaxDay = 31;
 function wheelMonthNames() {
     return (typeof currentLang !== 'undefined' && currentLang === 'si')
         ? ["ජන", "පෙබ", "මාර්", "අප්‍රේ", "මැයි", "ජූනි", "ජූලි", "අගෝ", "සැප්", "ඔක්", "නොවැ", "දෙසැ"]
-        : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map(tx);
 }
 
 function daysInMonth(year, monthIndex0) {
@@ -1921,7 +2017,7 @@ function updateSinhalaAstroDate() {
 
         if (engMode) {
             const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
-            const formattedDate = selectedDateObj.toLocaleDateString('en-US', dateOptions);
+            const formattedDate = selectedDateObj.toLocaleDateString(langLocale(), dateOptions);
             
             if (currentTithi && currentTithi !== '--') {
                 tithiLabelElement.innerText = `${formattedDate}, ${currentTithi}`;

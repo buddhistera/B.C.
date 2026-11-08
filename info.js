@@ -183,7 +183,7 @@
       radial-gradient(900px 500px at 88% -10%, #DEF6EA 0%, transparent 60%),
       radial-gradient(700px 480px at -10% 15%, #FBF0DE 0%, transparent 55%),
       var(--mint-bg);
-    font-family:'Noto Sans Sinhala','Noto Sans',sans-serif;
+    font-family:'Noto Sans','Noto Sans Sinhala','Noto Sans Devanagari',sans-serif;
     color:var(--ink);
     padding:34px 14px 56px;
     transition: background 0.5s ease, color 0.5s ease;}
@@ -267,7 +267,7 @@ to   { background-position: 0%   0%; }
     mix-blend-mode: overlay;
     pointer-events: none;}
 #infoOverlay .blessing{text-align:center;
-    font-family:'Noto Serif Sinhala',serif;
+    font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;
     font-style:italic;
     font-weight:600;
     color:var(--saffron);
@@ -309,7 +309,7 @@ to   { background-position: 0%   0%; }
     border-radius:18px;padding:18px 20px;
     box-shadow:0 14px 30px -26px rgba(20,80,60,.3);
     transition: all 0.3s ease;}
-#infoOverlay .platform-card h3{margin:0 0 6px;font-size:16px;font-family:'Noto Serif Sinhala',serif;
+#infoOverlay .platform-card h3{margin:0 0 6px;font-size:16px;font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;
     display:flex;align-items:center;gap:8px;}
 #infoOverlay .platform-card p{margin:0 0 12px;font-size:13.8px;color:var(--ink-soft);line-height:1.6;}
 #infoOverlay .platform-btn{display:inline-block;padding:10px 18px;border-radius:10px;
@@ -326,7 +326,7 @@ to   { background-position: 0%   0%; }
 #infoOverlay .tips a{color:var(--mint-deep);font-weight:600;}
 #infoOverlay .qr-card{text-align:center;
     background:linear-gradient(180deg,#ffffff, var(--mint-soft));}
-#infoOverlay .qr-card h3{font-family:'Noto Serif Sinhala',serif;font-size:17px;margin:0 0 4px;}
+#infoOverlay .qr-card h3{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;font-size:17px;margin:0 0 4px;}
 #infoOverlay .qr-card p.small{font-size:12.5px;color:var(--ink-soft);margin:0 0 16px;}
 #infoOverlay #qrcode{display:inline-block;padding:14px;background:#fff;border-radius:16px;
     border:1px solid var(--mint-line);}
@@ -393,7 +393,7 @@ body.dark-mode #infoOverlay .buddhist-flag{box-shadow:
 #infoOverlay .qr-make-btn:active{transform:scale(.99)}
 #infoOverlay .qr-maker{text-align:left}
 #infoOverlay .qr-maker[hidden]{display:none}
-#infoOverlay .qm-title{font-family:'Noto Serif Sinhala',serif;font-size:17px;margin:0 0 6px;text-align:center}
+#infoOverlay .qm-title{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;font-size:17px;margin:0 0 6px;text-align:center}
 #infoOverlay .qm-label{display:block;margin:14px 0 6px;font-size:13px;font-weight:700;color:var(--mint-deep)}
 #infoOverlay .qm-input{display:block;width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--mint-line);
     background:var(--mint-card);color:var(--ink);font:inherit;font-size:16px;line-height:1.5}
@@ -426,7 +426,7 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
 #infoOverlay .copy-btn.copied{background:var(--mint-deep);color:#fff}
 #infoOverlay .rate-card{text-align:center;background:linear-gradient(180deg,var(--mint-card),var(--saffron-soft));border-color:var(--saffron-line)}
 #infoOverlay .rate-card::before{background:linear-gradient(90deg,#F5B83D,var(--saffron))}
-#infoOverlay .rate-card h3{font-family:'Noto Serif Sinhala',serif;font-size:17px;margin:0 0 8px;color:var(--ink)}
+#infoOverlay .rate-card h3{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;font-size:17px;margin:0 0 8px;color:var(--ink)}
 #infoOverlay .rate-stars{display:flex;justify-content:center;gap:4px;margin:4px 0 14px}
 #infoOverlay .rate-star{font-size:32px;line-height:1;color:#F5B83D;text-decoration:none;padding:2px 3px;
     text-shadow:0 2px 6px rgba(201,133,46,.35);transition:transform .15s ease;animation:info-starPop .5s ease both}
@@ -928,7 +928,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
   }
 
   function initMaker(ov, l) {
-    var t = QM_STR[l] || QM_STR.si;
+    var t = (l === 'hi' && window.HI_QM_STR) || QM_STR[l] || QM_STR.si;
     var btn = ov.querySelector('#qrMakeBtn'), box = ov.querySelector('#qrMaker');
     if (!btn || !box) return;
     btn.textContent = t.makeBtn;
@@ -1032,7 +1032,9 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
   var pushed = false;
 
   function lang() {
-    return (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'en' : 'si';
+    var l = typeof currentLang !== 'undefined' ? currentLang : 'si';
+    if (l === 'hi' && window.HI_INFO_HTML) return 'hi';          /* හින්දි පිටුව lang/hi.js හි ඇත */
+    return (l === 'en' || l === 'hi') ? 'en' : 'si';
   }
 
   function injectStyle() {
@@ -1059,8 +1061,10 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       document.body.appendChild(ov);
     }
     ov.setAttribute('lang', l);
+    var page = HTML;
+    if (l === 'hi') page = page.replace('<!-- QR (shared, not language-specific) -->', '<div data-lang="hi">' + window.HI_INFO_HTML.replace(/\$\{PLAY_WEB\}/g, PLAY_WEB) + '</div>\n  <!-- QR (shared, not language-specific) -->');
     ov.innerHTML =
-      '<button class="info-close" type="button" aria-label="' + (l === 'si' ? 'ඉවත් වන්න' : 'Close') + '">&times;</button>' + HTML;
+      '<button class="info-close" type="button" aria-label="' + (l === 'si' ? 'ඉවත් වන්න' : l === 'hi' ? 'बंद करें' : 'Close') + '">&times;</button>' + page;
     ov.querySelectorAll('[data-lang]').forEach(function (el) {
       el.classList.toggle('active', el.getAttribute('data-lang') === l);
     });

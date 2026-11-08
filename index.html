@@ -21,7 +21,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700;800&family=Noto+Serif+Sinhala:wght@500;600;700;800&family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <!-- Noto Sans / Noto Serif = ඉංග්‍රීසි හා රෝම පාළිය (ā ī ū ṃ ṅ ñ ṭ ḍ ṇ ḷ නිවැරදිව). Devanagari fonts බාගත වන්නේ
+         හින්දි අකුරු පිටුවේ ඇති විට පමණි (unicode-range) — අනෙක් අයට අමතර බරක් නැත. -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&family=Noto+Serif+Sinhala:wght@500;600;700;800&family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Serif+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
       /* pull-to-refresh block එක අයින් කරන්න - allow native refresh */
@@ -37,6 +39,11 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-ECEGZ86GGK');
+    </script>
+    <script>
+      /* හින්දි තෝරා ඇත්නම් පමණක්, අනෙක් ගොනුවලට පෙර භාෂා ගොනු load කරයි (අනෙක් අයට කිසිදු බරක් නැත) */
+      try { var _l = localStorage.getItem('appLang'); if (_l) document.documentElement.lang = _l;
+        if (_l === 'hi') document.write('<script src="pali-script.js?v=1"><\/script><script src="lang/hi.js?v=1"><\/script>'); } catch (e) {}
     </script>
     <script src="astronomy.browser.min.js?v=1" defer></script>
     <script src="script.js" defer></script>

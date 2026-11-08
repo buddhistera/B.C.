@@ -26,12 +26,28 @@
   var spy = null;
 
   /* ---------------------------- helpers ---------------------------- */
-  function lang() { return (typeof currentLang !== 'undefined' && currentLang === 'en') ? 'en' : 'si'; }
-  function L(o) { if (!o) return ''; if (typeof o === 'string') return o; return o[lang()] || o.si || ''; }
+  function lang() { var l = typeof currentLang !== 'undefined' ? currentLang : 'si'; return (l === 'en' || l === 'hi') ? l : 'si'; }
+  /* හින්දි: ඉංග්‍රීසි පෙළ → lang/hi.js (නැත්නම් ඉංග්‍රීසියම);  රෝම පාළිය → දේවනාගරී (pali-script.js) */
+  function X(s) { return (typeof tx === 'function') ? tx(s) : s; }
+  function DV(s) { return (lang() === 'hi' && s && window.PaliScript) ? PaliScript.fromIAST(s, 'deva') : s; }
+  function XP(s) { if (lang() !== 'hi' || !s) return s; var t = X(s); if (t !== s) return t; if (window.__i18nPali) window.__i18nPali[s] = 1; return DV(s); } /* පාළි නාම: hi.js හි නැත්නම් දේවනාගරී අකුරින් */
+  function L(o) {
+    if (!o) return ''; if (typeof o === 'string') return o;
+    var l = lang(); if (l === 'hi') return o.hi || (o.en ? X(o.en) : '') || o.si || '';
+    return o[l] || o.si || '';
+  }
+  function LP(o) { if (!o || typeof o === 'string') return o || ''; return lang() === 'hi' ? (o.hi || XP(o.en || '') || o.si || '') : L(o); }
+  /* පාළි පෙළ: සිංහල → සිංහල අකුරින්; English → රෝම; हिन्दी → දේවනාගරී (රෝම නැත්නම් සිංහලෙන් හරවයි) */
+  function PAL(siTxt, iast) {
+    var l = lang(); if (l === 'si') return siTxt || ''; if (l === 'en' || !window.PaliScript) return iast || siTxt || '';
+    return iast ? PaliScript.fromIAST(iast, 'deva') : PaliScript.convert(siTxt || '', 'sinh', 'deva');
+  }
+  /* අර්ථය: හින්දි පරිවර්තනයක් (hindi / hi) තිබේ නම් එය, නැත්නම් ඉංග්‍රීසිය */
+  function MEAN(siTxt, enTxt, hiTxt) { var l = lang(); return l === 'si' ? siTxt : (l === 'hi' && hiTxt) ? hiTxt : enTxt; }
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function br(s) { return esc(s).replace(/\n/g, '<br>'); }
   function tabById(id) { for (var i = 0; i < TABS.length; i++) if (TABS[i].id === id) return TABS[i]; return TABS[0]; }
-  function T(si, en) { return lang() === 'en' ? en : si; }
+  function T(si, en) { return lang() === 'si' ? si : X(en); }
 
   /* --- ගද්‍ය ඡේද සහ ගාථා වෙන් කර හඳුනා ගැනීම ---------------------------
      - ගද්‍ය ඡේදයක් : තුළ තනි \n නොමැති, එක් අඛණ්ඩ පෙළක්  → indent ලැබේ
@@ -257,7 +273,7 @@ function attachChPinch(ov) {
   function pmFoot(list, si) {
     var out = '';
     (list || []).forEach(function (n) {
-      var t = si ? n.note : (n.note_en || '');
+      var t = si ? n.note : X(n.note_en || '');
       if (t) out += '<p class="pm-fn">‘' + esc(n.at) + '’ – ' + esc(t) + '</p>';
     });
     return out;
@@ -265,7 +281,7 @@ function attachChPinch(ov) {
   function pmBlocks(it, si, mean) {
     var h = '';
     it.parts.forEach(function (p) {
-      var t = (mean ? (si ? p.si : p.en) : (si ? p.pali : p.translit)) || '';
+      var t = (mean ? MEAN(p.si, p.en, p.hi) : (si ? p.pali : DV(p.translit))) || '';
       var end = p.role === 'end', seg = '';
       if (mean && !si && p.rubric_en) seg += pmPara('pm-rub', p.rubric_en);
       if (t.trim()) {
@@ -281,18 +297,18 @@ function attachChPinch(ov) {
         if (pn) seg += '<p class="pm-fn">' + esc(pn) + '</p>';
       } else seg += pmFoot(p.notes_pali, si);
       if (seg) {
-        var spk = si ? p.speaker_si : (p.speaker_en || p.speaker_si);
+        var spk = si ? p.speaker_si : (p.speaker_en ? X(p.speaker_en) : p.speaker_si);
         h += (spk ? '<p class="pm-spk">' + esc(spk) + '</p>' : '') + seg;
       }
       if (p.vagga) {                                     /* වග්ග අවසානය — මැදට */
-        var v = p.vagga, vt = mean ? (si ? v.si : v.en) : (si ? v.pali : v.translit);
+        var v = p.vagga, vt = mean ? MEAN(v.si, v.en, v.hi) : (si ? v.pali : DV(v.translit));
         if (vt) h += '<p class="pm-end pm-vend">' + esc(vt) + '</p>';
       }
     });
     return h;
   }
   function pmVaggaHead(v, si) {
-    var name = si ? v.name_si : v.name_en, cnt = si ? v.count_si : v.count_en;
+    var name = si ? v.name_si : XP(v.name_en), cnt = si ? v.count_si : X(v.count_en);
     return '<div class="pm-vh"><span class="pm-vn">' + esc(v.num) + '</span><b>' + esc(name) + '</b>' +
       '<small>' + esc(cnt) + ' (' + esc(v.from) + '–' + esc(v.to) + ')</small></div>';
   }
@@ -300,8 +316,8 @@ function attachChPinch(ov) {
     var si = lang() === 'si';
     var h = '<article class="ch-card" data-a="' + esc(it.id) + '" data-k="g-' + esc(it.group) + '">';
     if (it.vagga && it.vagga.num != null) h += pmVaggaHead(it.vagga, si);
-    if (it.title) h += '<div class="pm-sub">' + esc(si ? it.title.si : it.title.en) + '</div>';
-    if (it.intro) h += '<p class="pm-intro">' + br(si ? it.intro.si : it.intro.en) + '</p>';
+    if (it.title) h += '<div class="pm-sub">' + esc(si ? it.title.si : X(it.title.en)) + '</div>';
+    if (it.intro) h += '<p class="pm-intro">' + br(si ? it.intro.si : X(it.intro.en)) + '</p>';
     var pali = pmBlocks(it, si, false), mean = pmBlocks(it, si, true);
     if (pali || mean) {
       h += '<div class="pm-pali">' + pali;
@@ -310,7 +326,7 @@ function attachChPinch(ov) {
       h += '</div>';
       if (mean) h += '<div class="pm-meaning' + (si ? '' : ' en') + '">' + mean + '</div>';
     }
-    if (it.note) h += '<p class="pm-intro">' + br(si ? it.note.si : (it.note.en || it.note.si)) + '</p>';
+    if (it.note) h += '<p class="pm-intro">' + br(si ? it.note.si : (it.note.en ? X(it.note.en) : it.note.si)) + '</p>';
     return h + '</article>';
   }
   window.chPmToggle = function (b) {
@@ -353,7 +369,7 @@ function attachChPinch(ov) {
 --g700:#8a6508;--g600:#b8860b;--g500:#d4a017;--g400:#e6b944;--g300:#f2d478;--g200:#f9e9b8;--g100:#fdf5db;\
 --bg:#f3fcf7;--card:#ffffff;--elev:#f8fdfa;--subtle:#e8f8f0;--tint:#e0f5e8;--pali-bg:#edfaf3;\
 --tx:#0a2018;--tx2:#2a4a3a;--muted:#608a76;--bd:#c8e6d5;--bd2:#a0d4b8;--sh:0 4px 14px rgba(8,63,42,.10);--shs:0 1px 4px rgba(8,63,42,.08);\
---serif:"Noto Serif Sinhala","Noto Sans Sinhala",Noto Serif,serif;--sans:"Noto Sans Sinhala","Segoe UI",sans-serif}\
+--serif:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Sinhala",serif;--sans:"Noto Sans","Noto Sans Sinhala","Noto Sans Devanagari","Segoe UI",sans-serif}\
 body.dark-mode #chOverlay{--bg:#061410;--card:#0a2118;--elev:#0e2c20;--subtle:#123828;--tint:#123828;--pali-bg:#113325;\
 --tx:#e0f5e8;--tx2:#a8d4b8;--muted:#6a9a80;--bd:#1a4830;--bd2:#2a6042;--sh:0 4px 14px rgba(0,0,0,.5);--shs:0 1px 4px rgba(0,0,0,.45);\
 --g700:#e6b944;--g600:#f2d478;--g500:#f9e9b8;--g400:#fdf5db;--m700:#68cba3;--m600:#98ddbd;--m500:#c8edd8;--m800:#98ddbd;--m900:#c8edd8}\
@@ -519,9 +535,9 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
 
   function shell() {
     var tabs = TABS.map(function (t) {
-      return '<button type="button" class="ch-tab" data-t="' + t.id + '"><span>' + t.icon + '</span><span>' + esc(L(t.title)) + '</span></button>';
+      return '<button type="button" class="ch-tab" data-t="' + t.id + '"><span>' + t.icon + '</span><span>' + esc(LP(t.title)) + '</span></button>';
     }).join('');
-    var all = TABS.map(function (t) { return L(t.title); }).join(' · ');
+    var all = TABS.map(function (t) { return LP(t.title); }).join(' · ');
     return '<button class="ch-close" type="button" aria-label="' + T('ඉවත් වන්න', 'Close') + '">&times;</button>' +
       '<div class="ch-zoom-badge" aria-hidden="true"></div>' +
       '<header class="ch-hero">' + LAMP + '<h1>' + T('සජ්ඣායනා', 'Chanting') + '</h1><p>' + esc(all) + '</p></header>' +
@@ -535,7 +551,7 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     var si = lang() === 'si';
     var key = mod.navMode === 'groups' ? ('g-' + (it.group || '')) : it.id;
     var name = it.name || {};
-    var title = si ? (name.si || '') : (name.en || name.si || '');
+    var title = LP(name);
     var third = it.sub || '';
     var hasName = !!title;
     var numHtml = '';
@@ -555,23 +571,23 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
         (glabel ? '<div class="ch-gl">' + esc(glabel) + '</div>' : '') +
         '</div></div>';
     }
-    var main = si ? it.pali : (it.translit || it.pali);
-    var mean = si ? it.sinhala : it.english;
+    var main = PAL(it.pali, it.translit);
+    var mean = MEAN(it.sinhala, it.english, it.hindi);
     var body = '';
     if (main) {
-      var lblAttr = mod.hidePaliLabel ? '' : ' data-l="' + esc(si ? '📜 පාළි' : '📜 Pāḷi') + '"';
+      var lblAttr = mod.hidePaliLabel ? '' : ' data-l="' + esc(T('📜 පාළි', '📜 Pāḷi')) + '"';
       var lblCls = mod.hidePaliLabel ? ' no-lbl' : '';
       body += '<div class="ch-box ch-pali' + lblCls + '"' + lblAttr + '>' + splitParasHtml(main) + '</div>';
     }
     if (mean) {
-      var meanBox = '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(si ? '🇱🇰 සිංහල අර්ථය' : '🌐 Meaning') + '">' + splitParasHtml(mean) + '</div>';
+      var meanBox = '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(T('🇱🇰 සිංහල අර්ථය', '🌐 Meaning')) + '">' + splitParasHtml(mean) + '</div>';
       if (mod.meaningToggle) {
         body += '<div class="pm-row"><button type="button" class="pm-more" aria-expanded="false" onclick="chPmToggle(this)">' +
           T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button></div>' +
           '<div class="ch-mean-wrap">' + meanBox + '</div>';
       } else body += meanBox;
     }
-    var gt = si ? it.gatha : (it.gathaTr || it.gatha);
+    var gt = PAL(it.gatha, it.gathaTr);
     if (gt) body += '<div class="ch-gatha">' + esc(gt) + '</div>';
     return '<article class="ch-card" data-a="' + esc(it.id) + '" data-k="' + esc(key) + '">' + head + body + '</article>';
   }
@@ -579,14 +595,14 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
   function renderParts(mod) {
     var si = lang() === 'si';
     var rows = [];
-    var html = '<div class="ch-head"><h2>' + esc(L(mod.title)) + '</h2>' + (mod.subtitle ? '<p>' + esc(L(mod.subtitle)) + '</p>' : '') + '</div>';
+    var html = '<div class="ch-head"><h2>' + esc(LP(mod.title)) + '</h2>' + (mod.subtitle ? '<p>' + esc(L(mod.subtitle)) + '</p>' : '') + '</div>';
 
     // 1. Intro (නමස්කාරය)
     if (mod.intro) {
-      var lines = (!si && mod.intro.en && mod.intro.en.length) ? mod.intro.en : (mod.intro.si || []);
+      var lines = (!si && mod.intro.en && mod.intro.en.length) ? mod.intro.en.map(X) : (mod.intro.si || []);
       html += '<div class="ch-namo">';
       if (mod.intro.pali) {
-        html += '<div class="ch-namo-pali">' + esc(si ? mod.intro.pali : (mod.intro.translit || mod.intro.pali)) + '</div>';
+        html += '<div class="ch-namo-pali">' + esc(PAL(mod.intro.pali, mod.intro.translit)) + '</div>';
       }
       if (lines.length) html += '<div class="ch-namo-line"></div>';
       lines.forEach(function (t) { html += '<p class="ch-namo-t" style="margin:6px 0">' + br(t) + '</p>'; });
@@ -596,16 +612,16 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     // 2. Vandana (වන්දනා ගාථා)
     if (mod.vandana) {
       html += '<div class="ch-namo" style="margin-top:14px">' +
-        '<div class="ch-namo-pali">' + br(si ? mod.vandana.pali : (mod.vandana.translit || mod.vandana.pali)) + '</div>' +
+        '<div class="ch-namo-pali">' + br(PAL(mod.vandana.pali, mod.vandana.translit)) + '</div>' +
         '</div>';
     }
         // 3. Paccaya List (ප්‍රත්‍ය ලැයිස්තුව)
     if (mod.paccayaList) {
       html += '<div class="ch-namo" style="margin-top:14px">' +
-        '<div class="ch-namo-t">' + esc(si ? 'වතුවීසති පච්චය' : 'The Twenty-Four Conditions') + '</div>' +
+        '<div class="ch-namo-t">' + esc(T('වතුවීසති පච්චය', 'The Twenty-Four Conditions')) + '</div>' +
         '<div class="ch-namo-line"></div>' +
         '<div class="ch-namo-pali" style="font-size:.95rem;line-height:2.1;text-align:left">' +
-        br(si ? mod.paccayaList.pali : (mod.paccayaList.translit || mod.paccayaList.pali)) + '</div>' +
+        br(PAL(mod.paccayaList.pali, mod.paccayaList.translit)) + '</div>' +
         '</div>';
     }
 
@@ -622,10 +638,10 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
           var gp = mod.groups.filter(function (g) { return g.id === it.group; })[0];
           /* ස්වර්ණ නමස්කාර කොටුව: සිංහලෙන් → සිංහල අකුරින් පාළිය පමණයි; English → Roman පාළිය පමණයි */
           if (gp) gh = (gp.cat ? '<div class="pm-cat" data-a="c-' + esc(gp.id) + '"><span>' + esc(L(gp.cat)) + '</span></div>' : '') +
-            '<div class="ch-group" data-a="g-' + esc(gp.id) + '"><h3>' + esc(L(gp.label)) + '</h3>' +
+            '<div class="ch-group" data-a="g-' + esc(gp.id) + '"><h3>' + esc(LP(gp.label)) + '</h3>' +
             (gp.countLabel ? '<span>' + esc(L(gp.countLabel)) + '</span>'
-              : (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' rules') + '</span>' : '')) + '</div>' +
-            (gp.namo ? '<div class="ch-gold-namo"><div class="p">' + esc(si ? gp.namo.pali : (gp.namo.translit || gp.namo.pali)) + '</div></div>' : '');
+              : (gp.count != null ? '<span>' + esc(gp.count) + (si ? ' ශික්ෂාපද' : ' ' + X('rules')) + '</span>' : '')) + '</div>' +
+            (gp.namo ? '<div class="ch-gold-namo"><div class="p">' + esc(PAL(gp.namo.pali, gp.namo.translit)) + '</div></div>' : '');
         }
         rows.push({ g: gh, it: it });
       });
@@ -636,7 +652,7 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     if (mod.ending) {
       tail += '<div class="ch-namo" style="margin-top:20px">' +
         '<div class="ch-namo-pali" style="font-size:1.05rem;line-height:2.2">' +
-        br(si ? mod.ending.pali : (mod.ending.translit || mod.ending.pali)) + '</div>' +
+        br(PAL(mod.ending.pali, mod.ending.translit)) + '</div>' +
         '</div>';
     }
 
@@ -650,7 +666,7 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     html += '<div class="ch-foot"><div class="ls">🪔 🪔 🪔</div>';
     if (ft && ft.bless) html += '<p>' + br(L(ft.bless)) + '</p>';
     else html += '<p>' + T('සියලු සත්ත්වයෝ නිවනින් සැනසීම ලබත්වා! ', 'May all beings be well and happy! ') + '</p>';
-    html += '<div class="th">' + esc(ft && ft.thanks ? L(ft.thanks) : T('බුද්ධ සාසනං චිරං තිට්ඨතු !', 'Buddha Sāsanaṃ ciraṃ tiṭṭhatu!')) + '</div>' +
+    html += '<div class="th">' + esc(ft && ft.thanks ? LP(ft.thanks) : PAL('බුද්ධ සාසනං චිරං තිට්ඨතු !', 'Buddha Sāsanaṃ ciraṃ tiṭṭhatu!')) + '</div>' +
       (ft && ft.credit ? '<div class="cr">' + esc(L(ft.credit)) + '</div>' : '') + '</div>';
     return html;
   }
@@ -663,13 +679,13 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     if (mod.navMode === 'groups') {
       mod.groups.forEach(function (g) {
         if (g.cat) chips += '<span class="ch-lbl ch-cat">' + esc(L(g.cat)) + '</span>';
-        chips += '<button type="button" class="ch-chip" data-go="g-' + esc(g.id) + '" data-k="g-' + esc(g.id) + '">' + esc(L(g.short || g.label)) +
+        chips += '<button type="button" class="ch-chip" data-go="g-' + esc(g.id) + '" data-k="g-' + esc(g.id) + '">' + esc(LP(g.short || g.label)) +
           (g.count != null ? ' <span class="ch-nb">' + esc(g.count) + '</span>' : '') + '</button>';
       });
     } else {
       mod.items.forEach(function (it) {
         var lbl = si ? (it.short || (it.name && it.name.si))
-                     : (it.shortEn || (it.name && it.name.en) || it.short);
+                     : XP(it.shortEn || (it.name && it.name.en) || it.short);
         var nb = (mod.chipNum && it.num != null && /^\d+$/.test(String(it.num))) ? '<span class="ch-nb">' + esc(it.num) + '</span>' : '';
         chips += '<button type="button" class="ch-chip" data-go="' + esc(it.id) + '" data-k="' + esc(it.id) + '">' + nb + esc(lbl) + '</button>';
       });

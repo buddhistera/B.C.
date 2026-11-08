@@ -6,7 +6,9 @@
 var W = window, doc = document, LS = W.localStorage, D = Math.PI / 180, ER = 10, MD = 18, SD = 34, CD = 121, N = 72;
 var $ = function (i) { return doc.getElementById(i); };
 var en = function () { return typeof isEnglish === 'function' && isEnglish(); };
-var tr = function (s, e) { return en() ? e : s; };
+var TT = function (e) { return typeof tx === 'function' ? tx(e) : e; };   // English → හින්දි (lang/hi.js)  (T = THREE)
+var F = function (e) { var a = arguments; return String(TT(e)).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1]; }); };
+var tr = function (s, e) { return en() ? TT(e) : s; };
 var P = null, R = null, T = null, pushed = false, busy = false;
 var RC = null, TLT = 0, MC = {}, MCK = []; // RC: 3D renderer kept between opens · TLT: timeline paint token · MC: painted timeline moons (same date → same image)
 
@@ -30,7 +32,7 @@ var IC = { sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2
 function ic(n, s) { s = s || 18; return '<svg class="ic" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + '</svg>'; }
 function es(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif Sinhala","Noto Serif",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
+var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
 'body.dark-mode #spOverlay{--cd:rgba(14,20,52,.62);--bd:rgba(242,212,120,.26);--tx:#e8ecf8;--mu:#aab3d6;--bg2:rgba(242,212,120,.12);--ac:#f2d478;--tl:rgba(255,255,255,.05);--sh:0 8px 28px rgba(0,0,0,.45);background:radial-gradient(ellipse at 50% 0%,#1b2554 0%,#0b1030 45%,#04061a 100%)}' +
 '.sp-sky{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}' +
 '.sp-st{display:none;position:absolute;left:0;top:0;border-radius:50%;background:transparent}body.dark-mode .sp-st{display:block}' +
@@ -128,9 +130,9 @@ async function revName() { // BigDataCloud first (as location.js), OpenStreetMap
   var l = loc(); if (!l.ok || !navigator.onLine) return; var lang = typeof currentLang !== 'undefined' ? currentLang : (en() ? 'en' : 'si'), nm = '';
   async function tryGet(url) { var ctl = new AbortController(), t = setTimeout(function () { ctl.abort(); }, 7000); try { var r = await fetch(url, { signal: ctl.signal }); if (!r.ok) throw 0; return await r.json(); } finally { clearTimeout(t); } }
   try { var j = await tryGet('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' + l.lat + '&longitude=' + l.lng + '&localityLanguage=' + lang); nm = j.city || j.locality || j.principalSubdivision || ''; } catch (e) {}
-  if (!nm) { try { var k = await tryGet('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=12&addressdetails=1&accept-language=' + (lang === 'en' ? 'en' : 'si,en') + '&lat=' + l.lat + '&lon=' + l.lng); var a = k.address || {}; nm = a.city || a.town || a.village || a.suburb || a.county || ''; } catch (e) {} }
+  if (!nm) { try { var k = await tryGet('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=12&addressdetails=1&accept-language=' + (lang === 'en' ? 'en' : lang + ',en') + '&lat=' + l.lat + '&lon=' + l.lng); var a = k.address || {}; nm = a.city || a.town || a.village || a.suburb || a.county || ''; } catch (e) {} }
   if (!nm) return; LS.setItem('userLocName', nm);
-  var ls = $('locationStatus'); if (ls) ls.innerHTML = (en() ? '📍 Location: ' : '📍 ස්ථානය: ') + '<b>' + es(nm) + '</b><br><span class="loc-coords">(' + l.lat.toFixed(4) + '°, ' + l.lng.toFixed(4) + '°)</span>';
+  var ls = $('locationStatus'); if (ls) ls.innerHTML = (en() ? '📍 ' + TT('Location') + ': ' : '📍 ස්ථානය: ') + '<b>' + es(nm) + '</b><br><span class="loc-coords">(' + l.lat.toFixed(4) + '°, ' + l.lng.toFixed(4) + '°)</span>';
   if (P && P.open) setStat();
 }
 async function fetchLoc() {
@@ -252,9 +254,9 @@ function upd(light) {
   try {
     var hs = hz('Sun', d, l), hm = hz('Moon', d, l), sa = hs.altitude, ma = hm.altitude, a1 = Math.abs(sa).toFixed(0), a2 = Math.abs(ma).toFixed(0);
     sky(sa, hs.azimuth); place(hs, hm, d, l); if (!full) return;
-    $('spP1').innerHTML = sa > .8 ? ic('sun', 17) + '<span>' + tr('දිවා කාලය — ඉරේ උන්නතාංශය ', 'Daytime — Sun altitude ') + a1 + '°</span>'
-      : sa > -6 ? ic('dawn', 17) + '<span>' + tr('සන්ධ්‍යා / අරුණ ආලෝක කාලය — ඉර ක්ෂිතිජයට ', 'Twilight — Sun ') + (en() ? a1 + '° below horizon' : 'පහළින් ' + a1 + '°') + '</span>'
-      : ic('moon', 17) + '<span>' + tr('රාත්‍රී කාලය — ඉර ක්ෂිතිජයට පහළින් ', 'Night — Sun ') + (en() ? a1 + '° below horizon' : a1 + '°') + '</span>';
+    $('spP1').innerHTML = sa > .8 ? ic('sun', 17) + '<span>' + (en() ? F('Daytime — Sun altitude {0}°', a1) : 'දිවා කාලය — ඉරේ උන්නතාංශය ' + a1 + '°') + '</span>'
+      : sa > -6 ? ic('dawn', 17) + '<span>' + (en() ? F('Twilight — Sun {0}° below horizon', a1) : 'සන්ධ්‍යා / අරුණ ආලෝක කාලය — ඉර ක්ෂිතිජයට පහළින් ' + a1 + '°') + '</span>'
+      : ic('moon', 17) + '<span>' + (en() ? F('Night — Sun {0}° below horizon', a1) : 'රාත්‍රී කාලය — ඉර ක්ෂිතිජයට පහළින් ' + a1 + '°') + '</span>';
     $('spP2').innerHTML = ic('moon', 17) + '<span>' + (ma > 0 ? tr('සඳ ක්ෂිතිජයට ඉහළින් — උන්නතාංශය ', 'Moon above the horizon — altitude ') + a2 + '°' : tr('සඳ ක්ෂිතිජයට පහළින් (', 'Moon below the horizon (') + a2 + '°)') + '</span>';
   } catch (e) {}
 }

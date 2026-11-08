@@ -4,7 +4,8 @@
 // Offline Support + Automatic Cache Update + Lie-Fi Fix
 // ============================================================
 
-const CACHE_NAME = 'buddhist-era-v4.1.51';
+const CACHE_NAME = 'buddhist-era-v4.1.52';
+// pali-script.js, lang/hi.js, lang/hi-calc.js precache නොකරයි: හින්දි තෝරාගත් අයට පමණක්, පළමු භාවිතයේදී cache වේ
 
 const CACHE_ASSETS = [
   '/', '/index.html', '/manifest.json',

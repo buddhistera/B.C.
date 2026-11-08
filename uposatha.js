@@ -7,7 +7,11 @@
 var W = window, doc = document, D = Math.PI / 180;
 var $ = function (i) { return doc.getElementById(i); };
 var en = function () { return typeof isEnglish === 'function' ? isEnglish() : (typeof currentLang !== 'undefined' && currentLang === 'en'); };
-var tr = function (s, e) { return en() ? e : s; };
+var T = function (e) { return typeof tx === 'function' ? tx(e) : e; };   // English → හින්දි (lang/hi.js) — නැත්නම් English
+var F = function (e) { var a = arguments; return String(T(e)).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1]; }); };
+var PH = function (s) { return typeof paliHi === 'function' ? paliHi(s) : s; };   // රෝම පාළිය → හින්දියේදී දේවනාගරී
+var tr = function (s, e) { return en() ? T(e) : s; };
+var SWD = function (i) { var f = T(EDF[i]); return f !== EDF[i] ? f.replace(/वार$/, '') : EDY[i]; };   // කෙටි දින නාමය (හින්දි: रवि, सोम …)
 var P = null, pushed = false;
 var low = (navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (W.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
 /* iPhone / iPad (iPadOS "desktop" mode ද ඇතුළුව) — iOS හි <a download> ක්‍රමය විශ්වාස කළ නොහැක (විශේෂයෙන් Home Screen ඇප් ලෙස) */
@@ -32,14 +36,14 @@ var SIM = ['ජනවාරි', 'පෙබරවාරි', 'මාර්තු
 var SID = ['ඉරිදා', 'සඳුදා', 'අඟහරුවාදා', 'බදාදා', 'බ්‍රහස්පතින්දා', 'සිකුරාදා', 'සෙනසුරාදා'], EMO = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], EDY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 function ld(s) { var a = s.split('-'); return new Date(+a[0], +a[1] - 1, +a[2]); } // local date from 'YYYY-MM-DD'
 function ds(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
-function mon(d) { return en() ? EMO[d.getMonth()] : SIM[d.getMonth()]; }
+function mon(d) { return en() ? T(EMO[d.getMonth()]) : SIM[d.getMonth()]; }
 function md(d) { return en() ? d.getDate() + ' ' + mon(d) : mon(d) + ' ' + d.getDate(); }
-function wd(d) { return en() ? EDY[d.getDay()] : SID[d.getDay()]; }
+function wd(d) { return en() ? SWD(d.getDay()) : SID[d.getDay()]; }
 function fdt(d) { return en() ? d.getDate() + ' ' + mon(d) + ' ' + d.getFullYear() : d.getFullYear() + ' ' + mon(d) + ' ' + d.getDate(); }
 function days(a, b) { return Math.round((b - a) / 864e5); }
 function today0() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
 
-var CSS = '#upOverlay{--cd:rgba(255,253,249,.82);--bd:rgba(120,80,30,.16);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif Sinhala","Noto Serif",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
+var CSS = '#upOverlay{--cd:rgba(255,253,249,.82);--bd:rgba(120,80,30,.16);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
 'body.dark-mode #upOverlay{--cd:rgba(14,20,52,.66);--bd:rgba(242,212,120,.26);--tx:#e8ecf8;--mu:#aab3d6;--bg2:rgba(242,212,120,.12);--ac:#f2d478;--tl:rgba(255,255,255,.05);--sh:0 8px 28px rgba(0,0,0,.45);background:radial-gradient(ellipse at 50% 0%,#1b2554 0%,#0b1030 45%,#04061a 100%)}' +
 '#upOverlay button{font-family:inherit}.up-sky{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}' +
 '.up-st{display:none;position:absolute;left:0;top:0;border-radius:50%;background:transparent}body.dark-mode .up-st{display:block}' +
@@ -98,9 +102,9 @@ function yearRows(y) {
     var sk = Object.keys(i18n.si.seasons).find(function (k) { return i18n.si.seasons[k] === rs; }) || 'Hemanta', sn = t.seasons[sk];
     if (last !== sn) { last = sn; out.push({ banner: sn }); }
     var typ = 'Error', chat = false;
-    if (prev) { var df = days(prev, dt); if (df === 14) { typ = en() ? 'Cātuddasī' : 'චාතුද්දසී'; chat = true; } else if (df === 15) typ = en() ? 'Paṇṇarasī' : 'පණ්ණරසී'; }
+    if (prev) { var df = days(prev, dt); if (df === 14) { typ = en() ? PH('Cātuddasī') : 'චාතුද්දසී'; chat = true; } else if (df === 15) typ = en() ? PH('Paṇṇarasī') : 'පණ්ණරසී'; }
     prev = dt;
-    var nm = p.t; if (en()) nm = nm.replace('පසළොස්වක', 'Full Moon').replace('අමාවක', ' New Moon');
+    var nm = p.t; if (en()) nm = nm.replace('පසළොස්වක', T('Full Moon')).replace('අමාවක', ' ' + T('New Moon'));
     out.push({ d: p.d, dt: dt, c: c, name: nm + t.poyaSuffix, typ: typ, chat: chat, full: p.t.includes('පසළොස්වක'), nw: p.t.includes('අමාවක') });
   });
   return out;
@@ -158,8 +162,8 @@ function render(jump) {
   $('upY').textContent = y; $('upPrev').disabled = y <= (typeof MIN_YEAR !== 'undefined' ? MIN_YEAR : 1900); $('upNext').disabled = y >= (typeof MAX_YEAR !== 'undefined' ? MAX_YEAR : 3000); $('upYr').style.display = y === t0.getFullYear() ? 'none' : '';
   // hero: next uposatha (from today, any year)
   var np = typeof _pLowerBound === 'function' ? poyaList[_pLowerBound(function (p) { return p.d >= ts; })] : poyaList.find(function (p) { return p.d >= ts; });
-  if (np) { var nd = ld(np.d), k = days(t0, nd), nm = np.t; if (en()) nm = nm.replace('පසළොස්වක', 'Full Moon').replace('අමාවක', ' New Moon'); nextD = np.d;
-    $('upNxT').textContent = tr(TX.next[0], TX.next[1]) + ': ' + md(nd) + ' · ' + nm + i18n[currentLang].poyaSuffix + ' — ' + (k === 0 ? tr('අද', 'today') : tr('තව දින ' + k + ' යි', 'in ' + k + ' day' + (k > 1 ? 's' : ''))); } else $('upNxT').textContent = '';
+  if (np) { var nd = ld(np.d), k = days(t0, nd), nm = np.t; if (en()) nm = nm.replace('පසළොස්වක', T('Full Moon')).replace('අමාවක', ' ' + T('New Moon')); nextD = np.d;
+    $('upNxT').textContent = tr(TX.next[0], TX.next[1]) + ': ' + md(nd) + ' · ' + nm + i18n[currentLang].poyaSuffix + ' — ' + (k === 0 ? tr('අද', 'today') : en() ? F(k > 1 ? 'in {0} days' : 'in {0} day', k) : 'තව දින ' + k + ' යි'); } else $('upNxT').textContent = '';
   // list
   var list = yearRows(y);
   if (!list.length) rows = '<div class="up-nd">' + tr(TX.nodata[0], TX.nodata[1]) + '</div>';
@@ -179,7 +183,7 @@ function render(jump) {
   function per(name, a, b, la, lb) {
     var h = '<div class="up-per"><div class="up-ph">' + name + '</div><div class="up-vr"><span class="l">' + es(la) + '</span>' + badge(a) + '</div><div class="up-vr"><span class="l">' + es(lb) + '</span>' + badge(b) + '</div>';
     if (a && b) { var tot = Math.max(1, days(a, b)), el = days(a, t0), pc = Math.max(0, Math.min(100, el / tot * 100)), s;
-      s = el < 0 ? tr('ආරම්භයට තව දින ' + (-el), 'Starts in ' + (-el) + ' days') : el > tot ? tr('අවසන් වී ඇත', 'Completed') : tr('දින ' + el + ' / ' + tot + ' — ඉතිරි දින ' + (tot - el), 'Day ' + el + ' of ' + tot + ' — ' + (tot - el) + ' days left');
+      s = el < 0 ? (en() ? F('Starts in {0} days', -el) : 'ආරම්භයට තව දින ' + (-el)) : el > tot ? tr('අවසන් වී ඇත', 'Completed') : (en() ? F('Day {0} of {1} — {2} days left', el, tot, tot - el) : 'දින ' + el + ' / ' + tot + ' — ඉතිරි දින ' + (tot - el));
       h += '<div class="up-pb"><i style="width:' + pc.toFixed(1) + '%"></i>' + (el >= 0 && el <= tot ? '<u style="left:' + pc.toFixed(1) + '%"></u>' : '') + '</div><div class="up-pn">' + s + '</div>'; }
     return h + '</div>';
   }
@@ -196,21 +200,21 @@ var SIMa = ['ජන.', 'පෙබ.', 'මාර්තු', 'අප්‍රේ�
 var SIDa = ['ඉරිදා', 'සඳුදා', 'අඟහ.', 'බදාදා', 'බ්‍රහස්.', 'සිකු.', 'සෙන.'];
 var EDF = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 function closeSheet() { var s = $('upSheet'); if (s) s.classList.remove('on'); }
-function monAbbr(d) { return en() ? EMO[d.getMonth()].slice(0, 3) : SIMa[d.getMonth()]; }
-function wdAbbr(d) { return en() ? EDY[d.getDay()] : SIDa[d.getDay()]; }
-function wdFull(d) { return en() ? EDF[d.getDay()] : SID[d.getDay()]; }
+function monAbbr(d) { return en() ? T(EMO[d.getMonth()].slice(0, 3)) : SIMa[d.getMonth()]; }
+function wdAbbr(d) { return en() ? SWD(d.getDay()) : SIDa[d.getDay()]; }
+function wdFull(d) { return en() ? T(EDF[d.getDay()]) : SID[d.getDay()]; }
 
 function drawSheet(y, list, v, color) {
   var PW = low ? 2339 : 3508, PH = Math.round(PW * 210 / 297), m = PW / 297, cv = doc.createElement('canvas'), x, t = i18n[currentLang];
   cv.width = PW; cv.height = PH; x = cv.getContext('2d');
-  var F = '"Noto Serif Sinhala","Noto Serif","Iskoola Pota","Nirmala UI","Noto Sans Sinhala",serif';
+  var FF = '"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Iskoola Pota","Nirmala UI","Noto Sans Sinhala","Noto Sans Devanagari",serif';
   var C = color ?
     { ink: '#2b1a0e', mu: '#6b5a4a', ac: '#a0561d', bd: 'rgba(120,80,30,.28)', row: '#fbf3e6', hdr: '#f6ead9', ban: '#C8E6C9', banInk: '#1B5E20', bar: '#d4af37',
       fullBg: 'rgba(255,235,59,.2)', fullBd: '#d4af37', newBg: 'rgba(0,0,0,.12)', pc: '#c62828', pp: '#FF6600', vas: '#43a047', card: '#fbf3e6' } :
     { ink: '#000', mu: '#222', ac: '#000', bd: '#555', row: '#fff', hdr: '#e6e6e6', ban: '#d4d4d4', banInk: '#000', bar: '#000',
       fullBg: null, fullBd: '#555', newBg: '#ececec', pc: '#000', pp: '#fff', vas: '#000', card: '#fff' };
 
-  function font(z, w) { x.font = (w || 400) + ' ' + z.toFixed(1) + 'px ' + F; }
+  function font(z, w) { x.font = (w || 400) + ' ' + z.toFixed(1) + 'px ' + FF; }
   function tw(s, z, w) { font(z, w); return x.measureText(s).width; }
   function txt(s, px, py, z, w, col, al, mw) {
     s = String(s); if (mw) { var q = tw(s, z, w); if (q > mw) z *= mw / q; }
@@ -234,7 +238,7 @@ function drawSheet(y, list, v, color) {
 
   /* ----- title: full width across the top ----- */
   var mx = 9 * m, tw0 = PW - 2 * mx, th = 20 * m, ty = 8 * m, b2 = (y + 544) % 100 === 0 ? String(y + 544) : String((y + 544) % 100).padStart(2, '0'), bs = (y + 543) + ' - ' + b2,
-    title = en() ? 'Buddhist Era ' + bs + ' Uposatha Days Calendar (C.E. ' + y + ')' : 'ශ්‍රී බුද්ධ වර්ෂ ' + bs + ' උපෝසථ දින දර්ශනය (ව්‍ය ව. ' + y + ')';
+    title = en() ? F('Buddhist Era {0} Uposatha Days Calendar (C.E. {1})', bs, y) : 'ශ්‍රී බුද්ධ වර්ෂ ' + bs + ' උපෝසථ දින දර්ශනය (ව්‍ය ව. ' + y + ')';
   if (color) {
     var hg = x.createLinearGradient(mx, ty, mx + tw0, ty + th); hg.addColorStop(0, '#fff4dc'); hg.addColorStop(.5, '#fbe5b6'); hg.addColorStop(1, '#fff0d2');
     rr(mx, ty, tw0, th, 5 * m); x.fillStyle = hg; x.fill();
@@ -265,7 +269,7 @@ function drawSheet(y, list, v, color) {
   function cx(X, i) { var a = 0, j; for (j = 0; j < i; j++) a += cf[j]; return X + Wt * (a + cf[i] / 2); }
   function plabel(r) { return r.c + ' ' + (r.typ === 'Error' ? '-' : r.typ); }
   var pw = 0; list.forEach(function (r) { if (r.d) pw = Math.max(pw, tw(plabel(r), u * .44, 700)); }); pw += u * .9;
-  var hd = en() ? ['Month', 'Date', 'Day', 'Uposatha'] : ['මාසය', 'දිනය', 'දවස', 'පෝය'];
+  var hd = en() ? ['Month', 'Date', 'Day', 'Uposatha'].map(T) : ['මාසය', 'දිනය', 'දවස', 'පෝය'];
 
   function grp(g, X, Y) {
     var gp = u * .06, h0 = u * uB;
@@ -374,7 +378,7 @@ function dlJpg(color) {
     } catch (e) { fail(e); }
     freeCanvas(cv); done();
   };
-  try { if (doc.fonts && doc.fonts.load) Promise.all([doc.fonts.load('400 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('700 40px "Noto Serif Sinhala"', 'අඉ1A')]).then(go, go); else go(); } catch (e) { go(); }
+  try { if (doc.fonts && doc.fonts.load) Promise.all([doc.fonts.load('400 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('700 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('400 40px "Noto Serif"', 'Aā'), doc.fonts.load('700 40px "Noto Serif"', 'Aā')].concat(typeof isHindi === 'function' && isHindi() ? [doc.fonts.load('400 40px "Noto Serif Devanagari"', 'अआ'), doc.fonts.load('700 40px "Noto Serif Devanagari"', 'अआ')] : [])).then(go, go); else go(); } catch (e) { go(); }
 }
 
 /* ---------- open / close ---------- */
