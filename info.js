@@ -741,7 +741,12 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
 
   var QM_DL_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>';
 
+  function isApp() { return typeof isNativeApp === 'function' && isNativeApp(); }   /* Android ඇප් එක (Capacitor) */
+  function appShareCanvas(cv, name, title) {
+    cv.toBlob(function (b) { if (b) nativeShareFile(b, name, title || name).catch(function (e) { console.error('share:', e); }); }, 'image/png');
+  }
   function qmSave(cv, name) {
+    if (isApp()) { appShareCanvas(cv, name); return; }
     function viaUrl(url, revoke) {
       var a = document.createElement('a');
       a.href = url; a.download = name; a.rel = 'noopener';
@@ -822,6 +827,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
         navigator.clipboard.writeText(QM_SITE).then(done, function () { window.prompt('', QM_SITE); });
       } else { window.prompt('', QM_SITE); }
     }
+    if (isApp()) { qmStaticCanvas(function (cv) { if (cv) appShareCanvas(cv, 'buddhist-era-qr.png', title); else fallback(); }); return; }
     if (!navigator.share || !window.File) { fallback(); return; }
     qmStaticCanvas(function (cv) {
       if (!cv || !cv.toBlob) { fallback(); return; }
@@ -988,7 +994,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       var qr = QRCore.encode(data, 'M');
       if (!qr) { errBox.textContent = t.tooLong; return; }
       lastCanvas = qmDraw(qr, color);
-      var canShare = !!(navigator.share && window.File);
+      var canShare = isApp() || !!(navigator.share && window.File);
       var typeName = t.types[typeSel.value];
       resBox.innerHTML =
         '<img class="qm-img" alt="' + t.alt + '" src="' + lastCanvas.toDataURL('image/png') + '">' +
@@ -999,6 +1005,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       resBox.querySelector('#qm-dl').addEventListener('click', function () { qmSave(lastCanvas, 'qr-code.png'); });
       var sh = resBox.querySelector('#qm-share');
       if (sh) sh.addEventListener('click', function () {
+        if (isApp()) { appShareCanvas(lastCanvas, 'qr-code.png'); return; }
         lastCanvas.toBlob(function (blob) {
           if (!blob) return;
           var file = new File([blob], 'qr-code.png', { type: 'image/png' });
@@ -1018,6 +1025,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
     var ua = navigator.userAgent || '';
     if (!/android/i.test(ua)) return; // සාමාන්‍ය link එක (target=_blank) ක්‍රියා කරයි
     if (e) e.preventDefault();
+    if (isApp()) { window.location.href = 'market://details?id=' + PLAY_ID; return; }   /* ඇප් එකේ: Play Store කෙලින්ම */
     window.location.href = 'intent://details?id=' + PLAY_ID +
       '#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' +
       encodeURIComponent(PLAY_WEB) + ';end';

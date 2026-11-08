@@ -68,6 +68,7 @@ window.HI_DICT = {
   "Black & White": "श्वेत-श्याम", "In colour": "रंगीन", "Cancel": "रद्द करें",
   "Your JPG is ready": "आपकी JPG तैयार है", "💾 Save / Share": "💾 सहेजें / साझा करें", "Close": "बंद करें",
   "Tap \"Save / Share\" and choose \"Save Image\", or long-press the image and choose \"Save to Photos\".": "\"सहेजें / साझा करें\" दबाकर \"Save Image\" चुनें, या चित्र को देर तक दबाकर \"Save to Photos\" चुनें।",
+  "Tap \"Save / Share\" and choose Drive, Files, WhatsApp or another app to save or send the image.": "चित्र सहेजने या भेजने के लिए \"सहेजें / साझा करें\" दबाकर Drive, Files, WhatsApp या कोई अन्य ऐप चुनें।",
   "Long-press the image and choose \"Save to Photos\".": "चित्र को देर तक दबाकर \"Save to Photos\" चुनें।",
   "in {0} days": "{0} दिन में", "in {0} day": "{0} दिन में",
   "Completed": "पूर्ण",

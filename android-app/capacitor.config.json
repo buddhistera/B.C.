@@ -1,0 +1,8 @@
+{
+  "appId": "app.vercel.buddhist_era.twa",
+  "appName": "Buddhist Era",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}

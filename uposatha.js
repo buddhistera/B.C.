@@ -15,6 +15,7 @@ var SWD = function (i) { var f = T(EDF[i]); return f !== EDF[i] ? f.replace(/व
 var P = null, pushed = false;
 var low = (navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (W.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
 /* iPhone / iPad (iPadOS "desktop" mode ද ඇතුළුව) — iOS හි <a download> ක්‍රමය විශ්වාස කළ නොහැක (විශේෂයෙන් Home Screen ඇප් ලෙස) */
+var NATIVE = function () { return typeof isNativeApp === 'function' && isNativeApp(); };   // Android ඇප් එක (Capacitor)
 var IOS = /iP(hone|ad|od)/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 var TX = { title: ['උපෝසථ දින සහ වස් කාලය', 'Uposatha Days & Vassa Period'], hList: ['උපෝසථ දින', 'Uposatha Days'],
@@ -25,6 +26,7 @@ var TX = { title: ['උපෝසථ දින සහ වස් කාලය', 'U
   dlBtn: ['JPG', 'JPG'], dlAria: ['JPG ලෙස බාගත කරන්න', 'Download as JPG'], dlPick: ['බාගත කළ යුතු ආකාරය තෝරන්න', 'Choose how to download'], dlBw: ['කළු සුදු', 'Black & White'], dlCol: ['වර්ණයෙන්', 'In colour'], dlCan: ['අවලංගු කරන්න', 'Cancel'],
   pvTitle: ['JPG රූපය සූදානම්', 'Your JPG is ready'], pvShare: ['💾 සුරකින්න / බෙදාගන්න', '💾 Save / Share'], pvClose: ['වසන්න', 'Close'],
   pvHint: ['"සුරකින්න / බෙදාගන්න" ඔබා "Save Image" තෝරන්න. නැතහොත් රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" තෝරන්න.', 'Tap "Save / Share" and choose "Save Image", or long-press the image and choose "Save to Photos".'],
+  pvHintApp: ['"සුරකින්න / බෙදාගන්න" ඔබා, රූපය සුරැකීමට හෝ යැවීමට Drive, Files, WhatsApp වැනි ස්ථානයක් තෝරන්න.', 'Tap "Save / Share" and choose Drive, Files, WhatsApp or another app to save or send the image.'],
   pvHint2: ['රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" (ඡායාරූපවලට සුරකින්න) තෝරන්න.', 'Long-press the image and choose "Save to Photos".'] };
 var IC = { moon: '<path d="M20 14.6A8.4 8.4 0 1 1 9.4 4a6.7 6.7 0 0 0 10.6 10.6z"/>', cloud: '<path d="M7 15a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 8a3.5 3.5 0 0 1 .5 7H7z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/>',
   chev: '<path d="M14.5 5.5 8 12l6.5 6.5"/>', chevR: '<path d="M9.5 5.5 16 12l-6.5 6.5"/>', globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/>', down: '<path d="M6 9l6 6 6-6"/>', dl: '<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/>' };
@@ -345,10 +347,12 @@ function showPreview(blob, name) {
   var url = URL.createObjectURL(blob), file = null; P.pvUrl = url;
   $('upPvImg').src = url;
   try { file = new File([blob], name, { type: 'image/jpeg' }); } catch (e) { file = null; }
-  var can = !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] }));
+  var nat = NATIVE();
+  var can = nat || !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] }));
   var sb = $('upPvShare'); sb.style.display = can ? '' : 'none';
-  sb.onclick = can ? function () { navigator.share({ files: [file], title: name }).catch(function () {}); } : null;
-  $('upPvH').textContent = can ? tr(TX.pvHint[0], TX.pvHint[1]) : tr(TX.pvHint2[0], TX.pvHint2[1]);
+  sb.onclick = !can ? null : nat ? function () { nativeShareFile(blob, name, name).catch(function (e) { console.error('share:', e); }); }
+    : function () { navigator.share({ files: [file], title: name }).catch(function () {}); };
+  $('upPvH').textContent = nat ? tr(TX.pvHintApp[0], TX.pvHintApp[1]) : can ? tr(TX.pvHint[0], TX.pvHint[1]) : tr(TX.pvHint2[0], TX.pvHint2[1]);
   lab(); $('upPv').classList.add('on');
 }
 
@@ -362,7 +366,7 @@ function dlJpg(color) {
   var go = function () {
     var cv;
     try { cv = drawSheet(y, list, vasDates(y), !!color); } catch (e) { fail(e); done(); return; }
-    if (IOS) {
+    if (IOS || NATIVE()) {   /* iPhone සහ Android ඇප් එක: preview + Share */
       try {
         toJpegBlob(cv, .92, function (b) {
           freeCanvas(cv);

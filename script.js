@@ -33,6 +33,22 @@
     function paliHi(s) { return (currentLang === 'hi' && window.PaliScript) ? PaliScript.fromIAST(s, 'deva') : s; }
     // සිංහල අකුරු පාළිය → හින්දියේදී දේවනාගරී
     function paliSiHi(s) { return (currentLang === 'hi' && window.PaliScript) ? PaliScript.convert(s, 'sinh', 'deva') : s; }
+    // ---- Android ඇප් එක (Capacitor) ඇතුළේ පමණක් භාවිතා වේ — වෙබ් අඩවියට කිසිදු බලපෑමක් නැත ----
+    function isNativeApp() {
+        try { return !!(window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()); } catch (e) { return false; }
+    }
+    // Blob එකක් (JPG / PNG) ඇප් එකේ cache එකේ සුරකා Android "Share / Save" මෙනුව විවෘත කරයි
+    function nativeShareFile(blob, name, title) {
+        const PL = (window.Capacitor && Capacitor.Plugins) || {};
+        if (!PL.Filesystem || !PL.Share) return Promise.reject(new Error('Capacitor plugins missing'));
+        return new Promise(function (ok, no) {
+            const r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = no; r.readAsDataURL(blob);
+        }).then(function (b64) {
+            return PL.Filesystem.writeFile({ path: name, data: b64, directory: 'CACHE' });
+        }).then(function (res) {
+            return PL.Share.share({ title: title || name, dialogTitle: title || name, files: [res.uri] });
+        }).catch(function (e) { if (!/cancel/i.test(String(e && (e.message || e)))) throw e; });
+    }
     function langReady(l) { return l !== 'hi' || !!(window.HI_DICT && window.PaliScript); }
     function loadLang(l, cb) {
         const files = (LANG_FILES[l] || []).slice();
@@ -2154,7 +2170,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-if ('serviceWorker' in navigator) {
+// Android ඇප් එකේ ගොනු APK එක ඇතුළේම ඇති නිසා service worker අවශ්‍ය නැත (ඇප් update එකකදී පැරණි cache පෙන්වීම වළක්වයි)
+if ('serviceWorker' in navigator && !isNativeApp()) {
 
   // පළමු ස්ථාපනයේදී (මීට පෙර controller නොතිබූ විට) පිටුව දැනටමත් නවතම ගොනුවලින් පූරණය වී ඇති නිසා නැවත load කිරීම අනවශ්‍යයි;
   // යාවත්කාලීනයකදී පමණක්, ඒ ද එක් වරක් පමණක් reload වේ.
@@ -2162,6 +2179,8 @@ if ('serviceWorker' in navigator) {
   let reloadingForSW = false;
 
   window.addEventListener('load', async () => {
+
+    if (isNativeApp()) return;
 
     try {
 
