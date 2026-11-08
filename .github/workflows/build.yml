@@ -104,6 +104,7 @@ jobs:
             [ -n "$v" ] && V="$v" perl -pi -e 's/\Q$ENV{V}\E/***/g' build.log || true
           done
           tail -c 120000 build.log > "$RUNNER_TEMP/ci/build-tail.log"
+          find android-app/android/app/build/outputs/apk -name '*.apk' -exec cp {} "$RUNNER_TEMP/ci/" \; 2>/dev/null || true
           echo "run=${{ github.run_number }} status=$STATUS sha=${{ github.sha }} ref=${{ github.ref_name }}" > "$RUNNER_TEMP/ci/status.txt"
           cd "$RUNNER_TEMP/ci"
           git init -q && git checkout -q -b ci-logs

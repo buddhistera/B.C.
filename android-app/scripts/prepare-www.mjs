@@ -8,7 +8,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..', '..');
 const out = resolve(here, '..', 'www');
 const SKIP = new Set(['.git', '.github', 'android-app', 'node_modules', '.well-known', 'README.md', 'sitemap.xml',
-  'vercel.json', '.vercelignore', '.nojekyll', '.gitignore', 'sw.js', 'CLAUDE.md']);
+  'vercel.json', '.vercelignore', '.nojekyll', '.gitignore', 'sw.js', 'CLAUDE.md', 'build.log']);
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
