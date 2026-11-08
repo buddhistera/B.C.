@@ -275,4 +275,169 @@ Object.assign(window.HI_DICT, {
   "Making Food Allowable (Kappiya)": "भोजन को कप्पिय बनाना (कप्पिय)",
   "Asking Leave (Āpucchā)": "अनुमति लेना (आपुच्छा)",
   "Reflecting on the Four Requisites": "चार प्रत्ययों का प्रत्यवेक्षण",
-  "The Ten Subjects a Renunciant Should Often Reflect On (Dasadhamma Sutta)": "प्रव्रजित को बार-बार चिंतन करने योग्य दस बातें (
+  "The Ten Subjects a Renunciant Should Often Reflect On (Dasadhamma Sutta)": "प्रव्रजित को बार-बार चिंतन करने योग्य दस बातें (दसधम्म सुत्त)",
+  "© Kitulgoda Aranya Senasanaya, Bhikkhu Pātimokkha.": "© कितुलगोड अरण्य सेनासन, भिक्खु पातिमोक्ख।",
+  "Conclusion": "समापन",
+  "Brief Uposatha": "संक्षिप्त उपोसथ",
+  "Vassa Resolve": "वर्षावास अधिष्ठान",
+  "Pavāraṇā Preliminaries": "पवारणा पूर्व-कृत्य",
+  "Kaṭhina Spreading": "कठिन बिछाना",
+  "Sīmā Procedures": "सीमा विधि",
+  "Unconcealed Offences": "अप्रच्छन्न आपत्तियाँ",
+  "Suddhanta Probation": "सुद्धन्त परिवास",
+  "Mūlāya Paṭikassana (unconcealed, during probation)": "मूलाय पटिकस्सन (अप्रच्छन्न, परिवास में)",
+  "Mūlāya Paṭikassana (concealed, during probation)": "मूलाय पटिकस्सन (प्रच्छन्न, परिवास में)",
+  "Mūlāya Paṭikassana (during mānatta)": "मूलाय पटिकस्सन (मानत्त में)",
+  "Confession": "आपत्ति-देशना",
+  "Preceptor": "उपाध्याय",
+  "Teacher": "आचार्य",
+  "Consent": "छन्द",
+  "Kappa-dot": "कप्प-बिंदु",
+  "Robes": "चीवर",
+  "Robe relinquishing": "चीवर त्याग",
+  "Bowl": "पात्र",
+  "Medicine": "औषधि",
+  "Allowable food": "कप्पिय भोजन",
+  "Asking leave": "अनुमति",
+  "Reflection": "प्रत्यवेक्षण",
+  "Ten subjects": "दस बातें",
+  "Forgiveness": "क्षमा-याचना",
+  "Robe chapter": "चीवर वर्ग",
+  "Silk chapter": "कोसिय वर्ग",
+  "Bowl chapter": "पात्र वर्ग",
+  "Lying chapter": "मुसावाद वर्ग",
+  "Plant-life chapter": "भूतगाम वर्ग",
+  "Instructing-nuns chapter": "ओवाद वर्ग",
+  "Food chapter": "भोजन वर्ग",
+  "Naked-ascetic chapter": "अचेलक वर्ग",
+  "Liquor-drinking chapter": "सुरापान वर्ग",
+  "Living-beings chapter": "सप्पाणक वर्ग",
+  "Dhamma-companions chapter": "सहधम्मिक वर्ग",
+  "Jewel chapter": "रतन वर्ग",
+  "Well-rounded chapter": "परिमण्डल वर्ग",
+  "Laughter chapter": "उज्जग्घिक वर्ग",
+  "Arms-akimbo chapter": "खम्भकत वर्ग",
+  "Attentive chapter": "सक्कच्च वर्ग",
+  "Mouthful chapter": "कबळ वर्ग",
+  "Slurping chapter": "सुरुसुरु वर्ग",
+  "Footwear chapter": "पादुका वर्ग",
+  "The procedure for holding the Uposatha briefly when one of the ten dangers is present.": "दस संकटों में से कोई एक उपस्थित होने पर संक्षेप में उपोसथ करने की विधि।",
+  "(The ten dangers are: danger from kings, from thieves, from fire, from water, from humans, from non-humans, from wild beasts, from snakes, danger to life, or danger to the holy life.)": "(दस संकट हैं: राजा से, चोरों से, अग्नि से, जल से, मनुष्यों से, अमनुष्यों से, हिंसक पशुओं से, सर्पों से संकट, जीवन का संकट, या ब्रह्मचर्य का संकट।)",
+  "Note: After reciting the Introduction and the Pārājika rules, the remainder is to be recited as above.": "टिप्पणी: परिचय और पाराजिक शिक्षापदों का पाठ करने के बाद शेष भाग ऊपर बताए अनुसार पढ़ा जाए।",
+  "When there are three monks": "जब तीन भिक्षु हों",
+  "The Pārisuddhi Uposatha — an Uposatha held for the sake of purity.": "पारिसुद्धि उपोसथ — शुद्धि के लिए किया जाने वाला उपोसथ।",
+  "When there are two monks": "जब दो भिक्षु हों",
+  "When there is only one monk (the resolve-Uposatha)": "जब केवल एक भिक्षु हो (अधिष्ठान-उपोसथ)",
+  "On the day the Rains Retreat begins, after cleaning the monastery and completing the preliminary duties, squat with joined palms, pay homage three times, and say three times:": "वर्षावास आरंभ होने के दिन विहार की सफ़ाई और पूर्व-कृत्य पूरे करके, उकड़ूँ बैठकर हाथ जोड़ें, तीन बार वंदना करें और तीन बार कहें:",
+  "The resolution to be made when going out": "बाहर जाते समय किया जाने वाला अधिष्ठान",
+  "Group (gaṇa) Pavāraṇā": "गण (गण) पवारणा",
+  "The Twenty-Four Conditional Relations": "चौबीस प्रत्यय-संबंध",
+  "Homage to the Arahant, the Fully Enlightened One, who taught the great Samanta Paṭṭhāna Prakaraṇa endowed with infinite modes of conditionality.": "अनंत प्रत्यय-नयों से युक्त महान समन्त पट्ठान प्रकरण का उपदेश देने वाले अर्हत्, सम्यक्सम्बुद्ध को नमस्कार।",
+  "May all who read this Samanta Paṭṭhāna Dhamma Vandanā attain the wisdom of the infinite modes of conditionality!": "इस समन्त पट्ठान धम्म वंदना को पढ़ने वाले सभी जन अनंत प्रत्यय-नयों की प्रज्ञा प्राप्त करें!",
+  "May all beings be well and happy! 🙏": "सभी प्राणी सुखी और स्वस्थ हों! 🙏",
+  "24 Conditions": "24 प्रत्यय",
+  "The Four Foundations of Mindfulness": "चार स्मृति-उपस्थान",
+  "Introduction": "परिचय",
+  "Section on Breathing": "आनापान पर्व",
+  "Section on Postures": "ईर्यापथ पर्व",
+  "Section on Clear Comprehension": "सम्प्रजन्य पर्व",
+  "Section on Repulsiveness of the Body": "प्रतिकूल मनसिकार पर्व",
+  "Section on Elements": "धातु मनसिकार पर्व",
+  "Section on the Nine Charnel Grounds": "नव सिवथिक पर्व",
+  "Contemplation of Feeling": "वेदनानुपश्यना",
+  "Contemplation of Mind": "चित्तानुपश्यना",
+  "Section on the Hindrances": "नीवरण पर्व",
+  "Section on the Aggregates": "स्कंध पर्व",
+  "Section on the Sense Bases": "आयतन पर्व",
+  "Section on the Factors of Enlightenment": "बोध्यंग पर्व",
+  "The Truth of Suffering": "दुःख सत्य",
+  "The Truth of the Origin of Suffering": "दुःख समुदय सत्य",
+  "The Truth of the Cessation of Suffering": "दुःख निरोध सत्य",
+  "The Truth of the Path Leading to the Cessation of Suffering": "दुःख निरोधगामिनी प्रतिपदा सत्य",
+  "Vipāka": "विपाक"
+});
+
+/* ---------- जानकारी पृष्ठ (info.js) — हिन्दी भाग ---------- */
+window.HI_INFO_HTML = `
+    <p class="blessing">बुद्ध का शासन संसार में प्रकाशित हो!</p>
+
+    <div class="card">
+      <p>यहाँ दिखाए गए पोय (उपोसथ) दिवस थाईलैंड और श्रीलंका के उपोसथ दिवसों पर आधारित हैं। म्यांमार के उपोसथ दिवस कभी-कभी इनसे केवल एक दिन भिन्न हो सकते हैं।</p>
+      <p>अपने विचार और सुझाव कृपया नीचे दिए पते पर भेजें।</p>
+      <a class="email-btn" href="mailto:bhamarawali@gmail.com">📧 bhamarawali@gmail.com</a>
+    </div>
+
+    <div class="card important">
+      <span class="tag">❄️ महत्वपूर्ण</span>
+      <p>ऐप पहली बार खोलने के बाद मेनू में <strong>सूर्य</strong> पृष्ठ पर जाकर अपना स्थान सेट करें।</p>
+      <p>✏️ आवश्यकता हो तो अपने स्थान का विवरण डालकर वार्षिक अरुणोदय और मध्याह्न सारणी <a href="https://buddhistera.github.io/Dawn-Noon-calculation/" target="_blank" rel="noopener noreferrer">यहाँ से</a> मुद्रित कर सकते हैं।</p>
+    </div>
+
+    <div class="card rate-card">
+      <h3>⭐ ऐप को रेटिंग दें</h3>
+      <p>यदि यह ऐप आपके लिए उपयोगी है, तो कृपया Google Play Store पर स्टार रेटिंग और एक छोटी समीक्षा दें। इससे दूसरों को यह ऐप खोजने में सहायता मिलती है।</p>
+      <div class="rate-stars" aria-hidden="true">
+        <a class="rate-star" data-rate href="\${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="\${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="\${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="\${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a><a class="rate-star" data-rate href="\${PLAY_WEB}" target="_blank" rel="noopener noreferrer" tabindex="-1">★</a>
+      </div>
+      <a class="rate-btn" data-rate href="\${PLAY_WEB}" target="_blank" rel="noopener noreferrer">Play Store पर रेटिंग दें</a>
+    </div>
+
+    <div class="section-heading"><span class="dot"></span>ऐप कैसे प्राप्त करें</div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <h3>🤖 Android के लिए</h3>
+        <p>Google Play Store से इंस्टॉल करें।</p>
+        <a class="platform-btn" href="https://play.google.com/store/apps/details?id=app.vercel.buddhist_era.twa&pcampaignid=web_share">डाउनलोड ⬇️</a>
+      </div>
+      <div class="platform-card">
+        <h3>🪟 Windows के लिए</h3>
+        <p>यह वेब पता Chrome ब्राउज़र में खोलें और पता-पट्टी में <em>"install app"</em> आइकन दबाकर इंस्टॉल करें।</p>
+        <div class="link-row">
+          <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+          <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="लिंक कॉपी करें">📋</button>
+        </div>
+      </div>
+      <div class="platform-card">
+        <h3>🍎 iPhone / Mac OS के लिए</h3>
+        <p>यह वेब पता Safari ब्राउज़र में खोलें और Share → <em>"Add to Home Screen"</em> करें।</p>
+        <div class="link-row">
+          <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
+          <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="लिंक कॉपी करें">📋</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading"><span class="dot"></span>उपयोगी सुझाव</div>
+    <div class="card">
+      <ul class="tips">
+        <li><span class="pin">✏️</span><span>सूर्य पृष्ठ के लिए स्थान लेते समय, इंटरनेट न होने पर भी खुले आकाश के नीचे प्रयास करने से परिणाम जल्दी मिलता है।</span></li>
+        <li><span class="pin">✏️</span><span>म्यांमार के उपोसथ दिवस <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">यहाँ</a> देखे जा सकते हैं।</span></li>
+      </ul>
+    </div>
+`;
+
+/* ---------- QR कोड निर्माता (info.js) ---------- */
+window.HI_QM_STR = {
+  makeBtn: "✨ अपना QR कोड बनाएँ",
+  title: "अपना QR कोड बनाएँ",
+  type: "QR कोड का प्रकार",
+  types: { text: "पाठ / वेबसाइट लिंक", contact: "संपर्क (Contact)", wifi: "Wi-Fi", email: "ईमेल", phone: "फ़ोन नंबर", sms: "SMS संदेश" },
+  f: {
+    text: "पाठ या वेबसाइट लिंक (URL)", textPh: "https://example.com",
+    name: "नाम", phone: "फ़ोन नंबर", email: "ईमेल पता", org: "संस्था / पद", url: "वेबसाइट", address: "पता",
+    ssid: "Wi-Fi नाम (SSID)", password: "पासवर्ड", security: "सुरक्षा प्रकार", secWpa: "WPA / WPA2", secWep: "WEP", secNone: "कोई नहीं (खुला)", hidden: "छिपा हुआ नेटवर्क",
+    to: "प्राप्तकर्ता का ईमेल", subject: "विषय", body: "संदेश", smsNum: "फ़ोन नंबर", smsMsg: "संदेश"
+  },
+  color: "रंग",
+  colors: ["हरा", "काला", "नीला", "लाल"],
+  gen: "QR कोड बनाएँ",
+  dlAria: "QR कोड डाउनलोड करें",
+  shareAria: "QR कोड साझा करें",
+  copied: "लिंक कॉपी हो गया",
+  share: "↗️ साझा करें",
+  saveHint: "यदि डाउनलोड शुरू न हो, तो चित्र को देर तक दबाकर सहेजें।",
+  required: "कृपया आवश्यक जानकारी भरें।",
+  tooLong: "दर्ज की गई जानकारी QR कोड के लिए बहुत लंबी है। कृपया छोटा करें।",
+  note: "QR कोड आपके उपकरण पर ही बनता है। आपकी जानकारी कहीं नहीं भेजी जाती।",
+  alt: "आपका बनाया QR कोड"
+};
