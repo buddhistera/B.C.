@@ -18,6 +18,11 @@ for (const d of readdirSync(resDir)) {
 }
 cpSync(resolve(here, '..', 'resources', 'res'), resDir, { recursive: true });
 
+// 1b) ස්වදේශීය (Java) කේතය: MainActivity + AppBars plugin (තීරු වර්ණය)
+const javaDir = join(appDir, 'src', 'main', 'java', 'app', 'vercel', 'buddhist_era', 'twa');
+must(existsSync(join(javaDir, 'MainActivity.java')), 'MainActivity.java not found in ' + javaDir);
+for (const f of ['MainActivity.java', 'AppBarsPlugin.java']) cpSync(resolve(here, '..', 'native', f), join(javaDir, f));
+
 // 2) AndroidManifest: ස්ථාන අවසර (sunpage.js → navigator.geolocation)
 const mf = join(appDir, 'src', 'main', 'AndroidManifest.xml');
 let m = readFileSync(mf, 'utf8');

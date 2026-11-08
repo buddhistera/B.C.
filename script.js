@@ -49,6 +49,13 @@
             return PL.Share.share({ title: title || name, dialogTitle: title || name, files: [res.uri] });
         }).catch(function (e) { if (!/cancel/i.test(String(e && (e.message || e)))) throw e; });
     }
+    // Android ඇප් එක: ඉහළ (status) හා පහළ (navigation) තීරු ඇප් එකේ තේමාවේ වර්ණයට
+    function syncAppBars() {
+        if (!isNativeApp()) return;
+        const AB = Capacitor.Plugins && Capacitor.Plugins.AppBars; if (!AB) return;
+        const dark = document.body.classList.contains('dark-mode');
+        try { AB.setColors({ color: dark ? '#0A0C1C' : '#F5EDDA', dark: dark }).catch(function () {}); } catch (e) {}
+    }
     function langReady(l) { return l !== 'hi' || !!(window.HI_DICT && window.PaliScript); }
     function loadLang(l, cb) {
         const files = (LANG_FILES[l] || []).slice();
@@ -1223,6 +1230,7 @@ if (nextFullMoon) {
 function toggleDarkMode() {
     const isDark = document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    syncAppBars();
     
     
     if (typeof updateUI === "function") {
@@ -1253,6 +1261,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
     }
+    syncAppBars();
     
     if (typeof updateDarkModeBtnText === "function") updateDarkModeBtnText();
     if (typeof updateUI === "function") updateUI();
