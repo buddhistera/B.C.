@@ -34,33 +34,41 @@ jobs:
     env:
       APP_VERSION: ${{ inputs.version || '1.0.0' }}
     steps:
-      - uses: actions/checkout@v4
+      - id: co
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - id: node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - uses: dtolnay/rust-toolchain@stable
+      - id: rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - uses: Swatinem/rust-cache@v2
+      - id: cache
+        uses: Swatinem/rust-cache@v2
         with:
           workspaces: desktop-app/src-tauri
 
-      - name: Install Tauri CLI
+      - id: npm
+        name: Install Tauri CLI
         working-directory: desktop-app
         run: npm install --no-audit --no-fund 2>&1 | tee -a ../build.log
 
-      - name: Copy web files into the app + set version
+      - id: www
+        name: Copy web files into the app + set version
         working-directory: desktop-app
         run: |
           npm run prepare-www 2>&1 | tee -a ../build.log
           npm run set-version 2>&1 | tee -a ../build.log
 
-      - name: Build installer (.exe + .msi)
+      - id: tauri
+        name: Build installer (.exe + .msi)
         working-directory: desktop-app
         run: npx tauri build 2>&1 | tee -a ../build.log
 
-      - uses: actions/upload-artifact@v4
+      - id: art
+        uses: actions/upload-artifact@v4
         with:
           name: buddhist-era-windows-v${{ env.APP_VERSION }}
           path: |
@@ -77,6 +85,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/ci" && touch build.log
           tail -c 150000 build.log > "$RUNNER_TEMP/ci/build-tail.log"
           find desktop-app/src-tauri/target/release/bundle -name '*.exe' -exec cp {} "$RUNNER_TEMP/ci/" \; 2>/dev/null || true
+          echo '${{ toJSON(steps) }}' > "$RUNNER_TEMP/ci/steps.json"
           echo "run=${{ github.run_number }} version=$APP_VERSION status=$STATUS sha=${{ github.sha }} ref=${{ github.ref_name }}" > "$RUNNER_TEMP/ci/status.txt"
           cd "$RUNNER_TEMP/ci"
           git init -q && git checkout -q -b ci-logs-desktop
