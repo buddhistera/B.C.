@@ -1,0 +1,53 @@
+{
+  "co": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "node": {
+    "outputs": {
+      "node-version": "v22.23.4"
+    },
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "rust": {
+    "outputs": {
+      "cachekey": "2026101358cf",
+      "name": "stable"
+    },
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "cache": {
+    "outputs": {
+      "cache-hit": "false"
+    },
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "npm": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "www": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "tauri": {
+    "outputs": {},
+    "outcome": "success",
+    "conclusion": "success"
+  },
+  "art": {
+    "outputs": {
+      "artifact-id": "13644759457",
+      "artifact-digest": "f27c1be483dbf62936536bc9e91c9863f554120f984d0252c518e9bad91a8300",
+      "artifact-url": "https://github.com/buddhistera/B.C./actions/runs/42550055882/artifacts/13644759457"
+    },
+    "outcome": "success",
+    "conclusion": "success"
+  }
+}
