@@ -566,9 +566,13 @@
   var HI = false;
   function X(s) { return (HI && typeof tx === 'function') ? tx(s) : s; }
   function XF(s) { var a = arguments; return String(X(s)).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1]; }); }
-  function PV(s) { return (HI && window.PaliScript) ? PaliScript.fromIAST(s, 'deva') : s; }
+  var SC = 'deva';   /* හින්දි = දේවනාගරී, බුරුම = 'mymr' */
+  function PV(s) { return (HI && window.PaliScript) ? PaliScript.fromIAST(s, SC) : s; }
 
+  /* මියන්මාර් අධික වර්ෂයේ: පළමු වාසෝ / දෙවන වාසෝ */
+  var MM_LEAP = { 'පඨමාසාළ්හ': 'Paṭhamāsāḷha', 'දුතියාසාළ්හ': 'Dutiyāsāḷha' };
   function monthName(monthSi, lang) {
+    if (MM_LEAP[monthSi]) return lang === 'si' ? monthSi : MM_LEAP[monthSi];
     var adhi = monthSi.indexOf('අධි') === 0;
     var base = adhi ? monthSi.slice(2) : monthSi;
     if (lang === 'si') return monthSi;
@@ -661,7 +665,7 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
 
   function renderHtml(lang) {
     injectCss();
-    HI = lang === 'hi'; if (HI) lang = 'en';     /* හින්දි = ඉංග්‍රීසි වගුව + දේවනාගරී පාළිය + හින්දි පෙළ */
+    SC = { hi: 'deva', my: 'mymr', th: 'thai' }[lang] || 'deva'; HI = lang === 'hi' || lang === 'my' || lang === 'th'; if (HI) lang = 'en';     /* හින්දි / බුරුම = ඉංග්‍රීසි වගුව + දේවනාගරී / බුරුම පාළිය + එම භාෂාවේ පෙළ */
     var si = lang === 'si';
     var st = getState();
     if (!st) return '<div class="ch-load"><b>⚠️</b>' + (si ? 'දිනය ලබා ගත නොහැකි විය.' : X('Could not read the selected date.')) + '</div>';

@@ -15,7 +15,6 @@ var SWD = function (i) { var f = T(EDF[i]); return f !== EDF[i] ? f.replace(/व
 var P = null, pushed = false;
 var low = (navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (W.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
 /* iPhone / iPad (iPadOS "desktop" mode ද ඇතුළුව) — iOS හි <a download> ක්‍රමය විශ්වාස කළ නොහැක (විශේෂයෙන් Home Screen ඇප් ලෙස) */
-var NATIVE = function () { return typeof isNativeApp === 'function' && isNativeApp(); };   // Android ඇප් එක (Capacitor)
 var IOS = /iP(hone|ad|od)/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 var TX = { title: ['උපෝසථ දින සහ වස් කාලය', 'Uposatha Days & Vassa Period'], hList: ['උපෝසථ දින', 'Uposatha Days'],
@@ -26,8 +25,28 @@ var TX = { title: ['උපෝසථ දින සහ වස් කාලය', 'U
   dlBtn: ['JPG', 'JPG'], dlAria: ['JPG ලෙස බාගත කරන්න', 'Download as JPG'], dlPick: ['බාගත කළ යුතු ආකාරය තෝරන්න', 'Choose how to download'], dlBw: ['කළු සුදු', 'Black & White'], dlCol: ['වර්ණයෙන්', 'In colour'], dlCan: ['අවලංගු කරන්න', 'Cancel'],
   pvTitle: ['JPG රූපය සූදානම්', 'Your JPG is ready'], pvShare: ['💾 සුරකින්න / බෙදාගන්න', '💾 Save / Share'], pvClose: ['වසන්න', 'Close'],
   pvHint: ['"සුරකින්න / බෙදාගන්න" ඔබා "Save Image" තෝරන්න. නැතහොත් රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" තෝරන්න.', 'Tap "Save / Share" and choose "Save Image", or long-press the image and choose "Save to Photos".'],
-  pvHintApp: ['"සුරකින්න / බෙදාගන්න" ඔබා, රූපය සුරැකීමට හෝ යැවීමට Drive, Files, WhatsApp වැනි ස්ථානයක් තෝරන්න.', 'Tap "Save / Share" and choose Drive, Files, WhatsApp or another app to save or send the image.'],
-  pvHint2: ['රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" (ඡායාරූපවලට සුරකින්න) තෝරන්න.', 'Long-press the image and choose "Save to Photos".'] };
+  pvHint2: ['රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" (ඡායාරූපවලට සුරකින්න) තෝරන්න.', 'Long-press the image and choose "Save to Photos".'],
+  rLk: ['ශ්‍රී ලංකා / තායි', 'Sri Lanka / Thai'], rMm: ['මියන්මාර්', 'Myanmar'], rAria: ['උපෝසථ දින දැක්වෙන රට', 'Show uposatha days of'] };
+/* මියන්මාර් මාස නාම (උපෝසථ පිටුවේ මියන්මාර් ලැයිස්තුවේ පමණි): 0 = පළමු වාසෝ (අධික වර්ෂය) */
+var MMN_SI = ['පළමු වාසෝ', 'තගු', 'කසුන්', 'නයොන්', 'වාසෝ', 'වාගවුං', 'තෝතලින්', 'තදින්ජුට්', 'තසවුංමොන්', 'නදෝ', 'ප්‍යාතෝ', 'තබෝද්වේ', 'තබෝං'];
+var MMN_EN = ['First Waso', 'Tagu', 'Kason', 'Nayon', 'Waso', 'Wagaung', 'Tawthalin', 'Thadingyut', 'Tazaungmon', 'Nadaw', 'Pyatho', 'Tabodwe', 'Tabaung'];
+/* පරිශීලකයා උපෝසථ පිටුවේදී තේරූ රට ('lk' / 'mm') — localStorage හි සුරැකේ (ඇප් එක වසා නැවත විවෘත කළත් රැඳේ).
+   භාෂාව මාරු කළ විට එය මැකී නැවත භාෂාවට අනුව (බුරුම = මියන්මාර්, අනෙක් = ශ්‍රී ලංකා / තායි). */
+var RKEY = 'upRegion';
+function lsGet() { try { var v = localStorage.getItem(RKEY); return v === 'lk' || v === 'mm' ? v : null; } catch (e) { return null; } }
+function lsSet(v) { try { if (v) localStorage.setItem(RKEY, v); else localStorage.removeItem(RKEY); } catch (e) {} }
+var chosen = lsGet();
+function region() { return chosen || (typeof langPoyaRegion === 'function' ? langPoyaRegion() : 'lk'); }
+function btnRegion() { var r = region(); return r === 'th' ? 'lk' : r; }   // තායි ('th') = ශ්‍රී ලංකා / තායි දිනමයි → එම බොත්තම
+function inRegion(r, fn) { return typeof withPoyaRegion === 'function' ? withPoyaRegion(r, fn) : fn(); }
+/* මියන්මාර් ලැයිස්තුවේ පෝය නාමයට මියන්මාර් මාසය එක් කරයි (තගු පසළොස්වක, ဝါဆို လပြည့် …) */
+function mmMonthName(iso) {
+  if (!W.MMPoya) return '';
+  var m = MMPoya.myanmarDate(iso), w = m.myt > 0, mm = m.mm;
+  if (typeof currentLang !== 'undefined' && currentLang === 'my') return (mm === 4 && w) ? 'ဒုတိယဝါဆို' : MMPoya.MM_NAMES[mm];
+  if (!en()) return mm === 4 && w ? 'දෙවන වාසෝ' : MMN_SI[mm];
+  return T(mm === 4 && w ? 'Second Waso' : MMN_EN[mm]);
+}
 var IC = { moon: '<path d="M20 14.6A8.4 8.4 0 1 1 9.4 4a6.7 6.7 0 0 0 10.6 10.6z"/>', cloud: '<path d="M7 15a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17 8a3.5 3.5 0 0 1 .5 7H7z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/>',
   chev: '<path d="M14.5 5.5 8 12l6.5 6.5"/>', chevR: '<path d="M9.5 5.5 16 12l-6.5 6.5"/>', globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/>', down: '<path d="M6 9l6 6 6-6"/>', dl: '<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/>' };
 function ic(n, s) { s = s || 18; return '<svg class="ic" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + '</svg>'; }
@@ -45,7 +64,7 @@ function fdt(d) { return en() ? d.getDate() + ' ' + mon(d) + ' ' + d.getFullYear
 function days(a, b) { return Math.round((b - a) / 864e5); }
 function today0() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
 
-var CSS = '#upOverlay{--cd:rgba(255,253,249,.82);--bd:rgba(120,80,30,.16);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
+var CSS = '#upOverlay{--cd:rgba(255,253,249,.82);--bd:rgba(120,80,30,.16);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
 'body.dark-mode #upOverlay{--cd:rgba(14,20,52,.66);--bd:rgba(242,212,120,.26);--tx:#e8ecf8;--mu:#aab3d6;--bg2:rgba(242,212,120,.12);--ac:#f2d478;--tl:rgba(255,255,255,.05);--sh:0 8px 28px rgba(0,0,0,.45);background:radial-gradient(ellipse at 50% 0%,#1b2554 0%,#0b1030 45%,#04061a 100%)}' +
 '#upOverlay button{font-family:inherit}.up-sky{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}' +
 '.up-st{display:none;position:absolute;left:0;top:0;border-radius:50%;background:transparent}body.dark-mode .up-st{display:block}' +
@@ -85,6 +104,11 @@ CSS += '#upOverlay{--sbg:#fffaf2}body.dark-mode #upOverlay{--sbg:#141b45}' +
 '.up-pvh{font-size:.84rem;color:var(--mu);text-align:center;margin:12px 4px 12px;line-height:1.55}' +
 '.up-shbt.up-pvs{justify-content:center;border:0;background:linear-gradient(135deg,#8a3a12,#5a1f0d);color:#fdf1d6;box-shadow:0 4px 12px rgba(90,31,13,.35)}body.dark-mode .up-shbt.up-pvs{background:linear-gradient(135deg,#b4531c,#8a3a12)}';
 
+CSS += '.up-rg{display:inline-flex;gap:3px;margin:12px auto 0;padding:3px;border-radius:999px;background:rgba(255,255,255,.55);border:1px solid rgba(138,90,20,.25);max-width:100%}' +
+'.up-rg button{border:0;background:transparent;color:#6b3a10;font-weight:800;font-size:.84rem;line-height:1.3;padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}' +
+'.up-rg button.on{background:linear-gradient(135deg,#fcd34d,#e8a317);color:#3b2200;box-shadow:0 2px 8px rgba(200,140,20,.35)}' +
+'body.dark-mode .up-rg{background:rgba(0,0,0,.3);border-color:rgba(255,255,255,.18)}body.dark-mode .up-rg button{color:#f3e7c8}body.dark-mode .up-rg button.on{color:#3b2200}' +
+'@media (max-width:360px){.up-rg button{padding:7px 10px;font-size:.78rem}}';
 function css() { if ($('upStyle')) return; var s = doc.createElement('style'); s.id = 'upStyle'; s.textContent = CSS; doc.head.appendChild(s); }
 
 /* ---------- data: same rules as script.js (renderPoyaList / openVasModal) ---------- */
@@ -107,6 +131,7 @@ function yearRows(y) {
     if (prev) { var df = days(prev, dt); if (df === 14) { typ = en() ? PH('Cātuddasī') : 'චාතුද්දසී'; chat = true; } else if (df === 15) typ = en() ? PH('Paṇṇarasī') : 'පණ්ණරසී'; }
     prev = dt;
     var nm = p.t; if (en()) nm = nm.replace('පසළොස්වක', T('Full Moon')).replace('අමාවක', ' ' + T('New Moon'));
+    if (typeof poyaRegion !== 'undefined' && poyaRegion === 'mm') nm = mmMonthName(p.d) + ' ' + nm.trim();
     out.push({ d: p.d, dt: dt, c: c, name: nm + t.poyaSuffix, typ: typ, chat: chat, full: p.t.includes('පසළොස්වක'), nw: p.t.includes('අමාවක') });
   });
   return out;
@@ -126,7 +151,9 @@ function build() {
   var ov = $('upOverlay'); if (!ov) { ov = doc.createElement('div'); ov.id = 'upOverlay'; doc.body.appendChild(ov); }
   ov.innerHTML = '<div class="up-sky"><i class="up-st l1"></i><i class="up-st l2"></i><i class="up-st l3"></i></div>' +
   '<div class="up-wrap"><header class="up-hero"><button class="up-rb l" id="upBack" type="button" aria-label="Back">' + ic('chev', 24) + '</button>' +
-  '<h1 data-k="title"></h1><div class="up-nx" id="upNx"><i class="dot"></i><div id="upNxT"></div></div>' +
+  '<h1 data-k="title"></h1>' +
+  '<div class="up-rg" id="upRg" role="group"><button type="button" data-r="lk" data-k="rLk"></button><button type="button" data-r="mm" data-k="rMm"></button></div><br>' +
+  '<div class="up-nx" id="upNx"><i class="dot"></i><div id="upNxT"></div></div>' +
   '<div class="up-yr"><button class="up-yb" id="upPrev" type="button" aria-label="Previous year">' + ic('chev', 22) + '</button><div class="up-yv" id="upY"></div><button class="up-yb" id="upNext" type="button" aria-label="Next year">' + ic('chevR', 22) + '</button></div>' +
   '<div class="up-hb"><button class="up-go gl" id="upYr" type="button" data-k="thisYear" style="display:none"></button><button class="up-go" id="upToVas" type="button">' + ic('down', 17) + '<span data-k="toVas"></span></button><button class="up-dl" id="upDl" type="button">' + DLI + '<span data-k="dlBtn"></span></button></div></header>' +
   '<section class="up-card" id="upList"><div class="up-sh"><div class="up-bd">' + ic('moon', 24) + '</div><div><div class="up-t2" data-k="hList"></div><div class="up-ds" data-k="hListD"></div></div></div><div id="upRows"></div></section>' +
@@ -144,6 +171,7 @@ function build() {
   [].forEach.call(ov.querySelectorAll('.up-st'), function (e, k) { var s = []; for (var i = 0; i < n[k]; i++) s.push((Math.random() * w | 0) + 'px ' + (Math.random() * h | 0) + 'px ' + cs[(Math.random() * 3) | 0]); e.style.boxShadow = s.join(','); });
   P = { ov: ov, open: true, y: mainYear(), sc: 0, pvUrl: null };
   $('upBack').onclick = close;
+  [].forEach.call(ov.querySelectorAll('#upRg button'), function (b) { b.onclick = function () { var r = b.getAttribute('data-r'); if (r === btnRegion()) return; chosen = r; lsSet(r); render(true); }; });
   $('upPrev').onclick = function () { setYear(P.y - 1); }; $('upNext').onclick = function () { setYear(P.y + 1); }; $('upYr').onclick = function () { setYear(new Date().getFullYear()); };
   $('upToVas').onclick = function () { scrollTo($('upVas')); };
   $('upDl').onclick = function () { $('upSheet').classList.add('on'); };
@@ -154,17 +182,20 @@ function build() {
   return ov;
 }
 function scrollTo(el, off) { if (!el || !P) return; var top = el.getBoundingClientRect().top - P.ov.getBoundingClientRect().top + P.ov.scrollTop - (off == null ? 12 : off); try { P.ov.scrollTo({ top: top, behavior: 'smooth' }); } catch (e) { P.ov.scrollTop = top; } }
-function lab() { [].forEach.call(P.ov.querySelectorAll('[data-k]'), function (e) { var t = TX[e.getAttribute('data-k')]; if (t) e.textContent = tr(t[0], t[1]); }); var db = $('upDl'); if (db) db.setAttribute('aria-label', tr(TX.dlAria[0], TX.dlAria[1])); }
+function lab() { [].forEach.call(P.ov.querySelectorAll('[data-k]'), function (e) { var t = TX[e.getAttribute('data-k')]; if (t) e.textContent = tr(t[0], t[1]); }); var db = $('upDl'); if (db) db.setAttribute('aria-label', tr(TX.dlAria[0], TX.dlAria[1]));
+  var rg = $('upRg'), cr = btnRegion(); if (rg) { rg.setAttribute('aria-label', tr(TX.rAria[0], TX.rAria[1])); [].forEach.call(rg.querySelectorAll('button'), function (b) { var on = b.getAttribute('data-r') === cr; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); }); } }
 function setYear(y) {
   var lo = typeof MIN_YEAR !== 'undefined' ? MIN_YEAR : 1900, hi = typeof MAX_YEAR !== 'undefined' ? MAX_YEAR : 3000; if (y < lo || y > hi) return; P.y = y; render(true);
 }
-function render(jump) {
-  if (!P || !P.open) return; lab(); var y = P.y, t0 = today0(), ts = ds(t0), rows = '', nextD = null;
+function render(jump) { if (!P || !P.open) return; var r = region(); inRegion(r, function () { render0(jump, r); }); }
+function render0(jump, rgn) {
+  lab(); var y = P.y, t0 = today0(), ts = ds(t0), rows = '', nextD = null;
   try { ensurePoyaDataUpTo(y + 1); ensurePoyaDataUpTo(t0.getFullYear() + 1); } catch (e) {}
   $('upY').textContent = y; $('upPrev').disabled = y <= (typeof MIN_YEAR !== 'undefined' ? MIN_YEAR : 1900); $('upNext').disabled = y >= (typeof MAX_YEAR !== 'undefined' ? MAX_YEAR : 3000); $('upYr').style.display = y === t0.getFullYear() ? 'none' : '';
   // hero: next uposatha (from today, any year)
   var np = typeof _pLowerBound === 'function' ? poyaList[_pLowerBound(function (p) { return p.d >= ts; })] : poyaList.find(function (p) { return p.d >= ts; });
   if (np) { var nd = ld(np.d), k = days(t0, nd), nm = np.t; if (en()) nm = nm.replace('පසළොස්වක', T('Full Moon')).replace('අමාවක', ' ' + T('New Moon')); nextD = np.d;
+    if (rgn === 'mm') nm = mmMonthName(np.d) + ' ' + nm.trim();
     $('upNxT').textContent = tr(TX.next[0], TX.next[1]) + ': ' + md(nd) + ' · ' + nm + i18n[currentLang].poyaSuffix + ' — ' + (k === 0 ? tr('අද', 'today') : en() ? F(k > 1 ? 'in {0} days' : 'in {0} day', k) : 'තව දින ' + k + ' යි'); } else $('upNxT').textContent = '';
   // list
   var list = yearRows(y);
@@ -202,14 +233,14 @@ var SIMa = ['ජන.', 'පෙබ.', 'මාර්තු', 'අප්‍රේ�
 var SIDa = ['ඉරිදා', 'සඳුදා', 'අඟහ.', 'බදාදා', 'බ්‍රහස්.', 'සිකු.', 'සෙන.'];
 var EDF = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 function closeSheet() { var s = $('upSheet'); if (s) s.classList.remove('on'); }
-function monAbbr(d) { return en() ? T(EMO[d.getMonth()].slice(0, 3)) : SIMa[d.getMonth()]; }
+function monAbbr(d) { var k = EMO[d.getMonth()].slice(0, 3); return en() ? (typeof txMon3 === 'function' ? txMon3(k) : T(k)) : SIMa[d.getMonth()]; }
 function wdAbbr(d) { return en() ? SWD(d.getDay()) : SIDa[d.getDay()]; }
 function wdFull(d) { return en() ? T(EDF[d.getDay()]) : SID[d.getDay()]; }
 
-function drawSheet(y, list, v, color) {
+function drawSheet(y, list, v, color, rgn) {
   var PW = low ? 2339 : 3508, PH = Math.round(PW * 210 / 297), m = PW / 297, cv = doc.createElement('canvas'), x, t = i18n[currentLang];
   cv.width = PW; cv.height = PH; x = cv.getContext('2d');
-  var FF = '"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Iskoola Pota","Nirmala UI","Noto Sans Sinhala","Noto Sans Devanagari",serif';
+  var FF = '"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai","Iskoola Pota","Nirmala UI","Noto Sans Sinhala","Noto Sans Devanagari",serif';
   var C = color ?
     { ink: '#2b1a0e', mu: '#6b5a4a', ac: '#a0561d', bd: 'rgba(120,80,30,.28)', row: '#fbf3e6', hdr: '#f6ead9', ban: '#C8E6C9', banInk: '#1B5E20', bar: '#d4af37',
       fullBg: 'rgba(255,235,59,.2)', fullBd: '#d4af37', newBg: 'rgba(0,0,0,.12)', pc: '#c62828', pp: '#FF6600', vas: '#43a047', card: '#fbf3e6' } :
@@ -241,6 +272,7 @@ function drawSheet(y, list, v, color) {
   /* ----- title: full width across the top ----- */
   var mx = 9 * m, tw0 = PW - 2 * mx, th = 20 * m, ty = 8 * m, b2 = (y + 544) % 100 === 0 ? String(y + 544) : String((y + 544) % 100).padStart(2, '0'), bs = (y + 543) + ' - ' + b2,
     title = en() ? F('Buddhist Era {0} Uposatha Days Calendar (C.E. {1})', bs, y) : 'ශ්‍රී බුද්ධ වර්ෂ ' + bs + ' උපෝසථ දින දර්ශනය (ව්‍ය ව. ' + y + ')';
+  if (rgn === 'mm') title += ' · ' + tr(TX.rMm[0], TX.rMm[1]);
   if (color) {
     var hg = x.createLinearGradient(mx, ty, mx + tw0, ty + th); hg.addColorStop(0, '#fff4dc'); hg.addColorStop(.5, '#fbe5b6'); hg.addColorStop(1, '#fff0d2');
     rr(mx, ty, tw0, th, 5 * m); x.fillStyle = hg; x.fill();
@@ -347,26 +379,25 @@ function showPreview(blob, name) {
   var url = URL.createObjectURL(blob), file = null; P.pvUrl = url;
   $('upPvImg').src = url;
   try { file = new File([blob], name, { type: 'image/jpeg' }); } catch (e) { file = null; }
-  var nat = NATIVE();
-  var can = nat || !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] }));
+  var can = !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] }));
   var sb = $('upPvShare'); sb.style.display = can ? '' : 'none';
-  sb.onclick = !can ? null : nat ? function () { nativeShareFile(blob, name, name).catch(function (e) { console.error('share:', e); }); }
-    : function () { navigator.share({ files: [file], title: name }).catch(function () {}); };
-  $('upPvH').textContent = nat ? tr(TX.pvHintApp[0], TX.pvHintApp[1]) : can ? tr(TX.pvHint[0], TX.pvHint[1]) : tr(TX.pvHint2[0], TX.pvHint2[1]);
+  sb.onclick = can ? function () { navigator.share({ files: [file], title: name }).catch(function () {}); } : null;
+  $('upPvH').textContent = can ? tr(TX.pvHint[0], TX.pvHint[1]) : tr(TX.pvHint2[0], TX.pvHint2[1]);
   lab(); $('upPv').classList.add('on');
 }
 
 function dlJpg(color) {
   closeSheet(); if (!P) return;
-  var y = P.y, list = yearRows(y), btn = $('upDl'), name = 'Uposatha_' + y + (color ? '_Colour' : '_BW') + '.jpg';
+  var y = P.y, rgn = region(), btn = $('upDl'), name = 'Uposatha_' + y + (rgn === 'mm' ? '_Myanmar' : '') + (color ? '_Colour' : '_BW') + '.jpg';
+  var list = inRegion(rgn, function () { return yearRows(y); }), vas = inRegion(rgn, function () { return vasDates(y); });
   if (!list.length) { alert(tr(TX.nodata[0], TX.nodata[1])); return; }
   if (btn) btn.disabled = true;
   var fail = function (e) { if (e) console.error('uposatha jpg:', e); alert(tr('JPG සෑදීමට නොහැකි විය. නැවත උත්සාහ කරන්න.', 'Could not create the JPG. Please try again.')); };
   var done = function () { if (btn) btn.disabled = false; };
   var go = function () {
     var cv;
-    try { cv = drawSheet(y, list, vasDates(y), !!color); } catch (e) { fail(e); done(); return; }
-    if (IOS || NATIVE()) {   /* iPhone සහ Android ඇප් එක: preview + Share */
+    try { cv = drawSheet(y, list, vas, !!color, rgn); } catch (e) { fail(e); done(); return; }
+    if (IOS) {
       try {
         toJpegBlob(cv, .92, function (b) {
           freeCanvas(cv);
@@ -376,21 +407,13 @@ function dlJpg(color) {
       } catch (e) { freeCanvas(cv); fail(e); done(); }
       return;
     }
-    if (typeof isDesktopApp === 'function' && isDesktopApp()) {   /* Windows ඇප් එක: "Save as" කවුළුව */
-      toJpegBlob(cv, .95, function (b) {
-        freeCanvas(cv);
-        if (!b) { fail(); done(); return; }
-        desktopSaveFile(b, name).catch(fail).then(done);
-      });
-      return;
-    }
     try {
       var url = cv.toDataURL('image/jpeg', .95), a = doc.createElement('a');
       a.href = url; a.download = name; doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
     } catch (e) { fail(e); }
     freeCanvas(cv); done();
   };
-  try { if (doc.fonts && doc.fonts.load) Promise.all([doc.fonts.load('400 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('700 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('400 40px "Noto Serif"', 'Aā'), doc.fonts.load('700 40px "Noto Serif"', 'Aā')].concat(typeof isHindi === 'function' && isHindi() ? [doc.fonts.load('400 40px "Noto Serif Devanagari"', 'अआ'), doc.fonts.load('700 40px "Noto Serif Devanagari"', 'अआ')] : [])).then(go, go); else go(); } catch (e) { go(); }
+  try { if (doc.fonts && doc.fonts.load) Promise.all([doc.fonts.load('400 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('700 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('400 40px "Noto Serif"', 'Aā'), doc.fonts.load('700 40px "Noto Serif"', 'Aā')].concat(typeof isHindi === 'function' && isHindi() ? [doc.fonts.load('400 40px "Noto Serif Devanagari"', 'अआ'), doc.fonts.load('700 40px "Noto Serif Devanagari"', 'अआ')] : []).concat(typeof currentLang !== 'undefined' && currentLang === 'my' ? [doc.fonts.load('400 40px "Noto Sans Myanmar"', 'မြန်'), doc.fonts.load('700 40px "Noto Sans Myanmar"', 'မြန်')] : []).concat(typeof currentLang !== 'undefined' && currentLang === 'th' ? [doc.fonts.load('400 40px "Noto Sans Thai"', 'ไทย'), doc.fonts.load('700 40px "Noto Sans Thai"', 'ไทย')] : [])).then(go, go); else go(); } catch (e) { go(); }
 }
 
 /* ---------- open / close ---------- */
@@ -410,6 +433,11 @@ function wrap(n, f) { var o = W[n]; if (typeof o !== 'function') return; W[n] = 
 var oPoya = W.openPoyaModal, oVas = W.openVasModal;
 W.openPoyaModal = function () { try { open(false); } catch (e) { console.error('uposatha:', e); if (P) hide(); if (typeof oPoya === 'function') return oPoya.apply(this, arguments); } };
 W.openVasModal = function () { try { open(true); } catch (e) { console.error('uposatha:', e); if (P) hide(); if (typeof oVas === 'function') return oVas.apply(this, arguments); } };
-wrap('toggleLanguage', function () { if (P && P.open) render(false); });
+var lastLang = typeof currentLang !== 'undefined' ? currentLang : null;
+wrap('toggleLanguage', function () {   // භාෂාව සැබවින්ම මාරු වූ විට පමණක් සුරැකි රට මකයි
+  var l = typeof currentLang !== 'undefined' ? currentLang : null;
+  if (l !== lastLang) { lastLang = l; chosen = null; lsSet(null); }
+  if (P && P.open) render(false);
+});
 W.addEventListener('popstate', onPop);
 })();

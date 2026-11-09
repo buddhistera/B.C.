@@ -2355,8 +2355,8 @@
   --shadow-md: 0 6px 20px rgba(74, 13, 13, 0.10);
   --shadow-lg: 0 12px 36px rgba(74, 13, 13, 0.15);
 
-  --font-sans: 'Noto Sans', 'Noto Sans Sinhala', 'Iskoola Pota', 'Noto Sans Devanagari', sans-serif;
-  --font-serif: 'Noto Serif', 'Noto Serif Sinhala', 'Noto Sans Sinhala', 'Noto Serif Devanagari', serif;}
+  --font-sans: 'Noto Sans', 'Noto Sans Sinhala', 'Iskoola Pota', 'Noto Sans Devanagari','Noto Sans Myanmar','Noto Sans Thai', sans-serif;
+  --font-serif: 'Noto Serif', 'Noto Serif Sinhala', 'Noto Sans Sinhala', 'Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai', serif;}
 body.dark-mode #gnOverlay{--bg-page: #1a0a0a;
   --bg-card: #241010;
   --bg-elevated: #2d1616;
@@ -2872,10 +2872,14 @@ body.dark-mode #gnOverlay .paksha-card table td:first-child{color: var(--gold-40
 body.dark-mode #gnOverlay .gn-close{color:var(--gold-300)}
 #gnOverlay .topbar-inner{padding-right:64px}
 /* ===== English overrides ===== */
-#gnOverlay.lang-en{--font-sans:'Noto Serif','Noto Serif Devanagari',serif;--font-serif:'Noto Serif','Noto Serif Devanagari',serif;line-height:1.85}
-#gnOverlay.lang-hi{--font-sans:'Noto Sans','Noto Sans Devanagari',sans-serif;--font-serif:'Noto Serif','Noto Serif Devanagari',serif;line-height:1.9}
-#gnOverlay.lang-hi em.pali,#gnOverlay.lang-hi .hero .subtitle,#gnOverlay.lang-hi .year-card .name,#gnOverlay.lang-hi .num-cell .p,#gnOverlay.lang-hi footer .bless{font-style:normal}
-#gnOverlay.lang-en .pali,#gnOverlay.lang-en .iast{font-family:'Noto Serif','Noto Serif Devanagari',Noto Serif,serif}
+#gnOverlay.lang-en{--font-sans:'Noto Serif','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',serif;--font-serif:'Noto Serif','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',serif;line-height:1.85}
+#gnOverlay.lang-hi{--font-sans:'Noto Sans','Noto Sans Devanagari','Noto Sans Myanmar','Noto Sans Thai',sans-serif;--font-serif:'Noto Serif','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',serif;line-height:1.9}
+#gnOverlay.lang-my{--font-sans:'Noto Sans','Noto Sans Myanmar','Noto Sans Thai',sans-serif;--font-serif:'Noto Serif','Noto Sans Myanmar','Noto Sans Thai',serif;line-height:2.05}
+#gnOverlay.lang-en.lang-my em.pali,#gnOverlay.lang-en.lang-my .hero .subtitle,#gnOverlay.lang-en.lang-my .year-card .name,#gnOverlay.lang-en.lang-my .num-cell .p,#gnOverlay.lang-en.lang-my footer .bless{font-style:normal}
+#gnOverlay.lang-th{--font-sans:'Noto Sans','Noto Sans Thai',sans-serif;--font-serif:'Noto Serif','Noto Sans Thai',serif;line-height:1.95}
+#gnOverlay.lang-en.lang-th em.pali,#gnOverlay.lang-en.lang-th .hero .subtitle,#gnOverlay.lang-en.lang-th .year-card .name,#gnOverlay.lang-en.lang-th .num-cell .p,#gnOverlay.lang-en.lang-th footer .bless{font-style:normal}
+#gnOverlay.lang-en.lang-hi em.pali,#gnOverlay.lang-en.lang-hi .hero .subtitle,#gnOverlay.lang-en.lang-hi .year-card .name,#gnOverlay.lang-en.lang-hi .num-cell .p,#gnOverlay.lang-en.lang-hi footer .bless{font-style:normal}
+#gnOverlay.lang-en .pali,#gnOverlay.lang-en .iast{font-family:'Noto Serif','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',Noto Serif,serif}
 #gnOverlay.lang-en em.pali{font-style:italic;color:var(--burgundy-700);font-weight:500}
 body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
 #gnOverlay.lang-en .hero .subtitle,#gnOverlay.lang-en .year-card .name,#gnOverlay.lang-en .num-cell .p,#gnOverlay.lang-en footer .bless{font-style:italic}
@@ -2887,7 +2891,7 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
 
   function lang() {
     var l = typeof currentLang !== 'undefined' ? currentLang : 'si';
-    return (l === 'en' || l === 'hi') ? l : 'si';
+    return (l === 'en' || l === 'hi' || l === 'my' || l === 'th') ? l : 'si';
   }
 
   /* ---------- හින්දි: ඉංග්‍රීසි පිටුවම සාදා, එහි පෙළ කොටස් lang/hi-calc.js හි හින්දි පෙළින් ප්‍රතිස්ථාපනය කරයි ----------
@@ -2896,6 +2900,10 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
      • SVG රූප සහ HTML ව්‍යුහය එක් වරක් පමණි (ඉංග්‍රීසි පිටුවෙන්) — හින්දියට අමතරව ඇත්තේ පෙළ පමණි.
      • class="pali" පාළි වචන පරිවර්තනය නොකර දේවනාගරී අකුරින් ලියයි (pali-script.js). */
   var HI_CALC_SRC = 'lang/hi-calc.js?v=1';
+  /* බුරුම (my): හින්දි ක්‍රමයමයි — lang/my-calc.js (MY_CALC) පෙළ, class="pali" පාළිය බුරුම අකුරින් */
+  var TR_CALC = { hi: { v: 'HI_CALC', src: HI_CALC_SRC, sc: 'deva', close: 'बंद करें' },
+                  my: { v: 'MY_CALC', src: 'lang/my-calc.js?v=1', sc: 'mymr', close: 'ပိတ်ရန်' },
+                  th: { v: 'TH_CALC', src: 'lang/th-calc.js?v=1', sc: 'thai', close: 'ปิด' } };
   function hashKey(str) { var h = 0x811c9dc5; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); } return (h >>> 0).toString(36); }
   function segKey(el) { return el.innerHTML.replace(/\s+/g, ' ').trim(); }
   function isPaliEl(el) { return el.classList && el.classList.contains('pali'); }
@@ -2916,17 +2924,17 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
     })(root);
     return out;
   }
-  function paliToDeva(root) {
-    if (!window.PaliScript) return;
+  function paliToDeva(root, sc) {
+    if (!window.PaliScript) return; sc = sc || 'deva';
     [].forEach.call(root.querySelectorAll('.pali'), function (el) {
       var w = document.createTreeWalker(el, 4), n;
-      while ((n = w.nextNode())) if (/[A-Za-zāīūṃṅñṭḍṇḷ]/.test(n.nodeValue)) n.nodeValue = PaliScript.fromIAST(n.nodeValue, 'deva');
+      while ((n = w.nextNode())) if (/[A-Za-zāīūṃṅñṭḍṇḷ]/.test(n.nodeValue)) n.nodeValue = PaliScript.fromIAST(n.nodeValue, sc);
     });
   }
-  function applyHindi(ov) {
-    var D = window.HI_CALC; if (!D) return;
+  function applyHindi(ov, l) {
+    var T = TR_CALC[l || 'hi'], D = window[T.v]; if (!D) return;
     segments(ov).forEach(function (el) { var v = D[hashKey(segKey(el))]; if (v != null) el.innerHTML = v; });
-    paliToDeva(ov);
+    paliToDeva(ov, T.sc);
   }
   /* පරීක්ෂණ / පරිවර්තන මෙවලම: console එකේ  gnSegments()  → [hash, ඉංග්‍රීසි පෙළ] ලැයිස්තුව */
   window.gnSegments = function () {
@@ -2934,8 +2942,9 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
     return segments(box).map(function (el) { var k = segKey(el); return [hashKey(k), k]; });
   };
   function needHindi(cb) {
-    if (window.HI_CALC || lang() !== 'hi') return cb();
-    var sc = document.createElement('script'); sc.src = HI_CALC_SRC;
+    var T = TR_CALC[lang()];
+    if (!T || window[T.v]) return cb();
+    var sc = document.createElement('script'); sc.src = T.src;
     sc.onload = sc.onerror = function () { cb(); };
     document.head.appendChild(sc);
   }
@@ -2956,12 +2965,12 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
       ov.id = 'gnOverlay';
       document.body.appendChild(ov);
     }
-    ov.className = l === 'hi' ? 'lang-en lang-hi' : 'lang-' + l;
+    ov.className = TR_CALC[l] ? 'lang-en lang-' + l : 'lang-' + l;
     ov.setAttribute('lang', l);
     ov.innerHTML =
-      '<button class="gn-close" type="button" aria-label="' + (l === 'si' ? 'ඉවත් වන්න' : l === 'hi' ? 'बंद करें' : 'Close') + '">&times;</button>' +
+      '<button class="gn-close" type="button" aria-label="' + (l === 'si' ? 'ඉවත් වන්න' : TR_CALC[l] ? TR_CALC[l].close : 'Close') + '">&times;</button>' +
       (l === 'si' ? CONTENT.si : CONTENT.en);
-    if (l === 'hi') applyHindi(ov);
+    if (TR_CALC[l]) applyHindi(ov, l);
 
     ov.querySelector('.gn-close').addEventListener('click', closeCalculation);
 
@@ -3012,7 +3021,7 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
 
   window.openCalculation = function () {
     var dd = document.getElementById('myDropdown'); if (dd) dd.style.display = 'none';
-    if (lang() === 'hi' && !window.HI_CALC && !openCalculation._w) {   /* හින්දි පෙළ පළමු වරට පමණක් load කරයි */
+    if (TR_CALC[lang()] && !window[TR_CALC[lang()].v] && !openCalculation._w) {   /* හින්දි / බුරුම පෙළ පළමු වරට පමණක් load කරයි */
       openCalculation._w = 1; needHindi(function () { openCalculation._w = 0; window.openCalculation(); }); return;
     }
     injectStyle();

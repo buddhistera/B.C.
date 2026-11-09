@@ -32,7 +32,7 @@ var IC = { sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2
 function ic(n, s) { s = s || 18; return '<svg class="ic" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IC[n] + '</svg>'; }
 function es(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
+var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
 'body.dark-mode #spOverlay{--cd:rgba(14,20,52,.62);--bd:rgba(242,212,120,.26);--tx:#e8ecf8;--mu:#aab3d6;--bg2:rgba(242,212,120,.12);--ac:#f2d478;--tl:rgba(255,255,255,.05);--sh:0 8px 28px rgba(0,0,0,.45);background:radial-gradient(ellipse at 50% 0%,#1b2554 0%,#0b1030 45%,#04061a 100%)}' +
 '.sp-sky{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}' +
 '.sp-st{display:none;position:absolute;left:0;top:0;border-radius:50%;background:transparent}body.dark-mode .sp-st{display:block}' +
@@ -56,7 +56,7 @@ var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6
 '.sp-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}@media(min-width:520px){.sp-tiles{grid-template-columns:repeat(4,1fr)}}' +
 '.sp-tile{border-radius:18px;padding:13px 6px;text-align:center;background:var(--tl);border:1px solid var(--bd)}' +
 '.sp-tile .i{width:46px;height:46px;margin:0 auto;border-radius:15px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.75);border:1px solid currentColor}body.dark-mode .sp-tile .i{background:rgba(255,255,255,.08)}' +
-'.sp-tile .l{font-size:.78rem;color:var(--mu);margin-top:7px}.sp-tile .t{font-size:1.12rem;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}' +
+'.sp-tile .n{font-size:.62rem;line-height:1.3;color:var(--mu);margin-top:3px;opacity:.85}.sp-tile .l{font-size:.78rem;color:var(--mu);margin-top:7px}.sp-tile .t{font-size:1.12rem;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}' +
 '.sp-tile.dawn{color:#7e3fbf}.sp-tile.sunrise{color:#d9560b}.sp-tile.noon{color:#a16207}.sp-tile.sunset{color:#c62828}' +
 'body.dark-mode .sp-tile.dawn{color:#c4a1ff}body.dark-mode .sp-tile.sunrise{color:#ffa65c}body.dark-mode .sp-tile.noon{color:#ffe082}body.dark-mode .sp-tile.sunset{color:#ff8a80}' +
 '.sp-bar{position:relative;height:14px;border-radius:8px;margin-top:18px;border:1px solid var(--bd)}' +
@@ -112,7 +112,7 @@ function setStat(msg) {
   el.innerHTML = l.ok ? '<b>' + es(nm || c) + '</b>' + (nm ? '<br><span class="sp-co">' + c + '</span>' : '') : tr('ස්ථානය තෝරා නැත — කොළඹ අනුව පෙන්වයි', 'Location not set — showing Colombo');
 }
 function twa() { return (doc.referrer || '').indexOf('android-app://') === 0; }
-function inApp() { if (typeof isNativeApp === 'function' && isNativeApp()) return false; return /FBAN|FBAV|Instagram|Viber|Line\/|; wv\)/i.test(navigator.userAgent || ''); }
+function inApp() { return /FBAN|FBAV|Instagram|Viber|Line\/|; wv\)/i.test(navigator.userAgent || ''); }
 function once(opts, lim) { return new Promise(function (ok, no) { var done = false, t = setTimeout(function () { if (!done) { done = true; no({ code: 3 }); } }, lim);
   navigator.geolocation.getCurrentPosition(function (p) { if (!done) { done = true; clearTimeout(t); ok(p); } }, function (e) { if (!done) { done = true; clearTimeout(t); no(e); } }, opts); }); }
 function locErr(err) {
@@ -153,7 +153,13 @@ W.fetchLocationAndSunData = fetchLoc;
 
 /* ---------- page ---------- */
 function sh(i, k, x) { return '<div class="sp-sh"><div class="sp-bd">' + ic(i, 24) + '</div><div><div class="sp-t2" data-k="' + k + '"></div><div class="sp-ds" data-k="' + k + 'D"></div></div>' + (x || '') + '</div>'; }
-function tile(c, n, k) { return '<div class="sp-tile ' + c + '"><div class="i">' + ic(n, 26) + '</div><div class="l" data-k="' + k + '"></div><div class="t" id="sp_' + k + '">--</div></div>'; }
+function tile(c, n, k) { return '<div class="sp-tile ' + c + '"><div class="i">' + ic(n, 26) + '</div><div class="l" data-k="' + k + '"></div><div class="t" id="sp_' + k + '">--</div>' + (k === 'dawn' ? '<div class="n" id="sp_dawnNote"></div>' : '') + '</div>'; }
+/* අරුණෝදය ගණනය කළ ක්‍රමය (script.js → dawnRule): ශ්‍රී ලංකා 30 විනාඩි, මියන්මාර් 40 විනාඩි, තායි සිවිල් සන්ධ්‍යාව (−6°) */
+function dawnNote() {
+  var r = typeof dawnRule === 'function' ? dawnRule() : { min: 30 };
+  if (r.alt != null) return TT('Civil twilight (Sun 6° below horizon)');
+  return en() ? F('{0} min before sunrise', r.min) : 'ඉර උදාවට විනාඩි ' + r.min + ' කට පෙර';
+}
 function build() {
   var ov = $('spOverlay'); if (!ov) { ov = doc.createElement('div'); ov.id = 'spOverlay'; doc.body.appendChild(ov); }
   ov.innerHTML = '<div class="sp-sky"><i class="sp-st l1"></i><i class="sp-st l2"></i><i class="sp-st l3"></i></div><div class="sp-wrap">' +
@@ -180,7 +186,7 @@ function build() {
   $('spSl').oninput = function () { P.t = +this.value; P.live = false; upd(); };
   return ov;
 }
-function lab() { [].forEach.call(P.ov.querySelectorAll('[data-k]'), function (e) { var t = TX[e.getAttribute('data-k')]; if (t) e.textContent = tr(t[0], t[1]); }); }
+function lab() { [].forEach.call(P.ov.querySelectorAll('[data-k]'), function (e) { var t = TX[e.getAttribute('data-k')]; if (t) e.textContent = tr(t[0], t[1]); }); var dn = $('sp_dawnNote'); if (dn) dn.textContent = dawnNote(); }
 function bar() {
   var a = mins(g('sunDawn')), b = mins(g('sunSunrise')), n = mins(g('sunNoon')), s = mins(g('sunSunset')), p = function (x) { return (x / 14.4).toFixed(2) + '%'; }, bg = '#0b1230';
   if (a < b && b < n && n < s) { var e = Math.min(1439, s + 40); bg = 'linear-gradient(90deg,#0b1230 0%,#0b1230 ' + p(a) + ',#6d3fa0 ' + p((a + b) / 2) + ',#f59e0b ' + p(b) + ',#fde68a ' + p(n) + ',#f59e0b ' + p(s) + ',#c2410c ' + p((s + e) / 2) + ',#0b1230 ' + p(e) + ',#0b1230 100%)'; }

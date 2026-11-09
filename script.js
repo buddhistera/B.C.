@@ -3,17 +3,24 @@
 // හින්දි ක්‍රමය (gettext ආකාරය): කේතයේ ඇති ඉංග්‍රීසි පෙළම "යතුර" ලෙස යොදා lang/hi.js හි HI_DICT
 // වෙතින් හින්දි පෙළ ලබා ගනී → පරිවර්තනයක් නැති තැනක ඉංග්‍රීසිය ස්වයංක්‍රීයව පෙනේ (ඇප් එක කැඩෙන්නේ නැත).
 // lang/hi.js සහ pali-script.js load වන්නේ හින්දි තෝරාගත් අයට පමණි (අනෙක් අයට අමතර බරක් නැත).
-    const APP_LANGS = ['si', 'en', 'hi'];
-    const LANG_NAMES = { si: 'සිංහල', en: 'English', hi: 'हिन्दी' };
-    const LANG_FILES = { hi: ['pali-script.js?v=1', 'lang/hi.js?v=1'] };
+// my = မြန်မာ (බුරුම): හින්දි ක්‍රමයමයි — lang/my.js හි MY_DICT (මාතෘකා / UI පෙළ), පාළිය බුරුම අකුරින් (pali-script.js 'mymr'),
+//      දිගු අර්ථ පෙළ ඉංග්‍රීසියෙන්. බුරුම තේරූ විට මියන්මාර් උපෝසථ දින (mm-poya.js) ස්වයංක්‍රීයව යොදයි.
+// th = ไทย (තායි): එම ක්‍රමයමයි — lang/th.js (TH_DICT), පාළිය තායි අකුරින් ('thai'); උපෝසථ දින ශ්‍රී ලංකා / තායි ලෙසම.
+    const APP_LANGS = ['si', 'en', 'hi', 'my', 'th'];
+    const LANG_NAMES = { si: 'සිංහල', en: 'English', hi: 'हिन्दी', my: 'မြန်မာ', th: 'ไทย' };
+    const LANG_FILES = { hi: ['pali-script.js?v=3', 'lang/hi.js?v=5'], my: ['pali-script.js?v=3', 'lang/my.js?v=5'], th: ['pali-script.js?v=3', 'lang/th.js?v=5'] };
+    const LANG_DICT = { hi: 'HI_DICT', my: 'MY_DICT', th: 'TH_DICT' };   // ඉංග්‍රීසි යතුර → එම භාෂාවේ පෙළ
+    const LANG_SCRIPT = { hi: 'deva', my: 'mymr', th: 'thai' };          // පාළිය ලියන අක්ෂර මාලාව
     let currentLang = localStorage.getItem('appLang') || 'en';
     if (APP_LANGS.indexOf(currentLang) < 0) currentLang = 'en';
     try { document.documentElement.lang = currentLang; } catch (e) {}
+    // දැනට තෝරා ඇති භාෂාවේ පාළි අක්ෂර මාලාව ('deva' / 'mymr'), සිංහල / ඉංග්‍රීසි නම් null
+    function trScript(l) { return LANG_SCRIPT[l || currentLang] || null; }
 
-    // ඉංග්‍රීසි පෙළ → දැනට තෝරා ඇති භාෂාව (හින්දි නම් HI_DICT; නැත්නම් ඉංග්‍රීසියම)
+    // ඉංග්‍රීසි පෙළ → දැනට තෝරා ඇති භාෂාව (හින්දි නම් HI_DICT, බුරුම නම් MY_DICT; නැත්නම් ඉංග්‍රීසියම)
     function tx(s) {
-        if (currentLang !== 'hi' || s == null) return s;
-        const D = window.HI_DICT; if (!D) return s;
+        if (!LANG_DICT[currentLang] || s == null) return s;
+        const D = window[LANG_DICT[currentLang]]; if (!D) return s;
         const v = D[s]; if (v != null) return v;
         const k = String(s).trim();
         if (k !== s && D[k] != null) return String(s).replace(k, D[k]);
@@ -27,55 +34,17 @@
     }
     // {0} {1} ආදිය සහිත පෙළ:  txf('{0} days to {1} Uposatha', 5, 'Full Moon')
     function txf(s) { const a = arguments; return String(tx(s)).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1]; }); }
+    // කෙටි මාස නාම (Jan, Feb …): ඉංග්‍රීසියේ "May" කෙටි හා දිගු දෙකම එකමයි. තායි වැනි භාෂාවල කෙටි රූපය වෙනස් නිසා ("พ.ค." / "พฤษภาคม")
+    // එය "May (short)" යතුරෙන් ගනී; එම යතුර නැති භාෂාවලට සාමාන්‍ය "May" පරිවර්තනයමයි.
+    function txMon3(m) { if (m !== 'May') return tx(m); const v = tx('May (short)'); return v === 'May (short)' ? tx('May') : v; }
     function isHindi() { return currentLang === 'hi'; }
-    function langLocale() { return currentLang === 'si' ? 'si-LK' : currentLang === 'hi' ? 'hi-IN' : 'en-US'; }
-    // රෝම (IAST) පාළිය → හින්දියේදී දේවනාගරී අකුරින් (අනෙක් භාෂාවලදී එලෙසම)
-    function paliHi(s) { return (currentLang === 'hi' && window.PaliScript) ? PaliScript.fromIAST(s, 'deva') : s; }
-    // සිංහල අකුරු පාළිය → හින්දියේදී දේවනාගරී
-    function paliSiHi(s) { return (currentLang === 'hi' && window.PaliScript) ? PaliScript.convert(s, 'sinh', 'deva') : s; }
-    // ---- Android ඇප් එක (Capacitor) ඇතුළේ පමණක් භාවිතා වේ — වෙබ් අඩවියට කිසිදු බලපෑමක් නැත ----
-    function isNativeApp() {
-        try { return !!(window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()); } catch (e) { return false; }
-    }
-    // Blob එකක් (JPG / PNG) ඇප් එකේ cache එකේ සුරකා Android "Share / Save" මෙනුව විවෘත කරයි
-    function nativeShareFile(blob, name, title) {
-        const PL = (window.Capacitor && Capacitor.Plugins) || {};
-        if (!PL.Filesystem || !PL.Share) return Promise.reject(new Error('Capacitor plugins missing'));
-        return new Promise(function (ok, no) {
-            const r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = no; r.readAsDataURL(blob);
-        }).then(function (b64) {
-            return PL.Filesystem.writeFile({ path: name, data: b64, directory: 'CACHE' });
-        }).then(function (res) {
-            return PL.Share.share({ title: title || name, dialogTitle: title || name, files: [res.uri] });
-        }).catch(function (e) { if (!/cancel/i.test(String(e && (e.message || e)))) throw e; });
-    }
-    // ---- Windows ඇප් එක (Tauri) ඇතුළේ පමණක් ----
-    function isDesktopApp() { return !!(window.__TAURI__ && window.__TAURI__.core); }
-    // Blob එක Windows "Save as" කවුළුවෙන් සුරකියි (src-tauri/src/main.rs → save_file)
-    function desktopSaveFile(blob, name) {
-        return new Promise(function (ok, no) {
-            const r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = no; r.readAsDataURL(blob);
-        }).then(function (b64) { return window.__TAURI__.core.invoke('save_file', { name: name, data: b64 }); });
-    }
-    // Windows ඇප් එකේ: බාහිර සබැඳි (වෙබ් අඩවි, mailto) පරිගණකයේ browser එකේ විවෘත කරයි
-    if (isDesktopApp()) {
-        document.addEventListener('click', function (e) {
-            const a = e.target.closest ? e.target.closest('a[href]') : null; if (!a) return;
-            const href = a.href || '';
-            if (/^(https?:|mailto:)/i.test(href) && !/^https?:\/\/tauri\.localhost/i.test(href) && (a.target === '_blank' || !href.startsWith(location.origin))) {
-                e.preventDefault(); e.stopImmediatePropagation();
-                window.__TAURI__.core.invoke('open_url', { url: href }).catch(function (err) { console.error('open_url:', err); });
-            }
-        }, true);
-    }
-    // Android ඇප් එක: ඉහළ (status) හා පහළ (navigation) තීරු ඇප් එකේ තේමාවේ වර්ණයට
-    function syncAppBars() {
-        if (!isNativeApp()) return;
-        const AB = Capacitor.Plugins && Capacitor.Plugins.AppBars; if (!AB) return;
-        const dark = document.body.classList.contains('dark-mode');
-        try { AB.setColors({ color: dark ? '#0A0C1C' : '#F5EDDA', dark: dark }).catch(function () {}); } catch (e) {}
-    }
-    function langReady(l) { return l !== 'hi' || !!(window.HI_DICT && window.PaliScript); }
+    // තායි: 'th-TH' තනිවම බෞද්ධ (ථායි) වර්ෂ ගණනය යොදන නිසා ග්‍රෙගරියානු දින දර්ශනය බලහත්කාරයෙන්
+    function langLocale() { return currentLang === 'si' ? 'si-LK' : currentLang === 'hi' ? 'hi-IN' : currentLang === 'my' ? 'my-MM' : currentLang === 'th' ? 'th-TH-u-ca-gregory' : 'en-US'; }
+    // රෝම (IAST) පාළිය → හින්දියේදී දේවනාගරී / බුරුමයේදී බුරුම අකුරින් (අනෙක් භාෂාවලදී එලෙසම)
+    function paliHi(s) { const sc = trScript(); return (sc && window.PaliScript) ? PaliScript.fromIAST(s, sc) : s; }
+    // සිංහල අකුරු පාළිය → දේවනාගරී / බුරුම
+    function paliSiHi(s) { const sc = trScript(); return (sc && window.PaliScript) ? PaliScript.convert(s, 'sinh', sc) : s; }
+    function langReady(l) { return !LANG_DICT[l] || !!(window[LANG_DICT[l]] && window.PaliScript); }
     function loadLang(l, cb) {
         const files = (LANG_FILES[l] || []).slice();
         (function next() {
@@ -121,11 +90,12 @@
             paliTemplate: (a, s, m, p, t, w) => `Ayaṃ\n${a} saṃvacchare\n${s} utu asmiṃ utumhi\n${m} māsassa\n${p}\n${t}\n${w}\nidanti daṭṭhabbaṃ.`
         }
     };
-    // හින්දි: ඉංග්‍රීසි වගුවෙන්ම සාදයි — UI පෙළ HI_DICT වෙතින්, පාළි වචන දේවනාගරී අකුරින්
-    function buildHiI18n() {
+    // හින්දි / බුරුම: ඉංග්‍රීසි වගුවෙන්ම සාදයි — UI පෙළ HI_DICT / MY_DICT වෙතින්, පාළි වචන දේවනාගරී / බුරුම අකුරින්
+    function buildHiI18n(lg) {
+        lg = lg || 'hi';
         const e = i18n.en, h = {};
-        if (!langReady('hi')) { i18n.hi = e; return; }
-        const keep = currentLang; currentLang = 'hi';
+        if (!langReady(lg)) { i18n[lg] = e; return; }
+        const keep = currentLang; currentLang = lg;
         try {
             for (const k in e) if (typeof e[k] === 'string') h[k] = tx(e[k]);
             h.animals = e.animals.map(paliHi);
@@ -134,9 +104,11 @@
             h.paksha = { Kāla: paliHi(e.paksha.Kāla), Sukka: paliHi(e.paksha.Sukka) };
             h.paliTemplate = function () { return paliHi(e.paliTemplate.apply(null, arguments)); };
         } finally { currentLang = keep; }
-        i18n.hi = h;
+        i18n[lg] = h;
     }
-    buildHiI18n();
+    buildHiI18n('hi');
+    buildHiI18n('my');
+    buildHiI18n('th');
 
 // Poya chain overrides 1900-3000
 // රීතිය: ඕනෑම පෝයන් දෙකක් අතර පරතරය 14 හෝ 15 පමණි. 14 වන්නේ සෘතුවේ 3 සහ 7 පමණි;
@@ -566,9 +538,73 @@ function _pLastBefore(i, fn) { for (i = i - 1; i >= 0; i--) if (fn(poyaList[i]))
 
 let _chainState = null; // { currentDate, season, posInSeason, isFirst, monthIdx, thisGimhanaLeap }
 
+// ---- උපෝසථ දින "කලාපය" (region) ----
+// 'lk' = ශ්‍රී ලංකා / තායි (ඉහත දාමය — කිසිදු වෙනසක් නැත),  'mm' = මියන්මාර් (mm-poya.js).
+// poyaList, vesakDates ආදී ගෝලීය අගයන් සක්‍රිය කලාපයේ ඒවාය; කලාපය මාරු කළ විට එක් එක් කලාපයේ දත්ත / cache වෙන වෙනම තබාගනී.
+let poyaRegion = 'lk';
+const _poyaStore = {};
+function setPoyaRegion(r) {
+    r = (r === 'mm' && window.MMPoya) ? 'mm' : (r === 'th') ? 'th' : 'lk';
+    if (r === poyaRegion) return false;
+    _poyaStore[poyaRegion] = { list: poyaList, upTo: poyaListComputedUpToYear, chain: _chainState, vesak: vesakDates, vassa: Object.assign({}, _vassaCache) };
+    const s = _poyaStore[r] || { list: [], upTo: MIN_YEAR - 1, chain: null, vesak: {}, vassa: {} };
+    poyaList = s.list; poyaListComputedUpToYear = s.upTo; _chainState = s.chain; vesakDates = s.vesak;
+    for (const k in _vassaCache) delete _vassaCache[k];
+    Object.assign(_vassaCache, s.vassa);
+    poyaRegion = r;
+    return true;
+}
+// fn() ක්‍රියාත්මක වන අතරතුර පමණක් වෙනත් කලාපයක් (උපෝසථ පිටුවේ රට බොත්තම සඳහා) — ප්‍රධාන පිටුවට බලපෑමක් නැත
+function withPoyaRegion(r, fn) {
+    const keep = poyaRegion; setPoyaRegion(r);
+    try { return fn(); } finally { setPoyaRegion(keep); }
+}
+// භාෂාවට අනුව ප්‍රධාන පිටුවේ කලාපය: බුරුම = මියන්මාර්, තායි = 'th' (ශ්‍රී ලංකා / තායි දින + තායි මාස නාම), අනෙක් = ශ්‍රී ලංකා / තායි
+function langPoyaRegion(l) { l = l || currentLang; return l === 'my' ? 'mm' : l === 'th' ? 'th' : 'lk'; }
+
+// ---- තායි ('th'): පෝය දින, සෘතු ශ්‍රී ලංකා / තායි ලැයිස්තුවමයි; අධික වර්ෂයේ (ගිම්හානයේ පෝය 10) මාස නාම පමණක් තායි ක්‍රමයට ----
+// ශ්‍රී ලංකා ක්‍රමය: අධිවේසාඛ → වේසාඛ → ජෙට්ඨ → ආසාළ්හ   (අධි මාසය වෙසක්ට පෙර — මාස 13 අවසන් වන වර්ෂයට)
+// තායි ක්‍රමය:     වේසාඛ → ජෙට්ඨ → පඨමාසාළ්හ → දුතියාසාළ්හ   (ආසාළ්හ දෙවරක් — වෙසක්ට පසු, මාස 13 ඊළඟ වර්ෂයට)
+// ඒ නිසා වර්ෂය මාරුවන වෙසක් = තායි "වේසාඛ" පසළොස්වක, සහ සෑම වර්ෂයකම පළමු මාසය ජෙට්ඨ (මියන්මාර් ක්‍රමය මෙන්ම).
+const TH_LEAP_NAME = { 'අධිවේසාඛ': 'වේසාඛ', 'වේසාඛ': 'ජෙට්ඨ', 'ජෙට්ඨ': 'පඨමාසාළ්හ', 'ආසාළ්හ': 'දුතියාසාළ්හ' };
+function extendTHPoyaTo(uptoYear) {
+    const sl = withPoyaRegion('lk', function () { extendPoyaDataTo(uptoYear); return poyaList; });
+    for (let i = poyaList.length; i < sl.length; i++) {
+        const p = sl[i];
+        let m = p.m;
+        if (p.r === "ගිම්හාන" && TH_LEAP_NAME[m]) {
+            let leap = (m === 'අධිවේසාඛ');                      // එම ගිම්හාන සෘතුවේ අධිවේසාඛ තිබේද (පෙරට බලයි)
+            for (let k = i - 1; !leap && k >= 0 && sl[k].r === "ගිම්හාන"; k--) if (sl[k].m === 'අධිවේසාඛ') leap = true;
+            if (leap) m = TH_LEAP_NAME[m];
+        }
+        poyaList.push(m === p.m ? p : { d: p.d, r: p.r, t: p.t, m: m });
+    }
+    poyaListComputedUpToYear = uptoYear;
+    for (let y = MIN_YEAR; y <= uptoYear; y++) {
+        if (vesakDates[y]) continue;
+        const v = findVesakFM(y);
+        if (v) vesakDates[y] = v;
+    }
+}
+
+// මියන්මාර්: mm-poya.js මගින් පෝය ලැයිස්තුව දිගු කරයි; වෙසක් = එම වර්ෂයේ කසුන් (වේසාඛ) පසළොස්වක
+// (කසුන් පසළොස්වක අප්‍රේල් 22 – ජූනි 10 අතර ඕනෑම දිනයක විය හැක).
+function extendMMPoyaTo(uptoYear) {
+    MMPoya.extend(poyaList, uptoYear, '1899-01-01');
+    while (poyaList.length && +poyaList[poyaList.length - 1].d.slice(0, 4) > MAX_YEAR) poyaList.pop();
+    poyaListComputedUpToYear = uptoYear;
+    for (let y = MIN_YEAR - 1; y <= uptoYear; y++) {
+        if (vesakDates[y]) continue;
+        const v = findVesakFM(y);
+        if (v) vesakDates[y] = v;
+    }
+}
+
 function extendPoyaDataTo(uptoYear) {
     uptoYear = Math.min(uptoYear, MAX_YEAR);
     if (uptoYear <= poyaListComputedUpToYear) return;
+    if (poyaRegion === 'mm') return extendMMPoyaTo(uptoYear);
+    if (poyaRegion === 'th') return extendTHPoyaTo(uptoYear);
 
     if (_chainState === null) {
         _chainState = {
@@ -654,14 +690,23 @@ function extendPoyaDataTo(uptoYear) {
    
     for (let y = MIN_YEAR; y <= poyaListComputedUpToYear; y++) {
         if (vesakDates[y]) continue;
-        // poyaList දිනය අනුව ඇණවුම් කර ඇති නිසා මුළු ලැයිස්තුවම filter නොකර, අදාළ පරාසය පමණක් පීරයි (ප්‍රතිඵලය එලෙසම)
-        const lo = `${y}-05-04`, hi = `${y}-06-04`, candidates = [];
-        for (let i = _pLowerBound(p => p.d >= lo); i < poyaList.length && poyaList[i].d <= hi; i++) {
-            if (poyaList[i].t === "පසළොස්වක") candidates.push(poyaList[i]);
-        }
-        const vesak = candidates.find(p => p.m === "වේසාඛ") || candidates[0];
-        if (vesak) vesakDates[y] = vesak.d;
+        const v = findVesakFM(y);
+        if (v) vesakDates[y] = v;
     }
+}
+
+// බුද්ධ වර්ෂය මාරුවන වෙසක් = එම ක්‍රි.ව. වර්ෂයේ "වේසාඛ" නමැති පසළොස්වක (අධික වර්ෂයේ අධිවේසාඛයට පසු එන සැබෑ වෙසක්).
+// මෙම ක්‍රමයේ සෑම අධික වර්ෂයකම (ගිම්හානයේ පෝය 10) අධිවේසාඛ මාසය වෙසක් පෝයට පෙර යෙදෙන නිසා, අධි මාසය අවසන් වන
+// බුද්ධ වර්ෂයට මාස 13 ක් වන අතර, සෑම වර්ෂයකම පළමු මාසය ජෙට්ඨ වේ.
+// පෙර: මැයි 4 – ජූනි 4 කවුළුවෙන් පමණක් සෙවූ නිසා, වේසාඛ ජූනි 5/6 වූ වසර 41 කදී (උදා: 2020, 2039, 2058)
+// අධිවේසාඛ ගෙන වර්ෂය මාසයක් කලින් මාරු වී, වර්ෂයේ පළමු මාසය වැරදියට "වේසාඛ" විය. (ඉතිරි වසර 1060 පෙර පරිදිමයි.)
+// මියන්මාර් (mm-poya.js) සඳහාද එම රීතියමයි — කසුන් (වේසාඛ) පසළොස්වක (අප්‍රේල් 22 – ජූනි 10).
+function findVesakFM(y) {
+    const lo = `${y}-01-01`, hi = `${y}-12-31`;
+    for (let i = _pLowerBound(p => p.d >= lo); i < poyaList.length && poyaList[i].d <= hi; i++) {
+        if (poyaList[i].t === "පසළොස්වක" && poyaList[i].m === "වේසාඛ") return poyaList[i].d;
+    }
+    return null;
 }
 
 function ensurePoyaDataUpTo(year) {
@@ -731,6 +776,7 @@ function scheduleBackgroundPoyaExtension() {
     scheduleNext();
 }
 
+setPoyaRegion(langPoyaRegion());
 ensurePoyaDataUpTo(slYear(new Date()) + 1);
 scheduleBackgroundPoyaExtension();
     const tithiPaliS = ["","පඨමං","දුතියං","තතියං","චතුත්ථං","පඤ්චමං","ඡට්ඨමං","සත්තමං","අට්ඨමං","නවමං","දසමං","එකාදසමං","ද්වාදසමං","තෙරසමං","චුද්දසමං","පණ්ණරසමං"];
@@ -766,7 +812,25 @@ scheduleBackgroundPoyaExtension();
             document.body.appendChild(p);
         }
         p.querySelectorAll('.lp-opt').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-l') === currentLang); b.disabled = false; });
+        // භාෂා බොත්තමට ඉහළින්, එහි වම් කෙළවරට පෙළගස්වා (තිරයෙන් පිටතට නොයන ලෙස) පෙන්වයි
+        const box = p.querySelector('.lp-box'), btn = document.querySelector('#bottomNav .bn-first');
         p.classList.add('on');
+        const vw = window.innerWidth, vh = window.innerHeight, bw = box.offsetWidth;
+        let r = btn ? btn.getBoundingClientRect() : { left: 12, right: 54, top: vh - 70, width: 42 };
+        if (!r.width) r = { left: 12, right: 54, top: vh - 70, width: 42 };
+        const cx = r.left + r.width / 2;
+        const left = Math.max(12, Math.min(cx - 22, vw - bw - 12));
+        box.style.left = left + 'px';
+        box.style.bottom = (vh - r.top + 10) + 'px';
+        box.style.setProperty('--lp-ax', Math.max(12, Math.min(cx - left - 6, bw - 24)) + 'px');
+        box.style.setProperty('--lp-ox', (cx - left) + 'px');
+        box.style.animation = 'none'; void box.offsetWidth; box.style.animation = '';
+        const on = p.querySelector('.lp-opt.on'); if (on) try { on.focus({ preventScroll: true }); } catch (e) {}
+        if (!p._wired) {
+            p._wired = true;
+            window.addEventListener('resize', closeLangPicker);
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLangPicker(); });
+        }
     }
     function closeLangPicker() { const p = document.getElementById('langPick'); if (p) p.classList.remove('on'); }
 
@@ -786,7 +850,8 @@ scheduleBackgroundPoyaExtension();
         currentLang = l;
         localStorage.setItem('appLang', currentLang);
         try { document.documentElement.lang = currentLang; } catch (e) {}
-        if (l === 'hi') buildHiI18n();
+        if (LANG_DICT[l]) buildHiI18n(l);
+        setPoyaRegion(langPoyaRegion(l));   // බුරුම → මියන්මාර් උපෝසථ දින; අනෙක් භාෂා → ශ්‍රී ලංකා / තායි
         updateUI();
         calculateAll();    
         updateSunTimes(); 
@@ -1101,7 +1166,7 @@ function calculateAll() {
     const monthMap = {
         "මාඝ": "Māgha", "ඵග්ගුන": "Phagguna", "චිත්ත": "Citta",
         "අධිවේසාඛ": "Adhivesākha", "වේසාඛ": "Vesākha", "ජෙට්ඨ": "Jeṭṭha",
-        "ආසාළ්හ": "Āsāḷha", "සාවන": "Sāvana", "පොට්ඨපාද": "Poṭṭhapāda",
+        "ආසාළ්හ": "Āsāḷha", "පඨමාසාළ්හ": "Paṭhamāsāḷha", "දුතියාසාළ්හ": "Dutiyāsāḷha", "සාවන": "Sāvana", "පොට්ඨපාද": "Poṭṭhapāda",
         "අස්සයුජ": "Assayuja", "කත්තික": "Kattika", "මාඝසිර": "Māghasira", "ඵුස්ස": "Phussa"
     };
 
@@ -1117,7 +1182,7 @@ function calculateAll() {
 
     const sMonth = nextP ? nextP.m : "වේසාඛ"; 
     const displayMonth = (currentLang === 'si') ? sMonth
-        : (monthMap[sMonth] ? paliHi(monthMap[sMonth]) : (currentLang === 'hi' ? paliSiHi(sMonth) : sMonth));
+        : (monthMap[sMonth] ? paliHi(monthMap[sMonth]) : (trScript() ? paliSiHi(sMonth) : sMonth));
 
     let paliIndex = tithi; 
     let finalPaksha = paksha; 
@@ -1249,7 +1314,6 @@ if (nextFullMoon) {
 function toggleDarkMode() {
     const isDark = document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    syncAppBars();
     
     
     if (typeof updateUI === "function") {
@@ -1280,7 +1344,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
     }
-    syncAppBars();
     
     if (typeof updateDarkModeBtnText === "function") updateDarkModeBtnText();
     if (typeof updateUI === "function") updateUI();
@@ -1461,6 +1524,26 @@ function _findSpecialTithiEventsForDayRaw(dayStart) {
     return { beginTime: poyaStart, endTime: poyaEnd };
 }
 
+// ---- අරුණෝදය (dawn) — භාෂාවට අනුව රටේ සම්ප්‍රදාය ----
+//  • සිංහල / English / हिन्दी : ඉර උදාවට විනාඩි 30 කට පෙර (ශ්‍රී ලංකා ක්‍රමය)
+//  • မြန်မာ (my)            : ඉර උදාවට විනාඩි 40 කට පෙර (මියන්මාර් සම්ප්‍රදාය ලෙස දැක්වෙන අගය — අවශ්‍ය නම් මෙහි වෙනස් කරන්න)
+//  • ไทย (th)               : සිවිල් සන්ධ්‍යාව ආරම්භය — ඉර ක්ෂිතිජයට 6° පහළින් (තායි ආරණ්‍යක / ධම්මයුත් විනය විග්‍රහය;
+//                             "අත්ලේ රේඛා පෙනෙන තරම් ආලෝකය"). තායිලන්තයේ මෙය ඉර උදාවට විනාඩි 20–25 ක් පමණ පෙරයි.
+const DAWN_RULE = { my: { min: 40 }, th: { alt: -6 } };
+function dawnRule(l) { return DAWN_RULE[l || currentLang] || { min: 30 }; }
+let dawnObserver = null;
+function dawnTime(sunrise, observer) {
+    if (!sunrise) return null;
+    const rule = dawnRule();
+    if (rule.alt != null && observer && typeof Astronomy !== 'undefined') {
+        try {
+            const tw = Astronomy.SearchAltitude('Sun', observer, +1, Astronomy.MakeTime(new Date(sunrise.getTime() - 3 * 3600000)), 0.2, rule.alt);
+            if (tw && tw.date < sunrise) return tw.date;
+        } catch (e) {}
+    }
+    return new Date(sunrise.getTime() - (rule.min || 30) * 60000);
+}
+
 function updateSunTimes() {
     const dateInput = document.getElementById('sunDateInput');
     const statusText = document.getElementById('locationStatus');
@@ -1511,6 +1594,7 @@ function updateSunTimes() {
     try {
         if (typeof Astronomy !== 'undefined') {
             const observer = new Astronomy.Observer(parseFloat(lat), parseFloat(lng), 0);
+            dawnObserver = observer;
             
             const startOfDay = new Date(selectedDate);
             startOfDay.setHours(0, 0, 0, 0);
@@ -1593,7 +1677,7 @@ function updateSunTimes() {
         console.error("Astronomy Engine error:", e);
     }
     
-    const arunodaya = sunrise ? new Date(sunrise.getTime() - (30 * 60000)) : null;
+    const arunodaya = dawnTime(sunrise, dawnObserver);
 
     const formatTime = (dateObj) => {
         if(!dateObj || isNaN(dateObj.getTime())) {
@@ -1809,7 +1893,7 @@ let wheelCurrentMaxDay = 31;
 function wheelMonthNames() {
     return (typeof currentLang !== 'undefined' && currentLang === 'si')
         ? ["ජන", "පෙබ", "මාර්", "අප්‍රේ", "මැයි", "ජූනි", "ජූලි", "අගෝ", "සැප්", "ඔක්", "නොවැ", "දෙසැ"]
-        : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map(tx);
+        : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map(txMon3);
 }
 
 function daysInMonth(year, monthIndex0) {
@@ -2198,8 +2282,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-// Android ඇප් එකේ ගොනු APK එක ඇතුළේම ඇති නිසා service worker අවශ්‍ය නැත (ඇප් update එකකදී පැරණි cache පෙන්වීම වළක්වයි)
-if ('serviceWorker' in navigator && !isNativeApp() && !isDesktopApp()) {
+if ('serviceWorker' in navigator) {
 
   // පළමු ස්ථාපනයේදී (මීට පෙර controller නොතිබූ විට) පිටුව දැනටමත් නවතම ගොනුවලින් පූරණය වී ඇති නිසා නැවත load කිරීම අනවශ්‍යයි;
   // යාවත්කාලීනයකදී පමණක්, ඒ ද එක් වරක් පමණක් reload වේ.
@@ -2207,8 +2290,6 @@ if ('serviceWorker' in navigator && !isNativeApp() && !isDesktopApp()) {
   let reloadingForSW = false;
 
   window.addEventListener('load', async () => {
-
-    if (isNativeApp() || isDesktopApp()) return;
 
     try {
 

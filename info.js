@@ -32,7 +32,8 @@
     <p class="blessing">බුදු සසුන ලොව බැබළේවා !</p>
 
     <div class="card">
-      <p>මෙහි සඳහන් පෝය දිනයන් තායිලන්ත සහ ශ්‍රී ලංකා උපෝසථ දිනයන් මත පදනම්ව සකස් කොට ඇත. ඇතැම් විට මියන්මාර් උපෝසථ දිනයන් මීට වඩා දවසක් පමණක් වෙනස් විය හැකිය.</p>
+      <p>මෙහි සඳහන් පෝය දිනයන් තායිලන්ත සහ ශ්‍රී ලංකා උපෝසථ දිනයන් මත පදනම්ව සකස් කොට ඇත. මියන්මාර් උපෝසථ දිනයන් උපෝසථ පිටුවේ ඉහළ ඇති "මියන්මාර්" බොත්තමෙන් බලාගත හැකිය; මියන්මාර් (බුරුම) භාෂාව තේරූ විට ඇප් එක ස්වයංක්‍රීයව මියන්මාර් උපෝසථ දිනයන් අනුගමනය කරයි.</p>
+      <p>ශ්‍රී ලංකා, තායිලන්ත සහ මියන්මාර් මාසවල වෙනසක් පෙනෙන්නේ, අධික වර්ෂවලදී අධික මාසය එකතු කිරීම ඒ ඒ රටට අදාළව වෙසක් පෝයට පෙර හෝ පසුව සිදු වන නිසාය.</p>
       <p>ඔබගේ අදහස් සහ යෝජනා පහත ලිපිනයට එවන්න.</p>
       <a class="email-btn" href="mailto:bhamarawali@gmail.com">📧 bhamarawali@gmail.com</a>
     </div>
@@ -83,7 +84,6 @@
     <div class="card">
       <ul class="tips">
         <li><span class="pin">✏️</span><span>අරුණ සඳහා ස්ථානය ලබා ගැනීමේදී, අන්තර්ජාල සම්බන්ධතාවක් නැති තැනක එළිමහනේ සිට උත්සාහ කළහොත් ඉක්මනින් ප්‍රතිඵල ලැබේ.</span></li>
-        <li><span class="pin">✏️</span><span>මියන්මාර් උපෝසථ දින <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">මෙතනින්</a> බලාගත හැකිය.</span></li>
       </ul>
     </div>
   </div><!-- /data-lang="si" -->
@@ -94,7 +94,8 @@
     <p class="blessing">May the Buddha Sāsana shine throughout the world!</p>
 
     <div class="card">
-      <p>The Poya days shown here are based on the Thai and Sri Lankan Uposatha days. Myanmar Uposatha days may sometimes differ from these by just one day.</p>
+      <p>The Poya days shown here are based on the Thai and Sri Lankan Uposatha days. Myanmar Uposatha days can be viewed with the "Myanmar" button at the top of the Uposatha page; when the Myanmar (Burmese) language is selected, the app follows the Myanmar Uposatha days automatically.</p>
+      <p>The difference seen in the months of Sri Lanka, Thailand and Myanmar arises because, in leap years, the leap month is added before or after the Vesak Poya, according to the practice of each country.</p>
       <p>Please send your comments and suggestions to the address below.</p>
       <a class="email-btn" href="mailto:bhamarawali@gmail.com">📧 bhamarawali@gmail.com</a>
     </div>
@@ -143,7 +144,6 @@
     <div class="card">
       <ul class="tips">
         <li><span class="pin">✏️</span><span>Trying to get a sunrise location outdoors in a place without internet access will yield quicker results.</span></li>
-        <li><span class="pin">✏️</span><span>You can check Myanmar Uposatha dates <a href="https://docs.google.com/spreadsheets/d/1Ck5Eh3uQEbpraE0gE81fr6tNJvpX5ue9U4TluAa2K1M/edit?usp=drivesdk" target="_blank" rel="noopener noreferrer">here</a>.</span></li>
       </ul>
     </div>
   </div><!-- /data-lang="en" -->
@@ -183,7 +183,7 @@
       radial-gradient(900px 500px at 88% -10%, #DEF6EA 0%, transparent 60%),
       radial-gradient(700px 480px at -10% 15%, #FBF0DE 0%, transparent 55%),
       var(--mint-bg);
-    font-family:'Noto Sans','Noto Sans Sinhala','Noto Sans Devanagari',sans-serif;
+    font-family:'Noto Sans','Noto Sans Sinhala','Noto Sans Devanagari','Noto Sans Myanmar','Noto Sans Thai',sans-serif;
     color:var(--ink);
     padding:34px 14px 56px;
     transition: background 0.5s ease, color 0.5s ease;}
@@ -267,7 +267,7 @@ to   { background-position: 0%   0%; }
     mix-blend-mode: overlay;
     pointer-events: none;}
 #infoOverlay .blessing{text-align:center;
-    font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;
+    font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',serif;
     font-style:italic;
     font-weight:600;
     color:var(--saffron);
@@ -309,7 +309,7 @@ to   { background-position: 0%   0%; }
     border-radius:18px;padding:18px 20px;
     box-shadow:0 14px 30px -26px rgba(20,80,60,.3);
     transition: all 0.3s ease;}
-#infoOverlay .platform-card h3{margin:0 0 6px;font-size:16px;font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;
+#infoOverlay .platform-card h3{margin:0 0 6px;font-size:16px;font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',serif;
     display:flex;align-items:center;gap:8px;}
 #infoOverlay .platform-card p{margin:0 0 12px;font-size:13.8px;color:var(--ink-soft);line-height:1.6;}
 #infoOverlay .platform-btn{display:inline-block;padding:10px 18px;border-radius:10px;
@@ -326,7 +326,7 @@ to   { background-position: 0%   0%; }
 #infoOverlay .tips a{color:var(--mint-deep);font-weight:600;}
 #infoOverlay .qr-card{text-align:center;
     background:linear-gradient(180deg,#ffffff, var(--mint-soft));}
-#infoOverlay .qr-card h3{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;font-size:17px;margin:0 0 4px;}
+#infoOverlay .qr-card h3{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',serif;font-size:17px;margin:0 0 4px;}
 #infoOverlay .qr-card p.small{font-size:12.5px;color:var(--ink-soft);margin:0 0 16px;}
 #infoOverlay #qrcode{display:inline-block;padding:14px;background:#fff;border-radius:16px;
     border:1px solid var(--mint-line);}
@@ -393,7 +393,7 @@ body.dark-mode #infoOverlay .buddhist-flag{box-shadow:
 #infoOverlay .qr-make-btn:active{transform:scale(.99)}
 #infoOverlay .qr-maker{text-align:left}
 #infoOverlay .qr-maker[hidden]{display:none}
-#infoOverlay .qm-title{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;font-size:17px;margin:0 0 6px;text-align:center}
+#infoOverlay .qm-title{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',serif;font-size:17px;margin:0 0 6px;text-align:center}
 #infoOverlay .qm-label{display:block;margin:14px 0 6px;font-size:13px;font-weight:700;color:var(--mint-deep)}
 #infoOverlay .qm-input{display:block;width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--mint-line);
     background:var(--mint-card);color:var(--ink);font:inherit;font-size:16px;line-height:1.5}
@@ -426,7 +426,7 @@ body.dark-mode #infoOverlay .qm-sw.sel{box-shadow:0 0 0 3px var(--mint-deep)}
 #infoOverlay .copy-btn.copied{background:var(--mint-deep);color:#fff}
 #infoOverlay .rate-card{text-align:center;background:linear-gradient(180deg,var(--mint-card),var(--saffron-soft));border-color:var(--saffron-line)}
 #infoOverlay .rate-card::before{background:linear-gradient(90deg,#F5B83D,var(--saffron))}
-#infoOverlay .rate-card h3{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari',serif;font-size:17px;margin:0 0 8px;color:var(--ink)}
+#infoOverlay .rate-card h3{font-family:'Noto Serif','Noto Serif Sinhala','Noto Serif Devanagari','Noto Sans Myanmar','Noto Sans Thai',serif;font-size:17px;margin:0 0 8px;color:var(--ink)}
 #infoOverlay .rate-stars{display:flex;justify-content:center;gap:4px;margin:4px 0 14px}
 #infoOverlay .rate-star{font-size:32px;line-height:1;color:#F5B83D;text-decoration:none;padding:2px 3px;
     text-shadow:0 2px 6px rgba(201,133,46,.35);transition:transform .15s ease;animation:info-starPop .5s ease both}
@@ -741,15 +741,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
 
   var QM_DL_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>';
 
-  function isApp() { return typeof isNativeApp === 'function' && isNativeApp(); }   /* Android ඇප් එක (Capacitor) */
-  function appShareCanvas(cv, name, title) {
-    cv.toBlob(function (b) { if (b) nativeShareFile(b, name, title || name).catch(function (e) { console.error('share:', e); }); }, 'image/png');
-  }
   function qmSave(cv, name) {
-    if (isApp()) { appShareCanvas(cv, name); return; }
-    if (typeof isDesktopApp === 'function' && isDesktopApp()) {   /* Windows ඇප් එක: "Save as" කවුළුව */
-      cv.toBlob(function (b) { if (b) desktopSaveFile(b, name).catch(function (e) { console.error('save:', e); }); }, 'image/png'); return;
-    }
     function viaUrl(url, revoke) {
       var a = document.createElement('a');
       a.href = url; a.download = name; a.rel = 'noopener';
@@ -830,7 +822,6 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
         navigator.clipboard.writeText(QM_SITE).then(done, function () { window.prompt('', QM_SITE); });
       } else { window.prompt('', QM_SITE); }
     }
-    if (isApp()) { qmStaticCanvas(function (cv) { if (cv) appShareCanvas(cv, 'buddhist-era-qr.png', title); else fallback(); }); return; }
     if (!navigator.share || !window.File) { fallback(); return; }
     qmStaticCanvas(function (cv) {
       if (!cv || !cv.toBlob) { fallback(); return; }
@@ -937,7 +928,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
   }
 
   function initMaker(ov, l) {
-    var t = (l === 'hi' && window.HI_QM_STR) || QM_STR[l] || QM_STR.si;
+    var t = (TRP[l] && window[TRP[l] + '_QM_STR']) || QM_STR[l] || QM_STR.si;
     var btn = ov.querySelector('#qrMakeBtn'), box = ov.querySelector('#qrMaker');
     if (!btn || !box) return;
     btn.textContent = t.makeBtn;
@@ -997,7 +988,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       var qr = QRCore.encode(data, 'M');
       if (!qr) { errBox.textContent = t.tooLong; return; }
       lastCanvas = qmDraw(qr, color);
-      var canShare = isApp() || !!(navigator.share && window.File);
+      var canShare = !!(navigator.share && window.File);
       var typeName = t.types[typeSel.value];
       resBox.innerHTML =
         '<img class="qm-img" alt="' + t.alt + '" src="' + lastCanvas.toDataURL('image/png') + '">' +
@@ -1008,7 +999,6 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       resBox.querySelector('#qm-dl').addEventListener('click', function () { qmSave(lastCanvas, 'qr-code.png'); });
       var sh = resBox.querySelector('#qm-share');
       if (sh) sh.addEventListener('click', function () {
-        if (isApp()) { appShareCanvas(lastCanvas, 'qr-code.png'); return; }
         lastCanvas.toBlob(function (blob) {
           if (!blob) return;
           var file = new File([blob], 'qr-code.png', { type: 'image/png' });
@@ -1028,7 +1018,6 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
     var ua = navigator.userAgent || '';
     if (!/android/i.test(ua)) return; // සාමාන්‍ය link එක (target=_blank) ක්‍රියා කරයි
     if (e) e.preventDefault();
-    if (isApp()) { window.location.href = 'market://details?id=' + PLAY_ID; return; }   /* ඇප් එකේ: Play Store කෙලින්ම */
     window.location.href = 'intent://details?id=' + PLAY_ID +
       '#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' +
       encodeURIComponent(PLAY_WEB) + ';end';
@@ -1042,10 +1031,12 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
 
   var pushed = false;
 
+  /* හින්දි / බුරුම / තායි පිටු lang/hi.js, lang/my.js, lang/th.js හි (HI_ / MY_ / TH_ INFO_HTML, QM_STR) */
+  var TRP = { hi: 'HI', my: 'MY', th: 'TH' }, TRCLOSE = { hi: 'बंद करें', my: 'ပိတ်ရန်', th: 'ปิด' };
   function lang() {
     var l = typeof currentLang !== 'undefined' ? currentLang : 'si';
-    if (l === 'hi' && window.HI_INFO_HTML) return 'hi';          /* හින්දි පිටුව lang/hi.js හි ඇත */
-    return (l === 'en' || l === 'hi') ? 'en' : 'si';
+    if (TRP[l] && window[TRP[l] + '_INFO_HTML']) return l;
+    return (l === 'en' || l === 'hi' || l === 'my' || l === 'th') ? 'en' : 'si';
   }
 
   function injectStyle() {
@@ -1073,9 +1064,9 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
     }
     ov.setAttribute('lang', l);
     var page = HTML;
-    if (l === 'hi') page = page.replace('<!-- QR (shared, not language-specific) -->', '<div data-lang="hi">' + window.HI_INFO_HTML.replace(/\$\{PLAY_WEB\}/g, PLAY_WEB) + '</div>\n  <!-- QR (shared, not language-specific) -->');
+    if (TRP[l]) page = page.replace('<!-- QR (shared, not language-specific) -->', '<div data-lang="' + l + '">' + window[TRP[l] + '_INFO_HTML'].replace(/\$\{PLAY_WEB\}/g, PLAY_WEB) + '</div>\n  <!-- QR (shared, not language-specific) -->');
     ov.innerHTML =
-      '<button class="info-close" type="button" aria-label="' + (l === 'si' ? 'ඉවත් වන්න' : l === 'hi' ? 'बंद करें' : 'Close') + '">&times;</button>' + page;
+      '<button class="info-close" type="button" aria-label="' + (l === 'si' ? 'ඉවත් වන්න' : TRCLOSE[l] || 'Close') + '">&times;</button>' + page;
     ov.querySelectorAll('[data-lang]').forEach(function (el) {
       el.classList.toggle('active', el.getAttribute('data-lang') === l);
     });

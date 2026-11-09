@@ -1,8 +1,8 @@
 /* Buddhist Era — merged stylesheet (base + cream & gold theme). Assets in bg/ */
 :root {
     /* ලතින් font එක මුලින්ම: ඉංග්‍රීසි / රෝම පාළි (ā ṃ ṅ ...) ඒ මගින්, සිංහල හා හින්දි අකුරු ඊළඟ font වලින් */
-    --ff-sans: 'Noto Sans', 'Noto Sans Sinhala', 'Noto Sans Devanagari', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
-    --ff-serif: 'Noto Serif', 'Noto Serif Sinhala', 'Noto Serif Devanagari', serif;
+    --ff-sans: 'Noto Sans', 'Noto Sans Sinhala', 'Noto Sans Devanagari', 'Noto Sans Myanmar','Noto Sans Thai', 'Myanmar Text', 'Padauk', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
+    --ff-serif: 'Noto Serif', 'Noto Serif Sinhala', 'Noto Serif Devanagari', 'Noto Serif Myanmar', 'Noto Sans Myanmar','Noto Sans Thai', 'Myanmar Text', serif;
 
     --gold: #d4af37;
     --bg: #fffff0;
@@ -1139,15 +1139,22 @@ html body.dark-mode #chOverlay .ch-hero h1,
 html body:not(.dark-mode) #chOverlay .ch-hero h1{background:linear-gradient(180deg,#fff 0%,#e1e5ec 38%,#b4bcc8 68%,#f1f3f7 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important;text-shadow:none!important;
  filter:drop-shadow(1px 0 0 #2b2f38) drop-shadow(-1px 0 0 #2b2f38) drop-shadow(0 1px 0 #2b2f38) drop-shadow(0 -1px 0 #2b2f38) drop-shadow(0 2px 4px rgba(0,0,0,.55))!important}
 
-/* ===== භාෂා තේරීම (සිංහල / English / हिन्दी) ===== */
-#langPick{position:fixed;left:0;top:0;right:0;bottom:0;z-index:6000;display:none;align-items:flex-end;justify-content:center}
-#langPick.on{display:flex}
-#langPick .lp-bg{position:absolute;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.45)}
-#langPick .lp-box{position:relative;width:100%;max-width:420px;margin:0 10px calc(84px + env(safe-area-inset-bottom,0px));padding:10px;border-radius:20px;background:#fffaf0;box-shadow:0 12px 34px rgba(0,0,0,.35);display:grid;gap:8px}
-#langPick .lp-opt{display:block;width:100%;padding:13px 16px;border-radius:14px;border:1.5px solid rgba(160,110,20,.35);background:#fff;color:#3e2723;font-family:var(--ff-sans);font-size:1.08rem;font-weight:700;cursor:pointer;text-align:center}
-#langPick .lp-opt.on{background:linear-gradient(135deg,#e8b84a,#c8921c);color:#2b1a05;border-color:#b07c1c}
+/* ===== භාෂා තේරීම (සිංහල / English / हिन्दी / မြန်မာ) — භාෂා බොත්තම අසලින් ඉහළට නැගෙන කුඩා මෙනුව ===== */
+#langPick{position:fixed;left:0;top:0;right:0;bottom:0;z-index:6000;display:none}
+#langPick.on{display:block}
+#langPick .lp-bg{position:absolute;left:0;top:0;right:0;bottom:0;background:transparent}
+#langPick .lp-box{position:absolute;width:max-content;min-width:148px;max-width:calc(100vw - 24px);padding:6px;border-radius:16px;background:#fffaf0;border:1px solid rgba(176,124,40,.3);box-shadow:0 14px 34px rgba(60,40,10,.28),0 2px 6px rgba(60,40,10,.12);display:grid;gap:2px;transform-origin:var(--lp-ox,24px) 100%;animation:lpUp .2s cubic-bezier(.2,.9,.3,1.2)}
+#langPick .lp-box::after{content:"";position:absolute;bottom:-6px;left:var(--lp-ax,22px);width:12px;height:12px;background:inherit;border-right:1px solid rgba(176,124,40,.3);border-bottom:1px solid rgba(176,124,40,.3);transform:rotate(45deg)}
+@keyframes lpUp{from{opacity:0;transform:translateY(10px) scale(.9)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#langPick .lp-box{animation:none}}
+#langPick .lp-opt{position:relative;display:flex;align-items:center;gap:10px;width:100%;padding:9px 30px 9px 12px;border-radius:11px;border:0;background:transparent;color:#3e2723;font-family:var(--ff-sans);font-size:1rem;font-weight:700;line-height:1.35;cursor:pointer;text-align:left;white-space:nowrap}
+#langPick .lp-opt:hover{background:rgba(200,146,28,.12)}
+#langPick .lp-opt.on{background:linear-gradient(135deg,#f3d27e,#e2ad3c);color:#2b1a05}
+#langPick .lp-opt.on::after{content:"";position:absolute;right:12px;top:50%;width:5px;height:10px;margin-top:-7px;border:solid currentColor;border-width:0 2.2px 2.2px 0;transform:rotate(45deg)}
 #langPick .lp-opt:disabled{opacity:.55}
 #langPick .lp-opt:active{transform:scale(.98)}
-body.dark-mode #langPick .lp-box{background:#1d1a14}
-body.dark-mode #langPick .lp-opt{background:#2a251c;color:#f3e7c8;border-color:rgba(242,212,120,.3)}
+body.dark-mode #langPick .lp-box{background:#221d15;border-color:rgba(242,212,120,.28);box-shadow:0 14px 34px rgba(0,0,0,.55)}
+body.dark-mode #langPick .lp-box::after{border-color:rgba(242,212,120,.28)}
+body.dark-mode #langPick .lp-opt{color:#f3e7c8}
+body.dark-mode #langPick .lp-opt:hover{background:rgba(242,212,120,.1)}
 body.dark-mode #langPick .lp-opt.on{background:linear-gradient(135deg,#d4a017,#a8790c);color:#1a1205}

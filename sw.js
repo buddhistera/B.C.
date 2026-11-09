@@ -4,19 +4,21 @@
 // Offline Support + Automatic Cache Update + Lie-Fi Fix
 // ============================================================
 
-const CACHE_NAME = 'buddhist-era-v4.1.52';
-// pali-script.js, lang/hi.js, lang/hi-calc.js precache නොකරයි: හින්දි තෝරාගත් අයට පමණක්, පළමු භාවිතයේදී cache වේ
+const CACHE_NAME = 'buddhist-era-v4.1.53';
+// pali-script.js, lang/hi.js, lang/hi-calc.js, lang/my.js, lang/my-calc.js, lang/th.js, lang/th-calc.js precache නොකරයි: හින්දි / බුරුම / තායි තෝරාගත් අයට පමණක්, පළමු භාවිතයේදී cache වේ
 
+// සටහන: රූප (bg/*, moon.jpg) සහ three.min.js පිටුවෙන් ඉල්ලන්නේ ?v= නැතිවයි (style.css, visuals3d.js, sunpage.js);
+// cache-first ගැළපීම URL එකම විය යුතු නිසා මෙහිද එලෙසමයි (නැත්නම් දෙවරක් බාගත වී offline නොලැබේ).
 const CACHE_ASSETS = [
   '/', '/index.html', '/manifest.json',
-  '/info.js', '/style.css', '/script.js',
+  '/info.js', '/style.css', '/script.js', '/mm-poya.js?v=1',
   '/astronomy.browser.min.js?v=1', '/chanting.js', '/patthana-data.js',
   '/calculation.js', '/pirith-data.js', '/buddha-recitation.js',
   '/buddha-vandana-data.js', '/satipatthana-data.js', '/patimokkha-data.js',
-  '/sunpage.js', '/three.min.js?v=1', '/uposatha.js', '/visuals3d.js?v=4',
-  '/bg/waves.webp?v=1', '/bg/flowers.webp?v=1', '/bg/gold.webp?v=1',
-  '/bg/gold-lines.svg?v=1', '/bg/pearl.webp?v=1', '/bg/damask.webp?v=1',
-  '/bg/swirl.webp?v=1', '/moon.jpg?v=1',
+  '/sunpage.js', '/three.min.js', '/uposatha.js', '/visuals3d.js?v=4',
+  '/bg/waves.webp', '/bg/flowers.webp', '/bg/gold.webp',
+  '/bg/gold-lines.svg', '/bg/pearl.webp', '/bg/damask.webp',
+  '/bg/swirl.webp', '/moon.jpg',
   '/icon-192x192.png?v=5', '/icon-512x512.png?v=5'
 ];
 
