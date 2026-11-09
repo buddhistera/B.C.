@@ -34,8 +34,14 @@ jobs:
     env:
       APP_VERSION: ${{ inputs.version || '1.0.0' }}
     steps:
+      # repo නම "B.C." අගින් තිතක් ඇති නිසා Windows හි සාමාන්‍ය checkout එක අසාර්ථක වේ → C:\bc වෙත clone කරයි
       - id: co
-        uses: actions/checkout@v4
+        working-directory: C:\
+        run: |
+          git init -q /c/bc && cd /c/bc
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch -q --depth 1 origin "$GITHUB_SHA" && git checkout -q FETCH_HEAD
+          git log --oneline -1
 
       - id: node
         uses: actions/setup-node@v4
@@ -48,23 +54,23 @@ jobs:
       - id: cache
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: desktop-app/src-tauri
+          workspaces: C:/bc/desktop-app/src-tauri
 
       - id: npm
         name: Install Tauri CLI
-        working-directory: desktop-app
+        working-directory: C:/bc/desktop-app
         run: npm install --no-audit --no-fund 2>&1 | tee -a ../build.log
 
       - id: www
         name: Copy web files into the app + set version
-        working-directory: desktop-app
+        working-directory: C:/bc/desktop-app
         run: |
           npm run prepare-www 2>&1 | tee -a ../build.log
           npm run set-version 2>&1 | tee -a ../build.log
 
       - id: tauri
         name: Build installer (.exe + .msi)
-        working-directory: desktop-app
+        working-directory: C:/bc/desktop-app
         run: npx tauri build 2>&1 | tee -a ../build.log
 
       - id: art
@@ -72,8 +78,8 @@ jobs:
         with:
           name: buddhist-era-windows-v${{ env.APP_VERSION }}
           path: |
-            desktop-app/src-tauri/target/release/bundle/nsis/*.exe
-            desktop-app/src-tauri/target/release/bundle/msi/*.msi
+            C:/bc/desktop-app/src-tauri/target/release/bundle/nsis/*.exe
+            C:/bc/desktop-app/src-tauri/target/release/bundle/msi/*.msi
           if-no-files-found: error
 
       - name: Save build log
@@ -82,7 +88,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           STATUS: ${{ job.status }}
         run: |
-          mkdir -p "$RUNNER_TEMP/ci" && touch build.log
+          mkdir -p "$RUNNER_TEMP/ci" /c/bc && cd /c/bc && touch build.log
           tail -c 150000 build.log > "$RUNNER_TEMP/ci/build-tail.log"
           find desktop-app/src-tauri/target/release/bundle -name '*.exe' -exec cp {} "$RUNNER_TEMP/ci/" \; 2>/dev/null || true
           echo '${{ toJSON(steps) }}' > "$RUNNER_TEMP/ci/steps.json"
