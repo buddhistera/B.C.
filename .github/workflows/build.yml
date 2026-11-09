@@ -1,7 +1,10 @@
 # =====================================================================
 #  Buddhist Era — offline Android app (Capacitor) build
-#  • main / android-app branch එකට push කරන සෑම වාරයකම, හෝ Actions → "Android build" → Run workflow
-#  • ප්‍රතිඵලය: Actions පිටුවේ එම run එකේ "Artifacts" යටතේ  buddhist-era-android  (APK + AAB)
+#  ස්වයංක්‍රීයව ධාවනය නොවේ — අවශ්‍ය විට පමණක්:
+#    GitHub → Actions → "Android build" → Run workflow → version code / name ඇතුළත් කර → Run workflow
+#  • version code: Play Store එකේ අවසාන අගයට වඩා වැඩි පූර්ණ සංඛ්‍යාවක් (උදා: 6, 7, 8 …)
+#  • version name: පරිශීලකයින්ට පෙනෙන අනුවාදය (උදා: 2.0.0)
+#  • ප්‍රතිඵලය: එම run එකේ "Artifacts" යටතේ  buddhist-era-android-…  (APK + AAB)
 #  • Repo Settings → Secrets and variables → Actions හි පහත 4 ඇත්නම් Play Store එකට යැවිය හැකි
 #    release (signed) build එකක්; නැත්නම් පරීක්ෂණ සඳහා debug APK එකක් පමණි:
 #      ANDROID_KEYSTORE_BASE64   ANDROID_KEYSTORE_PASSWORD   ANDROID_KEY_ALIAS   ANDROID_KEY_PASSWORD
@@ -9,9 +12,15 @@
 name: Android build
 
 on:
-  push:
-    branches: [main, android-app]
   workflow_dispatch:
+    inputs:
+      version_code:
+        description: 'Version code (Play Store එකේ අවසාන අගයට වඩා වැඩි අංකයක්, උදා: 6)'
+        required: true
+      version_name:
+        description: 'Version name (උදා: 2.0.0)'
+        required: true
+        default: '2.0.0'
 
 permissions:
   contents: write   # build log එක ci-logs branch එකට යැවීමට පමණි
@@ -71,7 +80,14 @@ jobs:
 
       - name: Apply app settings (icons, permissions, version, signing)
         working-directory: android-app
-        run: npm run patch-android 2>&1 | tee -a ../build.log
+        env:
+          VERSION_CODE: ${{ inputs.version_code }}
+          VERSION_NAME: ${{ inputs.version_name }}
+        run: |
+          if ! [[ "$VERSION_CODE" =~ ^[0-9]+$ ]] || [ "$VERSION_CODE" -lt 1 ]; then
+            echo "Version code must be a whole number, e.g. 6 (got: '$VERSION_CODE')" | tee -a ../build.log; exit 1
+          fi
+          npm run patch-android 2>&1 | tee -a ../build.log
 
       - name: Build
         working-directory: android-app/android
@@ -86,7 +102,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: buddhist-era-android-${{ github.run_number }}
+          name: buddhist-era-android-v${{ inputs.version_name }}-code${{ inputs.version_code }}
           path: |
             android-app/android/app/build/outputs/apk/**/*.apk
             android-app/android/app/build/outputs/bundle/**/*.aab
@@ -105,7 +121,7 @@ jobs:
           done
           tail -c 120000 build.log > "$RUNNER_TEMP/ci/build-tail.log"
           find android-app/android/app/build/outputs/apk -name '*.apk' -exec cp {} "$RUNNER_TEMP/ci/" \; 2>/dev/null || true
-          echo "run=${{ github.run_number }} status=$STATUS sha=${{ github.sha }} ref=${{ github.ref_name }}" > "$RUNNER_TEMP/ci/status.txt"
+          echo "run=${{ github.run_number }} version=${{ inputs.version_name }}(${{ inputs.version_code }}) status=$STATUS sha=${{ github.sha }} ref=${{ github.ref_name }}" > "$RUNNER_TEMP/ci/status.txt"
           cd "$RUNNER_TEMP/ci"
           git init -q && git checkout -q -b ci-logs
           git -c user.name=github-actions -c user.email=actions@github.com add -A

@@ -35,7 +35,7 @@ writeFileSync(mf, m);
 const gf = join(appDir, 'build.gradle');
 let g = readFileSync(gf, 'utf8');
 const run = parseInt(process.env.GITHUB_RUN_NUMBER || '0', 10);
-const vCode = parseInt(process.env.VERSION_CODE || String(100 + run), 10);   // Play හි පැරණි TWA = 5; සෑම build එකකම වැඩි වේ
+const vCode = parseInt(process.env.VERSION_CODE || String(100 + run), 10);   // Actions → Run workflow හිදී ඔබ දෙන අගය (Play හි අවසාන අගයට වඩා වැඩි විය යුතුය)
 const vName = process.env.VERSION_NAME || `2.0.${run}`;
 must(/versionCode\s*=?\s*\d+/.test(g), 'versionCode not found');
 g = g.replace(/versionCode(\s*=?\s*)\d+/, `versionCode$1${vCode}`).replace(/versionName(\s*=?\s*)"[^"]*"/, `versionName$1"${vName}"`);
