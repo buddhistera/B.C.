@@ -49,6 +49,25 @@
             return PL.Share.share({ title: title || name, dialogTitle: title || name, files: [res.uri] });
         }).catch(function (e) { if (!/cancel/i.test(String(e && (e.message || e)))) throw e; });
     }
+    // ---- Windows ඇප් එක (Tauri) ඇතුළේ පමණක් ----
+    function isDesktopApp() { return !!(window.__TAURI__ && window.__TAURI__.core); }
+    // Blob එක Windows "Save as" කවුළුවෙන් සුරකියි (src-tauri/src/main.rs → save_file)
+    function desktopSaveFile(blob, name) {
+        return new Promise(function (ok, no) {
+            const r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = no; r.readAsDataURL(blob);
+        }).then(function (b64) { return window.__TAURI__.core.invoke('save_file', { name: name, data: b64 }); });
+    }
+    // Windows ඇප් එකේ: බාහිර සබැඳි (වෙබ් අඩවි, mailto) පරිගණකයේ browser එකේ විවෘත කරයි
+    if (isDesktopApp()) {
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest ? e.target.closest('a[href]') : null; if (!a) return;
+            const href = a.href || '';
+            if (/^(https?:|mailto:)/i.test(href) && !/^https?:\/\/tauri\.localhost/i.test(href) && (a.target === '_blank' || !href.startsWith(location.origin))) {
+                e.preventDefault(); e.stopImmediatePropagation();
+                window.__TAURI__.core.invoke('open_url', { url: href }).catch(function (err) { console.error('open_url:', err); });
+            }
+        }, true);
+    }
     // Android ඇප් එක: ඉහළ (status) හා පහළ (navigation) තීරු ඇප් එකේ තේමාවේ වර්ණයට
     function syncAppBars() {
         if (!isNativeApp()) return;
@@ -2180,7 +2199,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // Android ඇප් එකේ ගොනු APK එක ඇතුළේම ඇති නිසා service worker අවශ්‍ය නැත (ඇප් update එකකදී පැරණි cache පෙන්වීම වළක්වයි)
-if ('serviceWorker' in navigator && !isNativeApp()) {
+if ('serviceWorker' in navigator && !isNativeApp() && !isDesktopApp()) {
 
   // පළමු ස්ථාපනයේදී (මීට පෙර controller නොතිබූ විට) පිටුව දැනටමත් නවතම ගොනුවලින් පූරණය වී ඇති නිසා නැවත load කිරීම අනවශ්‍යයි;
   // යාවත්කාලීනයකදී පමණක්, ඒ ද එක් වරක් පමණක් reload වේ.
@@ -2189,7 +2208,7 @@ if ('serviceWorker' in navigator && !isNativeApp()) {
 
   window.addEventListener('load', async () => {
 
-    if (isNativeApp()) return;
+    if (isNativeApp() || isDesktopApp()) return;
 
     try {
 

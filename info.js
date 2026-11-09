@@ -747,6 +747,9 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
   }
   function qmSave(cv, name) {
     if (isApp()) { appShareCanvas(cv, name); return; }
+    if (typeof isDesktopApp === 'function' && isDesktopApp()) {   /* Windows ඇප් එක: "Save as" කවුළුව */
+      cv.toBlob(function (b) { if (b) desktopSaveFile(b, name).catch(function (e) { console.error('save:', e); }); }, 'image/png'); return;
+    }
     function viaUrl(url, revoke) {
       var a = document.createElement('a');
       a.href = url; a.download = name; a.rel = 'noopener';

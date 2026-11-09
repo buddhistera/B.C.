@@ -376,6 +376,14 @@ function dlJpg(color) {
       } catch (e) { freeCanvas(cv); fail(e); done(); }
       return;
     }
+    if (typeof isDesktopApp === 'function' && isDesktopApp()) {   /* Windows ඇප් එක: "Save as" කවුළුව */
+      toJpegBlob(cv, .95, function (b) {
+        freeCanvas(cv);
+        if (!b) { fail(); done(); return; }
+        desktopSaveFile(b, name).catch(fail).then(done);
+      });
+      return;
+    }
     try {
       var url = cv.toDataURL('image/jpeg', .95), a = doc.createElement('a');
       a.href = url; a.download = name; doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
