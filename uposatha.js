@@ -238,7 +238,9 @@ function wdAbbr(d) { return en() ? SWD(d.getDay()) : SIDa[d.getDay()]; }
 function wdFull(d) { return en() ? T(EDF[d.getDay()]) : SID[d.getDay()]; }
 
 function drawSheet(y, list, v, color, rgn) {
-  var PW = low ? 2339 : 3508, PH = Math.round(PW * 210 / 297), m = PW / 297, cv = doc.createElement('canvas'), x, t = i18n[currentLang];
+  /* විශාලව මුද්‍රණය කළත් බොඳ නොවීමට: 4800 px (A4 = ~410 dpi, A3 = ~290 dpi). iOS canvas සීමාව (16.7 MP) ඇතුළත — 4800×3394 = 16.3 MP.
+     මතකය අඩු උපාංගවල 3508 px (A4 @ 300 dpi). */
+  var PW = low ? 3508 : 4800, PH = Math.round(PW * 210 / 297), m = PW / 297, cv = doc.createElement('canvas'), x, t = i18n[currentLang];
   cv.width = PW; cv.height = PH; x = cv.getContext('2d');
   var FF = '"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai","Iskoola Pota","Nirmala UI","Noto Sans Sinhala","Noto Sans Devanagari",serif';
   var C = color ?
@@ -269,8 +271,28 @@ function drawSheet(y, list, v, color, rgn) {
   if (color) { var bg = x.createLinearGradient(0, 0, 0, PH); bg.addColorStop(0, '#f5dfc6'); bg.addColorStop(.24, '#faf2e8'); bg.addColorStop(1, '#fbf6ee'); x.fillStyle = bg; } else x.fillStyle = '#fff';
   x.fillRect(0, 0, PW, PH);
 
+  /* ----- border: ද්විත්ව රාමුව + කොන්වල දියමන්ති හැඩ (අරුණෝද්ගමන පත්‍රයේ ආකාරයට) -----
+     වර්ණ: වර්ණ පිටපතේ පිටුවේ දුඹුරු (#a0561d) රේඛා + රන් (#c9971a) දියමන්ති, කළු සුදු පිටපතේ කළු */
+  (function () {
+    var o = 3.2 * m, n = 5.4 * m, s = 1.7 * m, fc = color ? '#a0561d' : '#000', dc = color ? '#c9971a' : '#000';
+    x.strokeStyle = fc;
+    /* පිට රේඛාව (ඝන): පැති 4 වෙන වෙනම — එක් එක් රේඛාව දියමන්තියේ තුඩට 1 mm කට පෙර නවතී */
+    var g = s + 1 * m;
+    x.lineWidth = .55 * m; x.lineCap = 'butt'; x.beginPath();
+    x.moveTo(o + g, o); x.lineTo(PW - o - g, o);                  // ඉහළ
+    x.moveTo(o + g, PH - o); x.lineTo(PW - o - g, PH - o);        // පහළ
+    x.moveTo(o, o + g); x.lineTo(o, PH - o - g);                  // වම
+    x.moveTo(PW - o, o + g); x.lineTo(PW - o, PH - o - g);        // දකුණ
+    x.stroke();
+    x.lineWidth = .3 * m; x.strokeRect(n, n, PW - 2 * n, PH - 2 * n);    // ඇතුළු රේඛාව (සිහින්)
+    [[o, o], [PW - o, o], [o, PH - o], [PW - o, PH - o]].forEach(function (c) {   // දියමන්ති පිට රාමුවේ කොන් මත පමණි (ඇතුළු රාමුවට යා කරන රේඛාවක් නැත)
+      x.beginPath(); x.moveTo(c[0], c[1] - s); x.lineTo(c[0] + s, c[1]); x.lineTo(c[0], c[1] + s); x.lineTo(c[0] - s, c[1]); x.closePath();
+      x.fillStyle = dc; x.fill(); x.lineWidth = .25 * m; x.stroke();
+    });
+  })();
+
   /* ----- title: full width across the top ----- */
-  var mx = 9 * m, tw0 = PW - 2 * mx, th = 20 * m, ty = 8 * m, b2 = (y + 544) % 100 === 0 ? String(y + 544) : String((y + 544) % 100).padStart(2, '0'), bs = (y + 543) + ' - ' + b2,
+  var mx = 11 * m, tw0 = PW - 2 * mx, th = 20 * m, ty = 10 * m, b2 = (y + 544) % 100 === 0 ? String(y + 544) : String((y + 544) % 100).padStart(2, '0'), bs = (y + 543) + ' - ' + b2,
     title = en() ? F('Buddhist Era {0} Uposatha Days Calendar (C.E. {1})', bs, y) : 'ශ්‍රී බුද්ධ වර්ෂ ' + bs + ' උපෝසථ දින දර්ශනය (ව්‍ය ව. ' + y + ')';
   if (rgn === 'mm') title += ' · ' + tr(TX.rMm[0], TX.rMm[1]);
   if (color) {
@@ -297,7 +319,7 @@ function drawSheet(y, list, v, color, rgn) {
   function colH(a) { var s = 0; a.forEach(function (g) { s += uB + uH + g.r.length; }); return a.length ? s + (a.length - 1) * uG : 0; }
   var bk = 0, bm = 1e9, k, mm;
   for (k = 0; k <= G.length; k++) { mm = Math.max(colH(G.slice(0, k)), colH(G.slice(k))); if (mm <= bm + 1e-9) { bm = mm; bk = k; } }
-  var L = G.slice(0, bk), R = G.slice(bk), gut = 8 * m, Wt = (tw0 - gut) / 2, ct = 33 * m, cb = 202 * m;
+  var L = G.slice(0, bk), R = G.slice(bk), gut = 8 * m, Wt = (tw0 - gut) / 2, ct = 35 * m, cb = 200 * m;
   var u = Math.min((cb - ct) / (bm + uVG + uV), 9.2 * m);
   var cf = [.09, .23, .14, .24, .30];
   function cx(X, i) { var a = 0, j; for (j = 0; j < i; j++) a += cf[j]; return X + Wt * (a + cf[i] / 2); }
@@ -367,6 +389,26 @@ function toJpegBlob(cv, q, cb) {
   if (cv.toBlob) { cv.toBlob(function (b) { cb(b || urlToBlob(cv.toDataURL('image/jpeg', q))); }, 'image/jpeg', q); return; }
   cb(urlToBlob(cv.toDataURL('image/jpeg', q)));
 }
+/* ඉහළ ගුණාත්මක JPG: quality .97 සිට පටන්ගෙන, ගොනුව ~2.6 MB ඉක්මවන්නේ නම් පමණක් පියවරෙන් පියවර අඩු කරයි (~2 MB ඉලක්කය).
+   ඉන්පසු JFIF ශීර්ෂයේ DPI අගය සකසයි — මුද්‍රණ මෘදුකාංග රූපය A4 ප්‍රමාණයෙන් නිවැරදිව ගනී (නැත්නම් 72 dpi ලෙස සලකයි). */
+var JPG_MAX = 2.6e6, JPG_Q = [.97, .95, .93, .9, .87];
+function setJpegDpi(b, dpi, cb) {
+  if (!b || !b.arrayBuffer) { cb(b); return; }
+  b.arrayBuffer().then(function (ab) {
+    var u = new Uint8Array(ab);
+    if (u.length > 18 && u[0] === 0xFF && u[1] === 0xD8 && u[2] === 0xFF && u[3] === 0xE0 && u[6] === 0x4A && u[7] === 0x46 && u[8] === 0x49 && u[9] === 0x46 && u[10] === 0) {
+      u[13] = 1; u[14] = dpi >> 8; u[15] = dpi & 255; u[16] = dpi >> 8; u[17] = dpi & 255;   // units = dpi, X / Y density
+      cb(new Blob([u], { type: 'image/jpeg' }));
+    } else cb(b);
+  }, function () { cb(b); });
+}
+function makeJpeg(cv, cb, i) {
+  i = i || 0;
+  toJpegBlob(cv, JPG_Q[i], function (b) {
+    if (b && b.size > JPG_MAX && i < JPG_Q.length - 1) { makeJpeg(cv, cb, i + 1); return; }
+    setJpegDpi(b, Math.round(cv.width / (297 / 25.4)), cb);   // A4 දිග (297 mm) මත DPI
+  });
+}
 function freeCanvas(cv) { try { cv.width = cv.height = 0; } catch (e) {} } // iOS: canvas මතකය වහාම නිදහස් කරයි (දෙවන වරටත් සාදන්න හැකි වීමට)
 
 function closePreview() {
@@ -397,21 +439,21 @@ function dlJpg(color) {
   var go = function () {
     var cv;
     try { cv = drawSheet(y, list, vas, !!color, rgn); } catch (e) { fail(e); done(); return; }
-    if (IOS) {
-      try {
-        toJpegBlob(cv, .92, function (b) {
-          freeCanvas(cv);
-          if (b) { try { showPreview(b, name); } catch (e) { fail(e); } } else fail();
-          done();
-        });
-      } catch (e) { freeCanvas(cv); fail(e); done(); }
-      return;
-    }
     try {
-      var url = cv.toDataURL('image/jpeg', .95), a = doc.createElement('a');
-      a.href = url; a.download = name; doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
-    } catch (e) { fail(e); }
-    freeCanvas(cv); done();
+      makeJpeg(cv, function (b) {
+        freeCanvas(cv);
+        if (!b) { fail(); done(); return; }
+        try {
+          if (IOS) showPreview(b, name);
+          else {   // Blob URL — විශාල ගොනු සඳහා data: URL එකට වඩා වේගවත් හා මතකය අඩුවෙන් වැය වේ
+            var url = URL.createObjectURL(b), a = doc.createElement('a');
+            a.href = url; a.download = name; doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
+            setTimeout(function () { try { URL.revokeObjectURL(url); } catch (e) {} }, 60000);
+          }
+        } catch (e) { fail(e); }
+        done();
+      });
+    } catch (e) { freeCanvas(cv); fail(e); done(); }
   };
   try { if (doc.fonts && doc.fonts.load) Promise.all([doc.fonts.load('400 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('700 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('400 40px "Noto Serif"', 'Aā'), doc.fonts.load('700 40px "Noto Serif"', 'Aā')].concat(typeof isHindi === 'function' && isHindi() ? [doc.fonts.load('400 40px "Noto Serif Devanagari"', 'अआ'), doc.fonts.load('700 40px "Noto Serif Devanagari"', 'अआ')] : []).concat(typeof currentLang !== 'undefined' && currentLang === 'my' ? [doc.fonts.load('400 40px "Noto Sans Myanmar"', 'မြန်'), doc.fonts.load('700 40px "Noto Sans Myanmar"', 'မြန်')] : []).concat(typeof currentLang !== 'undefined' && currentLang === 'th' ? [doc.fonts.load('400 40px "Noto Sans Thai"', 'ไทย'), doc.fonts.load('700 40px "Noto Sans Thai"', 'ไทย')] : [])).then(go, go); else go(); } catch (e) { go(); }
 }
