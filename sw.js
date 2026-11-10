@@ -4,7 +4,7 @@
 // Offline Support + Automatic Cache Update + Lie-Fi Fix
 // ============================================================
 
-const CACHE_NAME = 'buddhist-era-v4.1.53';
+const CACHE_NAME = 'buddhist-era-v4.1.54';
 // pali-script.js, lang/hi.js, lang/hi-calc.js, lang/my.js, lang/my-calc.js, lang/th.js, lang/th-calc.js precache නොකරයි: හින්දි / බුරුම / තායි තෝරාගත් අයට පමණක්, පළමු භාවිතයේදී cache වේ
 
 // සටහන: රූප (bg/*, moon.jpg) සහ three.min.js පිටුවෙන් ඉල්ලන්නේ ?v= නැතිවයි (style.css, visuals3d.js, sunpage.js);
