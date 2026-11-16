@@ -2,69 +2,71 @@
 // Buddhist Era PWA — Service Worker
 // Offline Support + Automatic Cache Update + Lie-Fi / Zero-Data Fix
 // ------------------------------------------------------------
-// ★ ගොනු අනුවාද (version) අංක ඇත්තේ මෙම ගොනුවේ පමණි ★
+// ★ අනුවාද අංක අතින් වෙනස් කිරීමට අවශ්‍ය නැත — සියල්ල ස්වයංක්‍රීයයි ★
 //   index.html / script.js / calculation.js ආදී ගොනුවල ?v=... අවශ්‍ය නැත (තිබුණත් නොසලකයි).
 //
-//   ගොනුවක් වෙනස් කළ විට: පහත ලැයිස්තුවේ එම ගොනුවේ අංකය පමණක් +1 කරන්න.
-//     උදා: script.js වෙනස් කළා නම්  '/script.js': 1  →  '/script.js': 2
-//   • update එකේදී බාගත වන්නේ අංකය වෙනස් වූ ගොනු පමණි.
+//   • GitHub වෙත ගොනු upload කළ විට (main), GitHub Action එකක් (.github/workflows/sw-hashes.yml)
+//     එක් එක් ගොනුවේ අන්තර්ගතයෙන් hash එකක් සාදා පහත ලැයිස්තුවේ ඉබේම දමයි.
+//     අලුත් ගොනු ලැයිස්තුවට එක් කරයි, ඉවත් කළ ගොනු ලැයිස්තුවෙන් ඉවත් කරයි.
+//   • update එකේදී බාගත වන්නේ අන්තර්ගතය ඇත්තටම වෙනස් වූ ගොනු පමණි;
 //     අනෙක් ගොනු පැරණි cache එකෙන් පිටපත් කරයි (network භාවිතයක් නැත).
 //   • වෙනස් වූ ගොනු HTTP cache මඟහැර ({cache:'reload'}) සර්වරයෙන්ම අලුතින් ගනී.
 //   • නව cache එක සම්පූර්ණ වූ පසු පමණක් මාරු වේ → පිටුව එක් වරක් reload වේ
 //     (අලුත් HTML + පැරණි JS වැනි මිශ්‍ර තත්ත්වයක් නැත).
-//   • ලැයිස්තුවේ නැති අලුත් ගොනුවක් එක් කළොත්, එයද මෙහි ලැයිස්තුවට එක් කරන්න.
-//   • සියලු ගොනු එකවර අලුතින් බාගත කිරීමට අවශ්‍ය නම්: RESET අංකය +1 කරන්න.
+//   • ගොනුවක් CORE / OPTIONAL / LAZY අතර මාරු කිරීමට: එහි පේළිය අදාළ ලැයිස්තුවට ගෙන යන්න (hash එක ඉබේම).
+//   • සියලු ගොනු එකවර අලුතින් බාගත කිරීමට අවශ්‍ය නම් පමණක්: RESET අංකය +1 කරන්න.
 // ============================================================
 
 const RESET = 1;
 
 // අනිවාර්ය ගොනු — එකක් හෝ නොලැබුණොත් update එක අත්හැර පැරණි අනුවාදයම දිගටම ක්‍රියා කරයි
 const CORE_FILES = {
-  '/': 1,                              // index.html
-  '/manifest.json': 1,
-  '/style.css': 1,
-  '/astronomy.browser.min.js': 1,
-  '/mm-poya.js': 1,
-  '/script.js': 1,
-  '/calculation.js': 1,
-  '/info.js': 1,
-  '/chanting.js': 1,
-  '/visuals3d.js': 4,
-  '/sunpage.js': 1,
-  '/uposatha.js': 1
+  '/': 'b06d02b216',                              // index.html
+  '/manifest.json': '469ab2e27b',
+  '/style.css': '1f6ec15ecf',
+  '/astronomy.browser.min.js': 'd1b3ab4b86',
+  '/mm-poya.js': 'f67d310aa6',
+  '/script.js': '186eb26511',
+  '/calculation.js': '2eaef14a21',
+  '/info.js': 'e03a2f70ff',
+  '/chanting.js': 'ca3efd8abc',
+  '/visuals3d.js': '3482e1f91f',
+  '/sunpage.js': '110417d8df',
+  '/uposatha.js': 'ee09b97c30'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
 const OPTIONAL_FILES = {
-  '/patthana-data.js': 1,
-  '/pirith-data.js': 1,
-  '/buddha-recitation.js': 1,
-  '/buddha-vandana-data.js': 1,
-  '/satipatthana-data.js': 1,
-  '/patimokkha-data.js': 1,
-  '/three.min.js': 1,
-  '/moon.jpg': 1,
-  '/bg/waves.webp': 1,
-  '/bg/flowers.webp': 1,
-  '/bg/gold.webp': 1,
-  '/bg/gold-lines.svg': 1,
-  '/bg/pearl.webp': 1,
-  '/bg/damask.webp': 1,
-  '/bg/swirl.webp': 1,
-  '/icon-192x192.png': 5,
-  '/icon-512x512.png': 5
+  '/patthana-data.js': '7093f05955',
+  '/pirith-data.js': '73f0cfcde8',
+  '/buddha-recitation.js': 'ec46d24972',
+  '/buddha-vandana-data.js': '1f90334966',
+  '/satipatthana-data.js': '17cf3675fd',
+  '/patimokkha-data.js': '2f271186af',
+  '/three.min.js': 'a9d81ea63f',
+  '/moon.jpg': 'b246064f21',
+  '/bg/waves.webp': 'c471013b4f',
+  '/bg/flowers.webp': '4b29026c8c',
+  '/bg/gold.webp': 'ea924d8f19',
+  '/bg/gold-lines.svg': '54d8513b70',
+  '/bg/pearl.webp': 'be0ec5e73c',
+  '/bg/damask.webp': 'fd77ed6a39',
+  '/bg/swirl.webp': '6644916590',
+  '/icon-192x192.png': '623c36ba56',
+  '/icon-512x512.png': '31e4bc20f0',
+  '/icon-32×32.png': 'd74438ed59'
 };
 
 // හින්දි / බුරුම / තායි තෝරාගත් අයට පමණක් — පළමු භාවිතයේදී cache වේ.
-// update එකේදී: අංකය නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
+// update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
-  '/pali-script.js': 3,
-  '/lang/hi.js': 5,
-  '/lang/my.js': 5,
-  '/lang/th.js': 5,
-  '/lang/hi-calc.js': 1,
-  '/lang/my-calc.js': 1,
-  '/lang/th-calc.js': 1
+  '/pali-script.js': '6f33d6f815',
+  '/lang/hi.js': '30f17adbba',
+  '/lang/my.js': '0865d83134',
+  '/lang/th.js': '4980f36b78',
+  '/lang/hi-calc.js': '39cf96b451',
+  '/lang/my-calc.js': '28da8427e6',
+  '/lang/th-calc.js': '7e3a144cbc'
 };
 
 // ------------------------------------------------------------
@@ -73,7 +75,7 @@ const LAZY_FILES = {
 const CACHE_PREFIX = 'buddhist-era-';
 const VERSIONS = Object.assign({}, LAZY_FILES, OPTIONAL_FILES, CORE_FILES);
 
-// cache නාමය ඉහත අංක වලින්ම ස්වයංක්‍රීයව සෑදේ (අතින් වෙනස් කිරීමට දෙයක් නැත)
+// cache නාමය ඉහත hash වලින්ම ස්වයංක්‍රීයව සෑදේ (අතින් වෙනස් කිරීමට දෙයක් නැත)
 function hashOf(str) {
   let h = 0x811c9dc5;
   for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
@@ -90,13 +92,15 @@ const INSTALL_TIMEOUT_MS = 30000; // install (පසුබිමින්) — �
 
 // ඉල්ලීමේ path එක (?v=... සහ #hash නොසලකයි); index.html → '/'
 function pathOf(url) {
-  const p = new URL(url, self.location.href).pathname;
+  let p = new URL(url, self.location.href).pathname;
+  try { p = decodeURIComponent(p); } catch (e) {}       // icon-32%C3%9732.png → icon-32×32.png (ලැයිස්තුවේ ලෙසම)
   return p === '/index.html' ? '/' : p;
 }
 
-// cache එක තුළ ගබඩා කරන key එක: path + එම ගොනුවේ අංකය (ලැයිස්තුවේ නැති ගොනු = 0)
+// cache එක තුළ ගබඩා කරන key එක: path + එම ගොනුවේ hash එක (ලැයිස්තුවේ නැති ගොනු = 0)
 function keyOf(path) {
-  return path + '?v=' + (VERSIONS[path] || 0) + '&r=' + RESET;
+  const u = new URL(path + '?v=' + (VERSIONS[path] || 0) + '&r=' + RESET, self.location.href);
+  return u.pathname + u.search;                          // URL encoding එක Cache API එකට සමානව
 }
 
 // Operator fake page එක: .js / .css / රූප / json ඉල්ලද්දී HTML ආවොත් එය බොරු පිටුවකි
