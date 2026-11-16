@@ -2899,11 +2899,11 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
        ඉංග්‍රීසි කොටසක් පසුව වෙනස් කළොත් hash නොගැලපේ → එම කොටස පමණක් ඉංග්‍රීසියෙන් පෙනේ (කිසිවක් කැඩෙන්නේ නැත).
      • SVG රූප සහ HTML ව්‍යුහය එක් වරක් පමණි (ඉංග්‍රීසි පිටුවෙන්) — හින්දියට අමතරව ඇත්තේ පෙළ පමණි.
      • class="pali" පාළි වචන පරිවර්තනය නොකර දේවනාගරී අකුරින් ලියයි (pali-script.js). */
-  var HI_CALC_SRC = 'lang/hi-calc.js?v=1';
+  var HI_CALC_SRC = 'lang/hi-calc.js';
   /* බුරුම (my): හින්දි ක්‍රමයමයි — lang/my-calc.js (MY_CALC) පෙළ, class="pali" පාළිය බුරුම අකුරින් */
   var TR_CALC = { hi: { v: 'HI_CALC', src: HI_CALC_SRC, sc: 'deva', close: 'बंद करें' },
-                  my: { v: 'MY_CALC', src: 'lang/my-calc.js?v=1', sc: 'mymr', close: 'ပိတ်ရန်' },
-                  th: { v: 'TH_CALC', src: 'lang/th-calc.js?v=1', sc: 'thai', close: 'ปิด' } };
+                  my: { v: 'MY_CALC', src: 'lang/my-calc.js', sc: 'mymr', close: 'ပိတ်ရန်' },
+                  th: { v: 'TH_CALC', src: 'lang/th-calc.js', sc: 'thai', close: 'ปิด' } };
   function hashKey(str) { var h = 0x811c9dc5; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); } return (h >>> 0).toString(36); }
   function segKey(el) { return el.innerHTML.replace(/\s+/g, ' ').trim(); }
   function isPaliEl(el) { return el.classList && el.classList.contains('pali'); }

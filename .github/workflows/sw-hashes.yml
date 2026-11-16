@@ -1,0 +1,61 @@
+# =====================================================================
+#  sw.js ගොනු hash ස්වයංක්‍රීයව යාවත්කාලීන කිරීම
+#  main වෙත ගොනු upload / push කරන සෑම විටම ධාවනය වේ:
+#    • එක් එක් ගොනුවේ අන්තර්ගතයෙන් hash එකක් සාදා sw.js හි ලැයිස්තුවට දමයි
+#    • යමක් වෙනස් වී ඇත්නම් පමණක් "sw.js: update file hashes" commit එකක් එක් කරයි
+#      → Vercel එය deploy කරයි → පරිශීලකයින්ට වෙනස් වූ ගොනු පමණක් බාගත වේ
+#  ඔබට කිසිවක් කිරීමට අවශ්‍ය නැත. (අතින්: Actions → "Update sw.js hashes" → Run workflow)
+# =====================================================================
+name: Update sw.js hashes
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # යාවත්කාලීන කළ sw.js commit කිරීමට
+
+concurrency:
+  group: sw-hashes
+  cancel-in-progress: false
+
+jobs:
+  hashes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Compute file hashes
+        run: node .github/scripts/sw-hashes.mjs
+
+      - name: Check sw.js syntax
+        run: node --check sw.js
+
+      - name: Commit sw.js (only if changed)
+        run: |
+          if git diff --quiet -- sw.js; then
+            echo "sw.js already up to date - nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sw.js
+          git commit -m "sw.js: update file hashes"
+          # මේ අතරතුර තවත් push එකක් වී ඇත්නම්, එය මත නැවත ගණනය කර යවයි
+          for i in 1 2 3; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            git reset --hard origin/main
+            node .github/scripts/sw-hashes.mjs
+            if git diff --quiet -- sw.js; then exit 0; fi
+            git add sw.js
+            git commit -m "sw.js: update file hashes"
+          done
+          exit 1

@@ -43,15 +43,15 @@
     <script>
       /* හින්දි / බුරුම / තායි තෝරා ඇත්නම් පමණක්, අනෙක් ගොනුවලට පෙර භාෂා ගොනු load කරයි (අනෙක් අයට කිසිදු බරක් නැත) */
       try { var _l = localStorage.getItem('appLang'); if (_l) document.documentElement.lang = _l;
-        if (_l === 'hi' || _l === 'my' || _l === 'th') document.write('<script src="pali-script.js?v=3"><\/script><script src="lang/' + _l + '.js?v=5"><\/script>'); } catch (e) {}
+        if (_l === 'hi' || _l === 'my' || _l === 'th') document.write('<script src="pali-script.js"><\/script><script src="lang/' + _l + '.js"><\/script>'); } catch (e) {}
     </script>
-    <script src="astronomy.browser.min.js?v=1" defer></script>
-    <script src="mm-poya.js?v=1" defer></script>
+    <script src="astronomy.browser.min.js" defer></script>
+    <script src="mm-poya.js" defer></script>
     <script src="script.js" defer></script>
     <script src="calculation.js" defer></script>
     <script src="info.js" defer></script>
     <script src="chanting.js" defer></script>
-    <script src="visuals3d.js?v=4" defer></script>
+    <script src="visuals3d.js" defer></script>
     <script src="sunpage.js" defer></script>
     <script src="uposatha.js" defer></script>
 

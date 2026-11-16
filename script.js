@@ -8,7 +8,7 @@
 // th = ไทย (තායි): එම ක්‍රමයමයි — lang/th.js (TH_DICT), පාළිය තායි අකුරින් ('thai'); උපෝසථ දින ශ්‍රී ලංකා / තායි ලෙසම.
     const APP_LANGS = ['si', 'en', 'hi', 'my', 'th'];
     const LANG_NAMES = { si: 'සිංහල', en: 'English', hi: 'हिन्दी', my: 'မြန်မာ', th: 'ไทย' };
-    const LANG_FILES = { hi: ['pali-script.js?v=3', 'lang/hi.js?v=5'], my: ['pali-script.js?v=3', 'lang/my.js?v=5'], th: ['pali-script.js?v=3', 'lang/th.js?v=5'] };
+    const LANG_FILES = { hi: ['pali-script.js', 'lang/hi.js'], my: ['pali-script.js', 'lang/my.js'], th: ['pali-script.js', 'lang/th.js'] };
     const LANG_DICT = { hi: 'HI_DICT', my: 'MY_DICT', th: 'TH_DICT' };   // ඉංග්‍රීසි යතුර → එම භාෂාවේ පෙළ
     const LANG_SCRIPT = { hi: 'deva', my: 'mymr', th: 'thai' };          // පාළිය ලියන අක්ෂර මාලාව
     let currentLang = localStorage.getItem('appLang') || 'en';
@@ -2281,7 +2281,9 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-
+/* ---- Service Worker ----
+   ගොනු අනුවාදය (version) පාලනය කරන්නේ sw.js හි VERSION එකෙන් පමණි.
+   මෙහි හෝ index.html හි ?v=... වෙනස් කිරීමට අවශ්‍ය නැත. */
 if ('serviceWorker' in navigator) {
 
   // පළමු ස්ථාපනයේදී (මීට පෙර controller නොතිබූ විට) පිටුව දැනටමත් නවතම ගොනුවලින් පූරණය වී ඇති නිසා නැවත load කිරීම අනවශ්‍යයි;
@@ -2289,30 +2291,25 @@ if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
   let reloadingForSW = false;
 
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloadingForSW) return;
+    reloadingForSW = true;
+    window.location.reload();
+  });
+
   window.addEventListener('load', async () => {
-
     try {
-
-      const reg =
-        await navigator.serviceWorker.register('./sw.js');
-
+      // updateViaCache:'none' → sw.js සැමවිටම සර්වරයෙන්ම පරීක්ෂා කරයි (HTTP cache එකෙන් නොවේ)
+      const reg = await navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
       console.log('Service Worker Registered');
 
-      navigator.serviceWorker.addEventListener(
-        'controllerchange',
-        () => {
-          if (!hadController || reloadingForSW) return;
-          reloadingForSW = true;
-          window.location.reload();
-        }
-      );
+      // ඇප් එක දිගු වේලාවක් විවෘතව තබා නැවත තිරයට ආ විට නව version එකක් ඇත්දැයි පරීක්ෂා කරයි
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') reg.update().catch(() => {});
+      });
 
     } catch (err) {
-
       console.error('SW Error:', err);
-
     }
-
   });
-  
 }
