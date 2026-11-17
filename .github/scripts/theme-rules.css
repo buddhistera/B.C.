@@ -35,7 +35,7 @@ html[data-theme] body:not(.dark-mode) .panel-header{color:var(--t-ac2);border-bo
 html[data-theme] body:not(.dark-mode) .label-text,html[data-theme] body:not(.dark-mode) .val-text{color:var(--t-tx)}
 html[data-theme] body .main-panel,html[data-theme] body.dark-mode .main-panel{background:var(--t-panel);border:1px solid var(--t-panel-bd);box-shadow:0 6px 14px var(--t-sh)}
 html[data-theme] body .main-panel .main-val-text,html[data-theme] body.dark-mode .main-val-text{color:var(--t-panel-tx);text-shadow:var(--t-panel-ts)}
-html[data-theme].theme-deep body .main-panel .label-text{color:#fff4d6}
+html[data-theme] body:not(.dark-mode) .main-panel .label-text{color:var(--t-panel-lb)}
 html[data-theme] body.dark-mode .side-panel,html[data-theme] body.dark-mode .data-item{background-color:var(--t-card);border-color:var(--t-bd)}
 html[data-theme] body.dark-mode .main-panel .data-item{background-color:transparent}
 html[data-theme] body.dark-mode .panel-header{color:var(--t-ac);border-bottom-color:var(--t-bd)}
@@ -162,8 +162,7 @@ html[data-theme] body.dark-mode #upOverlay .up-bg2:not(.t){background:var(--t-ac
 html[data-theme] body #upOverlay .up-db .b{background:var(--s600);color:#fff}
 html[data-theme] body.dark-mode #upOverlay .up-db .b{background:var(--t-ac);color:var(--t-bg)}
 html[data-theme] body #upOverlay .up-pb i{background:linear-gradient(90deg,var(--s400),var(--h300))}
-html[data-theme] body #upOverlay .up-dl,html[data-theme] body #upOverlay .up-shbt.up-pvs{background:linear-gradient(135deg,var(--s700),var(--s900));color:#fff}
-html[data-theme].theme-deep body #upOverlay .up-dl,html[data-theme].theme-deep body #upOverlay .up-shbt.up-pvs{background:var(--t-btn);color:var(--t-btn-tx)}
+html[data-theme] body #upOverlay .up-dl,html[data-theme] body #upOverlay .up-shbt.up-pvs{background:var(--t-dl);color:var(--t-dl-tx)}
 html[data-theme] body.dark-mode #upOverlay .up-dl,html[data-theme] body.dark-mode #upOverlay .up-shbt.up-pvs{background:var(--t-btn);color:var(--t-btn-tx)}
 html[data-theme] body.dark-mode #upOverlay .up-hero h1{color:var(--t-ac)}
 
@@ -174,8 +173,7 @@ html[data-theme] body #spOverlay .sp-tlh::after{background:linear-gradient(90deg
 html[data-theme] body #spOverlay .sp-d.on b{color:var(--t-ac)}
 html[data-theme] body #spOverlay #spSl::-webkit-slider-thumb{border-color:var(--t-ac)}
 
-html[data-theme]:not(.theme-deep) body:not(.dark-mode) #spOverlay .sp-btn:not(.gold){color:var(--t-hero-tx);background:var(--t-hero-in);border-color:var(--t-hero-bd)}
-html[data-theme]:not(.theme-deep) body:not(.dark-mode) #spOverlay .sp-pl{color:var(--t-hero-tx);background:rgba(255,255,255,.55);border-color:var(--t-hero-bd)}
+html[data-theme] body:not(.dark-mode) #spOverlay .sp-btn:not(.gold),html[data-theme] body:not(.dark-mode) #spOverlay .sp-pl{color:var(--t-chip-tx);background:var(--t-chip-bg);border-color:var(--t-chip-bd)}
 
 /* ---- ගණනය පිටුව: ශීර්ෂය ---- */
 html[data-theme] body #gnOverlay .hero{background:linear-gradient(135deg,var(--s950) 0%,var(--s900) 40%,var(--s700) 70%,var(--h600) 100%);box-shadow:0 6px 30px var(--t-sh)}
@@ -231,8 +229,8 @@ html.theme-dark #setOverlay .st-sec{color:var(--t-ac)}
  #setOverlay .st-head{padding:8px 10px 8px 20px}#setOverlay .st-x{width:40px;height:40px}
  #setOverlay .st-body{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);column-gap:24px;align-content:start;padding:2px 20px 14px}
  #setOverlay .st-body>*{grid-column:2}
- #setOverlay .st-body>:nth-child(1){grid-column:1;grid-row:1}#setOverlay .st-body>:nth-child(2){grid-column:1;grid-row:2/span 4;align-self:start}
+ #setOverlay .st-body>:nth-child(1){grid-column:1;grid-row:1}#setOverlay .st-body>:nth-child(2){grid-column:1;grid-row:2/span 6;align-self:start}
  #setOverlay .st-body>:nth-child(3){grid-row:1}#setOverlay .st-body>:nth-child(4){grid-row:2}#setOverlay .st-body>:nth-child(5){grid-row:3}
- #setOverlay .st-body>:nth-child(6){grid-row:4}#setOverlay .st-body>:nth-child(7){grid-row:5}
+ #setOverlay .st-body>:nth-child(6){grid-row:4}#setOverlay .st-body>:nth-child(7){grid-row:5}#setOverlay .st-body>:nth-child(8){grid-row:6}#setOverlay .st-body>:nth-child(9){grid-row:7}
  #setOverlay .st-sec{margin:12px 0 8px}#setOverlay .st-sub{margin:6px 0 5px}
- #setOverlay .st-sw{padding:7px 2px 6px;gap:5px}#setOverlay .st-dot{width:32px;height:32px}}
+ #setOverlay .st-sw{padding:5px 2px 4px;gap:3px;flex-direction:row;justify-content:center;gap:6px}#setOverlay .st-dot{width:22px;height:22px}#setOverlay .st-swl{font-size:.7rem;text-align:left}}

@@ -1,5 +1,5 @@
 /* =====================================================================
-   theme.js — වර්ණ තේමා (10) + සැකසුම් පුවරුව (භාෂාව / වර්ණ තේමාව)
+   theme.js — වර්ණ තේමා (15) + සැකසුම් පුවරුව (භාෂාව / වර්ණ තේමාව)
    ---------------------------------------------------------------------
    • <head> තුළ ඉක්මනින්ම load වේ (defer නැතිව) → පිටුව පෙන්වීමට පෙර තේමාව යෙදේ (වර්ණ "පිපිරීමක්" නැත).
    • තේමාව: <html data-theme="..."> ; අඳුරු තේමා දෙකට (dark, midnight) body.dark-mode ද යොදයි
@@ -13,6 +13,7 @@
   var W = window, doc = document, root = doc.documentElement;
 
   // sw = සැකසුම් පුවරුවේ පෙන්වන වර්ණ කවය ; meta = බ්‍රවුසර/ඇප් තීරුවේ වර්ණය
+  // ලා පැහැ 5 · තද පැහැ 5 (අඳුරු 2 ඇතුළුව) · දීප්ත පැහැ 5
   var THEMES = [
     { id: 'cream',     dark: 0, sw: '#e9d6ab',           meta: '#fbf4e4', n: { si: 'ක්‍රීම්',     en: 'Cream',        hi: 'क्रीम',       my: 'ခရင်မ်',        th: 'ครีม' } },
     { id: 'yellow',    dark: 0, sw: '#f3dc6b',           meta: '#fffbe6', n: { si: 'ලා කහ',     en: 'Light yellow', hi: 'हल्का पीला',  my: 'အဝါဖျော့',      th: 'เหลืองอ่อน' } },
@@ -22,6 +23,11 @@
     { id: 'forest',    dark: 0, sw: '#1f5a3a', deep: 1,  meta: '#1b4d33', n: { si: 'තද කොළ',    en: 'Forest',       hi: 'वन हरा',      my: 'တောစိမ်း',      th: 'เขียวป่า' } },
     { id: 'saffron',   dark: 0, sw: '#b85a17', deep: 1,  meta: '#9a4710', n: { si: 'කාෂාය',     en: 'Saffron',      hi: 'केसरिया',     my: 'လိမ္မော်ရင့်',   th: 'หญ้าฝรั่น' } },
     { id: 'lotus',     dark: 0, sw: '#952141', deep: 1,  meta: '#86183a', n: { si: 'නෙළුම්',    en: 'Lotus',        hi: 'कमल',         my: 'ကြာ',            th: 'บัว' } },
+    { id: 'rose',      dark: 0, sw: '#ff005f', bright: 1, meta: '#ff005f', n: { si: 'රෝස',       en: 'Rose',         hi: 'गुलाबी',      my: 'ပန်းရောင်',      th: 'ชมพู' } },
+    { id: 'teal',      dark: 0, sw: '#00c2ae', bright: 1, meta: '#00c2ae', n: { si: 'කොළ නිල්',   en: 'Teal',         hi: 'टील',         my: 'စိမ်းပြာ',       th: 'เขียวหัวเป็ด' } },
+    { id: 'olive',     dark: 0, sw: '#b2ac11', bright: 1, meta: '#b2ac11', n: { si: 'ඔලිව්',      en: 'Olive',        hi: 'जैतूनी',      my: 'သံလွင်ရောင်',    th: 'เขียวมะกอก' } },
+    { id: 'coral',     dark: 0, sw: '#ffafa8', bright: 1, meta: '#ffafa8', n: { si: 'කොරල්',      en: 'Coral',        hi: 'मूंगा',       my: 'သန္တာ',           th: 'ปะการัง' } },
+    { id: 'seafoam',   dark: 0, sw: '#b0ebd2', bright: 1, meta: '#b0ebd2', n: { si: 'මුහුදු පෙණ', en: 'Seafoam',      hi: 'समुद्री झाग', my: 'ပင်လယ်အမြှုပ်',  th: 'ฟองทะเล' } },
     { id: 'dark',      dark: 1, sw: ['#0b1510', '#4fc796'], meta: '#06100c', n: { si: 'අඳුරු',     en: 'Dark',         hi: 'डार्क',       my: 'အမှောင်',        th: 'มืด' } },
     { id: 'midnight',  dark: 1, sw: ['#0b1030', '#e6c260'], meta: '#0b1030', n: { si: 'රාත්‍රී නිල්', en: 'Midnight',     hi: 'मध्यरात्रि',  my: 'သန်းခေါင်',      th: 'เที่ยงคืน' } }
   ];
@@ -34,6 +40,7 @@
     theme:  { si: 'වර්ණ තේමාව',   en: 'Colour theme', hi: 'रंग थीम',      my: 'အရောင်',          th: 'ธีมสี' },
     light:  { si: 'ලා පැහැ',      en: 'Light',        hi: 'हल्के रंग',    my: 'အဖျော့ရောင်',    th: 'สีอ่อน' },
     deep:   { si: 'තද පැහැ',      en: 'Deep',         hi: 'गहरे रंग',     my: 'အရင့်ရောင်',     th: 'สีเข้ม' },
+    bright: { si: 'දීප්ත පැහැ',    en: 'Bright',       hi: 'चटक रंग',      my: 'တောက်ပရောင်',    th: 'สีสด' },
     close:  { si: 'වසන්න',        en: 'Close',        hi: 'बंद करें',     my: 'ပိတ်ရန်',         th: 'ปิด' },
     loading:{ si: 'පූරණය වෙමින්…', en: 'Loading…',     hi: 'लोड हो रहा है…', my: 'ဖွင့်နေသည်…',  th: 'กำลังโหลด…' }
   };
@@ -65,6 +72,7 @@
     root.setAttribute('data-theme', t.id);
     root.classList.toggle('theme-dark', !!t.dark);
     root.classList.toggle('theme-deep', !!t.deep);
+    root.classList.toggle('theme-bright', !!t.bright);
     root.style.colorScheme = t.dark ? 'dark' : 'light';
     setMeta(t);
   }
@@ -129,7 +137,8 @@
       ov.addEventListener('click', onClick);
     }
     var cl = lang();
-    var light = THEMES.filter(function (t) { return !t.dark && !t.deep; });
+    var light = THEMES.filter(function (t) { return !t.dark && !t.deep && !t.bright; });
+    var bright = THEMES.filter(function (t) { return t.bright; });
     var deep = THEMES.filter(function (t) { return t.dark || t.deep; });
     var others = langs().filter(function (k) { return k !== cl; });
     ov.setAttribute('lang', cl);
@@ -154,6 +163,8 @@
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.light) + '">' + light.map(swatch).join('') + '</div>' +
           '<div class="st-sub">' + L(TX.deep) + '</div>' +
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.deep) + '">' + deep.map(swatch).join('') + '</div>' +
+          '<div class="st-sub">' + L(TX.bright) + '</div>' +
+          '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.bright) + '">' + bright.map(swatch).join('') + '</div>' +
         '</div>' +
       '</section>';
     syncPanel();

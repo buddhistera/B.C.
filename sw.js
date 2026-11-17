@@ -24,8 +24,8 @@ const CORE_FILES = {
   '/': '32aa82af7b',                              // index.html
   '/manifest.json': '469ab2e27b',
   '/style.css': '1f6ec15ecf',
-  '/theme.css': '0abfdbf5e4',
-  '/theme.js': 'd9e671c292',
+  '/theme.css': 'f37f480edb',
+  '/theme.js': '7c89975e8b',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
   '/script.js': 'dff6cd96f5',
