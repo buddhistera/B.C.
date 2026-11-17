@@ -21,16 +21,18 @@ const RESET = 1;
 
 // අනිවාර්ය ගොනු — එකක් හෝ නොලැබුණොත් update එක අත්හැර පැරණි අනුවාදයම දිගටම ක්‍රියා කරයි
 const CORE_FILES = {
-  '/': 'b06d02b216',                              // index.html
+  '/': '32aa82af7b',                              // index.html
   '/manifest.json': '469ab2e27b',
   '/style.css': '1f6ec15ecf',
+  '/theme.css': 'f37f480edb',
+  '/theme.js': '7c89975e8b',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
-  '/script.js': '186eb26511',
+  '/script.js': 'dff6cd96f5',
   '/calculation.js': '2eaef14a21',
   '/info.js': 'e03a2f70ff',
   '/chanting.js': 'ca3efd8abc',
-  '/visuals3d.js': '3482e1f91f',
+  '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': '110417d8df',
   '/uposatha.js': 'ee09b97c30'
 };

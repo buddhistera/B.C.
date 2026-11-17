@@ -1,0 +1,236 @@
+/* ---------------------------------------------------------------------
+   පිටු රීති — සියල්ල ඉහත තේමා විචල්‍ය මගින්. (theme-gen.py මගින් theme.css අගට එක් වේ)
+   ලා / තද: body:not(.dark-mode)  ·  අඳුරු: body.dark-mode
+   --------------------------------------------------------------------- */
+
+/* ================= ප්‍රධාන පිටුව ================= */
+html[data-theme] body:not(.dark-mode){background-color:var(--t-bg);
+ background-image:linear-gradient(var(--t-page-wash),var(--t-page-wash)),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/damask.webp);
+ background-size:auto,auto,380px auto;background-blend-mode:normal,var(--t-blend),normal;background-attachment:fixed}
+html[data-theme] body.dark-mode::before{background:var(--t-dbg);background-size:400% 400%}
+html[data-theme] body.dark-mode{background-color:var(--t-bg)}
+
+html[data-theme] body .hm-hero{color:var(--t-hero-tx);
+ background:var(--t-hero-wash),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/waves.webp) 30% 40%/cover;
+ background-blend-mode:normal,var(--t-blend),normal;border-color:var(--t-hero-bd);
+ box-shadow:0 14px 30px var(--t-sh),inset 0 1px 0 var(--t-hero-hl,rgba(255,255,255,.8)),inset 0 0 0 5px var(--t-hero-in),inset 0 0 0 6px var(--t-hero-ring)}
+html[data-theme]:not([data-theme="cream"]):not([data-theme="midnight"]) body .hm-hero::after{background:var(--t-frame);filter:none;
+ -webkit-mask:url(bg/gold-lines.svg) center/100% 100% no-repeat;mask:url(bg/gold-lines.svg) center/100% 100% no-repeat}
+html[data-theme] body .hm-hero .header::after{background:linear-gradient(90deg,transparent,var(--t-ln1) 25%,var(--t-ln2) 50%,var(--t-ln1) 75%,transparent)}
+html[data-theme] body .hm-hero .label,html[data-theme] body .hm-hero #ui-label-date,html[data-theme] body .hm-hero .tithi-astro-date{color:var(--t-hero-lb)}
+html[data-theme] body .custom-date-container,html[data-theme] body.dark-mode .custom-date-container{background:var(--t-in-bg)!important;border:1px solid var(--t-in-bd)!important}
+html[data-theme] body #dateText,html[data-theme] body.dark-mode #dateText{color:var(--t-in-tx)}
+html[data-theme] body:not(.dark-mode) #miniMoonVisual{box-shadow:0 0 0 3px var(--t-moon-ring),0 4px 12px var(--t-sh)}
+html[data-theme] body:not(.dark-mode) .hm-hero .poya-status{filter:drop-shadow(1px 0 0 var(--t-poya-ol)) drop-shadow(-1px 0 0 var(--t-poya-ol)) drop-shadow(0 1px 0 var(--t-poya-ol)) drop-shadow(0 -1px 0 var(--t-poya-ol)) drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+
+/* ප්‍රධාන මාතෘකාව සහ පිටු මාතෘකා — තේමාවේ "ලෝහ" අකුරු */
+html[data-theme] body #ui-title.header,
+html[data-theme] body:not(.dark-mode) #spOverlay .sp-hero h1,
+html[data-theme] body:not(.dark-mode) #upOverlay .up-hero h1,
+html[data-theme] body .emb{background:var(--t-metal)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important;filter:var(--t-metal-f)!important}
+
+/* වර්ෂ / මාස / දින පුවරු */
+html[data-theme] body:not(.dark-mode) .side-panel{background:linear-gradient(180deg,var(--t-card),var(--t-card2));border:1px solid var(--t-bd2);box-shadow:0 4px 10px var(--t-sh2),inset 0 1px 0 #fff}
+html[data-theme] body:not(.dark-mode) .panel-header{color:var(--t-ac2);border-bottom-color:var(--t-bd)}
+html[data-theme] body:not(.dark-mode) .label-text,html[data-theme] body:not(.dark-mode) .val-text{color:var(--t-tx)}
+html[data-theme] body .main-panel,html[data-theme] body.dark-mode .main-panel{background:var(--t-panel);border:1px solid var(--t-panel-bd);box-shadow:0 6px 14px var(--t-sh)}
+html[data-theme] body .main-panel .main-val-text,html[data-theme] body.dark-mode .main-val-text{color:var(--t-panel-tx);text-shadow:var(--t-panel-ts)}
+html[data-theme] body:not(.dark-mode) .main-panel .label-text{color:var(--t-panel-lb)}
+html[data-theme] body.dark-mode .side-panel,html[data-theme] body.dark-mode .data-item{background-color:var(--t-card);border-color:var(--t-bd)}
+html[data-theme] body.dark-mode .main-panel .data-item{background-color:transparent}
+html[data-theme] body.dark-mode .panel-header{color:var(--t-ac);border-bottom-color:var(--t-bd)}
+html[data-theme] body.dark-mode .val-text,html[data-theme] body.dark-mode .label-text{color:var(--t-tx)}
+
+/* පාළි පෙට්ටිය */
+html[data-theme] body:not(.dark-mode) .pali-box{background:linear-gradient(180deg,var(--t-page-wash),var(--t-page-wash)),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/pearl.webp) center/cover;
+ background-blend-mode:normal,var(--t-blend),normal;color:var(--t-tx2);border:1px solid var(--t-bd2);box-shadow:0 8px 20px var(--t-sh2),inset 0 0 0 5px rgba(255,255,255,.55),inset 0 0 0 6px var(--t-bd)}
+html[data-theme="cream"] body:not(.dark-mode) .pali-box{background:linear-gradient(rgba(255,246,228,.7),rgba(250,228,196,.5)),url(bg/pearl.webp) center/cover;color:#5a3410;border-color:#c8991f}
+html[data-theme] body.dark-mode .pali-box{background:linear-gradient(var(--t-cardB),var(--t-cardB)),url(bg/pearl.webp) center/cover;border:1px solid var(--t-bd2);color:var(--t-ac2)}
+html[data-theme="midnight"] body.dark-mode .pali-box{background:linear-gradient(rgba(14,16,34,.84),rgba(14,16,34,.92)),url(bg/pearl.webp) center/cover;color:#f2d478}
+
+/* පහළ මෙනු තීරුව */
+html[data-theme] body .bottom-nav,html[data-theme] body.dark-mode .bottom-nav{background:var(--t-nav)}
+html[data-theme] body .bottom-nav::before{background:linear-gradient(90deg,transparent,var(--t-ln1) 18%,var(--t-ln2) 50%,var(--t-ln1) 82%,transparent)}
+html[data-theme] body .bn-item,html[data-theme] body.dark-mode .bn-item{color:var(--t-nav-ic)}
+html[data-theme] body .bn-item:hover,html[data-theme] body .bn-item:active,html[data-theme] body .bn-item.active,
+html[data-theme] body.dark-mode .bn-item:hover,html[data-theme] body.dark-mode .bn-item:active,html[data-theme] body.dark-mode .bn-item.active{background:var(--t-nav-on-bg);color:var(--t-nav-on-tx)}
+
+/* දින තේරීමේ රෝදය */
+html[data-theme] body .modal-wheel{background:var(--t-scrim)}
+html[data-theme] body:not(.dark-mode) .wheel-picker-container{background:linear-gradient(var(--t-page-wash),var(--t-page-wash)),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/damask.webp) center/300px auto;
+ background-blend-mode:normal,var(--t-blend),normal;border:1px solid var(--t-bd2);box-shadow:0 26px 54px var(--t-sh),inset 0 0 0 5px rgba(255,255,255,.6),inset 0 0 0 6px var(--t-bd)}
+html[data-theme] body.dark-mode .wheel-picker-container{background:linear-gradient(var(--t-card),var(--t-bg));border:1px solid var(--t-bd2)}
+html[data-theme] body .wheel-picker-close,html[data-theme] body.dark-mode .wheel-picker-close{background:var(--t-card);color:var(--t-ac);border:1px solid var(--t-bd2)}
+html[data-theme] body .wheel-columns,html[data-theme] body.dark-mode .wheel-columns{background:var(--t-drum)}
+html[data-theme] body .wheel-item,html[data-theme] body.dark-mode .wheel-item{color:var(--t-drum-tx)}
+html[data-theme] body .wheel-item.wheel-selected,html[data-theme] body.dark-mode .wheel-item.wheel-selected{color:var(--t-drum-on)}
+html[data-theme] body .wheel-selection-band,html[data-theme] body.dark-mode .wheel-selection-band{border-top-color:var(--t-ac);border-bottom-color:var(--t-ac);background:var(--t-acs)}
+html[data-theme] body .wheel-ok-btn,html[data-theme] body.dark-mode .wheel-ok-btn{background:var(--t-btn);color:var(--t-btn-tx);border:1px solid var(--t-btn-bd);text-shadow:none}
+
+/* පැරණි භාෂා මෙනුව (අවශ්‍ය නම්) */
+html[data-theme] body #langPick .lp-box{background:var(--t-card);border-color:var(--t-bd2)}
+html[data-theme] body #langPick .lp-opt{color:var(--t-tx)}
+html[data-theme] body #langPick .lp-opt.on{background:var(--t-btn);color:var(--t-btn-tx)}
+
+/* ================= සූර්ය / චන්ද්‍ර පිටුව (sunpage.js) සහ උපෝසථ පිටුව (uposatha.js) ================= */
+html[data-theme] body #spOverlay,html[data-theme] body #upOverlay{--cd:var(--t-card);--bd:var(--t-bd);--tx:var(--t-tx);--mu:var(--t-mu);--bg2:var(--t-tint);--ac:var(--t-ac);--tl:var(--t-subtle);--sh:0 6px 22px var(--t-sh2)}
+html[data-theme] body #upOverlay{--cd:var(--t-card)}
+html[data-theme] body:not(.dark-mode) #spOverlay,html[data-theme] body:not(.dark-mode) #upOverlay{background:linear-gradient(var(--t-page-wash),var(--t-page-wash)),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/damask.webp) center top/360px auto,var(--t-bg);background-blend-mode:normal,var(--t-blend),normal,normal}
+html[data-theme] body.dark-mode #spOverlay,html[data-theme] body.dark-mode #upOverlay{--cd:var(--t-cardA);--bd:var(--t-bd);--bg2:var(--t-acs);--tl:rgba(255,255,255,.05);--sh:0 8px 28px rgba(0,0,0,.45);background:var(--t-rbg)}
+html[data-theme] body:not(.dark-mode) #spOverlay .sp-hero,html[data-theme] body:not(.dark-mode) #upOverlay .up-hero{color:var(--t-hero-tx);border:1px solid var(--t-hero-bd);
+ background:var(--t-hero-wash),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/gold.webp) center/cover;background-blend-mode:normal,var(--t-blend),normal;
+ box-shadow:0 12px 26px var(--t-sh),inset 0 0 0 5px var(--t-hero-in),inset 0 0 0 6px var(--t-hero-ring)}
+html[data-theme="cream"] body:not(.dark-mode) #spOverlay .sp-hero,html[data-theme="cream"] body:not(.dark-mode) #upOverlay .up-hero{background:linear-gradient(rgba(255,248,228,.5),rgba(255,240,205,.36)),url(bg/gold.webp) center/cover}
+html[data-theme] body.dark-mode #spOverlay .sp-hero,html[data-theme] body.dark-mode #upOverlay .up-hero{background:var(--t-dhero),url(bg/gold.webp) center/cover}
+html[data-theme] body:not(.dark-mode) #spOverlay .sp-hero h1::after,html[data-theme] body:not(.dark-mode) #upOverlay .up-hero h1::after{background:linear-gradient(90deg,transparent,var(--t-ln1) 28%,var(--t-ln2) 50%,var(--t-ln1) 72%,transparent)}
+html[data-theme] body:not(.dark-mode) #spOverlay .sp-hero p,html[data-theme] body:not(.dark-mode) #upOverlay .up-hero p{color:var(--t-hero-tx)}
+html[data-theme] body:not(.dark-mode) #spOverlay .sp-back,html[data-theme] body:not(.dark-mode) #upOverlay .up-back{color:var(--t-hero-tx);background:var(--t-hero-in);border-color:var(--t-hero-bd)}
+
+/* ================= සජ්ඣායනා පිටුව (chanting.js) ================= */
+html[data-theme] body #chOverlay{--m50:var(--s50);--m100:var(--s100);--m200:var(--s200);--m300:var(--s300);--m400:var(--s400);--m500:var(--s500);--m600:var(--s600);--m700:var(--s700);--m800:var(--s800);--m900:var(--s900);--m950:var(--s950);
+ --g400:var(--h400);--g500:var(--h500);--g600:var(--h600);--g700:var(--h700);
+ --bg:var(--t-bg);--card:var(--t-card);--elev:var(--t-elev);--subtle:var(--t-subtle);--tint:var(--t-tint);--pali-bg:var(--t-pali);
+ --tx:var(--t-tx);--tx2:var(--t-tx2);--muted:var(--t-mu);--bd:var(--t-bd);--bd2:var(--t-bd2);--sh:0 4px 14px var(--t-sh2);--shs:0 1px 4px var(--t-sh2)}
+html[data-theme] body.dark-mode #chOverlay{--bg:var(--t-bg);--card:var(--t-card);--elev:var(--t-elev);--subtle:var(--t-subtle);--tint:var(--t-tint);--pali-bg:var(--t-pali);
+ --tx:var(--t-tx);--tx2:var(--t-tx2);--muted:var(--t-mu);--bd:var(--t-bds);--bd2:var(--t-bds2);--sh:0 4px 14px rgba(0,0,0,.5);--shs:0 1px 4px rgba(0,0,0,.45);
+ --g700:var(--q700);--g600:var(--q600);--g500:var(--q500);--g400:var(--q400);--m700:var(--k700);--m600:var(--k600);--m500:var(--k500);--m800:var(--k800);--m900:var(--k900)}
+html[data-theme] body:not(.dark-mode) #chOverlay{background:linear-gradient(var(--t-page-wash),var(--t-page-wash)),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/swirl.webp) center top/620px auto,var(--t-bg);background-blend-mode:normal,var(--t-blend),normal,normal}
+html[data-theme] body.dark-mode #chOverlay{background:var(--t-bg)}
+html[data-theme] body:not(.dark-mode) #chOverlay .ch-hero{color:var(--t-hero-tx);border-bottom:1px solid var(--t-hero-bd);
+ background:var(--t-hero-wash),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/flowers.webp) center/cover;background-blend-mode:normal,var(--t-blend),normal}
+html[data-theme="cream"] body:not(.dark-mode) #chOverlay .ch-hero{background:linear-gradient(rgba(255,248,228,.45),rgba(250,236,200,.4)),url(bg/flowers.webp) center/cover}
+html[data-theme] body:not(.dark-mode) #chOverlay .ch-hero::after{background:linear-gradient(90deg,transparent,var(--t-ln1),var(--t-ln2),var(--t-ln1),transparent)}
+html[data-theme] body:not(.dark-mode) #chOverlay .ch-hero p{color:var(--t-hero-tx)}
+html[data-theme] body.dark-mode #chOverlay .ch-hero{background:radial-gradient(ellipse 85% 75% at 50% 24%,rgba(255,176,64,.2),rgba(80,40,10,.12) 55%,transparent 80%),var(--t-hero-wash),url(bg/flowers.webp) center/cover}
+
+/* ================= තොරතුරු පිටුව (info.js) ================= */
+html[data-theme] body #infoOverlay{--mint-bg:var(--t-bg);--mint-card:var(--t-card);--mint-deep:var(--s700);--mint-mid:var(--s500);--mint-soft:var(--s100);--mint-line:var(--s200);
+ --ink:var(--t-tx);--ink-soft:var(--t-mu);--saffron:var(--h600);--saffron-soft:var(--h100);--saffron-line:var(--h200);
+ background:radial-gradient(900px 500px at 88% -10%,var(--s100) 0%,transparent 60%),radial-gradient(700px 480px at -10% 15%,var(--h100) 0%,transparent 55%),var(--t-bg)}
+html[data-theme] body.dark-mode #infoOverlay{--mint-bg:var(--t-bg);--mint-card:var(--t-card);--mint-deep:var(--t-ac);--mint-mid:var(--t-ac2);--mint-soft:var(--t-subtle);--mint-line:var(--t-bd);
+ --ink:var(--t-tx);--ink-soft:var(--t-mu);--saffron:var(--q600);--saffron-soft:var(--t-tint);--saffron-line:var(--t-bd2);
+ background:var(--t-dbg)!important;background-size:400% 400%!important}
+html[data-theme] body.dark-mode #infoOverlay .card,html[data-theme] body.dark-mode #infoOverlay .platform-card{background:var(--t-cardA)!important;border-color:var(--t-bd)!important}
+
+/* ================= ගණනය පිටුව (calculation.js) ================= */
+html[data-theme] body #gnOverlay{--burgundy-900:var(--s900);--burgundy-800:var(--s800);--burgundy-700:var(--s700);--burgundy-600:var(--s600);--burgundy-500:var(--s500);--burgundy-400:var(--s400);--burgundy-300:var(--s300);--burgundy-200:var(--s200);--burgundy-100:var(--s100);
+ --gold-700:var(--h700);--gold-600:var(--h600);--gold-500:var(--h500);--gold-400:var(--h400);--gold-300:var(--h300);--gold-200:var(--h200);--gold-100:var(--h100);
+ --bg-page:var(--t-bg);--bg-card:var(--t-card);--bg-elevated:var(--t-elev);--bg-subtle:var(--t-subtle);--bg-verse:linear-gradient(135deg,var(--h100) 0%,var(--h200) 100%);--bg-pali:linear-gradient(135deg,var(--t-pali),var(--t-tint));--bg-tint:var(--t-tint);
+ --text-primary:var(--t-tx);--text-secondary:var(--t-tx2);--text-muted:var(--t-mu);--border-light:var(--t-bd);--border-medium:var(--s200);--border-strong:var(--s300);
+ --shadow-xs:0 1px 3px var(--t-sh2);--shadow-sm:0 2px 8px var(--t-sh2);--shadow-md:0 6px 20px var(--t-sh2);--shadow-lg:0 12px 36px var(--t-sh)}
+html[data-theme] body.dark-mode #gnOverlay{--bg-page:var(--t-bg);--bg-card:var(--t-card);--bg-elevated:var(--t-elev);--bg-subtle:var(--t-subtle);--bg-verse:linear-gradient(135deg,var(--t-tint) 0%,var(--t-subtle) 100%);--bg-pali:linear-gradient(135deg,var(--t-card),var(--t-tint));--bg-tint:var(--t-tint);
+ --text-primary:var(--t-tx);--text-secondary:var(--t-tx2);--text-muted:var(--t-mu);--border-light:var(--t-bds);--border-medium:var(--t-bds2);--border-strong:var(--t-ac);
+ --gold-700:var(--q700);--gold-600:var(--q600);--gold-500:var(--q500);--gold-400:var(--q400);--gold-300:var(--q400);--gold-200:var(--q400);--gold-100:var(--q400);
+ --burgundy-700:var(--k700);--burgundy-600:var(--k600);--burgundy-500:var(--k500);--burgundy-400:var(--k900);--burgundy-300:var(--k900);--burgundy-200:var(--k900);--burgundy-100:var(--k900);
+ --shadow-xs:0 1px 3px rgba(0,0,0,.4);--shadow-sm:0 2px 8px rgba(0,0,0,.45);--shadow-md:0 6px 20px rgba(0,0,0,.5);--shadow-lg:0 12px 36px rgba(0,0,0,.55)}
+
+
+/* ---- සජ්ඣායනා: ස්ථිර (hard-coded) වර්ණ ---- */
+html[data-theme] body #chOverlay .ch-zoom-badge{background:var(--s800);color:#fff}
+html[data-theme] body.dark-mode #chOverlay .ch-zoom-badge{background:var(--t-ac);color:var(--t-bg)}
+html[data-theme] body.dark-mode #chOverlay .ch-tab.active,html[data-theme] body.dark-mode #chOverlay .ch-chip.active{background:var(--t-ac);color:var(--t-bg)}
+html[data-theme] body #chOverlay .ch-tab.active{box-shadow:0 3px 10px var(--t-sh)}
+html[data-theme] body #chOverlay .ch-chip:not(.active) .ch-nb{background:var(--t-acs)}
+html[data-theme] body:not(.dark-mode) #chOverlay .ch-gold-namo,html[data-theme] body:not(.dark-mode) #chOverlay .rc-today,html[data-theme] body:not(.dark-mode) #chOverlay .ch-gatha{background:linear-gradient(135deg,var(--h100),var(--h200));border-color:var(--h500)}
+html[data-theme] body:not(.dark-mode) #chOverlay .ch-gold-namo .p{color:var(--h950)}
+html[data-theme] body:not(.dark-mode) #chOverlay .ch-gold-namo .t,html[data-theme] body:not(.dark-mode) #chOverlay .rc-today,html[data-theme] body:not(.dark-mode) #chOverlay .ch-gatha{color:var(--h800)}
+html[data-theme] body.dark-mode #chOverlay .ch-gold-namo{background:linear-gradient(135deg,var(--h800),var(--h700) 55%,var(--h600));border-color:var(--h500)}
+html[data-theme] body.dark-mode #chOverlay .rc-today,html[data-theme] body.dark-mode #chOverlay .ch-gatha{background:linear-gradient(135deg,var(--t-tint),var(--t-subtle));color:var(--q600);border-color:var(--h700)}
+html[data-theme] body #chOverlay .rc-poya{background:var(--h200);color:var(--h900)}
+html[data-theme] body.dark-mode #chOverlay .ch-group,html[data-theme] body.dark-mode #chOverlay .rc-card{background:linear-gradient(135deg,var(--t-top),var(--t-mid) 55%,var(--h800));border:1px solid var(--t-bd)}
+html[data-theme] body.dark-mode #chOverlay .ch-num,html[data-theme] body.dark-mode #chOverlay .pm-vn{background:linear-gradient(135deg,var(--s700),var(--s500));color:var(--t-bg)}
+html[data-theme] body.dark-mode #chOverlay .ch-pali::before{background:var(--s600);color:var(--t-bg)}
+html[data-theme] body.dark-mode #chOverlay .ch-mean::before{background:var(--s700);color:var(--t-bg)}
+html[data-theme] body #chOverlay .ch-foot{background:linear-gradient(135deg,var(--s950) 0%,var(--s800) 50%,var(--s600) 100%)}
+html[data-theme] body.dark-mode #chOverlay .ch-foot{background:linear-gradient(135deg,var(--t-top),var(--t-mid) 60%,var(--h800));border:1px solid var(--t-bd)}
+
+/* ---- උපෝසථ: ස්ථිර වර්ණ (ටැග් / පුර පසළොස්වක වර්ණ අර්ථවත් නිසා එලෙසම) ---- */
+html[data-theme] body #upOverlay .up-rb,html[data-theme] body #upOverlay .up-yb,html[data-theme] body #upOverlay .up-go.gl{color:var(--t-ac);border-color:var(--t-bd2)}
+html[data-theme] body:not(.dark-mode) #upOverlay .up-yv{color:var(--t-tx)}
+html[data-theme] body #upOverlay .up-nx .dot{background:var(--t-ac);box-shadow:0 0 0 3px var(--t-acs)}
+html[data-theme] body #upOverlay .up-go,html[data-theme] body #upOverlay .up-rg button.on{background:var(--t-btn);color:var(--t-btn-tx);box-shadow:0 2px 8px var(--t-sh)}
+html[data-theme] body #upOverlay .up-go.gl{background:var(--t-hero-in);box-shadow:none}
+html[data-theme] body:not(.dark-mode) #upOverlay .up-rg{border-color:var(--t-bd2)}
+html[data-theme] body:not(.dark-mode) #upOverlay .up-rg button:not(.on){color:var(--t-ac)}
+html[data-theme] body #upOverlay .up-sb{background:var(--t-tint);color:var(--t-ac2);border-left:5px solid var(--h500)}
+html[data-theme] body.dark-mode #upOverlay .up-sb{background:var(--t-acs);color:var(--t-ac2);border:1px solid var(--t-bd);border-left:5px solid var(--h500)}
+html[data-theme] body #upOverlay .up-row.next{background:var(--s100);border:1px solid var(--s300);border-left:6px solid var(--s600);color:var(--t-tx)}
+html[data-theme] body.dark-mode #upOverlay .up-row.next{background:var(--t-acs);border-color:var(--t-bd2);border-left-color:var(--t-ac)}
+html[data-theme] body #upOverlay .up-row.next .up-s{color:var(--t-mu)}
+html[data-theme] body #upOverlay .up-bg2:not(.t){background:var(--s600);color:#fff}
+html[data-theme] body.dark-mode #upOverlay .up-bg2:not(.t){background:var(--t-ac);color:var(--t-bg)}
+html[data-theme] body #upOverlay .up-db .b{background:var(--s600);color:#fff}
+html[data-theme] body.dark-mode #upOverlay .up-db .b{background:var(--t-ac);color:var(--t-bg)}
+html[data-theme] body #upOverlay .up-pb i{background:linear-gradient(90deg,var(--s400),var(--h300))}
+html[data-theme] body #upOverlay .up-dl,html[data-theme] body #upOverlay .up-shbt.up-pvs{background:var(--t-dl);color:var(--t-dl-tx)}
+html[data-theme] body.dark-mode #upOverlay .up-dl,html[data-theme] body.dark-mode #upOverlay .up-shbt.up-pvs{background:var(--t-btn);color:var(--t-btn-tx)}
+html[data-theme] body.dark-mode #upOverlay .up-hero h1{color:var(--t-ac)}
+
+/* ---- සූර්ය / චන්ද්‍ර පිටුව ---- */
+html[data-theme] body #spOverlay .sp-btn.gold{background:var(--t-btn);color:var(--t-btn-tx);box-shadow:0 4px 14px var(--t-sh)}
+html[data-theme] body.dark-mode #spOverlay .sp-hero h1,html[data-theme] body.dark-mode #spOverlay .sp-back{color:var(--t-ac)}
+html[data-theme] body #spOverlay .sp-tlh::after{background:linear-gradient(90deg,transparent,var(--t-ln1) 30%,var(--t-ln2) 50%,var(--t-ln1) 70%,transparent)}
+html[data-theme] body #spOverlay .sp-d.on b{color:var(--t-ac)}
+html[data-theme] body #spOverlay #spSl::-webkit-slider-thumb{border-color:var(--t-ac)}
+
+html[data-theme] body:not(.dark-mode) #spOverlay .sp-btn:not(.gold),html[data-theme] body:not(.dark-mode) #spOverlay .sp-pl{color:var(--t-chip-tx);background:var(--t-chip-bg);border-color:var(--t-chip-bd)}
+
+/* ---- ගණනය පිටුව: ශීර්ෂය ---- */
+html[data-theme] body #gnOverlay .hero{background:linear-gradient(135deg,var(--s950) 0%,var(--s900) 40%,var(--s700) 70%,var(--h600) 100%);box-shadow:0 6px 30px var(--t-sh)}
+html[data-theme] body.dark-mode #gnOverlay .hero{background:linear-gradient(135deg,var(--t-bg) 0%,var(--t-mid) 45%,var(--t-top) 75%,var(--h800) 100%)}
+
+/* ================= සැකසුම් බොත්තම + පුවරුව (theme.js) ================= */
+#setOverlay{position:fixed;inset:0;z-index:6500;display:none;font-family:var(--ff-sans)}
+#setOverlay.on{display:block}
+#setOverlay .st-bg{position:absolute;inset:0;background:var(--t-scrim,rgba(0,0,0,.45));animation:stFade .2s ease}
+#setOverlay .st-sheet{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);width:min(460px,calc(100% - 20px));max-height:calc(100% - 28px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+ display:flex;flex-direction:column;border-radius:22px;overflow:hidden;background:var(--t-card);color:var(--t-tx);box-shadow:0 24px 60px rgba(0,0,0,.35);animation:stIn .24s cubic-bezier(.2,.9,.3,1.1)}
+@keyframes stFade{from{opacity:0}to{opacity:1}}
+@keyframes stIn{from{opacity:0;transform:translate(-50%,-14px) scale(.97)}to{opacity:1;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion:reduce){#setOverlay .st-bg,#setOverlay .st-sheet{animation:none}}
+#setOverlay .st-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 14px 22px;background:var(--t-btn);color:var(--t-btn-tx)}
+html.theme-dark #setOverlay .st-head{background:linear-gradient(180deg,var(--t-card2),var(--t-card));color:var(--t-ac);border-bottom:1px solid var(--t-bd)}
+#setOverlay h2{margin:0;font-size:1.3rem;font-weight:800;letter-spacing:.01em}
+#setOverlay .st-x{flex:none;width:46px;height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.18);color:inherit;display:grid;place-items:center;cursor:pointer;padding:0}
+html.theme-dark #setOverlay .st-x{border-color:var(--t-bd2);background:var(--t-acs)}
+#setOverlay .st-x svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+#setOverlay .st-x:active{transform:scale(.94)}
+#setOverlay .st-body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:8px 20px 22px}
+#setOverlay .st-sec{margin:18px 0 10px;font-size:.82rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--t-ac2)}
+html.theme-dark #setOverlay .st-sec{color:var(--t-ac)}
+#setOverlay .st-sub{margin:12px 0 8px;font-size:.78rem;font-weight:700;color:var(--t-mu)}
+/* භාෂාව — දැනට ඇති භාෂාව; ක්ලික් කළ විට අනෙක් භාෂා පහළට දිගහැරේ */
+#setOverlay .st-lang{border:1.5px solid var(--t-bd2);border-radius:16px;background:var(--t-elev);overflow:hidden}
+#setOverlay .st-cur{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border:0;background:transparent;color:var(--t-tx);font:inherit;font-size:1.08rem;font-weight:800;cursor:pointer;text-align:left}
+#setOverlay .st-cur::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--t-sw-on);box-shadow:0 0 0 3px var(--t-acs);flex:none}
+#setOverlay .st-curn{flex:1}
+#setOverlay .st-chev{width:22px;height:22px;fill:none;stroke:var(--t-ac);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s ease;flex:none}
+#setOverlay .st-lang.open .st-chev{transform:rotate(180deg)}
+#setOverlay .st-list{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+#setOverlay .st-lang.open .st-list{grid-template-rows:1fr}
+#setOverlay .st-listin{overflow:hidden;min-height:0}
+#setOverlay .st-lo{display:block;width:100%;padding:13px 16px 13px 36px;border:0;border-top:1px solid var(--t-bd);background:transparent;color:var(--t-tx);font:inherit;font-size:1.02rem;font-weight:700;text-align:left;cursor:pointer}
+#setOverlay .st-lo:hover,#setOverlay .st-lo:focus-visible{background:var(--t-acs);outline:none}
+#setOverlay .st-lo.wait{opacity:.6}
+#setOverlay .st-lo.wait::after{content:"  " attr(data-wait);font-weight:500;font-size:.85em;color:var(--t-mu)}
+@media (prefers-reduced-motion:reduce){#setOverlay .st-list,#setOverlay .st-chev{transition:none}}
+/* වර්ණ තේමා */
+#setOverlay .st-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+#setOverlay .st-sw{display:flex;flex-direction:column;align-items:center;gap:7px;padding:10px 2px 9px;border-radius:15px;border:1.5px solid var(--t-bd);background:var(--t-elev);color:var(--t-tx);font:inherit;cursor:pointer;min-width:0;transition:transform .12s ease,border-color .2s ease,box-shadow .2s ease}
+#setOverlay .st-sw:active{transform:scale(.95)}
+#setOverlay .st-sw.on{border:2px solid var(--t-sw-on);box-shadow:0 0 0 3px var(--t-acs);background:var(--t-card)}
+#setOverlay .st-dot{width:38px;height:38px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.55),0 1px 3px rgba(0,0,0,.25)}
+#setOverlay .st-split{background:linear-gradient(135deg,var(--a) 0 50%,var(--b) 50% 100%)}
+#setOverlay .st-sw.on .st-dot{box-shadow:inset 0 0 0 2px rgba(255,255,255,.7),0 0 0 2px var(--t-card),0 0 0 4px var(--t-sw-on)}
+#setOverlay .st-swl{font-size:.74rem;font-weight:700;line-height:1.2;text-align:center;overflow-wrap:anywhere}
+@media (max-width:360px){#setOverlay .st-grid{gap:5px}#setOverlay .st-dot{width:32px;height:32px}#setOverlay .st-swl{font-size:.68rem}#setOverlay .st-body{padding:6px 12px 18px}}
+@media (orientation:landscape) and (max-height:600px){
+ #setOverlay .st-sheet{top:8px;width:min(780px,calc(100% - 20px));max-height:calc(100% - 16px)}
+ #setOverlay .st-head{padding:8px 10px 8px 20px}#setOverlay .st-x{width:40px;height:40px}
+ #setOverlay .st-body{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);column-gap:24px;align-content:start;padding:2px 20px 14px}
+ #setOverlay .st-body>*{grid-column:2}
+ #setOverlay .st-body>:nth-child(1){grid-column:1;grid-row:1}#setOverlay .st-body>:nth-child(2){grid-column:1;grid-row:2/span 6;align-self:start}
+ #setOverlay .st-body>:nth-child(3){grid-row:1}#setOverlay .st-body>:nth-child(4){grid-row:2}#setOverlay .st-body>:nth-child(5){grid-row:3}
+ #setOverlay .st-body>:nth-child(6){grid-row:4}#setOverlay .st-body>:nth-child(7){grid-row:5}#setOverlay .st-body>:nth-child(8){grid-row:6}#setOverlay .st-body>:nth-child(9){grid-row:7}
+ #setOverlay .st-sec{margin:12px 0 8px}#setOverlay .st-sub{margin:6px 0 5px}
+ #setOverlay .st-sw{padding:5px 2px 4px;gap:3px;flex-direction:row;justify-content:center;gap:6px}#setOverlay .st-dot{width:22px;height:22px}#setOverlay .st-swl{font-size:.7rem;text-align:left}}

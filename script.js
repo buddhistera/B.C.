@@ -67,7 +67,7 @@
     const i18n = {
         si: {
             title: "බුද්ධ වර්ෂය", dateLabel: "දිනය තෝරන්න ( ක්‍රි.ව) ⇓", atikkanta: "අතික්කන්ත\n(ඉකුත් වූ)", avasittha: "අවසිට්ඨ\n(ඉතිරි)",
-            langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", calcMenu: "📖 ගණනය", navSun: "අරුණ", navPoya: "උපෝසථ", navVas: "වස්", navChant: "සජ්ඣායනා", navCalc: "ගණනය", navMore: "තව", langLbl: "භාෂාව", darkLbl: "අඳුරු තිරය", lightLbl: "ආලෝකමත් තිරය", infoLbl: "තොරතුරු", contactMenu: "ℹ️ තොරතුරු", poyaTitle: " උපෝසථ දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
+            langBtn: "English 🇦🇺",sunMenu: "අරුණ | මධ්‍යහ්නය ☀️", poyaMenu: "පොහොය දින🌛", vasMenu: "වස් කාලය ⛈️", calcMenu: "📖 ගණනය", navSun: "අරුණ", navPoya: "උපෝසථ", navVas: "වස්", navChant: "සජ්ඣායනා", navCalc: "ගණනය", navMore: "තව", navSettings: "සැකසුම්", langLbl: "භාෂාව", darkLbl: "අඳුරු තිරය", lightLbl: "ආලෝකමත් තිරය", infoLbl: "තොරතුරු", contactMenu: "ℹ️ තොරතුරු", poyaTitle: " උපෝසථ දින ලැයිස්තුව ",darkMode: "අඳුරු තිරය 🌑",lightMode: "ආලෝකමත් තිරය💡",yearLabel: "වර්ෂය",monthLabel: "මාසය",dayLabel: "දිනය",   
             vasTitle: "", contactTitle: " තොරතුරු සහ බාගත කිරීම්", poyaSuffix: " පෝය",
             vas1: "පෙරවස් සමාදන්වීම", vas2: "පෙරවස් පවාරණය", vas3: "පසුවස් සමාදන්වීම", vas4: "පසුවස් පවාරණය",
             stSamadan: "පෙරවස් සමාදන් වන දිනය", stPavToday: "පෙරවස් පවාරණ දිනය", stPavTomorrow: "හෙට පෙරවස් පවාරණ දිනය",
@@ -79,7 +79,7 @@
         },
         en: {
             title: "Buddhist Era", dateLabel: "Select Date (C.E.) ⇓", atikkanta: "Atikkanta\n(Elapsed)", avasittha: "Avasiṭṭha\n(remaining)",
-            langBtn: "සිංහල 🇱🇰", sunMenu: "Dawn | Noon ☀️", poyaMenu: " Uposatha Days🌛", vasMenu: "Vassa Season ⛈️", calcMenu: "📖 Calculation", navSun: "Sun", navPoya: "Uposatha", navVas: "Vassa", navChant: "Chanting", navCalc: "Calculate", navMore: "More", langLbl: "Language", darkLbl: "Dark Mode", lightLbl: "Light Mode", infoLbl: "Info", contactMenu: "ℹ️ Info", poyaTitle: " Uposatha Calendar",darkMode: "Dark Mode 🌑",lightMode: "Light Mode 💡",yearLabel: "Year",monthLabel: "Month",dayLabel: "Day",
+            langBtn: "සිංහල 🇱🇰", sunMenu: "Dawn | Noon ☀️", poyaMenu: " Uposatha Days🌛", vasMenu: "Vassa Season ⛈️", calcMenu: "📖 Calculation", navSun: "Sun", navPoya: "Uposatha", navVas: "Vassa", navChant: "Chanting", navCalc: "Calculate", navMore: "More", navSettings: "Settings", langLbl: "Language", darkLbl: "Dark Mode", lightLbl: "Light Mode", infoLbl: "Info", contactMenu: "ℹ️ Info", poyaTitle: " Uposatha Calendar",darkMode: "Dark Mode 🌑",lightMode: "Light Mode 💡",yearLabel: "Year",monthLabel: "Month",dayLabel: "Day",
             vasTitle: "", contactTitle: "Contact & Downloads", poyaSuffix: "",
             vas1: "Entering the Early Rains Retreat", vas2: "Early Vassa Pavāraṇā", vas3: "Entering the Late Rains Retreat ", vas4: "Late Vassa Pavāraṇā ",
             stSamadan: "Day of Entering the Early Rains Retreat", stPavToday: "Early Vassa Pavāraṇā Day", stPavTomorrow: "Tomorrow is Early Vassa Pavāraṇā Day",
@@ -835,7 +835,7 @@ scheduleBackgroundPoyaExtension();
     function closeLangPicker() { const p = document.getElementById('langPick'); if (p) p.classList.remove('on'); }
 
     function toggleLanguage(l) {
-        if (typeof l !== 'string') { openLangPicker(); return; }
+        if (typeof l !== 'string') { if (typeof window.openSettings === 'function') window.openSettings(); else openLangPicker(); return; }
         if (APP_LANGS.indexOf(l) < 0 || l === currentLang) { closeLangPicker(); return; }
         if (!langReady(l)) {
             const b = document.querySelector('#langPick .lp-opt[data-l="' + l + '"]'); if (b) b.disabled = true;
@@ -879,6 +879,8 @@ scheduleBackgroundPoyaExtension();
     const moreItem = document.getElementById('ui-menu-more');
     if (moreItem) moreItem.innerText = t.navMore;
     document.getElementById('ui-menu-contact').innerText = t.infoLbl;
+    const setItem = document.getElementById('ui-menu-settings');
+    if (setItem) setItem.innerText = t.navSettings || 'Settings';
     
     const darkBtn = document.getElementById('ui-dark-lbl');
     if (darkBtn) {
@@ -1312,6 +1314,8 @@ if (nextFullMoon) {
 }
 
 function toggleDarkMode() {
+    // වර්ණ තේමා (theme.js): අවසන් වරට තෝරාගත් ලා තේමාව ↔ අඳුරු තේමාව
+    if (window.AppTheme) { window.AppTheme.toggle(); return; }
     const isDark = document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     

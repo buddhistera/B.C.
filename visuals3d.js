@@ -26,7 +26,7 @@ if (doc.readyState === 'complete') setTimeout(go, 400); else W.addEventListener(
 function init() {
   T = W.THREE; if (!T) return;
   try { bgInit(); } catch (e) { return; }
-  wrap('toggleDarkMode', sync); wrap('updateDisplay', sync);
+  wrap('toggleDarkMode', sync); wrap('updateDisplay', sync); W.addEventListener('themechange', sync);
   sync(); var rz; W.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (bg.mode) fit(true); }, 200); });
   doc.addEventListener('visibilitychange', sync);
   loadMoon(function (tex) { try { mrInit(tex); } catch (e) { return; } init2(); }); // lit moon: after the Moon map has loaded (background above does not wait)
