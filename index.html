@@ -18,6 +18,10 @@
     <link rel="apple-touch-icon" href="./icon-192x192.png">
     <link rel="manifest" href="./manifest.json">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="theme.css">
+    <meta name="theme-color" content="#fbf4e4">
+    <!-- වර්ණ තේමාව: පිටුව පෙන්වීමට පෙර යොදයි (defer නැත) -->
+    <script src="theme.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,6 +68,7 @@
 </style>
 </head>
 <body>
+<script>window.AppTheme && AppTheme.applyBody();</script>
 
 <div class="app-container">
     <header class="hm-hero">
@@ -249,8 +254,7 @@
     <button type="button" class="bn-item" onclick="openChanting()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c2 2.2 2.8 3.8 2.8 5.2a2.8 2.8 0 0 1-5.6 0c0-1.4.8-3 2.8-5.2z"/><path d="M4.5 12.5h15c0 3-2.7 5-7.5 5s-7.5-2-7.5-5z"/><path d="M12 17.5v2.5M8 21.5h8"/></svg><span class="nav-lbl" id="ui-menu-chant">සජ්ඣායනා</span></button>
     <button type="button" class="bn-item" onclick="openCalculation()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.3 5.2 8 4.7 4.5 5v12.5c3.5-.3 5.8.2 7.5 1.5 1.7-1.3 4-1.8 7.5-1.5V5C16 4.7 13.7 5.2 12 6.5z"/><path d="M12 6.5V19"/></svg><span class="nav-lbl" id="ui-menu-calc">ගණනය</span></button>
     <button type="button" class="bn-item" onclick="openInfo()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".7" fill="currentColor"/></svg><span class="nav-lbl" id="ui-menu-contact">තොරතුරු</span></button>
-    <button type="button" class="bn-item bn-ic bn-first" onclick="toggleLanguage()" aria-label="Language" title="Language"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg><span class="bn-sr" id="ui-lang-lbl">English</span></button>
-    <button type="button" class="bn-item bn-ic" onclick="toggleDarkMode()" aria-label="Theme" title="Theme"><svg class="th-moon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><svg class="th-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.9 1.9M16.8 16.8l1.9 1.9M18.7 5.3l-1.9 1.9M7.2 16.8l-1.9 1.9"/></svg><span class="bn-sr" id="ui-dark-lbl">Dark Mode</span></button>
+    <button type="button" class="bn-item" onclick="openSettings()" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.1"/><path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.6-2-3.4-2.4 1a7.7 7.7 0 0 0-2.6-1.5L14 2.5h-4l-.4 2.5A7.7 7.7 0 0 0 7 6.5l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 3l-2 1.6 2 3.4 2.4-1a7.7 7.7 0 0 0 2.6 1.5l.4 2.5h4l.4-2.5a7.7 7.7 0 0 0 2.6-1.5l2.4 1 2-3.4z"/></svg><span class="nav-lbl" id="ui-menu-settings">සැකසුම්</span></button>
     <div class="nav-popup" id="myDropdown" aria-hidden="true"></div>
 </nav>
 <span id="ui-menu-vas" hidden></span>
