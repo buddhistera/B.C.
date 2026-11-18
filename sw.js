@@ -28,13 +28,13 @@ const CORE_FILES = {
   '/theme.js': '7c89975e8b',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
-  '/script.js': 'dff6cd96f5',
+  '/script.js': 'e6e6307aff',
   '/calculation.js': '2eaef14a21',
   '/info.js': 'e03a2f70ff',
   '/chanting.js': 'ca3efd8abc',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': '110417d8df',
-  '/uposatha.js': 'ee09b97c30'
+  '/sunpage.js': 'ddfd74a2c4',
+  '/uposatha.js': 'cf7eeae4ce'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
@@ -63,7 +63,7 @@ const OPTIONAL_FILES = {
 // update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
   '/pali-script.js': '6f33d6f815',
-  '/lang/hi.js': '30f17adbba',
+  '/lang/hi.js': '157dd003f5',
   '/lang/my.js': '0865d83134',
   '/lang/th.js': '4980f36b78',
   '/lang/hi-calc.js': '39cf96b451',
