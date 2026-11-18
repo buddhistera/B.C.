@@ -23,7 +23,7 @@ const RESET = 1;
 const CORE_FILES = {
   '/': '46164de1e0',                              // index.html
   '/manifest.json': '469ab2e27b',
-  '/style.css': 'ab2f9b6512',
+  '/style.css': '3da5fa6622',
   '/theme.css': 'f37f480edb',
   '/theme.js': '0e9d8463a1',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
