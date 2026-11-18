@@ -665,8 +665,8 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
 
   function renderHtml(lang) {
     injectCss();
-    SC = { hi: 'deva', my: 'mymr', th: 'thai' }[lang] || 'deva'; HI = lang === 'hi' || lang === 'my' || lang === 'th'; if (HI) lang = 'en';     /* හින්දි / බුරුම = ඉංග්‍රීසි වගුව + දේවනාගරී / බුරුම පාළිය + එම භාෂාවේ පෙළ */
-    var si = lang === 'si';
+    SC = { hi: 'deva', my: 'mymr', th: 'thai', zh: 'iast' }[lang] || 'deva'; HI = lang === 'hi' || lang === 'my' || lang === 'th' || lang === 'zh'; if (HI) lang = 'en';     /* හින්දි / බුරුම = ඉංග්‍රීසි වගුව + දේවනාගරී / බුරුම පාළිය + එම භාෂාවේ පෙළ */
+    var si = lang === 'si', ZH = typeof currentLang !== 'undefined' && currentLang === 'zh';
     var st = getState();
     if (!st) return '<div class="ch-load"><b>⚠️</b>' + (si ? 'දිනය ලබා ගත නොහැකි විය.' : X('Could not read the selected date.')) + '</div>';
 
@@ -697,6 +697,7 @@ body.dark-mode #chOverlay .rc-namo-line{color:var(--g400)}\
     var EN_M = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     var EN_W = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     var dateTxt = si ? (gd.getFullYear() + ' ' + SI_M[gd.getMonth()] + ' ' + gd.getDate() + ', ' + SI_W[gd.getDay()])
+                     : ZH ? (gd.getFullYear() + '年' + (gd.getMonth() + 1) + '月' + gd.getDate() + '日 ' + X(EN_W[gd.getDay()]))   /* චීන දින ආකෘතිය */
                      : (X(EN_W[gd.getDay()]) + ', ' + gd.getDate() + ' ' + X(EN_M[gd.getMonth()]) + ' ' + gd.getFullYear());
 
     var labels = si ? { t: 'අදට නියමිත බුද්ධ වර්ෂය', y: 'වර්ෂය', m: 'මාසය', d: 'දිනය', an: 'සංවච්ඡරය', ut: 'සෘතුව', mo: 'මාසය', poya: 'උපෝසථ දිනය', nam: 'නමස්කාරය', pal: '📜 පාළි සජ්ඣායනය', mea: '🇱🇰 සිංහල අර්ථය' }

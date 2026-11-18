@@ -22,6 +22,7 @@ window.TH_DICT = {
   "Chanting": "สวดมนต์",
   "Calculate": "คำนวณ",
   "More": "เพิ่มเติม",
+  "Settings": "การตั้งค่า",
   "Language": "ภาษา",
   "Dark Mode": "โหมดมืด",
   "Light Mode": "โหมดสว่าง",

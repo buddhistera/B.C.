@@ -15,34 +15,34 @@
   // sw = සැකසුම් පුවරුවේ පෙන්වන වර්ණ කවය ; meta = බ්‍රවුසර/ඇප් තීරුවේ වර්ණය
   // ලා පැහැ 5 · තද පැහැ 5 (අඳුරු 2 ඇතුළුව) · දීප්ත පැහැ 5
   var THEMES = [
-    { id: 'cream',     dark: 0, sw: '#e9d6ab',           meta: '#fbf4e4', n: { si: 'ක්‍රීම්',     en: 'Cream',        hi: 'क्रीम',       my: 'ခရင်မ်',        th: 'ครีม' } },
-    { id: 'yellow',    dark: 0, sw: '#f3dc6b',           meta: '#fffbe6', n: { si: 'ලා කහ',     en: 'Light yellow', hi: 'हल्का पीला',  my: 'အဝါဖျော့',      th: 'เหลืองอ่อน' } },
-    { id: 'lightblue', dark: 0, sw: '#86b8ea',           meta: '#eef5fd', n: { si: 'ලා නිල්',    en: 'Light blue',   hi: 'हल्का नीला',  my: 'အပြာဖျော့',     th: 'ฟ้าอ่อน' } },
-    { id: 'mint',      dark: 0, sw: '#8fdcbe',           meta: '#eefaf4', n: { si: 'ලා කොළ',    en: 'Mint',         hi: 'मिंट',        my: 'မင့်',           th: 'มินต์' } },
-    { id: 'lavender',  dark: 0, sw: '#bba6e6',           meta: '#f5f2fc', n: { si: 'ලා දම්',     en: 'Lavender',     hi: 'लैवेंडर',     my: 'ခရမ်းဖျော့',    th: 'ลาเวนเดอร์' } },
-    { id: 'forest',    dark: 0, sw: '#1f5a3a', deep: 1,  meta: '#1b4d33', n: { si: 'තද කොළ',    en: 'Forest',       hi: 'वन हरा',      my: 'တောစိမ်း',      th: 'เขียวป่า' } },
-    { id: 'saffron',   dark: 0, sw: '#b85a17', deep: 1,  meta: '#9a4710', n: { si: 'කාෂාය',     en: 'Saffron',      hi: 'केसरिया',     my: 'လိမ္မော်ရင့်',   th: 'หญ้าฝรั่น' } },
-    { id: 'lotus',     dark: 0, sw: '#952141', deep: 1,  meta: '#86183a', n: { si: 'නෙළුම්',    en: 'Lotus',        hi: 'कमल',         my: 'ကြာ',            th: 'บัว' } },
-    { id: 'rose',      dark: 0, sw: '#ff005f', bright: 1, meta: '#ff005f', n: { si: 'රෝස',       en: 'Rose',         hi: 'गुलाबी',      my: 'ပန်းရောင်',      th: 'ชมพู' } },
-    { id: 'teal',      dark: 0, sw: '#00c2ae', bright: 1, meta: '#00c2ae', n: { si: 'කොළ නිල්',   en: 'Teal',         hi: 'टील',         my: 'စိမ်းပြာ',       th: 'เขียวหัวเป็ด' } },
-    { id: 'olive',     dark: 0, sw: '#b2ac11', bright: 1, meta: '#b2ac11', n: { si: 'ඔලිව්',      en: 'Olive',        hi: 'जैतूनी',      my: 'သံလွင်ရောင်',    th: 'เขียวมะกอก' } },
-    { id: 'coral',     dark: 0, sw: '#ffafa8', bright: 1, meta: '#ffafa8', n: { si: 'කොරල්',      en: 'Coral',        hi: 'मूंगा',       my: 'သန္တာ',           th: 'ปะการัง' } },
-    { id: 'seafoam',   dark: 0, sw: '#b0ebd2', bright: 1, meta: '#b0ebd2', n: { si: 'මුහුදු පෙණ', en: 'Seafoam',      hi: 'समुद्री झाग', my: 'ပင်လယ်အမြှုပ်',  th: 'ฟองทะเล' } },
-    { id: 'dark',      dark: 1, sw: ['#0b1510', '#4fc796'], meta: '#06100c', n: { si: 'අඳුරු',     en: 'Dark',         hi: 'डार्क',       my: 'အမှောင်',        th: 'มืด' } },
-    { id: 'midnight',  dark: 1, sw: ['#0b1030', '#e6c260'], meta: '#0b1030', n: { si: 'රාත්‍රී නිල්', en: 'Midnight',     hi: 'मध्यरात्रि',  my: 'သန်းခေါင်',      th: 'เที่ยงคืน' } }
+    { id: 'cream',     dark: 0, sw: '#e9d6ab',           meta: '#fbf4e4', n: { si: 'ක්‍රීම්',     en: 'Cream',        hi: 'क्रीम',       my: 'ခရင်မ်',        th: 'ครีม', zh: '奶油色' } },
+    { id: 'yellow',    dark: 0, sw: '#f3dc6b',           meta: '#fffbe6', n: { si: 'ලා කහ',     en: 'Light yellow', hi: 'हल्का पीला',  my: 'အဝါဖျော့',      th: 'เหลืองอ่อน', zh: '浅黄' } },
+    { id: 'lightblue', dark: 0, sw: '#86b8ea',           meta: '#eef5fd', n: { si: 'ලා නිල්',    en: 'Light blue',   hi: 'हल्का नीला',  my: 'အပြာဖျော့',     th: 'ฟ้าอ่อน', zh: '浅蓝' } },
+    { id: 'mint',      dark: 0, sw: '#8fdcbe',           meta: '#eefaf4', n: { si: 'ලා කොළ',    en: 'Mint',         hi: 'मिंट',        my: 'မင့်',           th: 'มินต์', zh: '薄荷绿' } },
+    { id: 'lavender',  dark: 0, sw: '#bba6e6',           meta: '#f5f2fc', n: { si: 'ලා දම්',     en: 'Lavender',     hi: 'लैवेंडर',     my: 'ခရမ်းဖျော့',    th: 'ลาเวนเดอร์', zh: '薰衣草紫' } },
+    { id: 'forest',    dark: 0, sw: '#1f5a3a', deep: 1,  meta: '#1b4d33', n: { si: 'තද කොළ',    en: 'Forest',       hi: 'वन हरा',      my: 'တောစိမ်း',      th: 'เขียวป่า', zh: '森林绿' } },
+    { id: 'saffron',   dark: 0, sw: '#b85a17', deep: 1,  meta: '#9a4710', n: { si: 'කාෂාය',     en: 'Saffron',      hi: 'केसरिया',     my: 'လိမ္မော်ရင့်',   th: 'หญ้าฝรั่น', zh: '袈裟橙' } },
+    { id: 'lotus',     dark: 0, sw: '#952141', deep: 1,  meta: '#86183a', n: { si: 'නෙළුම්',    en: 'Lotus',        hi: 'कमल',         my: 'ကြာ',            th: 'บัว', zh: '莲花红' } },
+    { id: 'rose',      dark: 0, sw: '#ff005f', bright: 1, meta: '#ff005f', n: { si: 'රෝස',       en: 'Rose',         hi: 'गुलाबी',      my: 'ပန်းရောင်',      th: 'ชมพู', zh: '玫瑰红' } },
+    { id: 'teal',      dark: 0, sw: '#00c2ae', bright: 1, meta: '#00c2ae', n: { si: 'කොළ නිල්',   en: 'Teal',         hi: 'टील',         my: 'စိမ်းပြာ',       th: 'เขียวหัวเป็ด', zh: '青绿' } },
+    { id: 'olive',     dark: 0, sw: '#b2ac11', bright: 1, meta: '#b2ac11', n: { si: 'ඔලිව්',      en: 'Olive',        hi: 'जैतूनी',      my: 'သံလွင်ရောင်',    th: 'เขียวมะกอก', zh: '橄榄绿' } },
+    { id: 'coral',     dark: 0, sw: '#ffafa8', bright: 1, meta: '#ffafa8', n: { si: 'කොරල්',      en: 'Coral',        hi: 'मूंगा',       my: 'သန္တာ',           th: 'ปะการัง', zh: '珊瑚色' } },
+    { id: 'seafoam',   dark: 0, sw: '#b0ebd2', bright: 1, meta: '#b0ebd2', n: { si: 'මුහුදු පෙණ', en: 'Seafoam',      hi: 'समुद्री झाग', my: 'ပင်လယ်အမြှုပ်',  th: 'ฟองทะเล', zh: '海沫绿' } },
+    { id: 'dark',      dark: 1, sw: ['#0b1510', '#4fc796'], meta: '#06100c', n: { si: 'අඳුරු',     en: 'Dark',         hi: 'डार्क',       my: 'အမှောင်',        th: 'มืด', zh: '深色' } },
+    { id: 'midnight',  dark: 1, sw: ['#0b1030', '#e6c260'], meta: '#0b1030', n: { si: 'රාත්‍රී නිල්', en: 'Midnight',     hi: 'मध्यरात्रि',  my: 'သန်းခေါင်',      th: 'เที่ยงคืน', zh: '午夜蓝' } }
   ];
   var BY = {}; THEMES.forEach(function (t) { BY[t.id] = t; });
   var DEFAULT_LIGHT = 'cream', DEFAULT_DARK = 'midnight';
 
   var TX = {
-    title:  { si: 'සැකසුම්',      en: 'Settings',     hi: 'सेटिंग्स',    my: 'ဆက်တင်များ',     th: 'การตั้งค่า' },
-    lang:   { si: 'භාෂාව',        en: 'Language',     hi: 'भाषा',        my: 'ဘာသာစကား',       th: 'ภาษา' },
-    theme:  { si: 'වර්ණ තේමාව',   en: 'Colour theme', hi: 'रंग थीम',      my: 'အရောင်',          th: 'ธีมสี' },
-    light:  { si: 'ලා පැහැ',      en: 'Light',        hi: 'हल्के रंग',    my: 'အဖျော့ရောင်',    th: 'สีอ่อน' },
-    deep:   { si: 'තද පැහැ',      en: 'Deep',         hi: 'गहरे रंग',     my: 'အရင့်ရောင်',     th: 'สีเข้ม' },
-    bright: { si: 'දීප්ත පැහැ',    en: 'Bright',       hi: 'चटक रंग',      my: 'တောက်ပရောင်',    th: 'สีสด' },
-    close:  { si: 'වසන්න',        en: 'Close',        hi: 'बंद करें',     my: 'ပိတ်ရန်',         th: 'ปิด' },
-    loading:{ si: 'පූරණය වෙමින්…', en: 'Loading…',     hi: 'लोड हो रहा है…', my: 'ဖွင့်နေသည်…',  th: 'กำลังโหลด…' }
+    title:  { si: 'සැකසුම්',      en: 'Settings',     hi: 'सेटिंग्स',    my: 'ဆက်တင်များ',     th: 'การตั้งค่า', zh: '设置' },
+    lang:   { si: 'භාෂාව',        en: 'Language',     hi: 'भाषा',        my: 'ဘာသာစကား',       th: 'ภาษา', zh: '语言' },
+    theme:  { si: 'වර්ණ තේමාව',   en: 'Colour theme', hi: 'रंग थीम',      my: 'အရောင်',          th: 'ธีมสี', zh: '颜色主题' },
+    light:  { si: 'ලා පැහැ',      en: 'Light',        hi: 'हल्के रंग',    my: 'အဖျော့ရောင်',    th: 'สีอ่อน', zh: '浅色系' },
+    deep:   { si: 'තද පැහැ',      en: 'Deep',         hi: 'गहरे रंग',     my: 'အရင့်ရောင်',     th: 'สีเข้ม', zh: '深色系' },
+    bright: { si: 'දීප්ත පැහැ',    en: 'Bright',       hi: 'चटक रंग',      my: 'တောက်ပရောင်',    th: 'สีสด', zh: '亮色系' },
+    close:  { si: 'වසන්න',        en: 'Close',        hi: 'बंद करें',     my: 'ပိတ်ရန်',         th: 'ปิด', zh: '关闭' },
+    loading:{ si: 'පූරණය වෙමින්…', en: 'Loading…',     hi: 'लोड हो रहा है…', my: 'ဖွင့်နေသည်…',  th: 'กำลังโหลด…', zh: '加载中…' }
   };
 
   function lang() { try { return (typeof currentLang !== 'undefined' && currentLang) || 'en'; } catch (e) { return 'en'; } }
