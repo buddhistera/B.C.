@@ -21,9 +21,9 @@ const RESET = 1;
 
 // අනිවාර්ය ගොනු — එකක් හෝ නොලැබුණොත් update එක අත්හැර පැරණි අනුවාදයම දිගටම ක්‍රියා කරයි
 const CORE_FILES = {
-  '/': '6098a620a5',                              // index.html
+  '/': '46164de1e0',                              // index.html
   '/manifest.json': '469ab2e27b',
-  '/style.css': '4c7a5ac5a3',
+  '/style.css': 'ab2f9b6512',
   '/theme.css': 'f37f480edb',
   '/theme.js': '0e9d8463a1',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
