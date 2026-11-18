@@ -63,9 +63,9 @@ const OPTIONAL_FILES = {
 // update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
   '/pali-script.js': '6f33d6f815',
-  '/lang/hi.js': '157dd003f5',
-  '/lang/my.js': '0865d83134',
-  '/lang/th.js': '4980f36b78',
+  '/lang/hi.js': 'f3da158c2d',
+  '/lang/my.js': '66b01bb834',
+  '/lang/th.js': '47c840ecfe',
   '/lang/hi-calc.js': '39cf96b451',
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc'
