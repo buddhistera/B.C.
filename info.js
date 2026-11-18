@@ -63,7 +63,9 @@
 
       <div class="platform-card">
         <h3>🪟 Windows සඳහා</h3>
-        <p>මෙම web ලිපිනය Chrome බ්‍රවුසරයෙන් විවෘත කර, ලිපින තීරුවේ ඇති <em>"install app"</em> අයිකනය ඔබා install කරන්න.</p>
+        <p>Setup ගොනුව බාගෙන install කරන්න (අන්තර්ජාලය නැතිවද ක්‍රියා කරයි).</p>
+        <a class="platform-btn" href="https://github.com/buddhistera/B.C./releases/latest/download/Buddhist-Era-Setup.exe" target="_blank" rel="noopener noreferrer">⬇️ Windows ඇප් එක බාගන්න</a>
+        <p class="platform-alt">නැතහොත් මෙම web ලිපිනය Chrome බ්‍රවුසරයෙන් විවෘත කර, ලිපින තීරුවේ ඇති <em>"install app"</em> අයිකනය ඔබා install කරන්න.</p>
         <div class="link-row">
           <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
           <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
@@ -124,7 +126,9 @@
       </div>
       <div class="platform-card">
         <h3>🪟 For Windows</h3>
-        <p>Open this web address in a Chrome browser and install it by clicking the <em>"install app"</em> icon in the address bar.</p>
+        <p>Download the Setup file and install it (works offline).</p>
+        <a class="platform-btn" href="https://github.com/buddhistera/B.C./releases/latest/download/Buddhist-Era-Setup.exe" target="_blank" rel="noopener noreferrer">⬇️ Download the Windows app</a>
+        <p class="platform-alt">Or open this web address in a Chrome browser and install it by clicking the <em>"install app"</em> icon in the address bar.</p>
         <div class="link-row">
           <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
           <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="Copy link">📋</button>
@@ -317,6 +321,7 @@ to   { background-position: 0%   0%; }
     color:#fff;text-decoration:none;font-weight:700;font-size:14px;
     box-shadow:0 10px 20px -10px rgba(30,143,108,.5);
     transition: all 0.3s ease;}
+#infoOverlay .platform-card .platform-alt{margin:14px 0 10px;}
 #infoOverlay .tips{list-style:none;margin:0;padding:0;}
 #infoOverlay .tips li{display:flex;gap:10px;padding:10px 0;
     font-size:14.3px;line-height:1.6;color:var(--ink);
@@ -741,7 +746,21 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
 
   var QM_DL_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>';
 
+  /* Android ඇප් එක (Capacitor) / Windows ඇප් එක (Tauri) — script.js හි isNativeApp / isDesktopApp */
+  function inAndroidApp() { return typeof isNativeApp === 'function' && isNativeApp(); }
+  function inWindowsApp() { return typeof isDesktopApp === 'function' && isDesktopApp(); }
+
   function qmSave(cv, name) {
+    /* ඇප් එකේදී <a download> ක්‍රියා නොකරයි:
+       Android → "Share / Save" මෙනුව (Drive, Files, WhatsApp …);  Windows → "Save as" කවුළුව */
+    if ((inAndroidApp() || inWindowsApp()) && cv.toBlob) {
+      cv.toBlob(function (b) {
+        if (!b) return;
+        var p = inWindowsApp() ? desktopSaveFile(b, name) : nativeShareFile(b, name, name);
+        p.catch(function (e) { console.error('qr save:', e); });
+      }, 'image/png');
+      return;
+    }
     function viaUrl(url, revoke) {
       var a = document.createElement('a');
       a.href = url; a.download = name; a.rel = 'noopener';
@@ -821,6 +840,16 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(QM_SITE).then(done, function () { window.prompt('', QM_SITE); });
       } else { window.prompt('', QM_SITE); }
+    }
+    if (inAndroidApp()) {   /* Android ඇප් එක: රූපය Android "Share" මෙනුවෙන් */
+      qmStaticCanvas(function (cv) {
+        if (!cv || !cv.toBlob) { fallback(); return; }
+        cv.toBlob(function (blob) {
+          if (!blob) { fallback(); return; }
+          nativeShareFile(blob, 'buddhist-era-qr.png', title).catch(function () { fallback(); });
+        }, 'image/png');
+      });
+      return;
     }
     if (!navigator.share || !window.File) { fallback(); return; }
     qmStaticCanvas(function (cv) {
@@ -988,7 +1017,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       var qr = QRCore.encode(data, 'M');
       if (!qr) { errBox.textContent = t.tooLong; return; }
       lastCanvas = qmDraw(qr, color);
-      var canShare = !!(navigator.share && window.File);
+      var canShare = inAndroidApp() || !!(navigator.share && window.File);
       var typeName = t.types[typeSel.value];
       resBox.innerHTML =
         '<img class="qm-img" alt="' + t.alt + '" src="' + lastCanvas.toDataURL('image/png') + '">' +
@@ -1001,6 +1030,7 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       if (sh) sh.addEventListener('click', function () {
         lastCanvas.toBlob(function (blob) {
           if (!blob) return;
+          if (inAndroidApp()) { nativeShareFile(blob, 'qr-code.png', 'QR').catch(function (e) { console.error('qr share:', e); }); return; }
           var file = new File([blob], 'qr-code.png', { type: 'image/png' });
           var p = (navigator.canShare && navigator.canShare({ files: [file] })) ? navigator.share({ files: [file] }) : navigator.share({ title: 'QR', text: data });
           if (p && p.catch) p.catch(function () {});
@@ -1018,6 +1048,8 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
     var ua = navigator.userAgent || '';
     if (!/android/i.test(ua)) return; // සාමාන්‍ය link එක (target=_blank) ක්‍රියා කරයි
     if (e) e.preventDefault();
+    /* Android ඇප් එක: market:// → Play Store යෙදුම කෙලින්ම (WebView එක intent:// විවෘත නොකරයි) */
+    if (inAndroidApp()) { window.location.href = 'market://details?id=' + PLAY_ID; return; }
     window.location.href = 'intent://details?id=' + PLAY_ID +
       '#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' +
       encodeURIComponent(PLAY_WEB) + ';end';
