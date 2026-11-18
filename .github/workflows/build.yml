@@ -120,26 +120,6 @@ jobs:
             android-app/android/app/build/outputs/bundle/**/*.aab
           if-no-files-found: error
 
-      # signed build එකක් නම්: AAB එක GitHub Release එකකට ද (පහසු download link එකක් සඳහා)
-      - name: Publish AAB as a GitHub Release
-        if: env.KS_FILE != ''
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          TAG="android-v${VERSION_NAME}-code${VERSION_CODE}"
-          FILE="buddhist-era-${VERSION_NAME}-code${VERSION_CODE}.aab"
-          cp android-app/android/app/build/outputs/bundle/release/app-release.aab "$FILE"
-          NOTES="Google Play Console වෙත upload කිරීම සඳහා signed Android App Bundle.
-
-          - versionName: ${VERSION_NAME}
-          - versionCode: ${VERSION_CODE}
-          - commit: ${GITHUB_SHA}"
-          gh release create "$TAG" "$FILE" \
-            --title "Buddhist Era AAB ${VERSION_NAME} (code ${VERSION_CODE})" \
-            --notes "$NOTES" \
-          || gh release upload "$TAG" "$FILE" --clobber
-          gh release view "$TAG" --json url,assets --jq '{url: .url, assets: [.assets[].name]}'
-
       # signed build එකක් සාර්ථක වූ පසු: අනුවාද අංකය main හි app-version.json හි සටහන් කරයි (ඊළඟ build එක +1)
       - name: Record version in app-version.json
         if: github.event_name == 'workflow_dispatch' && env.KS_FILE != ''
