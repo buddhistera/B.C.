@@ -598,7 +598,9 @@ window.TH_INFO_HTML = `
       </div>
       <div class="platform-card">
         <h3>🪟 สำหรับ Windows</h3>
-        <p>เปิดที่อยู่เว็บนี้ในเบราว์เซอร์ Chrome แล้วกดไอคอน <em>"install app"</em> ในแถบที่อยู่เพื่อติดตั้ง</p>
+        <p>ดาวน์โหลดไฟล์ Setup แล้วติดตั้ง (ใช้งานแบบออฟไลน์ได้)</p>
+        <a class="platform-btn" href="https://github.com/buddhistera/B.C./releases/latest/download/Buddhist-Era-Setup.exe" target="_blank" rel="noopener noreferrer">⬇️ ดาวน์โหลดแอป Windows</a>
+        <p class="platform-alt">หรือ เปิดที่อยู่เว็บนี้ในเบราว์เซอร์ Chrome แล้วกดไอคอน <em>"install app"</em> ในแถบที่อยู่เพื่อติดตั้ง</p>
         <div class="link-row">
           <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
           <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="คัดลอกลิงก์">📋</button>

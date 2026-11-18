@@ -585,7 +585,9 @@ window.MY_INFO_HTML = `
       </div>
       <div class="platform-card">
         <h3>🪟 Windows အတွက်</h3>
-        <p>ဤဝဘ်လိပ်စာကို Chrome browser တွင် ဖွင့်ပြီး လိပ်စာဘားရှိ <em>"install app"</em> အိုင်ကွန်ကို နှိပ်၍ ထည့်သွင်းပါ။</p>
+        <p>Setup ဖိုင်ကို ဒေါင်းလုဒ်လုပ်ပြီး ထည့်သွင်းပါ (အင်တာနက်မလိုဘဲ အသုံးပြုနိုင်သည်)။</p>
+        <a class="platform-btn" href="https://github.com/buddhistera/B.C./releases/latest/download/Buddhist-Era-Setup.exe" target="_blank" rel="noopener noreferrer">⬇️ Windows app ကို ဒေါင်းလုဒ်လုပ်ရန်</a>
+        <p class="platform-alt">သို့မဟုတ် ဤဝဘ်လိပ်စာကို Chrome browser တွင် ဖွင့်ပြီး လိပ်စာဘားရှိ <em>"install app"</em> အိုင်ကွန်ကို နှိပ်၍ ထည့်သွင်းပါ။</p>
         <div class="link-row">
           <a class="platform-btn" href="https://buddhist-era.vercel.app" target="_blank" rel="noopener noreferrer">buddhist-era.vercel.app</a>
           <button class="copy-btn" onclick="copyLink('https://buddhist-era.vercel.app', this)" aria-label="လင့်ခ် ကူးယူရန်">📋</button>
