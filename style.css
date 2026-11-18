@@ -1158,3 +1158,16 @@ body.dark-mode #langPick .lp-box::after{border-color:rgba(242,212,120,.28)}
 body.dark-mode #langPick .lp-opt{color:#f3e7c8}
 body.dark-mode #langPick .lp-opt:hover{background:rgba(242,212,120,.1)}
 body.dark-mode #langPick .lp-opt.on{background:linear-gradient(135deg,#d4a017,#a8790c);color:#1a1205}
+
+
+/* ===== Windows desktop app (Tauri): use the full window width ===== */
+html.is-desktop-app .app-container,
+html.is-desktop-app body .app-container{max-width:none;width:100%;box-sizing:border-box;padding-left:clamp(12px,2vw,32px);padding-right:clamp(12px,2vw,32px)}
+html.is-desktop-app #upOverlay .up-wrap,
+html.is-desktop-app #spOverlay .sp-wrap,
+html.is-desktop-app #chOverlay .ch-main,
+html.is-desktop-app #infoOverlay .wrap,
+html.is-desktop-app #gnOverlay main{max-width:none;width:100%;box-sizing:border-box;padding-left:clamp(12px,3vw,48px);padding-right:clamp(12px,3vw,48px)}
+html.is-desktop-app #upOverlay .up-shc,
+html.is-desktop-app #upOverlay .up-pvc{max-width:none}
+html.is-desktop-app #infoOverlay .platform-grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
