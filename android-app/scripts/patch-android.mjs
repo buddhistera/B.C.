@@ -1,6 +1,6 @@
 // `npx cap add android` මගින් සාදන Android project එකට අපගේ සැකසුම් යොදයි:
 //  • අයිකන / ආරම්භක තිරය (resources/res)   • ස්ථාන (GPS) අවසර   • versionCode / versionName
-//  • GitHub Secrets හි keystore එක ඇත්නම් release signing
+//  • GitHub Secrets හි keystore එක ඇත්නම් release signing   • Play In-App Updates
 import { readFileSync, writeFileSync, cpSync, readdirSync, rmSync, existsSync, statSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -55,6 +55,11 @@ if (!g.includes('signingConfigs')) {
   g = g.replace(/(buildTypes\s*\{\s*release\s*\{)/, `$1\n            if (System.getenv("KS_FILE")) { signingConfig = signingConfigs.release }`);
   // පරීක්ෂණ (debug) ඇප් එක Play Store ඇප් එක ඉවත් නොකර වෙනම install කළ හැකි වීමට: app.vercel.buddhist_era.twa.debug
   if (!/\bdebug\s*\{/.test(g)) g = g.replace(/(buildTypes\s*\{)/, `$1\n        debug {\n            applicationIdSuffix = ".debug"\n            versionNameSuffix = "-test"\n        }`);
+}
+// Google Play In-App Updates (MainActivity → Play හි නව version එකක් ඇත්නම් "Update available" තිරය)
+if (!g.includes('com.google.android.play:app-update')) {
+  must(/dependencies\s*\{/.test(g), 'dependencies block not found');
+  g = g.replace(/dependencies\s*\{/, `dependencies {\n    implementation "com.google.android.play:app-update:2.1.0"`);
 }
 writeFileSync(gf, g);
 

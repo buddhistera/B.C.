@@ -1,0 +1,9 @@
+{
+  "android": {
+    "versionCode": 6,
+    "versionName": "1.0.0.6"
+  },
+  "windows": {
+    "version": "1.0.0"
+  }
+}

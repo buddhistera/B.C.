@@ -112,7 +112,7 @@ function setStat(msg) {
   el.innerHTML = l.ok ? '<b>' + es(nm || c) + '</b>' + (nm ? '<br><span class="sp-co">' + c + '</span>' : '') : tr('ස්ථානය තෝරා නැත — කොළඹ අනුව පෙන්වයි', 'Location not set — showing Colombo');
 }
 function twa() { return (doc.referrer || '').indexOf('android-app://') === 0; }
-function inApp() { return /FBAN|FBAV|Instagram|Viber|Line\/|; wv\)/i.test(navigator.userAgent || ''); }
+function inApp() { if (typeof isNativeApp === 'function' && isNativeApp()) return false; return /FBAN|FBAV|Instagram|Viber|Line\/|; wv\)/i.test(navigator.userAgent || ''); }
 function once(opts, lim) { return new Promise(function (ok, no) { var done = false, t = setTimeout(function () { if (!done) { done = true; no({ code: 3 }); } }, lim);
   navigator.geolocation.getCurrentPosition(function (p) { if (!done) { done = true; clearTimeout(t); ok(p); } }, function (e) { if (!done) { done = true; clearTimeout(t); no(e); } }, opts); }); }
 function locErr(err) {

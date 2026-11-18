@@ -44,6 +44,52 @@
     function paliHi(s) { const sc = trScript(); return (sc && window.PaliScript) ? PaliScript.fromIAST(s, sc) : s; }
     // සිංහල අකුරු පාළිය → දේවනාගරී / බුරුම
     function paliSiHi(s) { const sc = trScript(); return (sc && window.PaliScript) ? PaliScript.convert(s, 'sinh', sc) : s; }
+    // ---- Android ඇප් එක (Capacitor) ඇතුළේ පමණක් භාවිතා වේ — වෙබ් අඩවියට කිසිදු බලපෑමක් නැත ----
+    function isNativeApp() {
+        try { return !!(window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()); } catch (e) { return false; }
+    }
+    // Blob එකක් (JPG / PNG) ඇප් එකේ cache එකේ සුරකා Android "Share / Save" මෙනුව විවෘත කරයි
+    function nativeShareFile(blob, name, title) {
+        const PL = (window.Capacitor && Capacitor.Plugins) || {};
+        if (!PL.Filesystem || !PL.Share) return Promise.reject(new Error('Capacitor plugins missing'));
+        return new Promise(function (ok, no) {
+            const r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = no; r.readAsDataURL(blob);
+        }).then(function (b64) {
+            return PL.Filesystem.writeFile({ path: name, data: b64, directory: 'CACHE' });
+        }).then(function (res) {
+            return PL.Share.share({ title: title || name, dialogTitle: title || name, files: [res.uri] });
+        }).catch(function (e) { if (!/cancel/i.test(String(e && (e.message || e)))) throw e; });
+    }
+    // ---- Windows ඇප් එක (Tauri) ඇතුළේ පමණක් ----
+    function isDesktopApp() { return !!(window.__TAURI__ && window.__TAURI__.core); }
+    // Blob එක Windows "Save as" කවුළුවෙන් සුරකියි (src-tauri/src/main.rs → save_file)
+    function desktopSaveFile(blob, name) {
+        return new Promise(function (ok, no) {
+            const r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = no; r.readAsDataURL(blob);
+        }).then(function (b64) { return window.__TAURI__.core.invoke('save_file', { name: name, data: b64 }); });
+    }
+    // Windows ඇප් එකේ: බාහිර සබැඳි (වෙබ් අඩවි, mailto) පරිගණකයේ browser එකේ විවෘත කරයි
+    if (isDesktopApp()) {
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest ? e.target.closest('a[href]') : null; if (!a) return;
+            const href = a.href || '';
+            if (/^(https?:|mailto:)/i.test(href) && !/^https?:\/\/tauri\.localhost/i.test(href) && (a.target === '_blank' || !href.startsWith(location.origin))) {
+                e.preventDefault(); e.stopImmediatePropagation();
+                window.__TAURI__.core.invoke('open_url', { url: href }).catch(function (err) { console.error('open_url:', err); });
+            }
+        }, true);
+    }
+    // Android ඇප් එක: ඉහළ (status) හා පහළ (navigation) තීරු ඇප් එකේ තේමාවේ වර්ණයට
+    function syncAppBars() {
+        if (!isNativeApp()) return;
+        const AB = Capacitor.Plugins && Capacitor.Plugins.AppBars; if (!AB) return;
+        const dark = document.body.classList.contains('dark-mode');
+        // වර්ණ තේමා (theme.js) meta theme-color එකේ තේමාවේ වර්ණය ලියයි — තීරු එයට ගැළපේ
+        const m = document.querySelector('meta[name="theme-color"]');
+        const meta = m && /^#[0-9a-f]{6}$/i.test((m.content || '').trim()) ? m.content.trim() : '';
+        try { AB.setColors({ color: meta || (dark ? '#0A0C1C' : '#F5EDDA'), dark: dark }).catch(function () {}); } catch (e) {}
+    }
+    window.addEventListener('themechange', function () { syncAppBars(); });
     function langReady(l) { return !LANG_DICT[l] || !!(window[LANG_DICT[l]] && window.PaliScript); }
     function loadLang(l, cb) {
         const files = (LANG_FILES[l] || []).slice();
@@ -1318,6 +1364,7 @@ function toggleDarkMode() {
     if (window.AppTheme) { window.AppTheme.toggle(); return; }
     const isDark = document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    syncAppBars();
     
     
     if (typeof updateUI === "function") {
@@ -1348,6 +1395,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
     }
+    syncAppBars();
     
     if (typeof updateDarkModeBtnText === "function") updateDarkModeBtnText();
     if (typeof updateUI === "function") updateUI();
@@ -2287,8 +2335,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 /* ---- Service Worker ----
    ගොනු අනුවාදය (version) පාලනය කරන්නේ sw.js හි VERSION එකෙන් පමණි.
-   මෙහි හෝ index.html හි ?v=... වෙනස් කිරීමට අවශ්‍ය නැත. */
-if ('serviceWorker' in navigator) {
+   මෙහි හෝ index.html හි ?v=... වෙනස් කිරීමට අවශ්‍ය නැත.
+   Android / Windows ඇප් එකේ ගොනු ඇප් එක ඇතුළේම ඇති නිසා service worker අවශ්‍ය නැත. */
+if ('serviceWorker' in navigator && !isNativeApp() && !isDesktopApp()) {
 
   // පළමු ස්ථාපනයේදී (මීට පෙර controller නොතිබූ විට) පිටුව දැනටමත් නවතම ගොනුවලින් පූරණය වී ඇති නිසා නැවත load කිරීම අනවශ්‍යයි;
   // යාවත්කාලීනයකදී පමණක්, ඒ ද එක් වරක් පමණක් reload වේ.
@@ -2317,3 +2366,112 @@ if ('serviceWorker' in navigator) {
     }
   });
 }
+
+// ================================================================
+// Windows ඇප් එකේ යාවත්කාලීන දැනුම්දීම (Tauri ඇප් එකේ පමණි — වෙබ් අඩවියට / Android ට බලපෑමක් නැත)
+// ----------------------------------------------------------------
+// • ඇප් එක ඇතුළේ ඇති app-build.json → ස්ථාපිත අනුවාදය (build වන විට set-version.mjs මගින් ලියයි)
+// • repo එකේ app-version.json       → නවතම අනුවාදය (Windows build workflow එක release එකෙන් පසු යාවත්කාලීන කරයි)
+// online විටදී ඇප් එක විවෘත කළ විට නවතම අනුවාදය වැඩි නම් දැනුම්දීම පෙන්වයි.
+// Android ඇප් එක Google Play හි ඇති නිසා එහි Play "Update available" තිරය MainActivity.java මගින් පෙන්වයි.
+// ================================================================
+(function () {
+    if (!(window.__TAURI__ && window.__TAURI__.core)) return;
+    const VERSION_URL = 'https://raw.githubusercontent.com/buddhistera/B.C./main/app-version.json';
+
+    function lang() { return typeof currentLang !== 'undefined' ? currentLang : 'si'; }
+    // සිංහල නම් සිංහල පෙළ; අනෙක් භාෂාවලට ඉංග්‍රීසි (පරිවර්තනයක් ඇත්නම් tx() මගින්)
+    function L(si, en) { return lang() === 'si' ? si : (typeof tx === 'function' ? tx(en) : en); }
+    function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+    function cmpVer(a, b) {
+        const pa = String(a || '0').split('.').map(n => parseInt(n, 10) || 0), pb = String(b || '0').split('.').map(n => parseInt(n, 10) || 0);
+        for (let i = 0; i < Math.max(pa.length, pb.length); i++) { const d = (pa[i] || 0) - (pb[i] || 0); if (d) return d > 0 ? 1 : -1; }
+        return 0;
+    }
+    function getJson(url, ms) {
+        const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), ms);
+        return fetch(url, { cache: 'no-store', signal: ctrl.signal })
+            .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .finally(() => clearTimeout(t));
+    }
+    function size(b) { b = Number(b); return b ? (b >= 1048576 ? (b / 1048576).toFixed(b >= 10485760 ? 0 : 1) + ' MB' : Math.round(b / 1024) + ' KB') : ''; }
+    function date(iso) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || '')); if (!m) return '';
+        try { return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString(typeof langLocale === 'function' ? langLocale() : undefined, { year: 'numeric', month: 'long', day: 'numeric' }); }
+        catch (e) { return m[0]; }
+    }
+    function openUrl(url) { window.__TAURI__.core.invoke('open_url', { url: url }).catch(err => console.error('open_url:', err)); }
+
+    const CSS =
+        '.bu-ov{--b:#fff;--t:#1f1f1f;--s:#444746;--l:#747775;--a:#0b57d0;--oa:#fff;--h:rgba(31,31,31,.08);position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);animation:buF .18s ease-out}' +
+        'body.dark-mode .bu-ov{--b:#131314;--t:#e3e3e3;--s:#c4c7c5;--l:#8e918f;--a:#a8c7fa;--oa:#062e6f;--h:rgba(227,227,227,.08)}' +
+        '@keyframes buF{from{opacity:0}to{opacity:1}}' +
+        '.bu-sh{background:var(--b);color:var(--t);width:min(560px,calc(100% - 32px));max-height:calc(100% - 32px);overflow-y:auto;border-radius:28px;box-shadow:0 12px 40px rgba(0,0,0,.35);font-family:inherit}' +
+        '.bu-top{display:flex;align-items:center;justify-content:space-between;padding:22px 20px 4px 28px}' +
+        '.bu-br{display:flex;align-items:center;gap:10px;font-size:1.05rem;color:var(--s)}.bu-br img{width:28px;height:28px;border-radius:7px}' +
+        '.bu-x{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:var(--t);display:flex;align-items:center;justify-content:center;cursor:pointer}.bu-x:hover{background:var(--h)}' +
+        '.bu-x svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}' +
+        '.bu-bd{padding:8px 28px 28px}.bu-h{margin:14px 0 18px;font-size:1.55rem;font-weight:500;line-height:1.35;color:var(--t)}' +
+        '.bu-p{margin:0 0 16px;font-size:1.02rem;line-height:1.6;color:var(--s)}' +
+        '.bu-app{display:flex;align-items:center;gap:18px;margin:22px 0 26px}.bu-app img{width:80px;height:80px;border-radius:18px;flex:none}' +
+        '.bu-an{font-size:1.12rem;color:var(--t);margin-bottom:6px}.bu-am{font-size:.95rem;color:var(--s);line-height:1.5}' +
+        '.bu-nw{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}' +
+        '.bu-nw.no{cursor:default}.bu-nw.no svg{display:none}.bu-nt{display:flex;flex-direction:column;gap:4px}.bu-n1{font-size:1.12rem;font-weight:500;color:var(--t)}.bu-n2{font-size:.95rem;color:var(--s)}' +
+        '.bu-nw svg{width:26px;height:26px;flex:none;fill:none;stroke:var(--t);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}.bu-nw.on svg{transform:rotate(180deg)}' +
+        '.bu-notes{white-space:pre-line;font-size:.98rem;line-height:1.6;color:var(--s);padding:4px 0 6px}' +
+        '.bu-ac{display:flex;gap:20px;margin-top:28px}.bu-b{flex:1;min-height:52px;padding:10px 16px;border-radius:999px;cursor:pointer;font:inherit;font-size:1.05rem;font-weight:500}' +
+        '.bu-m{background:transparent;color:var(--a);border:1px solid var(--l)}.bu-m:hover{background:var(--h)}' +
+        '.bu-g{background:var(--a);color:var(--oa);border:1px solid var(--a)}.bu-g:hover{filter:brightness(1.06)}' +
+        '.bu-b:focus-visible,.bu-x:focus-visible,.bu-nw:focus-visible{outline:2px solid var(--a);outline-offset:2px}' +
+        '@media(max-width:600px){.bu-ov{align-items:stretch;background:var(--b)}.bu-sh{width:100%;max-height:none;border-radius:0;box-shadow:none}.bu-bd{padding:6px 22px 28px}}';
+
+    function show(info, installed) {
+        if (document.getElementById('buUpdate')) return;
+        if (!document.getElementById('buUpdateCss')) {
+            const st = document.createElement('style'); st.id = 'buUpdateCss'; st.textContent = CSS; document.head.appendChild(st);
+        }
+        const name = L('බුද්ධ වර්ෂය', 'Buddhist Era');
+        const meta = ['v' + esc(info.version || ''), size(info.size), 'Windows'].filter(Boolean).join(' · ');
+        const d = date(info.date), notes = String(info.notes || '').trim();
+        const ov = document.createElement('div');
+        ov.id = 'buUpdate'; ov.className = 'bu-ov';
+        ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-labelledby', 'buUpdateH');
+        ov.innerHTML =
+            '<div class="bu-sh"><div class="bu-top"><div class="bu-br"><img src="icon-192x192.png" alt=""><span>' + esc(name) + '</span></div>' +
+            '<button type="button" class="bu-x" aria-label="' + esc(L('වසන්න', 'Close')) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
+            '<div class="bu-bd"><h2 id="buUpdateH" class="bu-h">' + esc(L('නව යාවත්කාලීනයක් ලැබී ඇත', 'Update available')) + '</h2>' +
+            '<p class="bu-p">' + esc(L('ඇප් එකේ නවතම අනුවාදය දැන් ලබා ගත හැකියි. නව විශේෂාංග හා නිවැරදි කිරීම් ලබා ගැනීමට යාවත්කාලීන කරන්න.',
+                'A newer version of the app is available. Update to get the latest features and fixes.')) + '</p>' +
+            '<p class="bu-p">' + esc(L('යාවත්කාලීන කරන්න එබූ විට Setup ගොනුව බාගත වේ. බාගත වූ පසු එය විවෘත කර ස්ථාපනය කරන්න — පවතින ඇප් එක ඉවත් කිරීම අවශ්‍ය නැත.',
+                'Tap Update to download the Setup file, then open it to install. You do not need to remove the current app.')) + '</p>' +
+            '<div class="bu-app"><img src="icon-192x192.png" alt=""><div><div class="bu-an">' + esc(name) + '</div><div class="bu-am">' + meta + '</div>' +
+            (installed ? '<div class="bu-am">' + esc(L('දැනට ඇති අනුවාදය', 'Installed version')) + ': v' + esc(installed) + '</div>' : '') + '</div></div>' +
+            (notes || d ? '<button type="button" class="bu-nw' + (notes ? '' : ' no') + '" aria-expanded="false"><span class="bu-nt"><span class="bu-n1">' + esc(L('අලුත් දේ', "What's new")) + '</span>' +
+                (d ? '<span class="bu-n2">' + esc(L('අවසන් වරට යාවත්කාලීන කළේ', 'Last updated')) + ' ' + esc(d) + '</span>' : '') + '</span>' +
+                '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>' +
+                (notes ? '<div class="bu-notes" hidden>' + esc(notes) + '</div>' : '') : '') +
+            '<div class="bu-ac"><button type="button" class="bu-b bu-m">' + esc(L('වැඩි විස්තර', 'Learn more')) + '</button>' +
+            '<button type="button" class="bu-b bu-g">' + esc(L('යාවත්කාලීන කරන්න', 'Update')) + '</button></div></div></div>';
+        document.body.appendChild(ov);
+        const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+        const onKey = (e) => { if (e.key === 'Escape') close(); };
+        document.addEventListener('keydown', onKey);
+        ov.querySelector('.bu-x').onclick = close;
+        ov.querySelector('.bu-m').onclick = () => openUrl(info.page || info.url);
+        ov.querySelector('.bu-g').onclick = () => { openUrl(info.url); close(); };
+        const nw = ov.querySelector('.bu-nw'), nt = ov.querySelector('.bu-notes');
+        if (nw && nt) nw.onclick = () => { const o = nt.hidden; nt.hidden = !o; nw.classList.toggle('on', o); nw.setAttribute('aria-expanded', o ? 'true' : 'false'); };
+    }
+
+    function check() {
+        if (navigator.onLine === false) return;
+        getJson('app-build.json', 4000)
+            .then(local => getJson(VERSION_URL + '?t=' + Date.now(), 8000).then(remote => [local, remote]))
+            .then(([local, remote]) => {
+                const info = remote && remote.windows;
+                if (info && info.url && cmpVer(info.version, local.version) > 0) show(info, local.version);
+            })
+            .catch(err => console.warn('App update check skipped:', err && err.message ? err.message : err));
+    }
+    window.addEventListener('load', () => setTimeout(check, 1500));
+})();

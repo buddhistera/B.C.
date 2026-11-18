@@ -21,7 +21,7 @@ const swPath = join(root, 'sw.js');
 
 // වෙබ් අඩවියට අයත් නොවන / cache නොකළ යුතු දෑ
 const SKIP = new Set(['.git', '.github', 'android-app', 'desktop-app', 'node_modules', '.well-known',
-  'sw.js', 'README.md', 'CLAUDE.md', 'sitemap.xml', 'vercel.json', '.vercelignore', '.nojekyll', '.gitignore', 'build.log']);
+  'sw.js', 'README.md', 'CLAUDE.md', 'sitemap.xml', 'vercel.json', '.vercelignore', '.nojekyll', '.gitignore', 'build.log', 'app-version.json']);
 if (existsSync(join(root, '.vercelignore'))) {
   for (const l of readFileSync(join(root, '.vercelignore'), 'utf8').split(/\r?\n/)) {
     const t = l.trim().replace(/^\/|\/$/g, '');

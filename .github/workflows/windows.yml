@@ -1,10 +1,12 @@
 # =====================================================================
 #  Buddhist Era — offline Windows app (Tauri) build
-#  අවශ්‍ය විට පමණක්:  GitHub → Actions → "Windows build" → Run workflow → version (උදා: 1.0.0) → Run workflow
-#  ප්‍රතිඵලය: එම run එකේ "Artifacts" යටතේ  buddhist-era-windows-…
-#    • Buddhist Era_x.y.z_x64-setup.exe  — install කිරීමේදී තෝරාගත හැක:
-#        "මට පමණක්" (Administrator අවසර අවශ්‍ය නැත)  හෝ  "සියලු පරිශීලකයින්ට" (Administrator)
-#    • Buddhist Era_x.y.z_x64_en-US.msi   — සියලු පරිශීලකයින්ට (Administrator / IT deployment)
+#  අවශ්‍ය විට පමණක්:  GitHub → Actions → "Windows build" → Run workflow → Run workflow
+#  • version හිස්ව තැබුවොත් ස්වයංක්‍රීයව අවසාන අගයට 1ක් එක් කරයි (app-version.json; උදා: 1.0.0 → 1.0.1)
+#  • notes: "අලුත් දේ" — ඇප් එකේ යාවත්කාලීන දැනුම්දීමේ පෙන්වයි (නව පේළියකට \n)
+#  ප්‍රතිඵලය: එම run එකේ "Artifacts" සහ GitHub Releases (windows-vX.Y.Z):
+#    • Buddhist-Era-Setup.exe  — install කිරීමේදී "මට පමණක්" හෝ "සියලු පරිශීලකයින්ට" තෝරාගත හැක
+#    • Buddhist-Era.msi        — සියලු පරිශීලකයින්ට (Administrator / IT deployment)
+#  release එකෙන් පසු app-version.json යාවත්කාලීන වේ → පරණ Windows ඇප් විවෘත කරන විට යාවත්කාලීන දැනුම්දීම පෙනේ.
 # =====================================================================
 name: Windows build
 
@@ -12,14 +14,18 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version (උදා: 1.0.0  — උපරිම 255.255.65535)'
-        required: true
-        default: '1.0.0'
+        description: 'Version — හිස්ව තබන්න (ස්වයංක්‍රීයව අවසාන අගය + 1; උපරිම 255.255.65535)'
+        required: false
+        default: ''
+      notes:
+        description: 'අලුත් දේ (යාවත්කාලීන දැනුම්දීමේ පෙන්වයි; නව පේළියකට \n). හිස්ව තැබිය හැක'
+        required: false
+        default: ''
   push:
     branches: [desktop-app]   # සංවර්ධනය සඳහා පමණි
 
 permissions:
-  contents: write   # build log එක ci-logs-desktop branch එකට යැවීමට පමණි
+  contents: write   # build log එක ci-logs-desktop branch එකට, release සහ app-version.json
 
 concurrency:
   group: windows-${{ github.ref }}
@@ -31,8 +37,6 @@ jobs:
     defaults:
       run:
         shell: bash
-    env:
-      APP_VERSION: ${{ inputs.version || '1.0.0' }}
     steps:
       # repo නම "B.C." අගින් තිතක් ඇති නිසා Windows හි සාමාන්‍ය checkout එක අසාර්ථක වේ → C:\bc වෙත clone කරයි
       - id: co
@@ -61,6 +65,16 @@ jobs:
         working-directory: C:/bc/desktop-app
         run: npm install --no-audit --no-fund 2>&1 | tee -a ../build.log
 
+      # අනුවාදය: අතින් දුන්නේ නැත්නම් app-version.json හි අවසාන අගය + 1
+      - id: ver
+        name: Version
+        working-directory: C:/bc
+        env:
+          IN_VERSION: ${{ inputs.version }}
+        run: |
+          if [ -n "$IN_VERSION" ]; then echo "APP_VERSION=$IN_VERSION" >> "$GITHUB_ENV"; echo "APP_VERSION=$IN_VERSION";
+          else node .github/scripts/app-version.mjs next windows app-version.json; fi
+
       - id: www
         name: Copy web files into the app + set version
         working-directory: C:/bc/desktop-app
@@ -81,6 +95,59 @@ jobs:
             C:/bc/desktop-app/src-tauri/target/release/bundle/nsis/*.exe
             C:/bc/desktop-app/src-tauri/target/release/bundle/msi/*.msi
           if-no-files-found: error
+
+      # GitHub Releases: installer ගොනු (සෘජු බාගත කිරීම)
+      - name: Prepare release files
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          mkdir -p /c/rel
+          cp /c/bc/desktop-app/src-tauri/target/release/bundle/nsis/*.exe "/c/rel/Buddhist-Era-Setup.exe"
+          cp /c/bc/desktop-app/src-tauri/target/release/bundle/msi/*.msi "/c/rel/Buddhist-Era.msi"
+
+      - name: Publish GitHub Release
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: windows-v${{ env.APP_VERSION }}
+          target_commitish: ${{ github.sha }}
+          name: Windows ${{ env.APP_VERSION }}
+          body: |
+            Buddhist Era (බුද්ධ වර්ෂය) — Windows ${{ env.APP_VERSION }} (offline)
+            • Buddhist-Era-Setup.exe — install කිරීමේදී "මට පමණක්" (Administrator අවශ්‍ය නැත) හෝ "සියලු පරිශීලකයින්ට" තෝරන්න.
+            • Buddhist-Era.msi — Administrator ලවා සියලු පරිශීලකයින්ට.
+            "Windows protected your PC" පෙන්වුවහොත්: More info → Run anyway.
+
+            ${{ inputs.notes }}
+          files: |
+            C:/rel/Buddhist-Era-Setup.exe
+            C:/rel/Buddhist-Era.msi
+          make_latest: true
+          overwrite_files: true
+
+      # ඇප් එකේ යාවත්කාලීන දැනුම්දීම: main හි app-version.json යාවත්කාලීන කරයි (පරණ ඇප් වලට අලුත් අනුවාදය පෙනේ)
+      - name: Update app-version.json
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ env.APP_VERSION }}
+          NOTES: ${{ inputs.notes }}
+          URL: https://github.com/${{ github.repository }}/releases/download/windows-v${{ env.APP_VERSION }}/Buddhist-Era-Setup.exe
+          PAGE: https://github.com/${{ github.repository }}/releases/tag/windows-v${{ env.APP_VERSION }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          export SIZE=$(stat -c%s /c/rel/Buddhist-Era-Setup.exe)
+          SITE=/c/site
+          for i in 1 2 3; do
+            rm -rf "$SITE"
+            git clone -q --depth 1 --branch main "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" "$SITE"
+            node /c/bc/.github/scripts/app-version.mjs save windows "$SITE/app-version.json"
+            cd "$SITE"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add app-version.json
+            git commit -q -m "app-version.json: Windows ${VERSION}" || { echo "no change"; break; }
+            if git push -q origin HEAD:main; then echo "app-version.json updated"; break; fi
+            cd /c; sleep 5
+          done
 
       - name: Save build log
         if: always()

@@ -15,6 +15,7 @@ var SWD = function (i) { var f = T(EDF[i]); return f !== EDF[i] ? f.replace(/व
 var P = null, pushed = false;
 var low = (navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (W.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
 /* iPhone / iPad (iPadOS "desktop" mode ද ඇතුළුව) — iOS හි <a download> ක්‍රමය විශ්වාස කළ නොහැක (විශේෂයෙන් Home Screen ඇප් ලෙස) */
+var NATIVE = function () { return typeof isNativeApp === 'function' && isNativeApp(); };   // Android ඇප් එක (Capacitor)
 var IOS = /iP(hone|ad|od)/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 var TX = { title: ['උපෝසථ දින සහ වස් කාලය', 'Uposatha Days & Vassa Period'], hList: ['උපෝසථ දින', 'Uposatha Days'],
@@ -25,6 +26,7 @@ var TX = { title: ['උපෝසථ දින සහ වස් කාලය', 'U
   dlBtn: ['JPG', 'JPG'], dlAria: ['JPG ලෙස බාගත කරන්න', 'Download as JPG'], dlPick: ['බාගත කළ යුතු ආකාරය තෝරන්න', 'Choose how to download'], dlBw: ['කළු සුදු', 'Black & White'], dlCol: ['වර්ණයෙන්', 'In colour'], dlCan: ['අවලංගු කරන්න', 'Cancel'],
   pvTitle: ['JPG රූපය සූදානම්', 'Your JPG is ready'], pvShare: ['💾 සුරකින්න / බෙදාගන්න', '💾 Save / Share'], pvClose: ['වසන්න', 'Close'],
   pvHint: ['"සුරකින්න / බෙදාගන්න" ඔබා "Save Image" තෝරන්න. නැතහොත් රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" තෝරන්න.', 'Tap "Save / Share" and choose "Save Image", or long-press the image and choose "Save to Photos".'],
+  pvHintApp: ['"සුරකින්න / බෙදාගන්න" ඔබා, රූපය සුරැකීමට හෝ යැවීමට Drive, Files, WhatsApp වැනි ස්ථානයක් තෝරන්න.', 'Tap "Save / Share" and choose Drive, Files, WhatsApp or another app to save or send the image.'],
   pvHint2: ['රූපය මත දිගු වේලාවක් ඔබා "Save to Photos" (ඡායාරූපවලට සුරකින්න) තෝරන්න.', 'Long-press the image and choose "Save to Photos".'],
   rLk: ['ශ්‍රී ලංකා / තායි', 'Sri Lanka / Thai'], rMm: ['මියන්මාර්', 'Myanmar'], rAria: ['උපෝසථ දින දැක්වෙන රට', 'Show uposatha days of'] };
 /* මියන්මාර් මාස නාම (උපෝසථ පිටුවේ මියන්මාර් ලැයිස්තුවේ පමණි): 0 = පළමු වාසෝ (අධික වර්ෂය) */
@@ -421,10 +423,12 @@ function showPreview(blob, name) {
   var url = URL.createObjectURL(blob), file = null; P.pvUrl = url;
   $('upPvImg').src = url;
   try { file = new File([blob], name, { type: 'image/jpeg' }); } catch (e) { file = null; }
-  var can = !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] }));
+  var nat = NATIVE();
+  var can = nat || !!(file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] }));
   var sb = $('upPvShare'); sb.style.display = can ? '' : 'none';
-  sb.onclick = can ? function () { navigator.share({ files: [file], title: name }).catch(function () {}); } : null;
-  $('upPvH').textContent = can ? tr(TX.pvHint[0], TX.pvHint[1]) : tr(TX.pvHint2[0], TX.pvHint2[1]);
+  sb.onclick = !can ? null : nat ? function () { nativeShareFile(blob, name, name).catch(function (e) { console.error('share:', e); }); }
+    : function () { navigator.share({ files: [file], title: name }).catch(function () {}); };
+  $('upPvH').textContent = nat ? tr(TX.pvHintApp[0], TX.pvHintApp[1]) : can ? tr(TX.pvHint[0], TX.pvHint[1]) : tr(TX.pvHint2[0], TX.pvHint2[1]);
   lab(); $('upPv').classList.add('on');
 }
 
@@ -443,8 +447,12 @@ function dlJpg(color) {
       makeJpeg(cv, function (b) {
         freeCanvas(cv);
         if (!b) { fail(); done(); return; }
+        if (!IOS && !NATIVE() && typeof isDesktopApp === 'function' && isDesktopApp()) {   /* Windows ඇප් එක: "Save as" කවුළුව */
+          desktopSaveFile(b, name).catch(fail).then(done);
+          return;
+        }
         try {
-          if (IOS) showPreview(b, name);
+          if (IOS || NATIVE()) showPreview(b, name);   /* iPhone සහ Android ඇප් එක: preview + Share */
           else {   // Blob URL — විශාල ගොනු සඳහා data: URL එකට වඩා වේගවත් හා මතකය අඩුවෙන් වැය වේ
             var url = URL.createObjectURL(b), a = doc.createElement('a');
             a.href = url; a.download = name; doc.body.appendChild(a); a.click(); doc.body.removeChild(a);

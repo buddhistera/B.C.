@@ -1,13 +1,16 @@
 # =====================================================================
 #  Buddhist Era — offline Android app (Capacitor) build
 #  ස්වයංක්‍රීයව ධාවනය නොවේ — අවශ්‍ය විට පමණක්:
-#    GitHub → Actions → "Android build" → Run workflow → version code / name ඇතුළත් කර → Run workflow
-#  • version code: Play Store එකේ අවසාන අගයට වඩා වැඩි පූර්ණ සංඛ්‍යාවක් (උදා: 6, 7, 8 …)
-#  • version name: පරිශීලකයින්ට පෙනෙන අනුවාදය (උදා: 2.0.0)
+#    GitHub → Actions → "Android build" → Run workflow → Run workflow
+#  • version code / name හිස්ව තැබුවොත් ස්වයංක්‍රීයව අවසාන අගයට 1ක් එක් කරයි
+#    (app-version.json හි සටහන් වේ — උදා: 6 / 1.0.0.6 → 7 / 1.0.0.7). අවශ්‍ය නම් අතින් ද දිය හැක.
 #  • ප්‍රතිඵලය: එම run එකේ "Artifacts" යටතේ  buddhist-era-android-…  (APK + AAB)
+#    → AAB (app-release.aab) එක Play Console → Production / Testing → Create new release වෙත upload කරන්න.
 #  • Repo Settings → Secrets and variables → Actions හි පහත 4 ඇත්නම් Play Store එකට යැවිය හැකි
 #    release (signed) build එකක්; නැත්නම් පරීක්ෂණ සඳහා debug APK එකක් පමණි:
 #      ANDROID_KEYSTORE_BASE64   ANDROID_KEYSTORE_PASSWORD   ANDROID_KEY_ALIAS   ANDROID_KEY_PASSWORD
+#  • Play Store යාවත්කාලීන දැනුම්දීම: Play හි නව version එකක් ඇත්නම් ඇප් එක විවෘත කරන විට Google Play
+#    "Update available" තිරය ස්වයංක්‍රීයව පෙන්වයි (MainActivity.java — Play In-App Updates).
 # =====================================================================
 name: Android build
 
@@ -15,15 +18,16 @@ on:
   workflow_dispatch:
     inputs:
       version_code:
-        description: 'Version code (Play Store එකේ අවසාන අගයට වඩා වැඩි අංකයක්, උදා: 6)'
-        required: true
+        description: 'Version code — හිස්ව තබන්න (ස්වයංක්‍රීයව අවසාන අගය + 1)'
+        required: false
+        default: ''
       version_name:
-        description: 'Version name (උදා: 2.0.0)'
-        required: true
-        default: '2.0.0'
+        description: 'Version name — හිස්ව තබන්න (ස්වයංක්‍රීයව, උදා: 1.0.0.7)'
+        required: false
+        default: ''
 
 permissions:
-  contents: write   # build log එක ci-logs branch එකට යැවීමට පමණි
+  contents: write   # build log එක ci-logs branch එකට, app-version.json main එකට
 
 concurrency:
   group: android-${{ github.ref }}
@@ -78,11 +82,19 @@ jobs:
             echo "Signing: secrets not set → debug build only" | tee -a build.log
           fi
 
+      # අනුවාදය: අතින් දුන්නේ නැත්නම් app-version.json හි අවසාන අගය + 1
+      - name: Version
+        env:
+          IN_CODE: ${{ inputs.version_code }}
+          IN_NAME: ${{ inputs.version_name }}
+        run: |
+          node .github/scripts/app-version.mjs next android app-version.json | tee -a build.log
+          [ -n "$IN_CODE" ] && echo "VERSION_CODE=$IN_CODE" >> "$GITHUB_ENV"
+          [ -n "$IN_NAME" ] && echo "VERSION_NAME=$IN_NAME" >> "$GITHUB_ENV"
+          true
+
       - name: Apply app settings (icons, permissions, version, signing)
         working-directory: android-app
-        env:
-          VERSION_CODE: ${{ inputs.version_code }}
-          VERSION_NAME: ${{ inputs.version_name }}
         run: |
           if ! [[ "$VERSION_CODE" =~ ^[0-9]+$ ]] || [ "$VERSION_CODE" -lt 1 ]; then
             echo "Version code must be a whole number, e.g. 6 (got: '$VERSION_CODE')" | tee -a ../build.log; exit 1
@@ -102,11 +114,31 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: buddhist-era-android-v${{ inputs.version_name }}-code${{ inputs.version_code }}
+          name: buddhist-era-android-v${{ env.VERSION_NAME }}-code${{ env.VERSION_CODE }}
           path: |
             android-app/android/app/build/outputs/apk/**/*.apk
             android-app/android/app/build/outputs/bundle/**/*.aab
           if-no-files-found: error
+
+      # signed build එකක් සාර්ථක වූ පසු: අනුවාද අංකය main හි app-version.json හි සටහන් කරයි (ඊළඟ build එක +1)
+      - name: Record version in app-version.json
+        if: github.event_name == 'workflow_dispatch' && env.KS_FILE != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SITE="$RUNNER_TEMP/site"
+          for i in 1 2 3; do
+            rm -rf "$SITE"
+            git clone -q --depth 1 --branch main "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" "$SITE"
+            VERSION="$VERSION_NAME" node .github/scripts/app-version.mjs save android "$SITE/app-version.json"
+            cd "$SITE"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add app-version.json
+            git commit -q -m "app-version.json: Android ${VERSION_NAME} (version code ${VERSION_CODE})" || { echo "no change"; break; }
+            if git push -q origin HEAD:main; then echo "app-version.json updated"; break; fi
+            cd - >/dev/null; sleep 5
+          done
 
       # ගැටලු විසඳීම සඳහා: build log එකේ අග කොටස ci-logs branch එකට (මුරපද ඉවත් කර)
       - name: Save build log
@@ -121,7 +153,7 @@ jobs:
           done
           tail -c 120000 build.log > "$RUNNER_TEMP/ci/build-tail.log"
           find android-app/android/app/build/outputs/apk -name '*.apk' -exec cp {} "$RUNNER_TEMP/ci/" \; 2>/dev/null || true
-          echo "run=${{ github.run_number }} version=${{ inputs.version_name }}(${{ inputs.version_code }}) status=$STATUS sha=${{ github.sha }} ref=${{ github.ref_name }}" > "$RUNNER_TEMP/ci/status.txt"
+          echo "run=${{ github.run_number }} version=${VERSION_NAME}(${VERSION_CODE}) status=$STATUS sha=${{ github.sha }} ref=${{ github.ref_name }}" > "$RUNNER_TEMP/ci/status.txt"
           cd "$RUNNER_TEMP/ci"
           git init -q && git checkout -q -b ci-logs
           git -c user.name=github-actions -c user.email=actions@github.com add -A
