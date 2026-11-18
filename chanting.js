@@ -26,9 +26,9 @@
   var spy = null;
 
   /* ---------------------------- helpers ---------------------------- */
-  function lang() { var l = typeof currentLang !== 'undefined' ? currentLang : 'si'; return (l === 'en' || l === 'hi' || l === 'my' || l === 'th') ? l : 'si'; }
+  function lang() { var l = typeof currentLang !== 'undefined' ? currentLang : 'si'; return (l === 'en' || l === 'hi' || l === 'my' || l === 'th' || l === 'zh') ? l : 'si'; }
   /* හින්දි / බුරුම: ඉංග්‍රීසි පෙළ → lang/hi.js / lang/my.js (නැත්නම් ඉංග්‍රීසියම);  රෝම පාළිය → දේවනාගරී / බුරුම අකුරු (pali-script.js) */
-  var SCRS = { hi: 'deva', my: 'mymr', th: 'thai' };
+  var SCRS = { hi: 'deva', my: 'mymr', th: 'thai', zh: 'iast' };   /* zh = චීන: පාළිය රෝම අකුරින්ම */
   function TRL() { return !!SCRS[lang()]; }          /* ඉංග්‍රීසි වගුව + අක්ෂරාන්තරිත පාළිය (හින්දි / බුරුම / තායි) */
   function SCR() { return SCRS[lang()] || 'deva'; }
   function X(s) { return (typeof tx === 'function') ? tx(s) : s; }
@@ -37,7 +37,7 @@
   function L(o) {
     if (!o) return ''; if (typeof o === 'string') return o;
     var l = lang(); if (l === 'hi') return o.hi || (o.en ? X(o.en) : '') || o.si || '';
-    if (l === 'my' || l === 'th') return o[l] || (o.en ? X(o.en) : '') || o.si || '';
+    if (l === 'my' || l === 'th' || l === 'zh') return o[l] || (o.en ? X(o.en) : '') || o.si || '';
     return o[l] || o.si || '';
   }
   function LP(o) { if (!o || typeof o === 'string') return o || ''; return TRL() ? (o[lang()] || XP(o.en || '') || o.si || '') : L(o); }
@@ -373,7 +373,7 @@ function attachChPinch(ov) {
 --g700:#8a6508;--g600:#b8860b;--g500:#d4a017;--g400:#e6b944;--g300:#f2d478;--g200:#f9e9b8;--g100:#fdf5db;\
 --bg:#f3fcf7;--card:#ffffff;--elev:#f8fdfa;--subtle:#e8f8f0;--tint:#e0f5e8;--pali-bg:#edfaf3;\
 --tx:#0a2018;--tx2:#2a4a3a;--muted:#608a76;--bd:#c8e6d5;--bd2:#a0d4b8;--sh:0 4px 14px rgba(8,63,42,.10);--shs:0 1px 4px rgba(8,63,42,.08);\
---serif:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai","Noto Sans Sinhala",serif;--sans:"Noto Sans","Noto Sans Sinhala","Noto Sans Devanagari","Noto Sans Myanmar","Noto Sans Thai","Segoe UI",sans-serif}\
+--serif:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai","Noto Serif SC","Noto Sans Sinhala",serif;--sans:"Noto Sans","Noto Sans Sinhala","Noto Sans Devanagari","Noto Sans Myanmar","Noto Sans Thai","Noto Sans SC","Segoe UI",sans-serif}\
 body.dark-mode #chOverlay{--bg:#061410;--card:#0a2118;--elev:#0e2c20;--subtle:#123828;--tint:#123828;--pali-bg:#113325;\
 --tx:#e0f5e8;--tx2:#a8d4b8;--muted:#6a9a80;--bd:#1a4830;--bd2:#2a6042;--sh:0 4px 14px rgba(0,0,0,.5);--shs:0 1px 4px rgba(0,0,0,.45);\
 --g700:#e6b944;--g600:#f2d478;--g500:#f9e9b8;--g400:#fdf5db;--m700:#68cba3;--m600:#98ddbd;--m500:#c8edd8;--m800:#98ddbd;--m900:#c8edd8}\

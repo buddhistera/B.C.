@@ -21,27 +21,27 @@ const RESET = 1;
 
 // අනිවාර්ය ගොනු — එකක් හෝ නොලැබුණොත් update එක අත්හැර පැරණි අනුවාදයම දිගටම ක්‍රියා කරයි
 const CORE_FILES = {
-  '/': '32aa82af7b',                              // index.html
+  '/': '6098a620a5',                              // index.html
   '/manifest.json': '469ab2e27b',
-  '/style.css': '1f6ec15ecf',
+  '/style.css': '4c7a5ac5a3',
   '/theme.css': 'f37f480edb',
-  '/theme.js': '7c89975e8b',
+  '/theme.js': '0e9d8463a1',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
-  '/script.js': 'e6e6307aff',
-  '/calculation.js': '2eaef14a21',
-  '/info.js': 'faedb0dfc7',
-  '/chanting.js': 'ca3efd8abc',
+  '/script.js': 'bb39df606f',
+  '/calculation.js': 'cbf6fd8a69',
+  '/info.js': '9bba8c1193',
+  '/chanting.js': 'c1938653d8',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': 'ddfd74a2c4',
-  '/uposatha.js': 'cf7eeae4ce'
+  '/sunpage.js': 'f942fc69e2',
+  '/uposatha.js': '11ed40c55e'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
 const OPTIONAL_FILES = {
   '/patthana-data.js': '7093f05955',
   '/pirith-data.js': '73f0cfcde8',
-  '/buddha-recitation.js': 'ec46d24972',
+  '/buddha-recitation.js': 'c680957a85',
   '/buddha-vandana-data.js': '1f90334966',
   '/satipatthana-data.js': '17cf3675fd',
   '/patimokkha-data.js': '2f271186af',
@@ -59,16 +59,18 @@ const OPTIONAL_FILES = {
   '/icon-32×32.png': 'd74438ed59'
 };
 
-// හින්දි / බුරුම / තායි තෝරාගත් අයට පමණක් — පළමු භාවිතයේදී cache වේ.
+// හින්දි / බුරුම / තායි / චීන තෝරාගත් අයට පමණක් — පළමු භාවිතයේදී cache වේ.
 // update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
   '/pali-script.js': '6f33d6f815',
-  '/lang/hi.js': 'f3da158c2d',
-  '/lang/my.js': '66b01bb834',
-  '/lang/th.js': '47c840ecfe',
+  '/lang/hi.js': '061eeb8d5b',
+  '/lang/my.js': '80fd04349b',
+  '/lang/th.js': '515d50a8eb',
   '/lang/hi-calc.js': '39cf96b451',
   '/lang/my-calc.js': '28da8427e6',
-  '/lang/th-calc.js': '7e3a144cbc'
+  '/lang/th-calc.js': '7e3a144cbc',
+  '/lang/zh-calc.js': '72607c06a9',
+  '/lang/zh.js': '02de722879'
 };
 
 // ------------------------------------------------------------

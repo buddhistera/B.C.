@@ -11,7 +11,7 @@ var T = function (e) { return typeof tx === 'function' ? tx(e) : e; };   // Engl
 var F = function (e) { var a = arguments; return String(T(e)).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1]; }); };
 var PH = function (s) { return typeof paliHi === 'function' ? paliHi(s) : s; };   // රෝම පාළිය → හින්දියේදී දේවනාගරී
 var tr = function (s, e) { return en() ? T(e) : s; };
-var SWD = function (i) { var f = T(EDF[i]); return f !== EDF[i] ? f.replace(/वार$/, '') : EDY[i]; };   // කෙටි දින නාමය (හින්දි: रवि, सोम …)
+var SWD = function (i) { var f = T(EDF[i]); return f !== EDF[i] ? f.replace(/वार$/, '').replace(/^星期/, '周') : EDY[i]; };   // කෙටි දින නාමය (හින්දි: रवि, सोम …)
 var P = null, pushed = false;
 var low = (navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (W.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
 /* iPhone / iPad (iPadOS "desktop" mode ද ඇතුළුව) — iOS හි <a download> ක්‍රමය විශ්වාස කළ නොහැක (විශේෂයෙන් Home Screen ඇප් ලෙස) */
@@ -60,13 +60,14 @@ var SID = ['ඉරිදා', 'සඳුදා', 'අඟහරුවාදා', 
 function ld(s) { var a = s.split('-'); return new Date(+a[0], +a[1] - 1, +a[2]); } // local date from 'YYYY-MM-DD'
 function ds(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 function mon(d) { return en() ? T(EMO[d.getMonth()]) : SIM[d.getMonth()]; }
-function md(d) { return en() ? d.getDate() + ' ' + mon(d) : mon(d) + ' ' + d.getDate(); }
+var ZH = function () { return typeof currentLang !== 'undefined' && currentLang === 'zh'; };   // චීන: 11月18日 / 2026年11月18日
+function md(d) { return ZH() ? (d.getMonth() + 1) + '月' + d.getDate() + '日' : en() ? d.getDate() + ' ' + mon(d) : mon(d) + ' ' + d.getDate(); }
 function wd(d) { return en() ? SWD(d.getDay()) : SID[d.getDay()]; }
-function fdt(d) { return en() ? d.getDate() + ' ' + mon(d) + ' ' + d.getFullYear() : d.getFullYear() + ' ' + mon(d) + ' ' + d.getDate(); }
+function fdt(d) { return ZH() ? d.getFullYear() + '年' + md(d) : en() ? d.getDate() + ' ' + mon(d) + ' ' + d.getFullYear() : d.getFullYear() + ' ' + mon(d) + ' ' + d.getDate(); }
 function days(a, b) { return Math.round((b - a) / 864e5); }
 function today0() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
 
-var CSS = '#upOverlay{--cd:rgba(255,253,249,.82);--bd:rgba(120,80,30,.16);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
+var CSS = '#upOverlay{--cd:rgba(255,253,249,.82);--bd:rgba(120,80,30,.16);--tx:#2b1a0e;--mu:#6b5a4a;--bg2:#f6ead9;--ac:#a0561d;--tl:#fbf3e6;--sh:0 6px 22px rgba(90,60,20,.09);position:fixed;left:0;top:0;right:0;bottom:0;z-index:3100;display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;color:var(--tx);font-family:"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai","Noto Serif SC",serif;background:linear-gradient(180deg,#f5dfc6 0%,#faf2e8 24%,#fbf6ee 100%)}' +
 'body.dark-mode #upOverlay{--cd:rgba(14,20,52,.66);--bd:rgba(242,212,120,.26);--tx:#e8ecf8;--mu:#aab3d6;--bg2:rgba(242,212,120,.12);--ac:#f2d478;--tl:rgba(255,255,255,.05);--sh:0 8px 28px rgba(0,0,0,.45);background:radial-gradient(ellipse at 50% 0%,#1b2554 0%,#0b1030 45%,#04061a 100%)}' +
 '#upOverlay button{font-family:inherit}.up-sky{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}' +
 '.up-st{display:none;position:absolute;left:0;top:0;border-radius:50%;background:transparent}body.dark-mode .up-st{display:block}' +
@@ -244,7 +245,7 @@ function drawSheet(y, list, v, color, rgn) {
      මතකය අඩු උපාංගවල 3508 px (A4 @ 300 dpi). */
   var PW = low ? 3508 : 4800, PH = Math.round(PW * 210 / 297), m = PW / 297, cv = doc.createElement('canvas'), x, t = i18n[currentLang];
   cv.width = PW; cv.height = PH; x = cv.getContext('2d');
-  var FF = '"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai","Iskoola Pota","Nirmala UI","Noto Sans Sinhala","Noto Sans Devanagari",serif';
+  var FF = '"Noto Serif","Noto Serif Sinhala","Noto Serif Devanagari","Noto Sans Myanmar","Noto Sans Thai","Noto Serif SC","Iskoola Pota","Nirmala UI","Noto Sans Sinhala","Noto Sans Devanagari",serif';
   var C = color ?
     { ink: '#2b1a0e', mu: '#6b5a4a', ac: '#a0561d', bd: 'rgba(120,80,30,.28)', row: '#fbf3e6', hdr: '#f6ead9', ban: '#C8E6C9', banInk: '#1B5E20', bar: '#d4af37',
       fullBg: 'rgba(255,235,59,.2)', fullBd: '#d4af37', newBg: 'rgba(0,0,0,.12)', pc: '#c62828', pp: '#FF6600', vas: '#43a047', card: '#fbf3e6' } :
@@ -463,7 +464,7 @@ function dlJpg(color) {
       });
     } catch (e) { freeCanvas(cv); fail(e); done(); }
   };
-  try { if (doc.fonts && doc.fonts.load) Promise.all([doc.fonts.load('400 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('700 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('400 40px "Noto Serif"', 'Aā'), doc.fonts.load('700 40px "Noto Serif"', 'Aā')].concat(typeof isHindi === 'function' && isHindi() ? [doc.fonts.load('400 40px "Noto Serif Devanagari"', 'अआ'), doc.fonts.load('700 40px "Noto Serif Devanagari"', 'अआ')] : []).concat(typeof currentLang !== 'undefined' && currentLang === 'my' ? [doc.fonts.load('400 40px "Noto Sans Myanmar"', 'မြန်'), doc.fonts.load('700 40px "Noto Sans Myanmar"', 'မြန်')] : []).concat(typeof currentLang !== 'undefined' && currentLang === 'th' ? [doc.fonts.load('400 40px "Noto Sans Thai"', 'ไทย'), doc.fonts.load('700 40px "Noto Sans Thai"', 'ไทย')] : [])).then(go, go); else go(); } catch (e) { go(); }
+  try { if (doc.fonts && doc.fonts.load) Promise.all([doc.fonts.load('400 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('700 40px "Noto Serif Sinhala"', 'අඉ1A'), doc.fonts.load('400 40px "Noto Serif"', 'Aā'), doc.fonts.load('700 40px "Noto Serif"', 'Aā')].concat(typeof isHindi === 'function' && isHindi() ? [doc.fonts.load('400 40px "Noto Serif Devanagari"', 'अआ'), doc.fonts.load('700 40px "Noto Serif Devanagari"', 'अआ')] : []).concat(typeof currentLang !== 'undefined' && currentLang === 'my' ? [doc.fonts.load('400 40px "Noto Sans Myanmar"', 'မြန်'), doc.fonts.load('700 40px "Noto Sans Myanmar"', 'မြန်')] : []).concat(typeof currentLang !== 'undefined' && currentLang === 'th' ? [doc.fonts.load('400 40px "Noto Sans Thai","Noto Serif SC"', 'ไทย'), doc.fonts.load('700 40px "Noto Sans Thai","Noto Serif SC"', 'ไทย')] : []).concat(ZH() ? [doc.fonts.load('400 40px "Noto Serif SC"', '佛历布萨日'), doc.fonts.load('700 40px "Noto Serif SC"', '佛历布萨日')] : [])).then(go, go); else go(); } catch (e) { go(); }
 }
 
 /* ---------- open / close ---------- */

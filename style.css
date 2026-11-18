@@ -1,8 +1,8 @@
 /* Buddhist Era — merged stylesheet (base + cream & gold theme). Assets in bg/ */
 :root {
     /* ලතින් font එක මුලින්ම: ඉංග්‍රීසි / රෝම පාළි (ā ṃ ṅ ...) ඒ මගින්, සිංහල හා හින්දි අකුරු ඊළඟ font වලින් */
-    --ff-sans: 'Noto Sans', 'Noto Sans Sinhala', 'Noto Sans Devanagari', 'Noto Sans Myanmar','Noto Sans Thai', 'Myanmar Text', 'Padauk', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
-    --ff-serif: 'Noto Serif', 'Noto Serif Sinhala', 'Noto Serif Devanagari', 'Noto Serif Myanmar', 'Noto Sans Myanmar','Noto Sans Thai', 'Myanmar Text', serif;
+    --ff-sans: 'Noto Sans', 'Noto Sans Sinhala', 'Noto Sans Devanagari', 'Noto Sans Myanmar','Noto Sans Thai','Noto Sans SC', 'Myanmar Text', 'Padauk', 'Segoe UI', 'Nirmala UI', -apple-system, sans-serif;
+    --ff-serif: 'Noto Serif', 'Noto Serif Sinhala', 'Noto Serif Devanagari', 'Noto Serif Myanmar', 'Noto Sans Myanmar','Noto Sans Thai','Noto Serif SC', 'Myanmar Text', serif;
 
     --gold: #d4af37;
     --bg: #fffff0;

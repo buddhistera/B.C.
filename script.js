@@ -6,11 +6,13 @@
 // my = မြန်မာ (බුරුම): හින්දි ක්‍රමයමයි — lang/my.js හි MY_DICT (මාතෘකා / UI පෙළ), පාළිය බුරුම අකුරින් (pali-script.js 'mymr'),
 //      දිගු අර්ථ පෙළ ඉංග්‍රීසියෙන්. බුරුම තේරූ විට මියන්මාර් උපෝසථ දින (mm-poya.js) ස්වයංක්‍රීයව යොදයි.
 // th = ไทย (තායි): එම ක්‍රමයමයි — lang/th.js (TH_DICT), පාළිය තායි අකුරින් ('thai'); උපෝසථ දින ශ්‍රී ලංකා / තායි ලෙසම.
-    const APP_LANGS = ['si', 'en', 'hi', 'my', 'th'];
-    const LANG_NAMES = { si: 'සිංහල', en: 'English', hi: 'हिन्दी', my: 'မြန်မာ', th: 'ไทย' };
-    const LANG_FILES = { hi: ['pali-script.js', 'lang/hi.js'], my: ['pali-script.js', 'lang/my.js'], th: ['pali-script.js', 'lang/th.js'] };
-    const LANG_DICT = { hi: 'HI_DICT', my: 'MY_DICT', th: 'TH_DICT' };   // ඉංග්‍රීසි යතුර → එම භාෂාවේ පෙළ
-    const LANG_SCRIPT = { hi: 'deva', my: 'mymr', th: 'thai' };          // පාළිය ලියන අක්ෂර මාලාව
+// zh = 简体中文 (චීන — සරල අකුරු): එම ක්‍රමයමයි — lang/zh.js (ZH_DICT). චීන අකුරුවලින් පාළි ශබ්ද නිවැරදිව ලිවිය නොහැකි නිසා
+//      පාළිය රෝම (IAST) අකුරින්ම ('iast' — චීන ථෙරවාද වන්දනා පොත්වල සම්මතය); උපෝසථ දින ශ්‍රී ලංකා / තායි ලෙසම.
+    const APP_LANGS = ['si', 'en', 'hi', 'my', 'th', 'zh'];
+    const LANG_NAMES = { si: 'සිංහල', en: 'English', hi: 'हिन्दी', my: 'မြန်မာ', th: 'ไทย', zh: '简体中文' };
+    const LANG_FILES = { hi: ['pali-script.js', 'lang/hi.js'], my: ['pali-script.js', 'lang/my.js'], th: ['pali-script.js', 'lang/th.js'], zh: ['pali-script.js', 'lang/zh.js'] };
+    const LANG_DICT = { hi: 'HI_DICT', my: 'MY_DICT', th: 'TH_DICT', zh: 'ZH_DICT' };   // ඉංග්‍රීසි යතුර → එම භාෂාවේ පෙළ
+    const LANG_SCRIPT = { hi: 'deva', my: 'mymr', th: 'thai', zh: 'iast' };          // පාළිය ලියන අක්ෂර මාලාව
     let currentLang = localStorage.getItem('appLang') || 'en';
     if (APP_LANGS.indexOf(currentLang) < 0) currentLang = 'en';
     try { document.documentElement.lang = currentLang; } catch (e) {}
@@ -39,7 +41,7 @@
     function txMon3(m) { if (m !== 'May') return tx(m); const v = tx('May (short)'); return v === 'May (short)' ? tx('May') : v; }
     function isHindi() { return currentLang === 'hi'; }
     // තායි: 'th-TH' තනිවම බෞද්ධ (ථායි) වර්ෂ ගණනය යොදන නිසා ග්‍රෙගරියානු දින දර්ශනය බලහත්කාරයෙන්
-    function langLocale() { return currentLang === 'si' ? 'si-LK' : currentLang === 'hi' ? 'hi-IN' : currentLang === 'my' ? 'my-MM' : currentLang === 'th' ? 'th-TH-u-ca-gregory' : 'en-US'; }
+    function langLocale() { return currentLang === 'si' ? 'si-LK' : currentLang === 'hi' ? 'hi-IN' : currentLang === 'my' ? 'my-MM' : currentLang === 'th' ? 'th-TH-u-ca-gregory' : currentLang === 'zh' ? 'zh-CN' : 'en-US'; }
     // රෝම (IAST) පාළිය → හින්දියේදී දේවනාගරී / බුරුමයේදී බුරුම අකුරින් (අනෙක් භාෂාවලදී එලෙසම)
     function paliHi(s) { const sc = trScript(); return (sc && window.PaliScript) ? PaliScript.fromIAST(s, sc) : s; }
     // සිංහල අකුරු පාළිය → දේවනාගරී / බුරුම
@@ -155,6 +157,7 @@
     buildHiI18n('hi');
     buildHiI18n('my');
     buildHiI18n('th');
+    buildHiI18n('zh');
 
 // Poya chain overrides 1900-3000
 // රීතිය: ඕනෑම පෝයන් දෙකක් අතර පරතරය 14 හෝ 15 පමණි. 14 වන්නේ සෘතුවේ 3 සහ 7 පමණි;
@@ -1092,6 +1095,7 @@ function renderPoyaList() {
 
         let displayDate = currentLang === 'si' 
             ? sinhalaMonths[dt.getMonth()] + " " + dt.getDate() 
+            : currentLang === 'zh' ? (dt.getMonth() + 1) + "月" + dt.getDate() + "日"     // චීන: 11月18日
             : dt.getDate() + " " + dt.toLocaleString(langLocale(), { month: 'long' });
        
         html += `

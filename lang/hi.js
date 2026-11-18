@@ -18,6 +18,7 @@ window.HI_DICT = {
   "Vassa Season ⛈️": "वर्षावास ⛈️",
   "📖 Calculation": "📖 गणना",
   "Sun": "सूर्य", "Uposatha": "उपोसथ", "Vassa": "वर्षावास", "Chanting": "पाठ", "Calculate": "गणना", "More": "और",
+  "Settings": "सेटिंग्स",
   "Language": "भाषा", "Dark Mode": "डार्क मोड", "Light Mode": "लाइट मोड", "Info": "जानकारी", "ℹ️ Info": "ℹ️ जानकारी",
   "Uposatha Calendar": "उपोसथ कैलेंडर",
   "Dark Mode 🌑": "डार्क मोड 🌑", "Light Mode 💡": "लाइट मोड 💡",

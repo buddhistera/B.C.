@@ -22,6 +22,7 @@ window.MY_DICT = {
   "Chanting": "ရွတ်ဖတ်",
   "Calculate": "တွက်ချက်",
   "More": "နောက်ထပ်",
+  "Settings": "ဆက်တင်များ",
   "Language": "ဘာသာစကား",
   "Dark Mode": "အမှောင်",
   "Light Mode": "အလင်း",
