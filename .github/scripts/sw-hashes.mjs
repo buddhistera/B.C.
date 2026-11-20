@@ -59,7 +59,7 @@ const all = walk(root, []).map((p) => (p === '/index.html' ? '/' : p));
 const added = { OPTIONAL_FILES: [], LAZY_FILES: [] };
 for (const p of all) {
   if (listed.has(p)) continue;
-  (p.startsWith('/lang/') ? added.LAZY_FILES : added.OPTIONAL_FILES).push(p);
+  (p.startsWith('/lang/') || p.startsWith('/fonts/') ? added.LAZY_FILES : added.OPTIONAL_FILES).push(p);   // අකුරු: තෝරාගත් අයට පමණක්
 }
 
 const removed = [], changed = [];
