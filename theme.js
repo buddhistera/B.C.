@@ -29,7 +29,7 @@
     { id: 'seafoam',   dark: 0, sw: '#b0ebd2', bright: 1, meta: '#b0ebd2', n: { si: 'මුහුදු පෙණ', en: 'Seafoam',      hi: 'समुद्री झाग', my: 'ပင်လယ်အမြှုပ်',  th: 'ฟองทะเล', zh: '海沫绿' } },
     { id: 'dark',      dark: 1, sw: ['#0b1510', '#4fc796'], meta: '#06100c', n: { si: 'අඳුරු',     en: 'Dark',         hi: 'डार्क',       my: 'အမှောင်',        th: 'มืด', zh: '深色' } },
     { id: 'midnight',  dark: 1, sw: ['#0b1030', '#e6c260'], meta: '#0b1030', n: { si: 'රාත්‍රී නිල්', en: 'Midnight',     hi: 'मध्यरात्रि',  my: 'သန်းခေါင်',      th: 'เที่ยงคืน', zh: '午夜蓝' } },
-    { id: 'charcoal',  dark: 1, sw: ['#262624', '#d97757'], meta: '#262624', n: { si: 'අඳුරු අළු',  en: 'Charcoal',     hi: 'चारकोल',      my: 'မီးသွေးရောင်',   th: 'ถ่านเทา', zh: '炭灰' } }
+    { id: 'charcoal',  dark: 1, sw: ['#000000', '#d97757'], meta: '#000000', n: { si: 'කළු',        en: 'Black',        hi: 'काला',        my: 'အနက်',           th: 'ดำ', zh: '纯黑' } }
   ];
   var BY = {}; THEMES.forEach(function (t) { BY[t.id] = t; });
   var DEFAULT_LIGHT = 'cream', DEFAULT_DARK = 'midnight';
