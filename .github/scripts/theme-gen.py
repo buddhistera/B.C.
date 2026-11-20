@@ -44,7 +44,6 @@ SPEC = {
     'mint':      dict(kind='light', bg='#eefaf4', ac='#22a06b'),
     'lavender':  dict(kind='light', bg='#f5f2fc', ac='#7b5cc0'),
     'forest':    dict(kind='deep',  bg='#f1f6f1', ac='#2f7d50', deep='#1f5a3a', hl='gold'),
-    'saffron':   dict(kind='deep',  bg='#fdf4eb', ac='#c0601a', deep='#a14d12', hl='gold'),
     'lotus':     dict(kind='deep',  bg='#fcf0f3', ac='#b02a4c', deep='#86183a', hl='gold'),
     # දීප්ත පැහැ: chrome = ඔබ දුන් වර්ණයම ; ac = පිටුව තුළ පෙළ / රාමු සඳහා එම වර්ණයේ තද ස්වරය
     'rose':      dict(kind='bright', bg='#fff1f5', ac='#d6004f', chrome='#ff005f'),
@@ -56,6 +55,9 @@ SPEC = {
                       tx='#e3f5ec', mu='#8fb5a3'),
     'midnight':  dict(kind='dark',  bg='#04061a', mid='#0b1030', top='#1b2554', card='#131a3a', ac='#f2d478', hl='gold',
                       tx='#e8ecf8', mu='#aab3d6', orig=True),
+    # අඳුරු අළු (Claude ඇප් එකේ රාත්‍රී මාදිලිය වැනි) — උණුසුම් අළු පසුබිම, තඹ-තැඹිලි ඉස්මතු වර්ණය; කාෂාය වෙනුවට
+    'charcoal':  dict(kind='dark',  bg='#1f1e1d', mid='#262624', top='#30302e', card='#30302e', ac='#d97757', hl='ac',
+                      tx='#f5f4ee', mu='#a6a39a'),
 }
 
 GOLD_METAL = 'linear-gradient(180deg,#fff3c2 0%,#e8bd55 34%,#b07c16 62%,#e9c768 100%)'

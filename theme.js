@@ -21,7 +21,6 @@
     { id: 'mint',      dark: 0, sw: '#8fdcbe',           meta: '#eefaf4', n: { si: 'ලා කොළ',    en: 'Mint',         hi: 'मिंट',        my: 'မင့်',           th: 'มินต์', zh: '薄荷绿' } },
     { id: 'lavender',  dark: 0, sw: '#bba6e6',           meta: '#f5f2fc', n: { si: 'ලා දම්',     en: 'Lavender',     hi: 'लैवेंडर',     my: 'ခရမ်းဖျော့',    th: 'ลาเวนเดอร์', zh: '薰衣草紫' } },
     { id: 'forest',    dark: 0, sw: '#1f5a3a', deep: 1,  meta: '#1b4d33', n: { si: 'තද කොළ',    en: 'Forest',       hi: 'वन हरा',      my: 'တောစိမ်း',      th: 'เขียวป่า', zh: '森林绿' } },
-    { id: 'saffron',   dark: 0, sw: '#b85a17', deep: 1,  meta: '#9a4710', n: { si: 'කාෂාය',     en: 'Saffron',      hi: 'केसरिया',     my: 'လိမ္မော်ရင့်',   th: 'หญ้าฝรั่น', zh: '袈裟橙' } },
     { id: 'lotus',     dark: 0, sw: '#952141', deep: 1,  meta: '#86183a', n: { si: 'නෙළුම්',    en: 'Lotus',        hi: 'कमल',         my: 'ကြာ',            th: 'บัว', zh: '莲花红' } },
     { id: 'rose',      dark: 0, sw: '#ff005f', bright: 1, meta: '#ff005f', n: { si: 'රෝස',       en: 'Rose',         hi: 'गुलाबी',      my: 'ပန်းရောင်',      th: 'ชมพู', zh: '玫瑰红' } },
     { id: 'teal',      dark: 0, sw: '#00c2ae', bright: 1, meta: '#00c2ae', n: { si: 'කොළ නිල්',   en: 'Teal',         hi: 'टील',         my: 'စိမ်းပြာ',       th: 'เขียวหัวเป็ด', zh: '青绿' } },
@@ -29,7 +28,8 @@
     { id: 'coral',     dark: 0, sw: '#ffafa8', bright: 1, meta: '#ffafa8', n: { si: 'කොරල්',      en: 'Coral',        hi: 'मूंगा',       my: 'သန္တာ',           th: 'ปะการัง', zh: '珊瑚色' } },
     { id: 'seafoam',   dark: 0, sw: '#b0ebd2', bright: 1, meta: '#b0ebd2', n: { si: 'මුහුදු පෙණ', en: 'Seafoam',      hi: 'समुद्री झाग', my: 'ပင်လယ်အမြှုပ်',  th: 'ฟองทะเล', zh: '海沫绿' } },
     { id: 'dark',      dark: 1, sw: ['#0b1510', '#4fc796'], meta: '#06100c', n: { si: 'අඳුරු',     en: 'Dark',         hi: 'डार्क',       my: 'အမှောင်',        th: 'มืด', zh: '深色' } },
-    { id: 'midnight',  dark: 1, sw: ['#0b1030', '#e6c260'], meta: '#0b1030', n: { si: 'රාත්‍රී නිල්', en: 'Midnight',     hi: 'मध्यरात्रि',  my: 'သန်းခေါင်',      th: 'เที่ยงคืน', zh: '午夜蓝' } }
+    { id: 'midnight',  dark: 1, sw: ['#0b1030', '#e6c260'], meta: '#0b1030', n: { si: 'රාත්‍රී නිල්', en: 'Midnight',     hi: 'मध्यरात्रि',  my: 'သန်းခေါင်',      th: 'เที่ยงคืน', zh: '午夜蓝' } },
+    { id: 'charcoal',  dark: 1, sw: ['#262624', '#d97757'], meta: '#262624', n: { si: 'අඳුරු අළු',  en: 'Charcoal',     hi: 'चारकोल',      my: 'မီးသွေးရောင်',   th: 'ถ่านเทา', zh: '炭灰' } }
   ];
   var BY = {}; THEMES.forEach(function (t) { BY[t.id] = t; });
   var DEFAULT_LIGHT = 'cream', DEFAULT_DARK = 'midnight';
@@ -67,16 +67,18 @@
        අනුවාද, SIL OFL; pitaka.lk "Sinhala Uni fonts 2.000"). තෝරාගත් විට පමණක් බාගත වේ.
      • sz = සිංහල අකුරු පමණක් විශාල කරන ප්‍රතිශතය (size-adjust) — මෙම අකුරු Noto Sans Sinhala ට වඩා
        කුඩාවට පෙනෙන නිසා, අකුරු උස Noto හා සමාන වන ලෙස මැනීමෙන් ගත් අගය. ඉංග්‍රීසි / අංක වෙනස් නොවේ.
+     • wr: '100 900' = ගංගානී / ඉමානී / සමන්තා තනිව ම තද (bold) හැඩයේ අකුරු; බොහෝ පෙළ 600–800 බරින් ඇති නිසා
+       browser එක ඒවා මත තවත් ව්‍යාජ bold එකක් එක් නොකරන ලෙස එම එක් ගොනුව සියලු බර සඳහා යොදයි.
      • පැරණි id: 'abhaya' (Abhaya Libre) → 'abhayauni' (අභය Uni ද Abhaya Libre ගේ glyph මතම සාදා ඇත). */
   var FONT_ALIAS = { abhaya: 'abhayauni', yaldevi: 'def', gemunu: 'def' };
   var FONTS = {
     si: [
       { id: 'def',        base: 'Noto Sans Sinhala' },
       { id: 'abhayauni',  fam: 'Abhaya Uni',         src: 'AbhayaUni-Variable',    wr: '400 800', sz: 122, n: 'අභය',     d: 'Abhaya Uni' },
-      { id: 'ganganee',   fam: 'Ganganee Uni',       src: 'GanganeeUni-Regular',   sz: 118, n: 'ගංගානී',   d: 'Ganganee Uni' },
-      { id: 'imanee',     fam: 'Imanee Uni',         src: 'ImaneeUni-Regular',     sz: 122, n: 'ඉමානී',    d: 'Imanee Uni' },
+      { id: 'ganganee',   fam: 'Ganganee Uni',       src: 'GanganeeUni-Regular', wr: '100 900',   sz: 118, n: 'ගංගානී',   d: 'Ganganee Uni' },
+      { id: 'imanee',     fam: 'Imanee Uni',         src: 'ImaneeUni-Regular', wr: '100 900',     sz: 122, n: 'ඉමානී',    d: 'Imanee Uni' },
       { id: 'bindumathi', fam: 'Bindumathi Uni',     src: 'BindumathiUni-Regular', sz: 122, n: 'බින්දුමතී', d: 'Bindumathi Uni' },
-      { id: 'samantha',   fam: 'Samantha Uni',       src: 'SamanthaUni-Regular',   sz: 122, n: 'සමන්තා',   d: 'Samantha Uni' },
+      { id: 'samantha',   fam: 'Samantha Uni',       src: 'SamanthaUni-Regular', wr: '100 900',   sz: 122, n: 'සමන්තා',   d: 'Samantha Uni' },
       { id: 'notoserif',  fam: 'Noto Serif Sinhala', w: '400;500;600;700;800', n: 'Noto Serif', d: 'Noto Serif Sinhala' }
     ],
     en: [
@@ -278,6 +280,7 @@
           '<button type="button" class="st-x" data-close="1" aria-label="' + L(TX.close) + '" title="' + L(TX.close) + '">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>' +
         '<div class="st-body">' +
+          '<div class="st-col st-col1">' +                     // තිරස් (landscape) විට: වම් තීරුව
           '<h3 class="st-sec">' + L(TX.lang) + '</h3>' +
           '<div class="st-lang' + (langOpen ? ' open' : '') + '">' +
             '<button type="button" class="st-cur" aria-expanded="' + (langOpen ? 'true' : 'false') + '" aria-controls="stLangList">' +
@@ -290,6 +293,7 @@
           '<h3 class="st-sec">' + L(TX.font) + '</h3>' +
           fontBox +
           '<p class="st-note">' + L(TX.fnote) + '</p>' +
+          '</div><div class="st-col st-col2">' +              // දකුණු තීරුව
           '<h3 class="st-sec">' + L(TX.theme) + '</h3>' +
           '<div class="st-sub">' + L(TX.light) + '</div>' +
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.light) + '">' + light.map(swatch).join('') + '</div>' +
@@ -297,6 +301,7 @@
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.deep) + '">' + deep.map(swatch).join('') + '</div>' +
           '<div class="st-sub">' + L(TX.bright) + '</div>' +
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.bright) + '">' + bright.map(swatch).join('') + '</div>' +
+          '</div>' +
         '</div>' +
       '</section>';
     syncPanel();
