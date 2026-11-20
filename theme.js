@@ -64,16 +64,19 @@
        එහි නැති අකුරු (ඉංග්‍රීසි, emoji ආදිය) පෙරනිමි Noto අකුරුවලින් පෙන්වයි.
      • w = බාගත කරන බර (weights) — Google හි ඇති ඒවා පමණි; වැරදුණොත් බර නොමැතිව නැවත උත්සාහ කරයි.
      • src = ඇප් එක සමඟම ඇති අකුරු (fonts/*.woff2 — Pushpananda Ekanayake ගේ FM අකුරුවල Unicode
-       අනුවාද, SIL OFL; pitaka.lk "Sinhala Uni fonts 2.000"). තෝරාගත් විට පමණක් බාගත වේ. */
+       අනුවාද, SIL OFL; pitaka.lk "Sinhala Uni fonts 2.000"). තෝරාගත් විට පමණක් බාගත වේ.
+     • sz = සිංහල අකුරු පමණක් විශාල කරන ප්‍රතිශතය (size-adjust) — මෙම අකුරු Noto Sans Sinhala ට වඩා
+       කුඩාවට පෙනෙන නිසා, අකුරු උස Noto හා සමාන වන ලෙස මැනීමෙන් ගත් අගය. ඉංග්‍රීසි / අංක වෙනස් නොවේ.
+     • පැරණි id: 'abhaya' (Abhaya Libre) → 'abhayauni' (අභය Uni ද Abhaya Libre ගේ glyph මතම සාදා ඇත). */
+  var FONT_ALIAS = { abhaya: 'abhayauni', yaldevi: 'def', gemunu: 'def' };
   var FONTS = {
     si: [
       { id: 'def',        base: 'Noto Sans Sinhala' },
-      { id: 'abhayauni',  fam: 'Abhaya Uni',         src: 'AbhayaUni-Variable',    wr: '400 800', n: 'අභය',        d: 'Abhaya Uni' },
-      { id: 'ganganee',   fam: 'Ganganee Uni',       src: 'GanganeeUni-Regular',   n: 'ගංගානී',      d: 'Ganganee Uni' },
-      { id: 'imanee',     fam: 'Imanee Uni',         src: 'ImaneeUni-Regular',     n: 'ඉමානී',       d: 'Imanee Uni' },
-      { id: 'bindumathi', fam: 'Bindumathi Uni',     src: 'BindumathiUni-Regular', n: 'බින්දුමතී',    d: 'Bindumathi Uni' },
-      { id: 'samantha',   fam: 'Samantha Uni',       src: 'SamanthaUni-Regular',   n: 'සමන්තා',      d: 'Samantha Uni' },
-      { id: 'abhaya',     fam: 'Abhaya Libre',       w: '400;500;600;700;800', n: 'අභය ලිබ්‍රේ', d: 'Abhaya Libre' },
+      { id: 'abhayauni',  fam: 'Abhaya Uni',         src: 'AbhayaUni-Variable',    wr: '400 800', sz: 122, n: 'අභය',     d: 'Abhaya Uni' },
+      { id: 'ganganee',   fam: 'Ganganee Uni',       src: 'GanganeeUni-Regular',   sz: 118, n: 'ගංගානී',   d: 'Ganganee Uni' },
+      { id: 'imanee',     fam: 'Imanee Uni',         src: 'ImaneeUni-Regular',     sz: 122, n: 'ඉමානී',    d: 'Imanee Uni' },
+      { id: 'bindumathi', fam: 'Bindumathi Uni',     src: 'BindumathiUni-Regular', sz: 122, n: 'බින්දුමතී', d: 'Bindumathi Uni' },
+      { id: 'samantha',   fam: 'Samantha Uni',       src: 'SamanthaUni-Regular',   sz: 122, n: 'සමන්තා',   d: 'Samantha Uni' },
       { id: 'notoserif',  fam: 'Noto Serif Sinhala', w: '400;500;600;700;800', n: 'Noto Serif', d: 'Noto Serif Sinhala' }
     ],
     en: [
@@ -120,6 +123,7 @@
   }
   function fontFor(l) {
     var id = read('appFont.' + l), list = FONTS[l];
+    if (l === 'si' && FONT_ALIAS[id]) id = FONT_ALIAS[id];
     for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
     return list[0];
   }
@@ -128,7 +132,12 @@
     if (doc.getElementById(id)) return;
     if (f.src) {     // ඇප් එක සමඟ ඇති අකුරු — @font-face පමණයි (භාවිත වන තුරු බාගත නොවේ)
       var st = doc.createElement('style'); st.id = id;
-      st.textContent = "@font-face{font-family:'" + f.fam + "';src:url(fonts/" + f.src + ".woff2) format('woff2');font-weight:" + (f.wr || '400') + ';font-style:normal;font-display:swap}';
+      var face = function (range, adj) {
+        return "@font-face{font-family:'" + f.fam + "';src:url(fonts/" + f.src + ".woff2) format('woff2');font-weight:" + (f.wr || '400') +
+          ';font-style:normal;font-display:swap;unicode-range:' + range + (adj ? ';size-adjust:' + adj + '%' : '') + '}';
+      };
+      var SI = 'U+0D80-0DFF,U+111E1-111F4,U+200C-200D,U+25CC';     // සිංහල (+ ZWJ / ZWNJ, තිත් කවය)
+      st.textContent = face('U+0000-0D7F,U+0E00-111E0,U+111F5-10FFFF', 0) + face(SI, f.sz || 0);
       (doc.head || root).appendChild(st);
       return;
     }
