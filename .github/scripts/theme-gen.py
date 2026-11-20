@@ -95,6 +95,8 @@ def light_vars(id, p):
         '--t-sw-on': s[600], '--t-panel-lb': mix(s[950], K, .45),
         '--t-chip-bg': 'rgba(255,255,255,.55)', '--t-chip-tx': s[900], '--t-chip-bd': rgba(s[600], .45),
         '--t-dl': 'linear-gradient(135deg,%s,%s)' % (s[700], s[900]), '--t-dl-tx': '#ffffff',
+        # අතික්කන්ත / අවසිට්ඨ පුවරු — පිටුවේ පසුබිමට වඩා මදක් තද වර්ණයක්
+        '--t-side': 'linear-gradient(180deg,%s,%s)' % (mix(bg, s[200], .5), mix(bg, s[300], .55)), '--t-side-bd': s[400],
     })
     if deep:
         d1 = p['deep']; d2 = mix(d1, K, .38)
@@ -203,6 +205,8 @@ def dark_vars(id, p):
         '--t-drum': 'linear-gradient(180deg,%s 0%%,%s 25%%,%s 50%%,%s 75%%,%s 100%%)' % (mix(bg, K, .4), mix(mid, top, .4), mix(top, ac, .08), mix(mid, top, .4), mix(bg, K, .4)),
         '--t-drum-tx': p['mu'], '--t-drum-on': mix(ac, W, .3),
         '--t-scrim': 'rgba(0,0,0,.55)', '--t-sw-on': ac,
+        # අතික්කන්ත / අවසිට්ඨ පුවරු — කාඩ්පතට වඩා මදක් ආලෝකමත්, තේමා වර්ණයේ සුළු ස්පර්ශයක් සහිතව
+        '--t-side': 'linear-gradient(180deg,%s,%s)' % (mix(mix(card, top, .7), ac, .1), mix(mix(card, top, .45), ac, .05)), '--t-side-bd': rgba(ac, .5),
         # අඳුරු මොඩියුල: ඉදිරිපස (පෙළ) සඳහා ලා ස්වර (මුල් dark-mode රටාව අනුව)
         '--k500': mix(ac, W, .72), '--k600': mix(ac, W, .5), '--k700': mix(ac, W, .18), '--k800': mix(ac, W, .5), '--k900': mix(ac, W, .72),
         '--q700': hl[400] if hl is GOLD else mix(ac, W, .1), '--q600': hl[300] if hl is GOLD else mix(ac, W, .35),

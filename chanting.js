@@ -472,6 +472,33 @@ body.dark-mode #chOverlay .ch-mean::before{background:#136c48}\
 #chOverlay .ch-mean.en{font-family:Noto Serif,serif;font-size:.97rem;line-height:1.85}\
 #chOverlay .ch-gatha{background:linear-gradient(135deg,#fdf5db,#f9e9b8);border:2px solid var(--g500);border-radius:14px;padding:16px 12px;text-align:center;font-family:var(--serif);font-style:italic;font-weight:600;color:#8a6508;margin:16px 0 2px;line-height:2.1;font-size:.95rem;white-space:pre-line;box-shadow:inset 0 0 22px rgba(212,160,23,.12)}\
 body.dark-mode #chOverlay .ch-gatha{background:linear-gradient(135deg,#3a2810,#4a3418);color:#f2d478;border-color:#b8860b}\
+/* සූත්‍ර යොමු (links) */\
+#chOverlay .ch-links{margin:14px 0 2px;padding:12px 12px 8px;border-radius:12px;background:var(--tint);border:1.5px solid var(--bd2)}\
+#chOverlay .ch-lk-h{font-size:.8rem;font-weight:800;color:var(--m800);margin:0 0 8px;letter-spacing:.2px}\
+body.dark-mode #chOverlay .ch-lk-h{color:var(--g400)}\
+#chOverlay .ch-lk-row{display:flex;align-items:flex-start;gap:6px;margin:0 0 6px}\
+#chOverlay .ch-lk-n{flex:none;min-width:1.6em;font-weight:800;color:var(--m700);font-size:.85rem;line-height:1.5;padding-top:7px}\
+#chOverlay .ch-lk-in{display:flex;flex-wrap:wrap;gap:6px;min-width:0}\
+#chOverlay .ch-lk{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:.84rem;font-weight:700;line-height:1.5;padding:6px 12px 6px 10px;border-radius:30px;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--m700),var(--m500));border:1.5px solid var(--g500);box-shadow:0 2px 6px rgba(19,108,72,.25);text-align:left}\
+#chOverlay .ch-lk::after{content:"›";font-size:1.15em;font-weight:800;opacity:.85;margin-left:1px}\
+#chOverlay .ch-lk:active{transform:scale(.96)}\
+body.dark-mode #chOverlay .ch-lk{background:var(--subtle);color:var(--g400);border-color:var(--g600);box-shadow:none}\
+/* යොමු කළ සූත්‍රය පෙන්වන පුවරුව */\
+#chOverlay .ch-peek{position:fixed;inset:0;z-index:5200;display:none}\
+#chOverlay .ch-peek.on{display:block}\
+#chOverlay .ch-pk-bg{position:absolute;inset:0;background:rgba(0,0,0,.45);animation:chPkF .2s ease}\
+#chOverlay .ch-pk-sh{position:absolute;left:0;right:0;bottom:0;top:calc(env(safe-area-inset-top,0px) + 34px);max-width:900px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);border-radius:20px 20px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.35);overflow:hidden;animation:chPkU .25s ease}\
+#chOverlay .ch-pk-hd{flex:none;display:flex;align-items:center;gap:10px;padding:10px 10px 10px 16px;background:linear-gradient(135deg,var(--m800),var(--m600));color:#fff;border-bottom:2px solid var(--g500)}\
+#chOverlay .ch-pk-ic{font-size:1.2rem}\
+body.dark-mode #chOverlay .ch-pk-hd{background:var(--card);color:var(--g400)}\
+body.dark-mode #chOverlay .ch-pk-x{color:var(--g400);border-color:var(--g600);background:transparent}\
+#chOverlay .ch-pk-t{flex:1;min-width:0;font-family:var(--serif);font-weight:800;font-size:1.02rem;line-height:1.4}\
+#chOverlay .ch-pk-x{flex:none;width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:rgba(255,255,255,.14);color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}\
+#chOverlay .ch-pk-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:4px 12px calc(24px + env(safe-area-inset-bottom,0px))}\
+#chOverlay .ch-pk-body .ch-card{margin:12px 0}\
+@keyframes chPkU{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}\
+@keyframes chPkF{from{opacity:0}to{opacity:1}}\
+@media (prefers-reduced-motion:reduce){#chOverlay .ch-pk-sh,#chOverlay .ch-pk-bg{animation:none}}\
 /* misc */\
 #chOverlay .ch-load{text-align:center;padding:60px 20px;color:var(--muted)}\
 #chOverlay .ch-load b{display:block;font-size:2.4rem;margin-bottom:8px}\
@@ -593,8 +620,67 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     }
     var gt = PAL(it.gatha, it.gathaTr);
     if (gt) body += '<div class="ch-gatha">' + esc(gt) + '</div>';
+    body += linksHtml(it);
     return '<article class="ch-card" data-a="' + esc(it.id) + '" data-k="' + esc(key) + '">' + head + body + '</article>';
   }
+
+  /* --- වෙනත් කොටසක ඇති සූත්‍ර වෙත ඍජු යොමු (උදා: වත පිරිත → පිරිත් සූත්‍ර) ---------------
+     දත්ත: it.links = [ [ {id, si, en, m?}, … ], … ]  — පේළියක් = පාළි ලැයිස්තුවේ එක් අංකයක්
+     m = මොඩියුලය (පෙරනිමි 'pirith'). ඔබන විට සූත්‍රය එම තිරය මතම පුවරුවක විවෘත වේ;
+     වැසූ විට (✕ / Back) පාඨකයා සිටි ස්ථානයටම නැවත පැමිණේ. */
+  function linksHtml(it) {
+    var rows = it.links;
+    if (!rows || !rows.length) return '';
+    var si = lang() === 'si', many = rows.length > 1, n = 0;
+    rows.forEach(function (r) { n += r.length; });
+    var h = '<div class="ch-links"><div class="ch-lk-h">' + esc(n > 1 ? T('📖 සූත්‍ර කියවන්න', '📖 Read the suttas') : T('📖 සූත්‍රය කියවන්න', '📖 Read the sutta')) + '</div>';
+    rows.forEach(function (r, i) {
+      h += '<div class="ch-lk-row">' + (many ? '<span class="ch-lk-n">' + (i + 1) + '.</span>' : '') + '<div class="ch-lk-in">';
+      r.forEach(function (l) {
+        h += '<button type="button" class="ch-lk" data-lk="' + esc((l.m || 'pirith') + ':' + l.id) + '">' + esc(si ? l.si : XP(l.en)) + '</button>';
+      });
+      h += '</div></div>';
+    });
+    return h + '</div>';
+  }
+
+  var peek = null, peekPushed = false;
+  function peekOpen() { return !!(peek && peek.classList.contains('on')); }
+  function openPeek(ov, ref) {
+    var k = String(ref || '').split(':'), tab = tabById(k[0]), id = k[1];
+    if (!id || tab.id !== k[0]) return;
+    if (!peek || peek.parentNode !== ov) {
+      peek = document.createElement('div');
+      peek.className = 'ch-peek';
+      peek.setAttribute('role', 'dialog'); peek.setAttribute('aria-modal', 'true');
+      ov.appendChild(peek);
+      peek.addEventListener('click', function (e) { if (e.target.closest('[data-pk-x]')) closePeekUser(); });
+    }
+    peek.innerHTML = '<div class="ch-pk-bg" data-pk-x="1"></div><section class="ch-pk-sh">' +
+      '<header class="ch-pk-hd"><span class="ch-pk-ic">' + tab.icon + '</span><div class="ch-pk-t"></div>' +
+      '<button type="button" class="ch-pk-x" data-pk-x="1" aria-label="' + esc(T('වසන්න', 'Close')) + '">&times;</button></header>' +
+      '<div class="ch-pk-body"><div class="ch-load"><b>🪔</b>' + T('පූරණය වෙමින්...', 'Loading...') + '</div></div></section>';
+    peek.setAttribute('lang', lang());
+    var body = peek.querySelector('.ch-pk-body');
+    body.style.zoom = getSavedChZoom();
+    peek.querySelector('.ch-pk-t').textContent = LP(tab.title);
+    peek.classList.add('on');
+    if (!peekPushed) { try { history.pushState({ chPeek: 1 }, ''); peekPushed = true; } catch (e) { peekPushed = false; } }
+    loadModule(tab).then(function (mod) {
+      if (!peekOpen()) return;
+      var it = null;
+      (mod.items || []).forEach(function (x) { if (x.id === id) it = x; });
+      if (!it) throw new Error('missing');
+      peek.querySelector('.ch-pk-t').textContent = LP(it.name) || LP(tab.title);
+      body.innerHTML = itemHtml(mod, it);
+      body.scrollTop = 0;
+    }).catch(function () {
+      if (!peekOpen()) return;
+      body.innerHTML = '<div class="ch-load"><b>⚠️</b>' + T('පූරණය කළ නොහැකි විය. නැවත උත්සාහ කරන්න.', 'Could not load. Try again.') + '</div>';
+    });
+  }
+  function closePeek() { if (peek) { peek.classList.remove('on'); peek.innerHTML = ''; } }
+  function closePeekUser() { if (peekPushed) history.back(); else closePeek(); }
 
   function renderParts(mod) {
     var si = lang() === 'si';
@@ -812,6 +898,9 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     ov.querySelector('.ch-subnav-in').addEventListener('click', function (e) {
       var c = e.target.closest('.ch-chip'); if (c) scrollToAnchor(ov, c.getAttribute('data-go'));
     });
+    ov.querySelector('.ch-main').addEventListener('click', function (e) {
+      var l = e.target.closest('.ch-lk'); if (l) openPeek(ov, l.getAttribute('data-lk'));
+    });
     attachChPinch(ov);
     var saved = null; try { saved = localStorage.getItem(STORE_KEY); } catch (e) {}
     ov.scrollTop = 0;
@@ -819,10 +908,14 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     return ov;
   }
 
-  function onKey(e) { if (e.key === 'Escape') closeChanting(); }
-  function onPop() { if (pushed) { pushed = false; hide(); } }
+  function onKey(e) { if (e.key === 'Escape') { if (peekOpen()) closePeekUser(); else closeChanting(); } }
+  function onPop() {
+    if (peekPushed) { peekPushed = false; closePeek(); return; }   /* Back: පළමුව සූත්‍ර පුවරුව පමණක් වසයි */
+    if (pushed) { pushed = false; hide(); }
+  }
   function hide() {
     var ov = document.getElementById('chOverlay'); if (ov) ov.style.display = 'none';
+    closePeek();
     document.body.classList.remove('ch-open'); renderTok++; pending = null;
     if (window.V3D) { try { V3D.chanting(false); } catch (e) {} }
     if (spy) { spy.disconnect(); spy = null; }

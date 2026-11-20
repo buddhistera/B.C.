@@ -41,6 +41,14 @@
     light:  { si: 'ලා පැහැ',      en: 'Light',        hi: 'हल्के रंग',    my: 'အဖျော့ရောင်',    th: 'สีอ่อน', zh: '浅色系' },
     deep:   { si: 'තද පැහැ',      en: 'Deep',         hi: 'गहरे रंग',     my: 'အရင့်ရောင်',     th: 'สีเข้ม', zh: '深色系' },
     bright: { si: 'දීප්ත පැහැ',    en: 'Bright',       hi: 'चटक रंग',      my: 'တောက်ပရောင်',    th: 'สีสด', zh: '亮色系' },
+    font:   { si: 'අකුරු',        en: 'Font',         hi: 'फ़ॉन्ट',       my: 'ဖောင့်',          th: 'แบบอักษร', zh: '字体' },
+    fdef:   { si: 'පෙරනිමි',      en: 'Default',      hi: 'डिफ़ॉल्ट',     my: 'မူလ',             th: 'ค่าเริ่มต้น', zh: '默认' },
+    fnote:  { si: 'තෝරාගත් අකුරු පළමු වරට අන්තර්ජාලයෙන් බාගත වේ. ඉන්පසු නොබැඳිව ද ක්‍රියා කරයි.',
+              en: 'A chosen font downloads once from the internet, then also works offline.',
+              hi: 'चुना गया फ़ॉन्ट पहली बार इंटरनेट से डाउनलोड होता है, फिर ऑफ़लाइन भी काम करता है।',
+              my: 'ရွေးထားသော ဖောင့်ကို ပထမအကြိမ် အင်တာနက်မှ ဒေါင်းလုဒ်လုပ်ပြီး နောက်ပိုင်း အော့ဖ်လိုင်းတွင်လည်း အသုံးပြုနိုင်သည်။',
+              th: 'แบบอักษรที่เลือกจะดาวน์โหลดจากอินเทอร์เน็ตครั้งแรก จากนั้นใช้งานออฟไลน์ได้',
+              zh: '所选字体首次需联网下载，之后可离线使用。' },
     close:  { si: 'වසන්න',        en: 'Close',        hi: 'बंद करें',     my: 'ပိတ်ရန်',         th: 'ปิด', zh: '关闭' },
     loading:{ si: 'පූරණය වෙමින්…', en: 'Loading…',     hi: 'लोड हो रहा है…', my: 'ဖွင့်နေသည်…',  th: 'กำลังโหลด…', zh: '加载中…' }
   };
@@ -49,6 +57,89 @@
   function L(o) { var l = lang(); return o[l] || o.en; }
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  /* ---------------- අකුරු (font) — භාෂාව අනුව Google Fonts ----------------
+     • 'appFont.<භාෂාව>' = තෝරාගත් අකුරු id (භාෂාවකට වෙනම). 'def' = දැනට පවතින Noto අකුරු.
+     • තෝරාගත් අකුරු <html data-uf> + --uf මගින් සියලු පිටුවලට (සජ්ඣායනා, උපෝසථ, ගණනය…) යෙදේ;
+       එහි නැති අකුරු (ඉංග්‍රීසි, emoji ආදිය) පෙරනිමි Noto අකුරුවලින් පෙන්වයි.
+     • w = බාගත කරන බර (weights) — Google හි ඇති ඒවා පමණි; වැරදුණොත් බර නොමැතිව නැවත උත්සාහ කරයි. */
+  var FONTS = {
+    si: [
+      { id: 'def',       base: 'Noto Sans Sinhala' },
+      { id: 'abhaya',    fam: 'Abhaya Libre',       w: '400;500;600;700;800', n: 'අභය', d: 'බුද්ධ ජයන්ති ත්‍රිපිටක මුද්‍රණ රටාව' },
+      { id: 'notoserif', fam: 'Noto Serif Sinhala', w: '400;500;600;700;800', n: 'Noto Serif', d: 'සෙරිෆ් රටාව' },
+      { id: 'yaldevi',   fam: 'Yaldevi',            w: '400;500;600;700',     n: 'යාල්දේවි', d: 'නූතන' },
+      { id: 'gemunu',    fam: 'Gemunu Libre',       w: '400;500;600;700;800', n: 'ගැමුණු', d: 'ශීර්ෂ රටාව' }
+    ],
+    en: [
+      { id: 'def',       base: 'Noto Sans' },
+      { id: 'notoserif', fam: 'Noto Serif',         w: '400;500;600;700;800', n: 'Noto Serif', d: 'Classic serif' },
+      { id: 'gentium',   fam: 'Gentium Book Plus',  w: '400;700',             n: 'Gentium Book Plus', d: 'Scholarly · full Pāli diacritics' },
+      { id: 'charis',    fam: 'Charis SIL',         w: '400;700',             n: 'Charis SIL', d: 'Book serif' },
+      { id: 'garamond',  fam: 'EB Garamond',        w: '400;500;600;700;800', n: 'EB Garamond', d: 'Old-style' }
+    ],
+    hi: [
+      { id: 'def',       base: 'Noto Sans Devanagari' },
+      { id: 'tiro',      fam: 'Tiro Devanagari Sanskrit', w: '',          n: 'Tiro Devanagari Sanskrit', d: 'संस्कृत / पालि शैली' },
+      { id: 'notoserif', fam: 'Noto Serif Devanagari', w: '400;500;600;700;800', n: 'Noto Serif Devanagari', d: 'सेरिफ़' },
+      { id: 'mukta',     fam: 'Mukta',              w: '400;500;600;700;800', n: 'Mukta', d: 'आधुनिक' },
+      { id: 'hind',      fam: 'Hind',               w: '400;500;600;700',     n: 'Hind', d: 'सरल' }
+    ],
+    my: [
+      { id: 'def',       base: 'Noto Sans Myanmar' },
+      { id: 'padauk',    fam: 'Padauk',             w: '400;700',             n: 'Padauk', d: 'ပိတောက်' },
+      { id: 'notoserif', fam: 'Noto Serif Myanmar', w: '400;500;600;700;800', n: 'Noto Serif Myanmar', d: 'Serif' }
+    ],
+    th: [
+      { id: 'def',       base: 'Noto Sans Thai' },
+      { id: 'sarabun',   fam: 'Sarabun',            w: '400;500;600;700;800', n: 'Sarabun', d: 'สารบรรณ' },
+      { id: 'notoserif', fam: 'Noto Serif Thai',    w: '400;500;600;700;800', n: 'Noto Serif Thai', d: 'มีเชิง' },
+      { id: 'looped',    fam: 'Noto Sans Thai Looped', w: '400;500;600;700;800', n: 'Noto Sans Thai Looped', d: 'มีหัว' }
+    ],
+    zh: [
+      { id: 'def',       base: 'Noto Sans SC' },
+      { id: 'notoserif', fam: 'Noto Serif SC',      w: '400;500;600;700;800', n: 'Noto Serif SC', d: '宋体风格' },
+      { id: 'xiaowei',   fam: 'ZCOOL XiaoWei',      w: '',                    n: '站酷小薇', d: 'ZCOOL XiaoWei' },
+      { id: 'mashan',    fam: 'Ma Shan Zheng',      w: '',                    n: '马善政楷书', d: '楷书风格' }
+    ]
+  };
+  var FSAMPLE = { si: 'නමො තස්ස භගවතො අරහතො', en: 'Namo tassa · Saṃyutta Nikāya', hi: 'नमो तस्स भगवतो अरहतो',
+                  my: 'နမော တဿ ဘဂဝတော အရဟတော', th: 'นะโม ตัสสะ ภะคะวะโต', zh: '南无本师释迦牟尼佛' };
+  var FBACK = "'Noto Sans','Noto Sans Sinhala','Noto Sans Devanagari','Noto Sans Myanmar','Noto Sans Thai','Noto Sans SC',sans-serif";
+
+  function fontLang() {
+    var l = null;
+    try { if (typeof currentLang !== 'undefined') l = currentLang; } catch (e) {}
+    l = l || read('appLang') || 'en';
+    return FONTS[l] ? l : 'en';
+  }
+  function fontFor(l) {
+    var id = read('appFont.' + l), list = FONTS[l];
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return list[0];
+  }
+  function fontCss(f) {
+    var id = 'uf-' + f.fam.replace(/\W+/g, '');
+    if (doc.getElementById(id)) return;
+    var href = function (w) { return 'https://fonts.googleapis.com/css2?family=' + f.fam.replace(/ /g, '+') + (w ? ':wght@' + w : '') + '&display=swap'; };
+    var ln = doc.createElement('link');
+    ln.rel = 'stylesheet'; ln.id = id; ln.href = href(f.w);
+    ln.onerror = function () { if (f.w && !ln.getAttribute('data-r')) { ln.setAttribute('data-r', '1'); ln.href = href(''); } };
+    (doc.head || root).appendChild(ln);
+  }
+  function applyFont() {
+    var f = fontFor(fontLang());
+    if (!f.fam) { root.removeAttribute('data-uf'); root.style.removeProperty('--uf'); return; }
+    fontCss(f);
+    root.setAttribute('data-uf', f.id);
+    root.style.setProperty('--uf', "'" + f.fam + "'," + FBACK);
+  }
+  (function () {   // සියලු පිටු සඳහා එක් රීතියක් (code / textarea සහ සැකසුම්වල නිදර්ශන පෙළ හැර)
+    var st = doc.createElement('style'); st.id = 'ufStyle';
+    st.textContent = 'html[data-uf] body,html[data-uf] body :not(code):not(pre):not(kbd):not(samp):not(textarea):not(.st-fs){font-family:var(--uf)!important}';
+    (doc.head || root).appendChild(st);
+  })();
+  applyFont();
 
   /* ---------------- තේමාව තීරණය / යෙදීම ---------------- */
   function initialId() {
@@ -141,6 +232,14 @@
     var bright = THEMES.filter(function (t) { return t.bright; });
     var deep = THEMES.filter(function (t) { return t.dark || t.deep; });
     var others = langs().filter(function (k) { return k !== cl; });
+    var fl = fontLang(), fonts = FONTS[fl], fcur = fontFor(fl).id;
+    fonts.forEach(function (f) { if (f.fam) fontCss(f); });   // නිදර්ශන පෙළ සඳහා (පුවරුව විවෘත කළ විට පමණි)
+    var fontBtn = function (f) {
+      var fam = f.fam ? "'" + f.fam + "'," + FBACK : "'" + f.base + "'," + FBACK;
+      return '<button type="button" class="st-fo' + (f.id === fcur ? ' on' : '') + '" data-f="' + f.id + '" role="radio" aria-checked="' + (f.id === fcur) + '">' +
+        '<span class="st-fl"><b>' + (f.fam ? f.n : L(TX.fdef)) + '</b><small>' + (f.fam ? f.d : f.base) + '</small></span>' +
+        '<span class="st-fs" lang="' + fl + '" style="font-family:' + fam.replace(/"/g, '&quot;') + '">' + FSAMPLE[fl] + '</span></button>';
+    };
     ov.setAttribute('lang', cl);
     ov.innerHTML =
       '<div class="st-bg" data-close="1"></div>' +
@@ -158,6 +257,9 @@
               return '<button type="button" class="st-lo" data-l="' + k + '" lang="' + k + '">' + langName(k) + '</button>';
             }).join('') + '</div></div>' +
           '</div>' +
+          '<h3 class="st-sec">' + L(TX.font) + '</h3>' +
+          '<div class="st-fonts" role="radiogroup" aria-label="' + L(TX.font) + '">' + fonts.map(fontBtn).join('') + '</div>' +
+          '<p class="st-note">' + L(TX.fnote) + '</p>' +
           '<h3 class="st-sec">' + L(TX.theme) + '</h3>' +
           '<div class="st-sub">' + L(TX.light) + '</div>' +
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.light) + '">' + light.map(swatch).join('') + '</div>' +
@@ -206,9 +308,23 @@
     if (t.closest('[data-close]')) { closeSettings(); return; }
     var sw = t.closest('.st-sw');
     if (sw) { set(sw.getAttribute('data-t')); return; }
+    var fo = t.closest('.st-fo');
+    if (fo) { pickFont(fo.getAttribute('data-f')); return; }
     if (t.closest('.st-cur')) { setLangOpen(!langOpen); return; }
     var lo = t.closest('.st-lo');
     if (lo) { pickLang(lo.getAttribute('data-l'), lo); return; }
+  }
+
+  function pickFont(id) {
+    var l = fontLang();
+    store('appFont.' + l, id);
+    applyFont();
+    if (!ov) return;
+    ov.querySelectorAll('.st-fo').forEach(function (b) {
+      var on = b.getAttribute('data-f') === id;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
   }
 
   function onKey(e) { if (e.key === 'Escape') closeSettings(); }
@@ -235,6 +351,13 @@
   }
 
   W.addEventListener('popstate', onPop);
+  doc.addEventListener('DOMContentLoaded', function () {   // භාෂාව මාරු වූ විට එම භාෂාවේ අකුරු
+    var o = W.toggleLanguage;
+    if (typeof o !== 'function' || o.__uf) return;
+    var w = function () { var r = o.apply(this, arguments); try { applyFont(); } catch (e) {} return r; };
+    w.__uf = 1; W.toggleLanguage = w;
+  });
+  W.AppFont = { apply: applyFont, list: FONTS };
   W.openSettings = openSettings;
   W.closeSettings = closeSettings;
 })();
