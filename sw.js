@@ -24,8 +24,8 @@ const CORE_FILES = {
   '/': '46164de1e0',                              // index.html
   '/manifest.json': '469ab2e27b',
   '/style.css': '3da5fa6622',
-  '/theme.css': '7af51789f3',
-  '/theme.js': '09b489fd26',
+  '/theme.css': 'd3c072ec16',
+  '/theme.js': 'bd27d8dcf5',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
   '/script.js': 'bb39df606f',
@@ -70,7 +70,13 @@ const LAZY_FILES = {
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc',
   '/lang/zh-calc.js': '72607c06a9',
-  '/lang/zh.js': '6a94eb80b8'
+  '/lang/zh.js': '6a94eb80b8',
+  '/fonts/AbhayaUni-Variable.woff2': '07a454c27a',
+  '/fonts/BindumathiUni-Regular.woff2': 'e16e89d322',
+  '/fonts/GanganeeUni-Regular.woff2': 'c023cd91c7',
+  '/fonts/ImaneeUni-Regular.woff2': '5b81fe3cb2',
+  '/fonts/OFL.txt': '72c71eb683',
+  '/fonts/SamanthaUni-Regular.woff2': 'fa6a0aa744'
 };
 
 // ------------------------------------------------------------

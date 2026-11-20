@@ -62,14 +62,19 @@
      • 'appFont.<භාෂාව>' = තෝරාගත් අකුරු id (භාෂාවකට වෙනම). 'def' = දැනට පවතින Noto අකුරු.
      • තෝරාගත් අකුරු <html data-uf> + --uf මගින් සියලු පිටුවලට (සජ්ඣායනා, උපෝසථ, ගණනය…) යෙදේ;
        එහි නැති අකුරු (ඉංග්‍රීසි, emoji ආදිය) පෙරනිමි Noto අකුරුවලින් පෙන්වයි.
-     • w = බාගත කරන බර (weights) — Google හි ඇති ඒවා පමණි; වැරදුණොත් බර නොමැතිව නැවත උත්සාහ කරයි. */
+     • w = බාගත කරන බර (weights) — Google හි ඇති ඒවා පමණි; වැරදුණොත් බර නොමැතිව නැවත උත්සාහ කරයි.
+     • src = ඇප් එක සමඟම ඇති අකුරු (fonts/*.woff2 — Pushpananda Ekanayake ගේ FM අකුරුවල Unicode
+       අනුවාද, SIL OFL; pitaka.lk "Sinhala Uni fonts 2.000"). තෝරාගත් විට පමණක් බාගත වේ. */
   var FONTS = {
     si: [
-      { id: 'def',       base: 'Noto Sans Sinhala' },
-      { id: 'abhaya',    fam: 'Abhaya Libre',       w: '400;500;600;700;800', n: 'අභය', d: 'බුද්ධ ජයන්ති ත්‍රිපිටක මුද්‍රණ රටාව' },
-      { id: 'notoserif', fam: 'Noto Serif Sinhala', w: '400;500;600;700;800', n: 'Noto Serif', d: 'සෙරිෆ් රටාව' },
-      { id: 'yaldevi',   fam: 'Yaldevi',            w: '400;500;600;700',     n: 'යාල්දේවි', d: 'නූතන' },
-      { id: 'gemunu',    fam: 'Gemunu Libre',       w: '400;500;600;700;800', n: 'ගැමුණු', d: 'ශීර්ෂ රටාව' }
+      { id: 'def',        base: 'Noto Sans Sinhala' },
+      { id: 'abhayauni',  fam: 'Abhaya Uni',         src: 'AbhayaUni-Variable',    wr: '400 800', n: 'අභය',        d: 'Abhaya Uni' },
+      { id: 'ganganee',   fam: 'Ganganee Uni',       src: 'GanganeeUni-Regular',   n: 'ගංගානී',      d: 'Ganganee Uni' },
+      { id: 'imanee',     fam: 'Imanee Uni',         src: 'ImaneeUni-Regular',     n: 'ඉමානී',       d: 'Imanee Uni' },
+      { id: 'bindumathi', fam: 'Bindumathi Uni',     src: 'BindumathiUni-Regular', n: 'බින්දුමතී',    d: 'Bindumathi Uni' },
+      { id: 'samantha',   fam: 'Samantha Uni',       src: 'SamanthaUni-Regular',   n: 'සමන්තා',      d: 'Samantha Uni' },
+      { id: 'abhaya',     fam: 'Abhaya Libre',       w: '400;500;600;700;800', n: 'අභය ලිබ්‍රේ', d: 'Abhaya Libre' },
+      { id: 'notoserif',  fam: 'Noto Serif Sinhala', w: '400;500;600;700;800', n: 'Noto Serif', d: 'Noto Serif Sinhala' }
     ],
     en: [
       { id: 'def',       base: 'Noto Sans' },
@@ -121,6 +126,12 @@
   function fontCss(f) {
     var id = 'uf-' + f.fam.replace(/\W+/g, '');
     if (doc.getElementById(id)) return;
+    if (f.src) {     // ඇප් එක සමඟ ඇති අකුරු — @font-face පමණයි (භාවිත වන තුරු බාගත නොවේ)
+      var st = doc.createElement('style'); st.id = id;
+      st.textContent = "@font-face{font-family:'" + f.fam + "';src:url(fonts/" + f.src + ".woff2) format('woff2');font-weight:" + (f.wr || '400') + ';font-style:normal;font-display:swap}';
+      (doc.head || root).appendChild(st);
+      return;
+    }
     var href = function (w) { return 'https://fonts.googleapis.com/css2?family=' + f.fam.replace(/ /g, '+') + (w ? ':wght@' + w : '') + '&display=swap'; };
     var ln = doc.createElement('link');
     ln.rel = 'stylesheet'; ln.id = id; ln.href = href(f.w);
@@ -199,7 +210,7 @@
   };
 
   /* ---------------- සැකසුම් පුවරුව ---------------- */
-  var ov = null, pushed = false, langOpen = false, waitTimer = 0;
+  var ov = null, pushed = false, langOpen = false, fontOpen = false, waitTimer = 0;
 
   function swatch(t) {
     var c = Array.isArray(t.sw)
@@ -232,14 +243,24 @@
     var bright = THEMES.filter(function (t) { return t.bright; });
     var deep = THEMES.filter(function (t) { return t.dark || t.deep; });
     var others = langs().filter(function (k) { return k !== cl; });
-    var fl = fontLang(), fonts = FONTS[fl], fcur = fontFor(fl).id;
-    fonts.forEach(function (f) { if (f.fam) fontCss(f); });   // නිදර්ශන පෙළ සඳහා (පුවරුව විවෘත කළ විට පමණි)
-    var fontBtn = function (f) {
-      var fam = f.fam ? "'" + f.fam + "'," + FBACK : "'" + f.base + "'," + FBACK;
-      return '<button type="button" class="st-fo' + (f.id === fcur ? ' on' : '') + '" data-f="' + f.id + '" role="radio" aria-checked="' + (f.id === fcur) + '">' +
-        '<span class="st-fl"><b>' + (f.fam ? f.n : L(TX.fdef)) + '</b><small>' + (f.fam ? f.d : f.base) + '</small></span>' +
-        '<span class="st-fs" lang="' + fl + '" style="font-family:' + fam.replace(/"/g, '&quot;') + '">' + FSAMPLE[fl] + '</span></button>';
+    var fl = fontLang(), fonts = FONTS[fl], fsel = fontFor(fl);
+    var famOf = function (f) { return "'" + (f.fam || f.base) + "'," + FBACK; };
+    var fontInfo = function (f) {
+      return '<span class="st-fl"><b>' + (f.fam ? f.n : L(TX.fdef)) + '</b><small>' + (f.fam ? f.d : f.base) + '</small></span>';
     };
+    /* තෝරාගත් අකුරු ඉහළින්; අනෙක් ඒවා භාෂා ලැයිස්තුව මෙන් පහළට දිගහැරේ.
+       නිදර්ශන පෙළේ අකුරු යොදන්නේ ලැයිස්තුව විවෘත කළ විට පමණි (data-ff) — නැත්නම් අකුරු සියල්ල බාගත වේ */
+    var fontBtn = function (f) {
+      return '<button type="button" class="st-fo" data-f="' + f.id + '" role="option">' + fontInfo(f) +
+        '<span class="st-fs" lang="' + fl + '" data-ff="' + famOf(f).replace(/"/g, '&quot;') + '">' + FSAMPLE[fl] + '</span></button>';
+    };
+    var fontBox = '<div class="st-lang st-fsel' + (fontOpen ? ' open' : '') + '">' +
+      '<button type="button" class="st-cur st-fcur" aria-expanded="' + (fontOpen ? 'true' : 'false') + '" aria-controls="stFontList">' +
+        '<span class="st-curn">' + fontInfo(fsel) + '<span class="st-fs" lang="' + fl + '" style="font-family:' + famOf(fsel).replace(/"/g, '&quot;') + '">' + FSAMPLE[fl] + '</span></span>' +
+        '<svg class="st-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>' +
+      '<div class="st-list" id="stFontList"><div class="st-listin" role="listbox" aria-label="' + L(TX.font) + '">' +
+        fonts.filter(function (f) { return f.id !== fsel.id; }).map(fontBtn).join('') +
+      '</div></div></div>';
     ov.setAttribute('lang', cl);
     ov.innerHTML =
       '<div class="st-bg" data-close="1"></div>' +
@@ -258,7 +279,7 @@
             }).join('') + '</div></div>' +
           '</div>' +
           '<h3 class="st-sec">' + L(TX.font) + '</h3>' +
-          '<div class="st-fonts" role="radiogroup" aria-label="' + L(TX.font) + '">' + fonts.map(fontBtn).join('') + '</div>' +
+          fontBox +
           '<p class="st-note">' + L(TX.fnote) + '</p>' +
           '<h3 class="st-sec">' + L(TX.theme) + '</h3>' +
           '<div class="st-sub">' + L(TX.light) + '</div>' +
@@ -283,7 +304,7 @@
 
   function setLangOpen(open) {
     langOpen = open;
-    var box = ov && ov.querySelector('.st-lang');
+    var box = ov && ov.querySelector('.st-lang:not(.st-fsel)');
     if (!box) return;
     box.classList.toggle('open', open);
     box.querySelector('.st-cur').setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -310,21 +331,31 @@
     if (sw) { set(sw.getAttribute('data-t')); return; }
     var fo = t.closest('.st-fo');
     if (fo) { pickFont(fo.getAttribute('data-f')); return; }
+    if (t.closest('.st-fcur')) { setFontOpen(!fontOpen); return; }
     if (t.closest('.st-cur')) { setLangOpen(!langOpen); return; }
     var lo = t.closest('.st-lo');
     if (lo) { pickLang(lo.getAttribute('data-l'), lo); return; }
   }
 
+  function setFontOpen(open) {
+    fontOpen = open;
+    var box = ov && ov.querySelector('.st-fsel');
+    if (!box) return;
+    if (open) {
+      FONTS[fontLang()].forEach(function (f) { if (f.fam) fontCss(f); });
+      box.querySelectorAll('.st-fs[data-ff]').forEach(function (e) { e.style.fontFamily = e.getAttribute('data-ff'); e.removeAttribute('data-ff'); });
+    }
+    box.classList.toggle('open', open);
+    box.querySelector('.st-fcur').setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
   function pickFont(id) {
-    var l = fontLang();
-    store('appFont.' + l, id);
+    store('appFont.' + fontLang(), id);
     applyFont();
     if (!ov) return;
-    ov.querySelectorAll('.st-fo').forEach(function (b) {
-      var on = b.getAttribute('data-f') === id;
-      b.classList.toggle('on', on);
-      b.setAttribute('aria-checked', on ? 'true' : 'false');
-    });
+    var body = ov.querySelector('.st-body'), y = body ? body.scrollTop : 0;
+    fontOpen = false; build();                       // තෝරාගත් අකුරු ඉහළට
+    body = ov.querySelector('.st-body'); if (body) body.scrollTop = y;
   }
 
   function onKey(e) { if (e.key === 'Escape') closeSettings(); }
@@ -338,7 +369,7 @@
   }
 
   function openSettings() {
-    langOpen = false;
+    langOpen = false; fontOpen = false;
     build();
     ov.classList.add('on');
     doc.addEventListener('keydown', onKey);
