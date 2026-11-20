@@ -118,6 +118,9 @@ html[data-theme] body.dark-mode #chOverlay{--bg:var(--t-bg);--card:var(--t-card)
  --g700:var(--q700);--g600:var(--q600);--g500:var(--q500);--g400:var(--q400);--m700:var(--k700);--m600:var(--k600);--m500:var(--k500);--m800:var(--k800);--m900:var(--k900)}
 html[data-theme] body:not(.dark-mode) #chOverlay{background:linear-gradient(var(--t-page-wash),var(--t-page-wash)),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/swirl.webp) center top/620px auto,var(--t-bg);background-blend-mode:normal,var(--t-blend),normal,normal}
 html[data-theme] body.dark-mode #chOverlay{background:var(--t-bg)}
+/* කළු තේමාව: සජ්ඣායනා පෙළ සුදු පැහැයෙන් (ඉස්මතු වර්ණය බොත්තම් / රාමුවලට පමණයි) */
+html[data-theme="charcoal"] body.dark-mode #chOverlay{--m200:#ffffff;--tx:#ffffff;--tx2:#f2f2f2;--muted:#cfcfcf}
+html[data-theme="charcoal"] body.dark-mode #chOverlay :is(.ch-pali,.pm-pali,.ch-nm,.ch-namo-pali,.ch-namo-t,.ch-head h2,.pm-sub,.pm-vh b,.pm-cat span,.ch-mean,.pm-meaning,.ch-pk-t){color:#fff}
 html[data-theme] body:not(.dark-mode) #chOverlay .ch-hero{color:var(--t-hero-tx);border-bottom:1px solid var(--t-hero-bd);
  background:var(--t-hero-wash),linear-gradient(var(--t-tintc),var(--t-tintc)),url(bg/flowers.webp) center/cover;background-blend-mode:normal,var(--t-blend),normal}
 html[data-theme="cream"] body:not(.dark-mode) #chOverlay .ch-hero{background:linear-gradient(rgba(255,248,228,.45),rgba(250,236,200,.4)),url(bg/flowers.webp) center/cover}
