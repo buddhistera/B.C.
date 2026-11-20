@@ -237,7 +237,8 @@
     "en": "Recitation of the Vata Pirith"
    },
    "pali": "1. කරණීය මෙත්ත සූත්‍රය\n2. \"උදෙතයං චක්ඛුමා එකරාජා\" යනාදි මෝර පිරිතේ මුල් කොටස",
-   "translit": "1. The Karaṇīya Mettā Sutta\n2. The opening portion of the Mora Paritta, beginning \"Udetayaṃ cakkhumā ekarājā\""
+   "translit": "1. The Karaṇīya Mettā Sutta\n2. The opening portion of the Mora Paritta, beginning \"Udetayaṃ cakkhumā ekarājā\"",
+   "links": [[{"id":"karaniya","si":"කරණීය මෙත්ත සූත්‍රය","en":"Karaṇīya Mettā Sutta"}],[{"id":"mora","si":"මෝර පරිත්ත","en":"Mora Paritta"}]]
   },
   {
    "id": "m15",
@@ -527,7 +528,8 @@
     "en": "Dasadhamma Sutta and Reflection on the Requisites Used"
    },
    "sinhala": "දසධම්ම සූත්‍රය සහ අතීත ප්‍රත්‍යවෙක්ෂාව සජ්ඣායනා කරන්න.",
-   "english": "Recite the Dasadhamma Sutta and the reflection on the requisites that have been used (Atīta Paccavekkhaṇā)."
+   "english": "Recite the Dasadhamma Sutta and the reflection on the requisites that have been used (Atīta Paccavekkhaṇā).",
+   "links": [[{"id":"dasadhamma","si":"දස ධම්ම සූත්‍රය","en":"Dasa Dhamma Sutta"},{"id":"civaradi","si":"පච්චවෙක්ඛණ","en":"Paccavekkhaṇā"}]]
   },
   {
    "id": "d7",
@@ -921,7 +923,8 @@
     "en": "Recitation of the Vata Pirith"
    },
    "pali": "1. කරණීය මෙත්ත සූත්‍රය\n2. දසධම්ම සූත්‍රයේ සිට චුන්ද බොජ්ඣංගය තෙක් දිනකට එක සූත්‍රය බැගින් සජ්ඣායනා කරන්න.\n3. මෝර පිරිතේ අපරාර්ධය\n4. ඛන්ධ (කඳ) පිරිත - නිමවා ඉන් අනතුරුව",
-   "translit": "1. The Karaṇīya Mettā Sutta.\n2. From the Dasadhamma Sutta up to the Cunda Bojjhaṅga: recite one sutta each day.\n3. The latter half of the Mora Paritta.\n4. The Khandha Paritta — and when it is finished, proceed to what follows."
+   "translit": "1. The Karaṇīya Mettā Sutta.\n2. From the Dasadhamma Sutta up to the Cunda Bojjhaṅga: recite one sutta each day.\n3. The latter half of the Mora Paritta.\n4. The Khandha Paritta — and when it is finished, proceed to what follows.",
+   "links": [[{"id":"karaniya","si":"කරණීය මෙත්ත සූත්‍රය","en":"Karaṇīya Mettā Sutta"}],[{"id":"dasadhamma","si":"දස ධම්ම සූත්‍රය","en":"Dasa Dhamma Sutta"},{"id":"mangala","si":"මහා මංගල සූත්‍රය","en":"Mahā Maṅgala Sutta"},{"id":"ratana","si":"රතන සූත්‍රය","en":"Ratana Sutta"},{"id":"karaniya","si":"කරණීය මෙත්ත සූත්‍රය","en":"Karaṇīya Mettā Sutta"},{"id":"khandha","si":"ඛන්ධ පරිත්ත","en":"Khandha Paritta"},{"id":"mettanisamsa","si":"මෙත්තානිසංස සූත්‍රය","en":"Mettānisaṃsa Sutta"},{"id":"mittanisamsa","si":"මිත්තානිසංස සූත්‍රය","en":"Mittānisaṃsa Sutta"},{"id":"mora","si":"මෝර පරිත්ත","en":"Mora Paritta"},{"id":"canda","si":"චන්ද පරිත්ත","en":"Canda Paritta"},{"id":"suriya","si":"සූරිය පරිත්ත","en":"Sūriya Paritta"},{"id":"dhajagga","si":"ධජග්ග පරිත්ත","en":"Dhajagga Paritta"},{"id":"mahakassapa","si":"මහාකස්සප බොජ්ඣංග පරිත්ත","en":"Mahākassapa Bojjhaṅga Paritta"},{"id":"mahamoggallana","si":"මහාමොග්ගල්ලාන බොජ්ඣංග පරිත්ත","en":"Mahāmoggallāna Bojjhaṅga Paritta"},{"id":"mahacunda","si":"මහාචුන්ද බොජ්ඣංග පරිත්ත","en":"Mahācunda Bojjhaṅga Paritta"}],[{"id":"mora","si":"මෝර පරිත්ත","en":"Mora Paritta"}],[{"id":"khandha","si":"ඛන්ධ පරිත්ත","en":"Khandha Paritta"}]]
   },
   {
    "id": "e27",
@@ -1226,7 +1229,8 @@
     "en": "Karaṇīya Mettā Sutta"
    },
    "sinhala": "කරණීය මෙත්ත සූත්‍රය සජ්ඣායනා කරන්න.",
-   "english": "Recite the Karaṇīya Mettā Sutta."
+   "english": "Recite the Karaṇīya Mettā Sutta.",
+   "links": [[{"id":"karaniya","si":"කරණීය මෙත්ත සූත්‍රය","en":"Karaṇīya Mettā Sutta"}]]
   },
   {
    "id": "b13",

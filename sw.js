@@ -218,12 +218,35 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;     // Google Fonts / Analytics ආදිය — browser එකටම
+  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {   // අකුරු — නොබැඳිව ද ලැබීමට
+    event.respondWith(handleFont(request, url));
+    return;
+  }
+  if (url.origin !== self.location.origin) return;     // Analytics ආදිය — browser එකටම
   if (url.pathname.endsWith('/sw.js')) return;
   if (request.headers.has('range')) return;
 
   event.respondWith(request.mode === 'navigate' ? handlePage(url) : handleAsset(request, url));
 });
+
+// ----------------------------------------------------------
+// GOOGLE FONTS — සැකසුම් තුළ තෝරන අකුරු ද ඇතුළුව, එක් වරක් ලැබුණු පසු නොබැඳිව ද ක්‍රියා කරයි
+//   • fonts.gstatic.com (අකුරු ගොනු — කිසිදා වෙනස් නොවේ) : cache එකෙන්ම
+//   • fonts.googleapis.com (CSS) : cache එකෙන් ඉක්මනින් දී, පසුබිමේ අලුත් කරයි
+//   (FONT_CACHE නාමය CACHE_PREFIX වලින් ආරම්භ නොවන නිසා app update එකේදී මැකී යන්නේ නැත)
+// ----------------------------------------------------------
+const FONT_CACHE = 'be-fonts-1';
+async function handleFont(request, url) {
+  const cache = await caches.open(FONT_CACHE);
+  const hit = await cache.match(request);
+  if (hit && url.hostname === 'fonts.gstatic.com') return hit;
+  const net = fetch(request).then((res) => {
+    if (res && (res.ok || res.type === 'opaque')) cache.put(request, res.clone()).catch(() => {});
+    return res;
+  });
+  if (hit) { net.catch(() => {}); return hit; }
+  return net;
+}
 
 // ----------------------------------------------------------
 // NAVIGATION — HTML පිටු : එම අනුවාදයේ cache එකෙන් (JS/CSS සමඟ සැමවිටම ගැළපේ)
