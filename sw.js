@@ -24,17 +24,17 @@ const CORE_FILES = {
   '/': '46164de1e0',                              // index.html
   '/manifest.json': '469ab2e27b',
   '/style.css': '3da5fa6622',
-  '/theme.css': 'f37f480edb',
-  '/theme.js': '0e9d8463a1',
+  '/theme.css': '7af51789f3',
+  '/theme.js': '09b489fd26',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
   '/script.js': 'bb39df606f',
   '/calculation.js': 'cbf6fd8a69',
   '/info.js': '9bba8c1193',
-  '/chanting.js': 'c1938653d8',
+  '/chanting.js': '385638fdb3',
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'f942fc69e2',
-  '/uposatha.js': '11ed40c55e'
+  '/uposatha.js': '98811edd85'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
@@ -42,7 +42,7 @@ const OPTIONAL_FILES = {
   '/patthana-data.js': '7093f05955',
   '/pirith-data.js': '73f0cfcde8',
   '/buddha-recitation.js': 'c680957a85',
-  '/buddha-vandana-data.js': '1f90334966',
+  '/buddha-vandana-data.js': '88a1586430',
   '/satipatthana-data.js': '17cf3675fd',
   '/patimokkha-data.js': '2f271186af',
   '/three.min.js': 'a9d81ea63f',
@@ -63,14 +63,14 @@ const OPTIONAL_FILES = {
 // update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
   '/pali-script.js': '6f33d6f815',
-  '/lang/hi.js': '061eeb8d5b',
-  '/lang/my.js': '80fd04349b',
-  '/lang/th.js': '515d50a8eb',
+  '/lang/hi.js': '7004148ea3',
+  '/lang/my.js': 'df7ae4ebb0',
+  '/lang/th.js': '323b1116fb',
   '/lang/hi-calc.js': '39cf96b451',
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc',
   '/lang/zh-calc.js': '72607c06a9',
-  '/lang/zh.js': '02de722879'
+  '/lang/zh.js': '6a94eb80b8'
 };
 
 // ------------------------------------------------------------
