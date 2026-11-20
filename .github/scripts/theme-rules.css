@@ -239,10 +239,7 @@ html.theme-dark #setOverlay .st-fs{color:var(--t-ac)}
 @media (orientation:landscape) and (max-height:600px){
  #setOverlay .st-sheet{top:8px;width:min(780px,calc(100% - 20px));max-height:calc(100% - 16px)}
  #setOverlay .st-head{padding:8px 10px 8px 20px}#setOverlay .st-x{width:40px;height:40px}
- #setOverlay .st-body{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);column-gap:24px;align-content:start;padding:2px 20px 14px}
- #setOverlay .st-body>*{grid-column:2}
- #setOverlay .st-body>:nth-child(1){grid-column:1;grid-row:1}#setOverlay .st-body>:nth-child(2){grid-column:1;grid-row:2/span 6;align-self:start}
- #setOverlay .st-body>:nth-child(3){grid-row:1}#setOverlay .st-body>:nth-child(4){grid-row:2}#setOverlay .st-body>:nth-child(5){grid-row:3}
- #setOverlay .st-body>:nth-child(6){grid-row:4}#setOverlay .st-body>:nth-child(7){grid-row:5}#setOverlay .st-body>:nth-child(8){grid-row:6}#setOverlay .st-body>:nth-child(9){grid-row:7}
+ #setOverlay .st-body{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);column-gap:24px;align-items:start;padding:2px 20px 14px}
+ #setOverlay .st-col{min-width:0}
  #setOverlay .st-sec{margin:12px 0 8px}#setOverlay .st-sub{margin:6px 0 5px}
  #setOverlay .st-sw{padding:5px 2px 4px;gap:3px;flex-direction:row;justify-content:center;gap:6px}#setOverlay .st-dot{width:22px;height:22px}#setOverlay .st-swl{font-size:.7rem;text-align:left}}

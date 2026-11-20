@@ -67,16 +67,18 @@
        අනුවාද, SIL OFL; pitaka.lk "Sinhala Uni fonts 2.000"). තෝරාගත් විට පමණක් බාගත වේ.
      • sz = සිංහල අකුරු පමණක් විශාල කරන ප්‍රතිශතය (size-adjust) — මෙම අකුරු Noto Sans Sinhala ට වඩා
        කුඩාවට පෙනෙන නිසා, අකුරු උස Noto හා සමාන වන ලෙස මැනීමෙන් ගත් අගය. ඉංග්‍රීසි / අංක වෙනස් නොවේ.
+     • wr: '100 900' = ගංගානී / ඉමානී / සමන්තා තනිව ම තද (bold) හැඩයේ අකුරු; බොහෝ පෙළ 600–800 බරින් ඇති නිසා
+       browser එක ඒවා මත තවත් ව්‍යාජ bold එකක් එක් නොකරන ලෙස එම එක් ගොනුව සියලු බර සඳහා යොදයි.
      • පැරණි id: 'abhaya' (Abhaya Libre) → 'abhayauni' (අභය Uni ද Abhaya Libre ගේ glyph මතම සාදා ඇත). */
   var FONT_ALIAS = { abhaya: 'abhayauni', yaldevi: 'def', gemunu: 'def' };
   var FONTS = {
     si: [
       { id: 'def',        base: 'Noto Sans Sinhala' },
       { id: 'abhayauni',  fam: 'Abhaya Uni',         src: 'AbhayaUni-Variable',    wr: '400 800', sz: 122, n: 'අභය',     d: 'Abhaya Uni' },
-      { id: 'ganganee',   fam: 'Ganganee Uni',       src: 'GanganeeUni-Regular',   sz: 118, n: 'ගංගානී',   d: 'Ganganee Uni' },
-      { id: 'imanee',     fam: 'Imanee Uni',         src: 'ImaneeUni-Regular',     sz: 122, n: 'ඉමානී',    d: 'Imanee Uni' },
+      { id: 'ganganee',   fam: 'Ganganee Uni',       src: 'GanganeeUni-Regular', wr: '100 900',   sz: 118, n: 'ගංගානී',   d: 'Ganganee Uni' },
+      { id: 'imanee',     fam: 'Imanee Uni',         src: 'ImaneeUni-Regular', wr: '100 900',     sz: 122, n: 'ඉමානී',    d: 'Imanee Uni' },
       { id: 'bindumathi', fam: 'Bindumathi Uni',     src: 'BindumathiUni-Regular', sz: 122, n: 'බින්දුමතී', d: 'Bindumathi Uni' },
-      { id: 'samantha',   fam: 'Samantha Uni',       src: 'SamanthaUni-Regular',   sz: 122, n: 'සමන්තා',   d: 'Samantha Uni' },
+      { id: 'samantha',   fam: 'Samantha Uni',       src: 'SamanthaUni-Regular', wr: '100 900',   sz: 122, n: 'සමන්තා',   d: 'Samantha Uni' },
       { id: 'notoserif',  fam: 'Noto Serif Sinhala', w: '400;500;600;700;800', n: 'Noto Serif', d: 'Noto Serif Sinhala' }
     ],
     en: [
@@ -278,6 +280,7 @@
           '<button type="button" class="st-x" data-close="1" aria-label="' + L(TX.close) + '" title="' + L(TX.close) + '">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>' +
         '<div class="st-body">' +
+          '<div class="st-col st-col1">' +                     // තිරස් (landscape) විට: වම් තීරුව
           '<h3 class="st-sec">' + L(TX.lang) + '</h3>' +
           '<div class="st-lang' + (langOpen ? ' open' : '') + '">' +
             '<button type="button" class="st-cur" aria-expanded="' + (langOpen ? 'true' : 'false') + '" aria-controls="stLangList">' +
@@ -290,6 +293,7 @@
           '<h3 class="st-sec">' + L(TX.font) + '</h3>' +
           fontBox +
           '<p class="st-note">' + L(TX.fnote) + '</p>' +
+          '</div><div class="st-col st-col2">' +              // දකුණු තීරුව
           '<h3 class="st-sec">' + L(TX.theme) + '</h3>' +
           '<div class="st-sub">' + L(TX.light) + '</div>' +
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.light) + '">' + light.map(swatch).join('') + '</div>' +
@@ -297,6 +301,7 @@
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.deep) + '">' + deep.map(swatch).join('') + '</div>' +
           '<div class="st-sub">' + L(TX.bright) + '</div>' +
           '<div class="st-grid" role="radiogroup" aria-label="' + L(TX.bright) + '">' + bright.map(swatch).join('') + '</div>' +
+          '</div>' +
         '</div>' +
       '</section>';
     syncPanel();
