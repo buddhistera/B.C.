@@ -55,9 +55,9 @@ SPEC = {
                       tx='#e3f5ec', mu='#8fb5a3'),
     'midnight':  dict(kind='dark',  bg='#04061a', mid='#0b1030', top='#1b2554', card='#131a3a', ac='#f2d478', hl='gold',
                       tx='#e8ecf8', mu='#aab3d6', orig=True),
-    # අඳුරු අළු (Claude ඇප් එකේ රාත්‍රී මාදිලිය වැනි) — උණුසුම් අළු පසුබිම, තඹ-තැඹිලි ඉස්මතු වර්ණය; කාෂාය වෙනුවට
-    'charcoal':  dict(kind='dark',  bg='#1f1e1d', mid='#262624', top='#30302e', card='#30302e', ac='#d97757', hl='ac',
-                      tx='#f5f4ee', mu='#a6a39a'),
+    # කළු — කළු පසුබිම, සුදු අකුරු, තඹ-තැඹිලි ඉස්මතු වර්ණය (Claude ඇප් එකේ රාත්‍රී මාදිලිය ආශ්‍රයෙන්); කාෂාය වෙනුවට
+    'charcoal':  dict(kind='dark',  bg='#000000', mid='#050505', top='#1c1c1c', card='#161616', ac='#d97757', hl='ac',
+                      tx='#ffffff', mu='#b8b8b8'),
 }
 
 GOLD_METAL = 'linear-gradient(180deg,#fff3c2 0%,#e8bd55 34%,#b07c16 62%,#e9c768 100%)'
