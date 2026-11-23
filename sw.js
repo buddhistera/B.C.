@@ -30,7 +30,7 @@ const CORE_FILES = {
   '/mm-poya.js': 'f67d310aa6',
   '/script.js': '9946788516',
   '/calculation.js': 'cbf6fd8a69',
-  '/info.js': '046fd2a4f8',
+  '/info.js': 'cbca00f6f5',
   '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'b5be8ccb68',
@@ -41,7 +41,7 @@ const CORE_FILES = {
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
 const OPTIONAL_FILES = {
   '/patthana-data.js': '7093f05955',
-  '/pirith-data.js': '4883d8c564',
+  '/pirith-data.js': '5886c3d8be',
   '/buddha-recitation.js': 'c680957a85',
   '/buddha-vandana-data.js': '88a1586430',
   '/satipatthana-data.js': '17cf3675fd',
