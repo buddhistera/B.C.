@@ -28,7 +28,7 @@ const CORE_FILES = {
   '/theme.js': '9ffb92099c',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
-  '/script.js': 'b57494bbff',
+  '/script.js': '9946788516',
   '/calculation.js': 'cbf6fd8a69',
   '/info.js': '046fd2a4f8',
   '/chanting.js': 'e845323596',

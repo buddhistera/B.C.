@@ -1665,8 +1665,11 @@ function updateSunTimes() {
             if (sunrise && sunset) {
                 solarNoon = new Date((sunrise.getTime() + sunset.getTime()) / 2);
             } else {
-                const sn = Astronomy.SearchTransit('Sun', observer, astroStartOfDay);
-                solarNoon = sn ? (sn.date || sn.time?.date || null) : null;
+                // ධ්‍රැව ආසන්න ප්‍රදේශ (හිරු නොනගින/නොබසින දින): මධ්‍යාහ්නය = හිරුගේ hour angle 0
+                // (SearchTransit යනු ග්‍රහ ගමන් සඳහා වන ශ්‍රිතයක් - මෙහි දෝෂයක් ඇති කළා)
+                let sn = null;
+                try { sn = Astronomy.SearchHourAngle('Sun', observer, 0, astroStartOfDay, 1); } catch (e) { sn = null; }
+                solarNoon = sn && sn.time ? sn.time.date : null;
             }
 
             const mr = Astronomy.SearchRiseSet('Moon', observer, 1, astroStartOfDay, 1);
