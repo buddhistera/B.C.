@@ -112,6 +112,8 @@ window.HI_DICT = {
   /* ---------- पाठ (chanting.js) ---------- */
   "rules": "शिक्षापद",
   "Meaning": "अर्थ",
+  "Other Parittas": "अन्य परित्त",
+  "or": "अथवा",
   "📖 Read the sutta": "📖 सुत्त पढ़ें",
   "📖 Read the suttas": "📖 सुत्त पढ़ें",
   "Could not load. Try again.": "लोड नहीं हो सका। फिर से प्रयास करें।",

@@ -21,26 +21,27 @@ const RESET = 1;
 
 // අනිවාර්ය ගොනු — එකක් හෝ නොලැබුණොත් update එක අත්හැර පැරණි අනුවාදයම දිගටම ක්‍රියා කරයි
 const CORE_FILES = {
-  '/': '46164de1e0',                              // index.html
+  '/': 'fcb052843e',                              // index.html
   '/manifest.json': '469ab2e27b',
-  '/style.css': '3da5fa6622',
+  '/style.css': '3c7a2bb320',
   '/theme.css': '448ec1646a',
-  '/theme.js': '3aed04c869',
+  '/theme.js': '9ffb92099c',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
-  '/script.js': 'bb39df606f',
+  '/script.js': '9946788516',
   '/calculation.js': 'cbf6fd8a69',
-  '/info.js': '9bba8c1193',
-  '/chanting.js': '385638fdb3',
+  '/info.js': '046fd2a4f8',
+  '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': 'f942fc69e2',
-  '/uposatha.js': '98811edd85'
+  '/sunpage.js': 'b5be8ccb68',
+  '/uposatha.js': '98811edd85',
+  '/calendar.js': '39f5bc2d85'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
 const OPTIONAL_FILES = {
   '/patthana-data.js': '7093f05955',
-  '/pirith-data.js': '73f0cfcde8',
+  '/pirith-data.js': '4883d8c564',
   '/buddha-recitation.js': 'c680957a85',
   '/buddha-vandana-data.js': '88a1586430',
   '/satipatthana-data.js': '17cf3675fd',
@@ -56,27 +57,40 @@ const OPTIONAL_FILES = {
   '/bg/swirl.webp': '6644916590',
   '/icon-192x192.png': '623c36ba56',
   '/icon-512x512.png': '31e4bc20f0',
-  '/icon-32×32.png': 'd74438ed59'
+  '/icon-32×32.png': 'd74438ed59',
+  // සිංහල / ඉංග්‍රීසි පෙරනිමි අකුරු — install එකේදීම (පළමු offline භාවිතයටත්)
+  '/fonts/NotoSans-Latin.woff2': '9774902da9',
+  '/fonts/NotoSerif-Latin.woff2': '6fbce23951',
+  '/fonts/NotoSansSinhala.woff2': 'ae4880f390',
+  '/fonts/NotoSerifSinhala.woff2': '3ab31d7d4b'
 };
 
 // හින්දි / බුරුම / තායි / චීන තෝරාගත් අයට පමණක් — පළමු භාවිතයේදී cache වේ.
 // update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
   '/pali-script.js': '6f33d6f815',
-  '/lang/hi.js': '7004148ea3',
-  '/lang/my.js': 'df7ae4ebb0',
-  '/lang/th.js': '323b1116fb',
+  '/lang/hi.js': '1e5c5ebe26',
+  '/lang/my.js': 'e2b659f4bc',
+  '/lang/th.js': 'd08de20e07',
   '/lang/hi-calc.js': '39cf96b451',
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc',
   '/lang/zh-calc.js': '72607c06a9',
-  '/lang/zh.js': '6a94eb80b8',
+  '/lang/zh.js': '2aeac89442',
   '/fonts/AbhayaUni-Variable.woff2': '07a454c27a',
-  '/fonts/BindumathiUni-Regular.woff2': 'e16e89d322',
-  '/fonts/GanganeeUni-Regular.woff2': 'c023cd91c7',
-  '/fonts/ImaneeUni-Regular.woff2': '5b81fe3cb2',
   '/fonts/OFL.txt': '72c71eb683',
-  '/fonts/SamanthaUni-Regular.woff2': 'fa6a0aa744'
+  '/fonts/NotoSansDevanagari.woff2': 'dbec927017',
+  '/fonts/NotoSansMyanmar.woff2': '5426fb17d8',
+  '/fonts/NotoSansThai.woff2': 'e9db338b9b',
+  '/fonts/NotoSerifDevanagari.woff2': '9e390641a8',
+  '/fonts/NotoSerifMyanmar.woff2': 'd0e883e7ae',
+  '/fonts/NotoSerifThai.woff2': '54702dc224',
+  '/fonts/README.txt': '7a41200b1c',
+  '/fonts/AbhayaLibre-Bold.woff2': '9d422027d2',
+  '/fonts/AbhayaLibre-Medium.woff2': '33e9d0d1d1',
+  '/fonts/AbhayaLibre-Regular.woff2': '5022b0b4d0',
+  '/fonts/AbhayaLibre-SemiBold.woff2': '720e121809',
+  '/fonts/NotoSansSymbols-Zodiac.woff2': '18ff4d0330'
 };
 
 // ------------------------------------------------------------
@@ -206,7 +220,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const names = await caches.keys();
     await Promise.all(names.map((name) => {
-      if (name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME) {
+      if ((name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME) || name === 'be-fonts-1') {   // be-fonts-1 = පැරණි Google Fonts cache
         console.log('[SW] Deleting old cache:', name);
         return caches.delete(name);
       }
@@ -224,35 +238,12 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {   // අකුරු — නොබැඳිව ද ලැබීමට
-    event.respondWith(handleFont(request, url));
-    return;
-  }
-  if (url.origin !== self.location.origin) return;     // Analytics ආදිය — browser එකටම
+  if (url.origin !== self.location.origin) return;     // Analytics ආදිය — browser එකටම (අකුරු දැන් fonts/ තුළම)
   if (url.pathname.endsWith('/sw.js')) return;
   if (request.headers.has('range')) return;
 
   event.respondWith(request.mode === 'navigate' ? handlePage(url) : handleAsset(request, url));
 });
-
-// ----------------------------------------------------------
-// GOOGLE FONTS — සැකසුම් තුළ තෝරන අකුරු ද ඇතුළුව, එක් වරක් ලැබුණු පසු නොබැඳිව ද ක්‍රියා කරයි
-//   • fonts.gstatic.com (අකුරු ගොනු — කිසිදා වෙනස් නොවේ) : cache එකෙන්ම
-//   • fonts.googleapis.com (CSS) : cache එකෙන් ඉක්මනින් දී, පසුබිමේ අලුත් කරයි
-//   (FONT_CACHE නාමය CACHE_PREFIX වලින් ආරම්භ නොවන නිසා app update එකේදී මැකී යන්නේ නැත)
-// ----------------------------------------------------------
-const FONT_CACHE = 'be-fonts-1';
-async function handleFont(request, url) {
-  const cache = await caches.open(FONT_CACHE);
-  const hit = await cache.match(request);
-  if (hit && url.hostname === 'fonts.gstatic.com') return hit;
-  const net = fetch(request).then((res) => {
-    if (res && (res.ok || res.type === 'opaque')) cache.put(request, res.clone()).catch(() => {});
-    return res;
-  });
-  if (hit) { net.catch(() => {}); return hit; }
-  return net;
-}
 
 // ----------------------------------------------------------
 // NAVIGATION — HTML පිටු : එම අනුවාදයේ cache එකෙන් (JS/CSS සමඟ සැමවිටම ගැළපේ)

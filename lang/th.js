@@ -160,6 +160,8 @@ window.TH_DICT = {
   "Night — Sun {0}° below horizon": "กลางคืน — ดวงอาทิตย์อยู่ใต้ขอบฟ้า {0}°",
   "rules": "สิกขาบท",
   "Meaning": "คำแปล",
+  "Other Parittas": "พระปริตรอื่น ๆ",
+  "or": "หรือ",
   "📖 Read the sutta": "📖 อ่านพระสูตร",
   "📖 Read the suttas": "📖 อ่านพระสูตร",
   "Could not load. Try again.": "โหลดไม่สำเร็จ โปรดลองอีกครั้ง",

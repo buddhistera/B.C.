@@ -1665,8 +1665,11 @@ function updateSunTimes() {
             if (sunrise && sunset) {
                 solarNoon = new Date((sunrise.getTime() + sunset.getTime()) / 2);
             } else {
-                const sn = Astronomy.SearchTransit('Sun', observer, astroStartOfDay);
-                solarNoon = sn ? (sn.date || sn.time?.date || null) : null;
+                // ධ්‍රැව ආසන්න ප්‍රදේශ (හිරු නොනගින/නොබසින දින): මධ්‍යාහ්නය = හිරුගේ hour angle 0
+                // (SearchTransit යනු ග්‍රහ ගමන් සඳහා වන ශ්‍රිතයක් - මෙහි දෝෂයක් ඇති කළා)
+                let sn = null;
+                try { sn = Astronomy.SearchHourAngle('Sun', observer, 0, astroStartOfDay, 1); } catch (e) { sn = null; }
+                solarNoon = sn && sn.time ? sn.time.date : null;
             }
 
             const mr = Astronomy.SearchRiseSet('Moon', observer, 1, astroStartOfDay, 1);
@@ -1884,11 +1887,11 @@ function updateSunTimes() {
 }
 
 function openSunModal() {
-    const sunModal = document.getElementById("sunModal");
-    if (sunModal) sunModal.style.display = "flex";
+    // නව "අරුණ" පිටුව sunpage.js මගින් (එය load වූ පසු මෙම ශ්‍රිතය ප්‍රතිස්ථාපනය වේ).
+    // ඊට පෙර එබුවොත් පැරණි කාඩ්පත් පිටුව නොපෙන්වා, ඉල්ලීම මතක තබා sunpage.js load වූ විගස විවෘත කරයි.
+    window.__spPending = true;
     const myDropdown = document.getElementById("myDropdown");
     if (myDropdown) myDropdown.style.display = "none";
-    
     updateSunTimes();
 }
 

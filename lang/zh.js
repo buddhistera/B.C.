@@ -8,19 +8,10 @@
      (pali-script.js 'iast'; චීන ථෙරවාද වන්දනා පොත්වල සම්මතයද මෙයමයි).
    • බෞද්ධ පාරිභාෂික වචන: චීන ථෙරවාද / පාළි ත්‍රිපිටක පරිවර්තනවල සම්මත වචන (布萨, 雨安居, 自恣, 护卫经 …).
    • උපෝසථ දින හා ගණනය ශ්‍රී ලංකා / තායි ලෙසම වේ (භාෂාව පමණක් වෙනස්). චීන 佛历 = ක්‍රි.ව. + 544 (එකමයි).
-   • චීන අකුරු font (Noto Sans SC / Noto Serif SC) බාගත වන්නේ චීන තෝරාගත් අයට පමණි (පහත) — offline විට
-     දුරකථනයේ / පරිගණකයේ චීන font එක (Noto CJK, Microsoft YaHei, PingFang) ස්වයංක්‍රීයව යොදයි.
+   • චීන අකුරු: දුරකථනයේ / පරිගණකයේම ඇති චීන font එක (Noto CJK, Microsoft YaHei, PingFang) — බාගත කිරීමක් නැත.
    • නිකුත් කිරීමට පෙර චීන භාෂාව දන්නෙකු ලවා පරීක්ෂා කරවන්න.
    ===================================================================== */
-(function () {
-  try {
-    if (document.getElementById('zhFonts') || !document.head) return;
-    var l = document.createElement('link');
-    l.id = 'zhFonts'; l.rel = 'stylesheet';
-    l.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap';
-    document.head.appendChild(l);
-  } catch (e) {}
-})();
+/* චීන අකුරු: උපාංගයේම ඇති අකුරු (Noto Sans CJK / Microsoft YaHei / PingFang) — අන්තර්ජාලයෙන් බාගත කිරීමක් නැත */
 
 window.ZH_DICT = {
   "Buddhist Era": "佛历",
@@ -176,6 +167,23 @@ window.ZH_DICT = {
   "Night — Sun {0}° below horizon": "夜间 — 太阳在地平线下 {0}°",
   "rules": "条学处",
   "Meaning": "释义",
+  "Pirit Hamāra Kirīma": "护卫经圆满",
+  "Udē Pirit Hamāra Kirīma": "晨间护卫经圆满",
+  "Jina Pañjara": "胜者铠甲偈",
+  "Vandāmi Cetiyaṃ": "礼敬塔庙",
+  "Puññānumodanā": "随喜功德",
+  "Devatānumodanā": "回向诸天",
+  "Iminā Puññakammena": "以此功德",
+  "Ārādhanā": "礼请",
+  "Parittārādhanā": "礼请诵护卫经",
+  "Devatārādhanā": "礼请诸天",
+  "Paṭiccasamuppāda": "缘起",
+  "Ratanattayaguṇa": "三宝功德",
+  "Bhavatu Sabba Maṅgalaṃ": "愿一切吉祥",
+  "Mahā Paritta": "大护卫经",
+  "Atireka Satta Suttāni": "七部补充经",
+  "Other Parittas": "其他护卫经",
+  "or": "或",
   "📖 Read the sutta": "📖 阅读经文",
   "📖 Read the suttas": "📖 阅读经文",
   "Could not load. Try again.": "无法加载，请重试。",

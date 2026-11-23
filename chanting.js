@@ -60,6 +60,8 @@
   function splitParasHtml(text) {
     if (!text) return '';
     return String(text).split(/\n\n+/).filter(function (p) { return p.length > 0; }).map(function (p) {
+      /* 【~】 = "හෝ" (විකල්ප පාඨ දෙකක් අතර) — භාෂාව අනුව */
+      if (p.trim() === '【~】') return '<p class="c ch-or">— ' + esc(T('හෝ', 'or')) + ' —</p>';
       /* 【…】 පමණක් ඇති ඡේදය (ඡක්කං / පබ්බං / නිද්දෙසො වැනි අවසාන සටහන්) මැදට පෙන්වයි */
       if (/^【[^】\n]+】(\n【[^】\n]+】)*$/.test(p)) {
         return '<p class="c">' + esc(p.replace(/【([^】]+)】/g, '($1)')) + '</p>';
@@ -349,16 +351,31 @@ function attachChPinch(ov) {
     p.catch(function () { delete LOADING[tab.id]; });
     return p;
   }
+  /* { id, ref: '<වෙනත් අයිතමයක id>' } — එම අයිතමයේ පෙළම මෙතැනද (උදා: මහ පිරිතේ මංගල / රතන / කරණීය) */
+  function resolveRefs(m) {
+    if (!m || !m.items || m.__refs) return m;
+    var by = {};
+    m.items.forEach(function (x) { if (!x.ref) by[x.id] = x; });
+    m.items = m.items.map(function (x) {
+      if (!x.ref || !by[x.ref]) return x;
+      var o = {}, k;
+      for (k in by[x.ref]) o[k] = by[x.ref][k];
+      for (k in x) if (k !== 'ref') o[k] = x[k];
+      return o;
+    });
+    m.__refs = 1;
+    return m;
+  }
   function loadModuleRaw(tab) {
     return new Promise(function (resolve, reject) {
       if (MODS[tab.id]) return resolve(MODS[tab.id]);
       function done() {
         var m = tab.adapt ? tab.adapt() : (window.ChantingModules && window.ChantingModules[tab.id]);
         if (!m) return reject(new Error('empty'));
-        MODS[tab.id] = m; resolve(m);
+        MODS[tab.id] = resolveRefs(m); resolve(MODS[tab.id]);
       }
       var pre = tab.adapt ? tab.adapt() : (window.ChantingModules && window.ChantingModules[tab.id]);
-      if (pre) { MODS[tab.id] = pre; return resolve(pre); }
+      if (pre) { MODS[tab.id] = resolveRefs(pre); return resolve(MODS[tab.id]); }
       var sc = document.createElement('script');
       sc.src = tab.src;
       sc.onload = done;
@@ -405,8 +422,26 @@ body.dark-mode #chOverlay .ch-zoom-badge{background:rgba(0,229,255,.88);color:#0
 body.dark-mode #chOverlay .ch-tab{background:var(--subtle);color:var(--m200)}\
 body.dark-mode #chOverlay .ch-tab.active{background:#22a06b;color:#061410}\
 /* sub nav */\
-#chOverlay .ch-subnav{position:sticky;z-index:29;background:var(--elev);border-bottom:1px solid var(--bd);box-shadow:var(--shs)}\
-#chOverlay .ch-subnav-in{display:flex;gap:6px;padding:7px 10px;overflow-x:auto;align-items:center;scrollbar-width:none}\
+#chOverlay .ch-subnav{position:sticky;z-index:29;background:var(--elev);border-bottom:1px solid var(--bd);box-shadow:var(--shs);display:flex;align-items:center}\
+#chOverlay .ch-subnav-in{flex:1;min-width:0;display:flex;gap:6px;padding:7px 10px 7px 6px;overflow-x:auto;align-items:center;scrollbar-width:none}\
+/* පටුන (☰) — කොටසේ සියලු මාතෘකා පහළට දිගහැරෙන ලැයිස්තුවක් ලෙස */\
+#chOverlay .ch-tocb{flex:none;width:36px;height:32px;margin-left:8px;border-radius:9px;border:1.5px solid var(--m600);background:var(--card);color:var(--m700);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}\
+#chOverlay .ch-tocb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}\
+#chOverlay .ch-tocb[aria-expanded=true]{background:var(--m700);color:#fff}\
+body.dark-mode #chOverlay .ch-tocb{background:var(--subtle);color:var(--g400);border-color:var(--g600)}\
+body.dark-mode #chOverlay .ch-tocb[aria-expanded=true]{background:var(--g600);color:var(--bg)}\
+#chOverlay .ch-toc{position:absolute;left:8px;top:calc(100% + 4px);width:min(380px,calc(100% - 16px));max-height:min(70vh,560px);overflow-y:auto;overscroll-behavior:contain;background:var(--card);border:1.5px solid var(--bd2);border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.28);padding:6px 0;display:none;z-index:40}\
+#chOverlay .ch-toc.on{display:block;animation:chTocIn .16s ease}\
+@keyframes chTocIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}\
+#chOverlay .ch-toc-cat{padding:10px 14px 4px;font-size:.72rem;font-weight:800;letter-spacing:.3px;color:var(--muted);text-transform:uppercase}\
+#chOverlay .ch-toc button{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--tx);font-family:var(--sans);cursor:pointer;line-height:1.45}\
+#chOverlay .ch-toc .ch-toc-g{padding:9px 14px;font-size:.92rem;font-weight:800;color:var(--m800);border-top:1px solid var(--bd)}\
+#chOverlay .ch-toc .ch-toc-g:first-child,#chOverlay .ch-toc .ch-toc-cat+.ch-toc-g{border-top:0}\
+body.dark-mode #chOverlay .ch-toc .ch-toc-g{color:var(--g400)}\
+#chOverlay .ch-toc .ch-toc-i{padding:6px 14px 6px 30px;font-size:.86rem;font-weight:600}\
+#chOverlay .ch-toc .ch-toc-i::before{content:"›";margin:0 7px 0 -12px;color:var(--m600);font-weight:800}\
+#chOverlay .ch-toc button:hover,#chOverlay .ch-toc button:focus-visible{background:var(--tint);outline:none}\
+#chOverlay .ch-toc button.on{background:var(--tint);box-shadow:inset 3px 0 0 var(--m600)}\
 #chOverlay .ch-lbl{flex:0 0 auto;font-size:.7rem;font-weight:700;color:var(--m700);padding:3px 9px;border-radius:6px;background:var(--tint);border-left:3px solid var(--g500)}\
 #chOverlay .ch-chip{flex:0 0 auto;display:flex;align-items:center;gap:5px;color:var(--m800);background:var(--tint);border:1.3px solid transparent;font-family:var(--sans);font-size:.76rem;font-weight:600;padding:5px 11px;border-radius:30px;white-space:nowrap;cursor:pointer;transition:all .2s ease;line-height:1.5}\
 #chOverlay .ch-chip.active{background:var(--m600);color:#fff;border-color:var(--m800)}\
@@ -536,6 +571,8 @@ body.dark-mode #chOverlay .pm-vh b{color:var(--g400)}\
 body.dark-mode #chOverlay .pm-cat span{color:var(--g400)}\
 #chOverlay .ch-lbl.ch-cat{background:transparent;color:var(--muted);border-left:2px dotted var(--m600);border-radius:0;margin-left:6px}\
 #chOverlay .pm-row{display:flex;justify-content:flex-end;margin:2px 0 4px}\
+#chOverlay .ch-pali{display:flow-root}\
+#chOverlay .ch-mbtn{float:right;margin:.4em 0 0 12px;text-indent:0;line-height:1.6;white-space:nowrap;text-align:center}\
 #chOverlay .pm-more{background:none;border:1.3px solid var(--m700);color:var(--m700);padding:2px 12px;border-radius:30px;font-family:var(--sans);font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;line-height:1.7}\
 #chOverlay .pm-more .pm-arr{font-size:.62em;display:inline-block;transition:transform .2s}\
 #chOverlay .pm-more[aria-expanded=true] .pm-arr{transform:rotate(180deg)}\
@@ -573,7 +610,9 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
       '<div class="ch-zoom-badge" aria-hidden="true"></div>' +
       '<header class="ch-hero">' + LAMP + '<h1>' + T('සජ්ඣායනා', 'Chanting') + '</h1><p>' + esc(all) + '</p></header>' +
       '<div class="ch-tabs"><div class="ch-tabs-in">' + tabs + '</div></div>' +
-      '<div class="ch-subnav"><div class="ch-subnav-in"></div></div>' +
+      '<div class="ch-subnav"><button type="button" class="ch-tocb" aria-expanded="false" aria-label="' + esc(T('පටුන', 'Contents')) + '" title="' + esc(T('පටුන', 'Contents')) + '">' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg></button>' +
+        '<div class="ch-subnav-in"></div><div class="ch-toc" role="menu"></div></div>' +
       '<main class="ch-main"></main>';
   }
 
@@ -605,17 +644,21 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     var main = PAL(it.pali, it.translit);
     var mean = MEAN(it.sinhala, it.english, it.hindi);
     var body = '';
+    /* "තේරුම" බොත්තම: පාළි කොටුවේ අවසාන පේළියේ දකුණු කෙළවරේ (float) — එම පේළියේ ඉඩ නැත්නම් ඊට යටින්.
+       ඒ නිසා කොටුව සහ ඊළඟ කාඩ්පත අතර වෙනම පේළියක් අවශ්‍ය නොවේ. */
+    var mbtn = (mean && mod.meaningToggle) ? '<button type="button" class="pm-more ch-mbtn" aria-expanded="false" onclick="chPmToggle(this)">' +
+      T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button>' : '';
     if (main) {
       var lblAttr = mod.hidePaliLabel ? '' : ' data-l="' + esc(T('📜 පාළි', '📜 Pāḷi')) + '"';
       var lblCls = mod.hidePaliLabel ? ' no-lbl' : '';
-      body += '<div class="ch-box ch-pali' + lblCls + '"' + lblAttr + '>' + splitParasHtml(main) + '</div>';
+      var ph = splitParasHtml(main), cut = ph.lastIndexOf('</p>');
+      if (mbtn && cut >= 0) { ph = ph.slice(0, cut) + mbtn + ph.slice(cut); mbtn = ''; }
+      body += '<div class="ch-box ch-pali' + lblCls + '"' + lblAttr + '>' + ph + '</div>';
     }
     if (mean) {
       var meanBox = '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(T('🇱🇰 සිංහල අර්ථය', '🌐 Meaning')) + '">' + splitParasHtml(mean) + '</div>';
       if (mod.meaningToggle) {
-        body += '<div class="pm-row"><button type="button" class="pm-more" aria-expanded="false" onclick="chPmToggle(this)">' +
-          T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button></div>' +
-          '<div class="ch-mean-wrap">' + meanBox + '</div>';
+        body += (mbtn ? '<div class="pm-row">' + mbtn + '</div>' : '') + '<div class="ch-mean-wrap">' + meanBox + '</div>';
       } else body += meanBox;
     }
     var gt = PAL(it.gatha, it.gathaTr);
@@ -781,6 +824,43 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
       });
     }
     ov.querySelector('.ch-subnav-in').innerHTML = chips;
+    ov.querySelector('.ch-toc').innerHTML = tocHtml(mod);
+    tocOpen(ov, false);
+  }
+
+  /* ---- පටුන (☰): කොටස් (group) සහ එක් එක් මාතෘකාව පහළට දිගහැරෙන ලැයිස්තුවක් ලෙස.
+         පවතින තිරස් chip තීරුව එලෙසම ඇත. ---- */
+  function itemLabel(it) {
+    var si = lang() === 'si';
+    return si ? (it.short || (it.name && it.name.si) || '') : XP(it.shortEn || (it.name && it.name.en) || it.short || '');
+  }
+  function tocHtml(mod) {
+    var h = '', multi = mod.groups && mod.groups.length > 1;
+    var link = function (cls, a, txt) { return '<button type="button" role="menuitem" class="' + cls + '" data-go="' + esc(a) + '" data-k="' + esc(a) + '">' + esc(txt) + '</button>'; };
+    var items = (mod.items || []).filter(function (it) { return !it.pm && itemLabel(it); });
+    if (multi) {
+      mod.groups.forEach(function (g) {
+        if (g.cat) h += '<div class="ch-toc-cat">' + esc(L(g.cat)) + '</div>';
+        h += link('ch-toc-g', 'g-' + g.id, LP(g.short || g.label));
+        items.forEach(function (it) { if (it.group === g.id) h += link('ch-toc-i', it.id, itemLabel(it)); });
+      });
+    } else {
+      items.forEach(function (it) { h += link('ch-toc-g', it.id, itemLabel(it)); });
+    }
+    return h;
+  }
+  function tocOpen(ov, open) {
+    var b = ov.querySelector('.ch-tocb'), t = ov.querySelector('.ch-toc');
+    if (!b || !t) return;
+    if (open == null) open = !t.classList.contains('on');
+    t.classList.toggle('on', open);
+    b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (!open) return;
+    /* දැනට කියවන ස්ථානය ලැයිස්තුවේ සලකුණු කර එය පෙනෙන සේ */
+    var act = ov.querySelector('.ch-subnav-in .ch-chip.active'), k = act && act.getAttribute('data-k');
+    t.querySelectorAll('button.on').forEach(function (x) { x.classList.remove('on'); });
+    var cur = k && t.querySelector('button[data-k="' + k + '"]');
+    if (cur) { cur.classList.add('on'); t.scrollTop = cur.offsetTop - t.clientHeight / 3; }
   }
 
   function stickyOffsets(ov) {
@@ -866,6 +946,7 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     var tin = ov.querySelector('.ch-tabs-in');
     if (activeTabBtn) tin.scrollTo({ left: activeTabBtn.offsetLeft - 20, behavior: 'smooth' });
     ov.querySelector('.ch-subnav-in').innerHTML = '';
+    ov.querySelector('.ch-toc').innerHTML = ''; tocOpen(ov, false);
     main.innerHTML = '<div class="ch-load"><b>🪔</b>' + T('පූරණය වෙමින්...', 'Loading...') + '</div>';
     loadModule(tab).then(function (mod) {
       if (cur !== tab.id) return;
@@ -895,6 +976,14 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     ov.querySelectorAll('.ch-tab').forEach(function (b) {
       b.addEventListener('click', function () { showTab(ov, b.getAttribute('data-t')); });
     });
+    ov.querySelector('.ch-tocb').addEventListener('click', function (e) { e.stopPropagation(); tocOpen(ov); });
+    ov.querySelector('.ch-toc').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-go]'); if (!b) return;
+      tocOpen(ov, false); scrollToAnchor(ov, b.getAttribute('data-go'));
+    });
+    ov.addEventListener('click', function (e) {     // පටුනෙන් පිටත ඔබූ විට වැසේ
+      if (!e.target.closest('.ch-toc') && !e.target.closest('.ch-tocb')) tocOpen(ov, false);
+    });
     ov.querySelector('.ch-subnav-in').addEventListener('click', function (e) {
       var c = e.target.closest('.ch-chip'); if (c) scrollToAnchor(ov, c.getAttribute('data-go'));
     });
@@ -908,7 +997,11 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     return ov;
   }
 
-  function onKey(e) { if (e.key === 'Escape') { if (peekOpen()) closePeekUser(); else closeChanting(); } }
+  function onKey(e) {
+    if (e.key !== 'Escape') return;
+    var ov = document.getElementById('chOverlay'), t = ov && ov.querySelector('.ch-toc.on');
+    if (peekOpen()) closePeekUser(); else if (t) tocOpen(ov, false); else closeChanting();
+  }
   function onPop() {
     if (peekPushed) { peekPushed = false; closePeek(); return; }   /* Back: පළමුව සූත්‍ර පුවරුව පමණක් වසයි */
     if (pushed) { pushed = false; hide(); }
