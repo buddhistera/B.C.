@@ -43,12 +43,12 @@
     bright: { si: 'දීප්ත පැහැ',    en: 'Bright',       hi: 'चटक रंग',      my: 'တောက်ပရောင်',    th: 'สีสด', zh: '亮色系' },
     font:   { si: 'අකුරු',        en: 'Font',         hi: 'फ़ॉन्ट',       my: 'ဖောင့်',          th: 'แบบอักษร', zh: '字体' },
     fdef:   { si: 'පෙරනිමි',      en: 'Default',      hi: 'डिफ़ॉल्ट',     my: 'မူလ',             th: 'ค่าเริ่มต้น', zh: '默认' },
-    fnote:  { si: 'තෝරාගත් අකුරු පළමු වරට අන්තර්ජාලයෙන් බාගත වේ. ඉන්පසු නොබැඳිව ද ක්‍රියා කරයි.',
-              en: 'A chosen font downloads once from the internet, then also works offline.',
-              hi: 'चुना गया फ़ॉन्ट पहली बार इंटरनेट से डाउनलोड होता है, फिर ऑफ़लाइन भी काम करता है।',
-              my: 'ရွေးထားသော ဖောင့်ကို ပထမအကြိမ် အင်တာနက်မှ ဒေါင်းလုဒ်လုပ်ပြီး နောက်ပိုင်း အော့ဖ်လိုင်းတွင်လည်း အသုံးပြုနိုင်သည်။',
-              th: 'แบบอักษรที่เลือกจะดาวน์โหลดจากอินเทอร์เน็ตครั้งแรก จากนั้นใช้งานออฟไลน์ได้',
-              zh: '所选字体首次需联网下载，之后可离线使用。' },
+    fnote:  { si: 'සියලු අකුරු ඇප් එක සමඟම ඇත — අන්තර්ජාලය අවශ්‍ය නැත.',
+              en: 'All fonts come with the app — no internet needed.',
+              hi: 'सभी फ़ॉन्ट ऐप के साथ ही हैं — इंटरनेट की आवश्यकता नहीं।',
+              my: 'ဖောင့်အားလုံး အက်ပ်နှင့်အတူ ပါဝင်သည် — အင်တာနက် မလိုပါ။',
+              th: 'แบบอักษรทั้งหมดมาพร้อมแอป — ไม่ต้องใช้อินเทอร์เน็ต',
+              zh: '所有字体均随应用附带，无需联网。' },
     close:  { si: 'වසන්න',        en: 'Close',        hi: 'बंद करें',     my: 'ပိတ်ရန်',         th: 'ปิด', zh: '关闭' },
     loading:{ si: 'පූරණය වෙමින්…', en: 'Loading…',     hi: 'लोड हो रहा है…', my: 'ဖွင့်နေသည်…',  th: 'กำลังโหลด…', zh: '加载中…' }
   };
@@ -58,59 +58,42 @@
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 
-  /* ---------------- අකුරු (font) — භාෂාව අනුව Google Fonts ----------------
-     • 'appFont.<භාෂාව>' = තෝරාගත් අකුරු id (භාෂාවකට වෙනම). 'def' = දැනට පවතින Noto අකුරු.
+  /* ---------------- අකුරු (font) — ඇප් එක සමඟම ඇති අකුරු පමණි (බාගත කිරීමක් / අන්තර්ජාලයක් නැත) ----------------
+     • 'appFont.<භාෂාව>' = තෝරාගත් අකුරු id (භාෂාවකට වෙනම). 'def' = පෙරනිමි Noto Sans අකුරු.
      • තෝරාගත් අකුරු <html data-uf> + --uf මගින් සියලු පිටුවලට (සජ්ඣායනා, උපෝසථ, ගණනය…) යෙදේ;
        එහි නැති අකුරු (ඉංග්‍රීසි, emoji ආදිය) පෙරනිමි Noto අකුරුවලින් පෙන්වයි.
-     • w = බාගත කරන බර (weights) — Google හි ඇති ඒවා පමණි; වැරදුණොත් බර නොමැතිව නැවත උත්සාහ කරයි.
-     • src = ඇප් එක සමඟම ඇති අකුරු (fonts/*.woff2 — Pushpananda Ekanayake ගේ FM අකුරුවල Unicode
-       අනුවාද, SIL OFL; pitaka.lk "Sinhala Uni fonts 2.000"). තෝරාගත් විට පමණක් බාගත වේ.
-     • sz = සිංහල අකුරු පමණක් විශාල කරන ප්‍රතිශතය (size-adjust) — මෙම අකුරු Noto Sans Sinhala ට වඩා
-       කුඩාවට පෙනෙන නිසා, අකුරු උස Noto හා සමාන වන ලෙස මැනීමෙන් ගත් අගය. ඉංග්‍රීසි / අංක වෙනස් නොවේ.
-     • wr: '100 900' = ගංගානී / ඉමානී / සමන්තා තනිව ම තද (bold) හැඩයේ අකුරු; බොහෝ පෙළ 600–800 බරින් ඇති නිසා
-       browser එක ඒවා මත තවත් ව්‍යාජ bold එකක් එක් නොකරන ලෙස එම එක් ගොනුව සියලු බර සඳහා යොදයි.
-     • පැරණි id: 'abhaya' (Abhaya Libre) → 'abhayauni' (අභය Uni ද Abhaya Libre ගේ glyph මතම සාදා ඇත). */
-  var FONT_ALIAS = { abhaya: 'abhayauni', yaldevi: 'def', gemunu: 'def' };
+     • Noto Sans / Serif අකුරු style.css හි @font-face (fonts/*.woff2) මගින් දැනටමත් ඇත.
+     • src = theme.js මෙහිම @font-face සාදන අකුරු (අභය — fonts/AbhayaUni-Variable.woff2, SIL OFL; pitaka.lk).
+     • sz = සිංහල අකුරු පමණක් විශාල කරන ප්‍රතිශතය (size-adjust) — අභය Noto Sans Sinhala ට වඩා කුඩාවට
+       පෙනෙන නිසා, අකුරු උස Noto හා සමාන වන ලෙස මැනීමෙන් ගත් අගය. ඉංග්‍රීසි / අංක වෙනස් නොවේ.
+     • stack = උපාංගයේම ඇති අකුරු (චීන) — බාගත කිරීමක් නැත.
+     • පැරණි / ඉවත් කළ id: 'abhaya' (Abhaya Libre) → 'abhayauni'; අනෙක් ඒවා → පෙරනිමි. */
+  var FONT_ALIAS = { abhaya: 'abhayauni' };
   var FONTS = {
     si: [
       { id: 'def',        base: 'Noto Sans Sinhala' },
-      { id: 'abhayauni',  fam: 'Abhaya Uni',         src: 'AbhayaUni-Variable',    wr: '400 800', sz: 122, n: 'අභය',     d: 'Abhaya Uni' },
-      { id: 'ganganee',   fam: 'Ganganee Uni',       src: 'GanganeeUni-Regular', wr: '100 900',   sz: 118, n: 'ගංගානී',   d: 'Ganganee Uni' },
-      { id: 'imanee',     fam: 'Imanee Uni',         src: 'ImaneeUni-Regular', wr: '100 900',     sz: 122, n: 'ඉමානී',    d: 'Imanee Uni' },
-      { id: 'bindumathi', fam: 'Bindumathi Uni',     src: 'BindumathiUni-Regular', sz: 122, n: 'බින්දුමතී', d: 'Bindumathi Uni' },
-      { id: 'samantha',   fam: 'Samantha Uni',       src: 'SamanthaUni-Regular', wr: '100 900',   sz: 122, n: 'සමන්තා',   d: 'Samantha Uni' },
-      { id: 'notoserif',  fam: 'Noto Serif Sinhala', w: '400;500;600;700;800', n: 'Noto Serif', d: 'Noto Serif Sinhala' }
+      { id: 'notoserif',  fam: 'Noto Serif Sinhala', n: 'Noto Serif', d: 'Noto Serif Sinhala' },
+      { id: 'abhayauni',  fam: 'Abhaya Uni', src: 'AbhayaUni-Variable', wr: '400 800', sz: 122, n: 'අභය', d: 'Abhaya Uni' }
     ],
     en: [
-      { id: 'def',       base: 'Noto Sans' },
-      { id: 'notoserif', fam: 'Noto Serif',         w: '400;500;600;700;800', n: 'Noto Serif', d: 'Classic serif' },
-      { id: 'gentium',   fam: 'Gentium Book Plus',  w: '400;700',             n: 'Gentium Book Plus', d: 'Scholarly · full Pāli diacritics' },
-      { id: 'charis',    fam: 'Charis SIL',         w: '400;700',             n: 'Charis SIL', d: 'Book serif' },
-      { id: 'garamond',  fam: 'EB Garamond',        w: '400;500;600;700;800', n: 'EB Garamond', d: 'Old-style' }
+      { id: 'def',        base: 'Noto Sans' },
+      { id: 'notoserif',  fam: 'Noto Serif', n: 'Noto Serif', d: 'Serif' }
     ],
     hi: [
-      { id: 'def',       base: 'Noto Sans Devanagari' },
-      { id: 'tiro',      fam: 'Tiro Devanagari Sanskrit', w: '',          n: 'Tiro Devanagari Sanskrit', d: 'संस्कृत / पालि शैली' },
-      { id: 'notoserif', fam: 'Noto Serif Devanagari', w: '400;500;600;700;800', n: 'Noto Serif Devanagari', d: 'सेरिफ़' },
-      { id: 'mukta',     fam: 'Mukta',              w: '400;500;600;700;800', n: 'Mukta', d: 'आधुनिक' },
-      { id: 'hind',      fam: 'Hind',               w: '400;500;600;700',     n: 'Hind', d: 'सरल' }
+      { id: 'def',        base: 'Noto Sans Devanagari' },
+      { id: 'notoserif',  fam: 'Noto Serif Devanagari', n: 'Noto Serif Devanagari', d: 'सेरिफ़' }
     ],
     my: [
-      { id: 'def',       base: 'Noto Sans Myanmar' },
-      { id: 'padauk',    fam: 'Padauk',             w: '400;700',             n: 'Padauk', d: 'ပိတောက်' },
-      { id: 'notoserif', fam: 'Noto Serif Myanmar', w: '400;500;600;700;800', n: 'Noto Serif Myanmar', d: 'Serif' }
+      { id: 'def',        base: 'Noto Sans Myanmar' },
+      { id: 'notoserif',  fam: 'Noto Serif Myanmar', n: 'Noto Serif Myanmar', d: 'Serif' }
     ],
     th: [
-      { id: 'def',       base: 'Noto Sans Thai' },
-      { id: 'sarabun',   fam: 'Sarabun',            w: '400;500;600;700;800', n: 'Sarabun', d: 'สารบรรณ' },
-      { id: 'notoserif', fam: 'Noto Serif Thai',    w: '400;500;600;700;800', n: 'Noto Serif Thai', d: 'มีเชิง' },
-      { id: 'looped',    fam: 'Noto Sans Thai Looped', w: '400;500;600;700;800', n: 'Noto Sans Thai Looped', d: 'มีหัว' }
+      { id: 'def',        base: 'Noto Sans Thai' },
+      { id: 'notoserif',  fam: 'Noto Serif Thai', n: 'Noto Serif Thai', d: 'มีเชิง' }
     ],
-    zh: [
-      { id: 'def',       base: 'Noto Sans SC' },
-      { id: 'notoserif', fam: 'Noto Serif SC',      w: '400;500;600;700;800', n: 'Noto Serif SC', d: '宋体风格' },
-      { id: 'xiaowei',   fam: 'ZCOOL XiaoWei',      w: '',                    n: '站酷小薇', d: 'ZCOOL XiaoWei' },
-      { id: 'mashan',    fam: 'Ma Shan Zheng',      w: '',                    n: '马善政楷书', d: '楷书风格' }
+    zh: [   // චීන: උපාංගයේම ඇති අකුරු (බාගත කිරීමක් නැත)
+      { id: 'def',        base: 'Noto Sans SC', d0: '系统黑体' },
+      { id: 'serif',      fam: 'Noto Serif CJK SC', stack: "'Noto Serif CJK SC','Noto Serif SC','Source Han Serif SC','Songti SC','STSong','SimSun',serif", n: '宋体', d: '系统宋体' }
     ]
   };
   var FSAMPLE = { si: 'නමො තස්ස භගවතො අරහතො', en: 'Namo tassa · Saṃyutta Nikāya', hi: 'नमो तस्स भगवतो अरहतो',
@@ -143,18 +126,14 @@
       (doc.head || root).appendChild(st);
       return;
     }
-    var href = function (w) { return 'https://fonts.googleapis.com/css2?family=' + f.fam.replace(/ /g, '+') + (w ? ':wght@' + w : '') + '&display=swap'; };
-    var ln = doc.createElement('link');
-    ln.rel = 'stylesheet'; ln.id = id; ln.href = href(f.w);
-    ln.onerror = function () { if (f.w && !ln.getAttribute('data-r')) { ln.setAttribute('data-r', '1'); ln.href = href(''); } };
-    (doc.head || root).appendChild(ln);
   }
+  function fontStack(f) { return f.stack || ("'" + (f.fam || f.base) + "'," + FBACK); }
   function applyFont() {
     var f = fontFor(fontLang());
     if (!f.fam) { root.removeAttribute('data-uf'); root.style.removeProperty('--uf'); return; }
     fontCss(f);
     root.setAttribute('data-uf', f.id);
-    root.style.setProperty('--uf', "'" + f.fam + "'," + FBACK);
+    root.style.setProperty('--uf', fontStack(f));
   }
   (function () {   // සියලු පිටු සඳහා එක් රීතියක් (code / textarea සහ සැකසුම්වල නිදර්ශන පෙළ හැර)
     var st = doc.createElement('style'); st.id = 'ufStyle';
@@ -255,9 +234,9 @@
     var deep = THEMES.filter(function (t) { return t.dark || t.deep; });
     var others = langs().filter(function (k) { return k !== cl; });
     var fl = fontLang(), fonts = FONTS[fl], fsel = fontFor(fl);
-    var famOf = function (f) { return "'" + (f.fam || f.base) + "'," + FBACK; };
+    var famOf = fontStack;
     var fontInfo = function (f) {
-      return '<span class="st-fl"><b>' + (f.fam ? f.n : L(TX.fdef)) + '</b><small>' + (f.fam ? f.d : f.base) + '</small></span>';
+      return '<span class="st-fl"><b>' + (f.fam ? f.n : L(TX.fdef)) + '</b><small>' + (f.fam ? f.d : (f.d0 || f.base)) + '</small></span>';
     };
     /* තෝරාගත් අකුරු ඉහළින්; අනෙක් ඒවා භාෂා ලැයිස්තුව මෙන් පහළට දිගහැරේ.
        නිදර්ශන පෙළේ අකුරු යොදන්නේ ලැයිස්තුව විවෘත කළ විට පමණි (data-ff) — නැත්නම් අකුරු සියල්ල බාගත වේ */

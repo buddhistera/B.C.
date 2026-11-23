@@ -8,19 +8,10 @@
      (pali-script.js 'iast'; චීන ථෙරවාද වන්දනා පොත්වල සම්මතයද මෙයමයි).
    • බෞද්ධ පාරිභාෂික වචන: චීන ථෙරවාද / පාළි ත්‍රිපිටක පරිවර්තනවල සම්මත වචන (布萨, 雨安居, 自恣, 护卫经 …).
    • උපෝසථ දින හා ගණනය ශ්‍රී ලංකා / තායි ලෙසම වේ (භාෂාව පමණක් වෙනස්). චීන 佛历 = ක්‍රි.ව. + 544 (එකමයි).
-   • චීන අකුරු font (Noto Sans SC / Noto Serif SC) බාගත වන්නේ චීන තෝරාගත් අයට පමණි (පහත) — offline විට
-     දුරකථනයේ / පරිගණකයේ චීන font එක (Noto CJK, Microsoft YaHei, PingFang) ස්වයංක්‍රීයව යොදයි.
+   • චීන අකුරු: දුරකථනයේ / පරිගණකයේම ඇති චීන font එක (Noto CJK, Microsoft YaHei, PingFang) — බාගත කිරීමක් නැත.
    • නිකුත් කිරීමට පෙර චීන භාෂාව දන්නෙකු ලවා පරීක්ෂා කරවන්න.
    ===================================================================== */
-(function () {
-  try {
-    if (document.getElementById('zhFonts') || !document.head) return;
-    var l = document.createElement('link');
-    l.id = 'zhFonts'; l.rel = 'stylesheet';
-    l.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap';
-    document.head.appendChild(l);
-  } catch (e) {}
-})();
+/* චීන අකුරු: උපාංගයේම ඇති අකුරු (Noto Sans CJK / Microsoft YaHei / PingFang) — අන්තර්ජාලයෙන් බාගත කිරීමක් නැත */
 
 window.ZH_DICT = {
   "Buddhist Era": "佛历",

@@ -21,11 +21,11 @@ const RESET = 1;
 
 // අනිවාර්ය ගොනු — එකක් හෝ නොලැබුණොත් update එක අත්හැර පැරණි අනුවාදයම දිගටම ක්‍රියා කරයි
 const CORE_FILES = {
-  '/': '46164de1e0',                              // index.html
+  '/': 'fcb052843e',                              // index.html
   '/manifest.json': '469ab2e27b',
-  '/style.css': '3da5fa6622',
+  '/style.css': '08a74db2a3',
   '/theme.css': '448ec1646a',
-  '/theme.js': '3aed04c869',
+  '/theme.js': 'fde8faca37',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
   '/script.js': 'bb39df606f',
@@ -34,7 +34,8 @@ const CORE_FILES = {
   '/chanting.js': '385638fdb3',
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'f942fc69e2',
-  '/uposatha.js': '98811edd85'
+  '/uposatha.js': '98811edd85',
+  '/calendar.js': '83ef8b11cc'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
@@ -56,7 +57,12 @@ const OPTIONAL_FILES = {
   '/bg/swirl.webp': '6644916590',
   '/icon-192x192.png': '623c36ba56',
   '/icon-512x512.png': '31e4bc20f0',
-  '/icon-32×32.png': 'd74438ed59'
+  '/icon-32×32.png': 'd74438ed59',
+  // සිංහල / ඉංග්‍රීසි පෙරනිමි අකුරු — install එකේදීම (පළමු offline භාවිතයටත්)
+  '/fonts/NotoSans-Latin.woff2': '9774902da9',
+  '/fonts/NotoSerif-Latin.woff2': '6fbce23951',
+  '/fonts/NotoSansSinhala.woff2': 'ae4880f390',
+  '/fonts/NotoSerifSinhala.woff2': '3ab31d7d4b'
 };
 
 // හින්දි / බුරුම / තායි / චීන තෝරාගත් අයට පමණක් — පළමු භාවිතයේදී cache වේ.
@@ -70,13 +76,16 @@ const LAZY_FILES = {
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc',
   '/lang/zh-calc.js': '72607c06a9',
-  '/lang/zh.js': '6a94eb80b8',
+  '/lang/zh.js': '984563551e',
   '/fonts/AbhayaUni-Variable.woff2': '07a454c27a',
-  '/fonts/BindumathiUni-Regular.woff2': 'e16e89d322',
-  '/fonts/GanganeeUni-Regular.woff2': 'c023cd91c7',
-  '/fonts/ImaneeUni-Regular.woff2': '5b81fe3cb2',
   '/fonts/OFL.txt': '72c71eb683',
-  '/fonts/SamanthaUni-Regular.woff2': 'fa6a0aa744'
+  '/fonts/NotoSansDevanagari.woff2': 'dbec927017',
+  '/fonts/NotoSansMyanmar.woff2': '5426fb17d8',
+  '/fonts/NotoSansThai.woff2': 'e9db338b9b',
+  '/fonts/NotoSerifDevanagari.woff2': '9e390641a8',
+  '/fonts/NotoSerifMyanmar.woff2': 'd0e883e7ae',
+  '/fonts/NotoSerifThai.woff2': '54702dc224',
+  '/fonts/README.txt': 'd5b9746706'
 };
 
 // ------------------------------------------------------------
@@ -206,7 +215,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const names = await caches.keys();
     await Promise.all(names.map((name) => {
-      if (name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME) {
+      if ((name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME) || name === 'be-fonts-1') {   // be-fonts-1 = පැරණි Google Fonts cache
         console.log('[SW] Deleting old cache:', name);
         return caches.delete(name);
       }
@@ -224,35 +233,12 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {   // අකුරු — නොබැඳිව ද ලැබීමට
-    event.respondWith(handleFont(request, url));
-    return;
-  }
-  if (url.origin !== self.location.origin) return;     // Analytics ආදිය — browser එකටම
+  if (url.origin !== self.location.origin) return;     // Analytics ආදිය — browser එකටම (අකුරු දැන් fonts/ තුළම)
   if (url.pathname.endsWith('/sw.js')) return;
   if (request.headers.has('range')) return;
 
   event.respondWith(request.mode === 'navigate' ? handlePage(url) : handleAsset(request, url));
 });
-
-// ----------------------------------------------------------
-// GOOGLE FONTS — සැකසුම් තුළ තෝරන අකුරු ද ඇතුළුව, එක් වරක් ලැබුණු පසු නොබැඳිව ද ක්‍රියා කරයි
-//   • fonts.gstatic.com (අකුරු ගොනු — කිසිදා වෙනස් නොවේ) : cache එකෙන්ම
-//   • fonts.googleapis.com (CSS) : cache එකෙන් ඉක්මනින් දී, පසුබිමේ අලුත් කරයි
-//   (FONT_CACHE නාමය CACHE_PREFIX වලින් ආරම්භ නොවන නිසා app update එකේදී මැකී යන්නේ නැත)
-// ----------------------------------------------------------
-const FONT_CACHE = 'be-fonts-1';
-async function handleFont(request, url) {
-  const cache = await caches.open(FONT_CACHE);
-  const hit = await cache.match(request);
-  if (hit && url.hostname === 'fonts.gstatic.com') return hit;
-  const net = fetch(request).then((res) => {
-    if (res && (res.ok || res.type === 'opaque')) cache.put(request, res.clone()).catch(() => {});
-    return res;
-  });
-  if (hit) { net.catch(() => {}); return hit; }
-  return net;
-}
 
 // ----------------------------------------------------------
 // NAVIGATION — HTML පිටු : එම අනුවාදයේ cache එකෙන් (JS/CSS සමඟ සැමවිටම ගැළපේ)
