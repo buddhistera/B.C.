@@ -82,6 +82,15 @@
       </div>
     </div>
 
+    <div class="card dict-card">
+      <h3>📖 පාලි සිංහල ශබ්දකෝෂය</h3>
+      <p>පාලි වචනවල සිංහල අර්ථ සෙවීම සඳහා පාලි සිංහල ශබ්දකෝෂය මෙතැනින් ලබාගන්න.</p>
+      <div class="link-row">
+        <a class="platform-btn" href="https://pali-sinhala-dictionary.github.io/DPSD/" target="_blank" rel="noopener noreferrer">පාලි සිංහල ශබ්දකෝෂය ↗</a>
+        <button class="copy-btn" onclick="copyLink('https://pali-sinhala-dictionary.github.io/DPSD/', this)" aria-label="Copy link">📋</button>
+      </div>
+    </div>
+
     <div class="section-heading"><span class="dot"></span>ප්‍රයෝජනවත් ඉඟි</div>
     <div class="card">
       <ul class="tips">
@@ -167,8 +176,18 @@
   <div class="card qr-maker" id="qrMaker" hidden></div>
 
   <p class="footer-note">🙏 Sādhu Sādhu Sādhu 🙏</p>
+  <p class="copyright"><!--COPYRIGHT--></p>
 </div>
 `;
+  /* සියලු භාෂාවලින් හිමිකම් දැන්වීම (info පිටුවේ පහළම) */
+  var COPYRIGHT = {
+    si: 'සියලු හිමිකම් ඇවිරිනි. හඳුනා නොගත් දෝෂ පැවතිය හැකි නිසා, මෙහි ඇති කේත කොටස් අවසරයකින් තොරව මොනයම් ආකාරයකින් හෝ උපුටා ගැනීම, නැවත පළකිරීම සපුරා තහනම්.',
+    en: 'All rights reserved. As there may be undetected errors, copying or republishing any part of the code here, in any form, without permission is strictly prohibited.',
+    hi: 'सर्वाधिकार सुरक्षित। चूँकि इसमें अज्ञात त्रुटियाँ हो सकती हैं, यहाँ के कोड के किसी भी भाग को बिना अनुमति के किसी भी रूप में कॉपी करना या पुनः प्रकाशित करना सख़्त वर्जित है।',
+    my: 'မူပိုင်ခွင့်အားလုံး ရယူထားသည်။ မသိရှိရသေးသော အမှားများ ရှိနိုင်သောကြောင့် ဤနေရာရှိ ကုဒ်အစိတ်အပိုင်းများကို ခွင့်ပြုချက်မရှိဘဲ မည်သည့်ပုံစံဖြင့်မဆို ကူးယူခြင်း၊ ပြန်လည်ထုတ်ဝေခြင်းကို လုံးဝ တားမြစ်သည်။',
+    th: 'สงวนลิขสิทธิ์ทั้งหมด เนื่องจากอาจมีข้อผิดพลาดที่ยังตรวจไม่พบ ห้ามคัดลอกหรือเผยแพร่ซ้ำส่วนใดส่วนหนึ่งของโค้ดในที่นี้ไม่ว่าในรูปแบบใด โดยไม่ได้รับอนุญาตโดยเด็ดขาด',
+    zh: '版权所有。由于可能存在尚未发现的错误，未经许可，严禁以任何形式复制或转载此处的任何代码部分。'
+  };
   var CSS  = `#infoOverlay{--mint-bg: #F1FBF6;
     --mint-card: #FFFFFF;
     --mint-deep: #1E8F6C;
@@ -337,6 +356,9 @@ to   { background-position: 0%   0%; }
     border:1px solid var(--mint-line);}
 #infoOverlay .qr-label{margin-top:12px;font-weight:700;font-size:13.5px;color:var(--mint-deep);}
 #infoOverlay .footer-note{text-align:center;color:var(--ink-soft);font-size:12px;margin-top:26px;line-height:1.6;}
+#infoOverlay .copyright{text-align:center;color:var(--ink-soft);font-size:11.5px;line-height:1.7;margin:10px auto 6px;max-width:560px;padding-top:12px;border-top:1px dashed var(--mint-line);opacity:.9}
+#infoOverlay .dict-card h3{margin:0 0 6px;font-size:16px;font-family:'Noto Serif','Noto Serif Sinhala',serif}
+#infoOverlay .dict-card p{margin:0 0 12px;font-size:13.8px;color:var(--ink-soft);line-height:1.6}
 body.dark-mode #infoOverlay{--mint-bg: #090a10;
       --mint-card: #131724;
       --mint-deep: #00e5ff;
@@ -1095,7 +1117,8 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
       document.body.appendChild(ov);
     }
     ov.setAttribute('lang', l);
-    var page = HTML;
+    var cl = typeof currentLang !== 'undefined' && COPYRIGHT[currentLang] ? currentLang : l;
+    var page = HTML.replace('<!--COPYRIGHT-->', '© ' + (COPYRIGHT[cl] || COPYRIGHT.en));
     if (TRP[l]) page = page.replace('<!-- QR (shared, not language-specific) -->', '<div data-lang="' + l + '">' + window[TRP[l] + '_INFO_HTML'].replace(/\$\{PLAY_WEB\}/g, PLAY_WEB) + '</div>\n  <!-- QR (shared, not language-specific) -->');
     ov.innerHTML =
       '<button class="info-close" type="button" aria-label="' + (l === 'si' ? 'ඉවත් වන්න' : TRCLOSE[l] || 'Close') + '">&times;</button>' + page;

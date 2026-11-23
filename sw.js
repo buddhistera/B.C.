@@ -30,7 +30,7 @@ const CORE_FILES = {
   '/mm-poya.js': 'f67d310aa6',
   '/script.js': 'b57494bbff',
   '/calculation.js': 'cbf6fd8a69',
-  '/info.js': '9bba8c1193',
+  '/info.js': '046fd2a4f8',
   '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'b5be8ccb68',
