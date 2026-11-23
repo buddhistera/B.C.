@@ -84,7 +84,7 @@
 
     <div class="card dict-card">
       <h3>📖 පාලි සිංහල ශබ්දකෝෂය</h3>
-      <p>පාලි වචනවල සිංහල අර්ථ සෙවීම සඳහා පාලි සිංහල ශබ්දකෝෂය මෙතැනින් ලබාගන්න.</p>
+      <p>තේරුම්, නිරුක්ති, ව්‍යාකරණ විස්තර සහිත පාලි සිංහල ශබ්ද කෝෂය මෙතනින් ලබාගන්න.</p>
       <div class="link-row">
         <a class="platform-btn" href="https://pali-sinhala-dictionary.github.io/DPSD/" target="_blank" rel="noopener noreferrer">පාලි සිංහල ශබ්දකෝෂය ↗</a>
         <button class="copy-btn" onclick="copyLink('https://pali-sinhala-dictionary.github.io/DPSD/', this)" aria-label="Copy link">📋</button>
