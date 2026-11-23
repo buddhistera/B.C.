@@ -356,7 +356,8 @@ to   { background-position: 0%   0%; }
     border:1px solid var(--mint-line);}
 #infoOverlay .qr-label{margin-top:12px;font-weight:700;font-size:13.5px;color:var(--mint-deep);}
 #infoOverlay .footer-note{text-align:center;color:var(--ink-soft);font-size:12px;margin-top:26px;line-height:1.6;}
-#infoOverlay .copyright{text-align:center;color:var(--ink-soft);font-size:11.5px;line-height:1.7;margin:10px auto 6px;max-width:560px;padding-top:12px;border-top:1px dashed var(--mint-line);opacity:.9}
+#infoOverlay .copyright{text-align:center;color:#c62828;font-size:13.5px;font-weight:600;line-height:1.7;margin:10px auto 6px;max-width:560px;padding-top:12px;border-top:1px dashed var(--mint-line)}
+body.dark-mode #infoOverlay .copyright{color:#ff6b6b}
 #infoOverlay .dict-card h3{margin:0 0 6px;font-size:16px;font-family:'Noto Serif','Noto Serif Sinhala',serif}
 #infoOverlay .dict-card p{margin:0 0 12px;font-size:13.8px;color:var(--ink-soft);line-height:1.6}
 body.dark-mode #infoOverlay{--mint-bg: #090a10;

@@ -4,7 +4,10 @@
    • ප්‍රධාන පිටුවේ දිනය තෝරන කොටුවට ඉදිරියෙන් ඇති කුඩා 📅 සලකුණෙන් මාසික දර්ශනය විවෘත වේ;
      එහි ඉහළ ▦ සලකුණෙන් වාර්ෂික දර්ශනය (මාසයක් ඔබන විට එම මාසයට).
        openCalendar('month') / openCalendar('year')
-   • පසළොස්වක පෝය = කහ, අමාවක පෝය = කළු, අද දිනය = වළල්ලක්, තෝරාගත් දිනය = ලා පසුබිම.
+   • උපෝසථ දින: පසළොස්වක = කහ, අමාවක = කළු. අද දිනය = වළල්ලක්, තෝරාගත් දිනය = ලා පසුබිම.
+   • තාරකා විද්‍යාත්මක පෝය (සැබෑ පූර්ණ / නව චන්ද්‍ර මොහොත) = දිනය වටා කොටුවක් (පසළොස්වක කහ, අමාවක කළු).
+     ලොව පිළිගත් ක්‍රමය: එම මොහොත (Astronomy Engine) උපාංගයේ දේශීය වේලාවෙන් වැටෙන දින දර්ශන දිනය —
+     මොහොතක් නිසා එක් කලාපයක එය සැමවිටම එක් දිනයක් පමණි (මැදියම අසල නම් කලාප අනුව දිනය වෙනස් විය හැක).
      පෝය දින poyaList (script.js) වෙතින් — ප්‍රධාන පිටුවේ කලාපය (ශ්‍රී ලංකා / තායි / මියන්මාර්) අනුව.
    • ඊතල (‹ ›) හෝ ඇඟිල්ලෙන් වමට / දකුණට ඇදීමෙන් මාස / වර්ෂ මාරු වේ.
    • දිනයක් ඔබූ විට එය ප්‍රධාන පිටුවේ දිනය ලෙස යොදා දින දර්ශනය වැසේ.
@@ -19,6 +22,10 @@
     year:   { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历' },
     full:   { si: 'පසළොස්වක පෝය', en: 'Full-moon Uposatha', hi: 'पूर्णिमा उपोसथ', my: 'လပြည့် ဥပုသ်', th: 'วันพระ จันทร์เต็มดวง', zh: '满月布萨' },
     nw:     { si: 'අමාවක පෝය', en: 'New-moon Uposatha', hi: 'अमावस्या उपोसथ', my: 'လကွယ် ဥပုသ်', th: 'วันพระ จันทร์ดับ', zh: '新月布萨' },
+    upo:    { si: 'උපෝසථ දින', en: 'Uposatha days', hi: 'उपोसथ दिवस', my: 'ဥပုသ်နေ့များ', th: 'วันพระ', zh: '布萨日' },
+    astro:  { si: 'තාරකා විද්‍යාත්මක පෝය දින', en: 'Astronomical full & new moon', hi: 'खगोलीय पूर्णिमा व अमावस्या', my: 'နက္ခတ္တဗေဒ လပြည့်/လကွယ်', th: 'จันทร์เต็มดวง/จันทร์ดับ ทางดาราศาสตร์', zh: '天文满月与新月' },
+    fullS:  { si: 'පසළොස්වක', en: 'Full moon', hi: 'पूर्णिमा', my: 'လပြည့်', th: 'จันทร์เต็มดวง', zh: '满月' },
+    newS:   { si: 'අමාවක', en: 'New moon', hi: 'अमावस्या', my: 'လကွယ်', th: 'จันทร์ดับ', zh: '新月' },
     today:  { si: 'අද', en: 'Today', hi: 'आज', my: 'ယနေ့', th: 'วันนี้', zh: '今天' },
     close:  { si: 'වසන්න', en: 'Close', hi: 'बंद करें', my: 'ပိတ်ရန်', th: 'ปิด', zh: '关闭' },
     toYear: { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历' },
@@ -84,6 +91,30 @@
     return out;
   }
 
+  /* ---- තාරකා විද්‍යාත්මක පෝය: { 'YYYY-MM-DD': { k: 'full' | 'new', t: Date } } ----
+     සැබෑ පූර්ණ / නව චන්ද්‍ර මොහොත (Astronomy Engine, SearchMoonQuarter). දිනය = එම මොහොත
+     උපාංගයේ දේශීය වේලාවෙන් වැටෙන දිනය (ලොව පිළිගත් ක්‍රමය — timeanddate, USNO, ජාතික පංචාංග ආදිය). */
+  var AC = {};
+  function astroOf(y) {
+    if (AC[y]) return AC[y];
+    var out = {};
+    try {
+      var A = W.Astronomy;
+      if (!A) return out;                       // astronomy.js තවම load වී නැත — cache නොකර නැවත උත්සාහ කරයි
+      var mq = A.SearchMoonQuarter(new Date(y - 1, 11, 20)), end = new Date(y + 1, 0, 10), g = 0;
+      while (mq && mq.time.date < end && g++ < 80) {
+        if (mq.quarter === 0 || mq.quarter === 2) {
+          var dt = mq.time.date;
+          if (dt.getFullYear() === y) out[iso(y, dt.getMonth(), dt.getDate())] = { k: mq.quarter === 2 ? 'full' : 'new', t: dt };
+        }
+        mq = A.NextMoonQuarter(mq);
+      }
+    } catch (e) { return out; }
+    AC[y] = out;
+    return out;
+  }
+  function hm(dt) { return p2(dt.getHours()) + ':' + p2(dt.getMinutes()); }
+
   /* ---------------------------- CSS ---------------------------- */
   var CSS = '\
 #calOverlay{position:fixed;inset:0;z-index:4800;display:none}\
@@ -115,9 +146,23 @@ html.theme-dark #calOverlay .cl-wd.su,html.theme-dark #calOverlay .cl-d.su{color
 #calOverlay .cl-d.new,#calOverlay .cl-m.new{background:#111;color:#fff!important}\
 html.theme-dark #calOverlay .cl-d.new,html.theme-dark #calOverlay .cl-m.new{background:#000;box-shadow:inset 0 0 0 2px #bdbdbd}\
 #calOverlay .cl-d.tdy,#calOverlay .cl-m.tdy{outline:3px solid var(--t-sw-on,#c08a28);outline-offset:2px;font-weight:900}\
+#calOverlay .cl-d.af::before,#calOverlay .cl-d.an::before{content:"";position:absolute;inset:-3px;border:2.5px solid #f2b705;border-radius:11px;pointer-events:none}\
+#calOverlay .cl-d.an::before{border-color:#1a1a1a}\
+html.theme-dark #calOverlay .cl-d.an::before{border-color:#e6e6e6}\
+#calOverlay .cl-d.tdy.af,#calOverlay .cl-d.tdy.an{outline-width:2.5px;outline-offset:-5px}\
+#calOverlay .cl-m.af::before,#calOverlay .cl-m.an::before{content:"";position:absolute;inset:-1px;border:1.6px solid #f2b705;border-radius:5px;pointer-events:none}\
+#calOverlay .cl-m.an::before{border-color:#1a1a1a}\
+html.theme-dark #calOverlay .cl-m.an::before{border-color:#e6e6e6}\
 #calOverlay .cl-d.tdy::after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:currentColor}\
-#calOverlay .cl-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:12px;padding-top:10px;border-top:1px solid var(--t-bd,#eed8ab);font-size:.8rem;color:var(--t-mu,#816741)}\
+#calOverlay .cl-foot{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 18px;margin-top:12px;padding-top:10px;border-top:1px solid var(--t-bd,#eed8ab);font-size:.8rem;color:var(--t-mu,#816741)}\
 #calOverlay .cl-lg{display:inline-flex;align-items:center;gap:6px}\
+#calOverlay .cl-lgg{display:flex;flex-direction:column;gap:5px}\
+#calOverlay .cl-lgt{font-weight:800;font-size:.76rem;color:var(--t-ac2,#6b4410)}\
+html.theme-dark #calOverlay .cl-lgt{color:var(--t-ac,#f2d478)}\
+#calOverlay .cl-lgr{display:flex;flex-wrap:wrap;gap:4px 12px}\
+#calOverlay .cl-lg i.af,#calOverlay .cl-lg i.an{width:17px;height:17px;border-radius:5px;border:2.5px solid #f2b705;background:transparent}\
+#calOverlay .cl-lg i.an{border-color:#1a1a1a}\
+html.theme-dark #calOverlay .cl-lg i.an{border-color:#e6e6e6}\
 #calOverlay .cl-lg i{width:16px;height:16px;border-radius:50%;display:inline-block;flex:none}\
 #calOverlay .cl-lg i.full{background:#f7c948;box-shadow:inset 0 0 0 2px #e0a800}\
 #calOverlay .cl-lg i.new{background:#111}\
@@ -131,7 +176,7 @@ html.theme-dark #calOverlay .cl-lg i.new{background:#000;box-shadow:inset 0 0 0 
 html.theme-dark #calOverlay .cl-mo h4{color:var(--t-ac,#f2d478)}\
 #calOverlay .cl-mg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px}\
 #calOverlay .cl-mw{text-align:center;font-size:.55rem;font-weight:800;color:var(--t-mu,#816741);overflow:hidden;white-space:nowrap}\
-#calOverlay .cl-m{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:.68rem;font-weight:700;color:var(--t-tx,#2b1b08)}\
+#calOverlay .cl-m{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:.68rem;font-weight:700;color:var(--t-tx,#2b1b08)}\
 #calOverlay .cl-m.su{color:#c62828}\
 html.theme-dark #calOverlay .cl-m.su{color:#ff8a80}\
 #calOverlay .cl-m.tdy{outline-width:2px;outline-offset:0}\
@@ -173,14 +218,19 @@ body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07)
   }
 
   function foot() {
-    return '<div class="cl-foot"><span class="cl-lg"><i class="full"></i>' + esc(L(TX.full)) + '</span>' +
-      '<span class="cl-lg"><i class="new"></i>' + esc(L(TX.nw)) + '</span>' +
+    return '<div class="cl-foot">' +
+      '<div class="cl-lgg"><span class="cl-lgt">' + esc(L(TX.upo)) + '</span><div class="cl-lgr">' +
+        '<span class="cl-lg"><i class="full"></i>' + esc(L(TX.fullS)) + '</span>' +
+        '<span class="cl-lg"><i class="new"></i>' + esc(L(TX.newS)) + '</span></div></div>' +
+      '<div class="cl-lgg"><span class="cl-lgt">' + esc(L(TX.astro)) + '</span><div class="cl-lgr">' +
+        '<span class="cl-lg"><i class="af"></i>' + esc(L(TX.fullS)) + '</span>' +
+        '<span class="cl-lg"><i class="an"></i>' + esc(L(TX.newS)) + '</span></div></div>' +
       '<span class="cl-lg"><i class="tdy"></i>' + esc(L(TX.today)) + '</span>' +
       '<button type="button" class="cl-today" data-today="1">' + esc(L(TX.today)) + '</button></div>';
   }
 
   function monthHtml() {
-    var pm = poyaOf(Y), td = todayISO(), sel = mainISO(), wd = wdNames();
+    var pm = poyaOf(Y), am = astroOf(Y), td = todayISO(), sel = mainISO(), wd = wdNames();
     var first = new Date(Y, M, 1).getDay(), n = new Date(Y, M + 1, 0).getDate();
     var h = navRow('y', yearText(Y), 'y-1', 'y+1', Y <= YMIN, Y >= YMAX, L(TX.prevY), L(TX.nextY)) +
       navRow('m', monName(Y, M), 'm-1', 'm+1', Y <= YMIN && M === 0, Y >= YMAX && M === 11, L(TX.prevM), L(TX.nextM)) +
@@ -191,16 +241,19 @@ body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07)
       var s = iso(Y, M, d), k = pm[s], c = 'cl-d';
       if ((first + d - 1) % 7 === 0) c += ' su';
       if (k) c += ' ' + k;
+      var a = am[s];
+      if (a) c += a.k === 'full' ? ' af' : ' an';
       if (s === td) c += ' tdy';
       if (s === sel && !k) c += ' sel';
       var t = k ? L(k === 'full' ? TX.full : TX.nw) : '';
+      if (a) t += (t ? ' · ' : '') + L(TX.astro) + ': ' + L(a.k === 'full' ? TX.fullS : TX.newS) + ' ' + hm(a.t);
       h += '<button type="button" class="' + c + '" data-d="' + s + '"' + (t ? ' title="' + esc(t) + '"' : '') + ' aria-label="' + esc(d + ' ' + monName(Y, M) + (t ? ' — ' + t : '')) + '">' + d + '</button>';
     }
     return h + '</div>' + foot();
   }
 
   function yearHtml() {
-    var pm = poyaOf(Y), td = todayISO(), wd = wdMini(), cm = new Date().getFullYear() === Y ? new Date().getMonth() : -1;
+    var pm = poyaOf(Y), am = astroOf(Y), td = todayISO(), wd = wdMini(), cm = new Date().getFullYear() === Y ? new Date().getMonth() : -1;
     var h = navRow('m', yearText(Y), 'y-1', 'y+1', Y <= YMIN, Y >= YMAX, L(TX.prevY), L(TX.nextY)) + '<div class="cl-yr">';
     for (var m = 0; m < 12; m++) {
       var first = new Date(Y, m, 1).getDay(), n = new Date(Y, m + 1, 0).getDate();
@@ -211,6 +264,7 @@ body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07)
         var s = iso(Y, m, d), k = pm[s], c = 'cl-m';
         if ((first + d - 1) % 7 === 0) c += ' su';
         if (k) c += ' ' + k;
+        if (am[s]) c += am[s].k === 'full' ? ' af' : ' an';
         if (s === td) c += ' tdy';
         h += '<span class="' + c + '">' + d + '</span>';
       }

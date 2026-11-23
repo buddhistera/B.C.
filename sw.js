@@ -30,12 +30,12 @@ const CORE_FILES = {
   '/mm-poya.js': 'f67d310aa6',
   '/script.js': '9946788516',
   '/calculation.js': 'cbf6fd8a69',
-  '/info.js': 'cbca00f6f5',
+  '/info.js': '8368644fe3',
   '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'b5be8ccb68',
   '/uposatha.js': '98811edd85',
-  '/calendar.js': '39f5bc2d85'
+  '/calendar.js': '17edbdb649'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
