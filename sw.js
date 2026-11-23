@@ -31,7 +31,7 @@ const CORE_FILES = {
   '/script.js': 'bb39df606f',
   '/calculation.js': 'cbf6fd8a69',
   '/info.js': '9bba8c1193',
-  '/chanting.js': 'e87f68eba5',
+  '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'f942fc69e2',
   '/uposatha.js': '98811edd85',
@@ -41,7 +41,7 @@ const CORE_FILES = {
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
 const OPTIONAL_FILES = {
   '/patthana-data.js': '7093f05955',
-  '/pirith-data.js': '5412edfc2f',
+  '/pirith-data.js': '4883d8c564',
   '/buddha-recitation.js': 'c680957a85',
   '/buddha-vandana-data.js': '88a1586430',
   '/satipatthana-data.js': '17cf3675fd',
@@ -76,7 +76,7 @@ const LAZY_FILES = {
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc',
   '/lang/zh-calc.js': '72607c06a9',
-  '/lang/zh.js': '68251fe285',
+  '/lang/zh.js': '2aeac89442',
   '/fonts/AbhayaUni-Variable.woff2': '07a454c27a',
   '/fonts/OFL.txt': '72c71eb683',
   '/fonts/NotoSansDevanagari.woff2': 'dbec927017',
