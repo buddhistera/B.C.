@@ -25,7 +25,7 @@ const CORE_FILES = {
   '/manifest.json': '469ab2e27b',
   '/style.css': '08a74db2a3',
   '/theme.css': '448ec1646a',
-  '/theme.js': 'fde8faca37',
+  '/theme.js': '9ffb92099c',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
   '/script.js': 'bb39df606f',
@@ -85,7 +85,11 @@ const LAZY_FILES = {
   '/fonts/NotoSerifDevanagari.woff2': '9e390641a8',
   '/fonts/NotoSerifMyanmar.woff2': 'd0e883e7ae',
   '/fonts/NotoSerifThai.woff2': '54702dc224',
-  '/fonts/README.txt': 'd5b9746706'
+  '/fonts/README.txt': 'd283dca42a',
+  '/fonts/AbhayaLibre-Bold.woff2': '9d422027d2',
+  '/fonts/AbhayaLibre-Medium.woff2': '33e9d0d1d1',
+  '/fonts/AbhayaLibre-Regular.woff2': '5022b0b4d0',
+  '/fonts/AbhayaLibre-SemiBold.woff2': '720e121809'
 };
 
 // ------------------------------------------------------------

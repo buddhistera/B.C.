@@ -67,13 +67,17 @@
      • sz = සිංහල අකුරු පමණක් විශාල කරන ප්‍රතිශතය (size-adjust) — අභය Noto Sans Sinhala ට වඩා කුඩාවට
        පෙනෙන නිසා, අකුරු උස Noto හා සමාන වන ලෙස මැනීමෙන් ගත් අගය. ඉංග්‍රීසි / අංක වෙනස් නොවේ.
      • stack = උපාංගයේම ඇති අකුරු (චීන) — බාගත කිරීමක් නැත.
-     • පැරණි / ඉවත් කළ id: 'abhaya' (Abhaya Libre) → 'abhayauni'; අනෙක් ඒවා → පෙරනිමි. */
-  var FONT_ALIAS = { abhaya: 'abhayauni' };
+     • files = බර (weight) අනුව වෙනම ගොනු: [ගොනුව, බර පරාසය] (අභය ලිබ්‍රේ — fonts/AbhayaLibre-*.woff2, SIL OFL; Google Fonts / Mooniak).
+     • siOnly = සිංහල අකුරු පමණක් මෙම අකුරෙන්; ඉංග්‍රීසි / අංක පෙරනිමි Noto Sans අකුරෙන්.
+     • ඉවත් කළ id (ගංගානී ආදිය) → පෙරනිමි. */
+  var FONT_ALIAS = {};
   var FONTS = {
     si: [
       { id: 'def',        base: 'Noto Sans Sinhala' },
       { id: 'notoserif',  fam: 'Noto Serif Sinhala', n: 'Noto Serif', d: 'Noto Serif Sinhala' },
-      { id: 'abhayauni',  fam: 'Abhaya Uni', src: 'AbhayaUni-Variable', wr: '400 800', sz: 122, n: 'අභය', d: 'Abhaya Uni' }
+      { id: 'abhayauni',  fam: 'Abhaya Uni', src: 'AbhayaUni-Variable', wr: '400 800', sz: 122, n: 'අභය', d: 'Abhaya Uni' },
+      { id: 'abhaya',     fam: 'Abhaya Libre', sz: 130, siOnly: 1, n: 'අභය ලිබ්‍රේ', d: 'Abhaya Libre',
+        files: [['AbhayaLibre-Regular', '100 450'], ['AbhayaLibre-Medium', '451 550'], ['AbhayaLibre-SemiBold', '551 650'], ['AbhayaLibre-Bold', '651 900']] }
     ],
     en: [
       { id: 'def',        base: 'Noto Sans' },
@@ -115,14 +119,19 @@
   function fontCss(f) {
     var id = 'uf-' + f.fam.replace(/\W+/g, '');
     if (doc.getElementById(id)) return;
-    if (f.src) {     // ඇප් එක සමඟ ඇති අකුරු — @font-face පමණයි (භාවිත වන තුරු බාගත නොවේ)
+    if (f.src || f.files) {     // ඇප් එක සමඟ ඇති අකුරු — @font-face පමණයි (භාවිත වන තුරු බාගත නොවේ)
       var st = doc.createElement('style'); st.id = id;
-      var face = function (range, adj) {
-        return "@font-face{font-family:'" + f.fam + "';src:url(fonts/" + f.src + ".woff2) format('woff2');font-weight:" + (f.wr || '400') +
+      var face = function (file, wr, range, adj) {
+        return "@font-face{font-family:'" + f.fam + "';src:url(fonts/" + file + ".woff2) format('woff2');font-weight:" + wr +
           ';font-style:normal;font-display:swap;unicode-range:' + range + (adj ? ';size-adjust:' + adj + '%' : '') + '}';
       };
       var SI = 'U+0D80-0DFF,U+111E1-111F4,U+200C-200D,U+25CC';     // සිංහල (+ ZWJ / ZWNJ, තිත් කවය)
-      st.textContent = face('U+0000-0D7F,U+0E00-111E0,U+111F5-10FFFF', 0) + face(SI, f.sz || 0);
+      var css = '';
+      (f.files || [[f.src, f.wr || '400']]).forEach(function (x) {
+        if (!f.siOnly) css += face(x[0], x[1], 'U+0000-0D7F,U+0E00-111E0,U+111F5-10FFFF', 0);
+        css += face(x[0], x[1], SI, f.sz || 0);
+      });
+      st.textContent = css;
       (doc.head || root).appendChild(st);
       return;
     }
