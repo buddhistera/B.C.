@@ -157,6 +157,8 @@ window.MY_DICT = {
   "Night — Sun {0}° below horizon": "ညအချိန် — နေသည် မိုးကုပ်စက်ဝိုင်းအောက် {0}°",
   "rules": "သိက္ခာပုဒ်",
   "Meaning": "အဓိပ္ပာယ်",
+  "Other Parittas": "အခြား ပရိတ်များ",
+  "or": "သို့မဟုတ်",
   "📖 Read the sutta": "📖 သုတ်ကို ဖတ်ရန်",
   "📖 Read the suttas": "📖 သုတ်များကို ဖတ်ရန်",
   "Could not load. Try again.": "ဖွင့်၍ မရပါ။ ထပ်မံ ကြိုးစားပါ။",

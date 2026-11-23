@@ -31,7 +31,7 @@ const CORE_FILES = {
   '/script.js': 'bb39df606f',
   '/calculation.js': 'cbf6fd8a69',
   '/info.js': '9bba8c1193',
-  '/chanting.js': '5b76b8a4f9',
+  '/chanting.js': 'e87f68eba5',
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'f942fc69e2',
   '/uposatha.js': '98811edd85',
@@ -41,7 +41,7 @@ const CORE_FILES = {
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
 const OPTIONAL_FILES = {
   '/patthana-data.js': '7093f05955',
-  '/pirith-data.js': '73f0cfcde8',
+  '/pirith-data.js': '5412edfc2f',
   '/buddha-recitation.js': 'c680957a85',
   '/buddha-vandana-data.js': '88a1586430',
   '/satipatthana-data.js': '17cf3675fd',
@@ -69,14 +69,14 @@ const OPTIONAL_FILES = {
 // update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
   '/pali-script.js': '6f33d6f815',
-  '/lang/hi.js': '7004148ea3',
-  '/lang/my.js': 'df7ae4ebb0',
-  '/lang/th.js': '323b1116fb',
+  '/lang/hi.js': '1e5c5ebe26',
+  '/lang/my.js': 'e2b659f4bc',
+  '/lang/th.js': 'd08de20e07',
   '/lang/hi-calc.js': '39cf96b451',
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc',
   '/lang/zh-calc.js': '72607c06a9',
-  '/lang/zh.js': '984563551e',
+  '/lang/zh.js': '68251fe285',
   '/fonts/AbhayaUni-Variable.woff2': '07a454c27a',
   '/fonts/OFL.txt': '72c71eb683',
   '/fonts/NotoSansDevanagari.woff2': 'dbec927017',

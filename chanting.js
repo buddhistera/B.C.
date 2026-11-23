@@ -60,6 +60,8 @@
   function splitParasHtml(text) {
     if (!text) return '';
     return String(text).split(/\n\n+/).filter(function (p) { return p.length > 0; }).map(function (p) {
+      /* 【~】 = "හෝ" (විකල්ප පාඨ දෙකක් අතර) — භාෂාව අනුව */
+      if (p.trim() === '【~】') return '<p class="c ch-or">— ' + esc(T('හෝ', 'or')) + ' —</p>';
       /* 【…】 පමණක් ඇති ඡේදය (ඡක්කං / පබ්බං / නිද්දෙසො වැනි අවසාන සටහන්) මැදට පෙන්වයි */
       if (/^【[^】\n]+】(\n【[^】\n]+】)*$/.test(p)) {
         return '<p class="c">' + esc(p.replace(/【([^】]+)】/g, '($1)')) + '</p>';
@@ -349,16 +351,31 @@ function attachChPinch(ov) {
     p.catch(function () { delete LOADING[tab.id]; });
     return p;
   }
+  /* { id, ref: '<වෙනත් අයිතමයක id>' } — එම අයිතමයේ පෙළම මෙතැනද (උදා: මහ පිරිතේ මංගල / රතන / කරණීය) */
+  function resolveRefs(m) {
+    if (!m || !m.items || m.__refs) return m;
+    var by = {};
+    m.items.forEach(function (x) { if (!x.ref) by[x.id] = x; });
+    m.items = m.items.map(function (x) {
+      if (!x.ref || !by[x.ref]) return x;
+      var o = {}, k;
+      for (k in by[x.ref]) o[k] = by[x.ref][k];
+      for (k in x) if (k !== 'ref') o[k] = x[k];
+      return o;
+    });
+    m.__refs = 1;
+    return m;
+  }
   function loadModuleRaw(tab) {
     return new Promise(function (resolve, reject) {
       if (MODS[tab.id]) return resolve(MODS[tab.id]);
       function done() {
         var m = tab.adapt ? tab.adapt() : (window.ChantingModules && window.ChantingModules[tab.id]);
         if (!m) return reject(new Error('empty'));
-        MODS[tab.id] = m; resolve(m);
+        MODS[tab.id] = resolveRefs(m); resolve(MODS[tab.id]);
       }
       var pre = tab.adapt ? tab.adapt() : (window.ChantingModules && window.ChantingModules[tab.id]);
-      if (pre) { MODS[tab.id] = pre; return resolve(pre); }
+      if (pre) { MODS[tab.id] = resolveRefs(pre); return resolve(MODS[tab.id]); }
       var sc = document.createElement('script');
       sc.src = tab.src;
       sc.onload = done;
