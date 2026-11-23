@@ -84,7 +84,7 @@ var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6
 '.sp-note{font-size:.74rem;color:var(--mu);margin-top:10px;text-align:center}' +
 '.sp-rd{flex-wrap:wrap}.sp-zd{flex-basis:100%;display:grid;grid-template-columns:minmax(0,1.3fr) auto auto;gap:2px 8px;margin:6px 0 1px;padding-top:7px;border-top:1px dashed var(--bd);font-size:.8rem;line-height:1.45;align-items:baseline}' +
 '.sp-zd .h{font-size:.7rem;font-weight:700;color:var(--mu)}.sp-zd .n{font-weight:700;display:flex;align-items:baseline;gap:5px;min-width:0}.sp-zd .n span{min-width:0;overflow-wrap:anywhere}' +
-'.sp-zd .g{font-family:"BE Zodiac",serif;font-size:1.05rem;line-height:1;color:var(--ac);flex:none;width:1.1em;text-align:center}.sp-zd .k{flex:none;width:1.1em;text-align:center;color:var(--ac);font-size:.85rem}' +
+'.sp-zd .g{font-family:"BE Zodiac",serif;font-size:1.45rem;font-weight:400;line-height:1;color:var(--ac);flex:none;width:1.2em;text-align:center;align-self:center}.sp-zd .k{flex:none;width:1.2em;text-align:center;color:var(--ac);font-size:1.15rem;line-height:1;align-self:center}' +
 '.sp-zd .t{font-variant-numeric:tabular-nums;white-space:nowrap}.sp-zd .t.on{font-weight:800;color:var(--ac)}.sp-zd .x{grid-column:1/-1;font-size:.68rem;color:var(--mu)}';
 
 function css() { if ($('spStyle')) return; var s = doc.createElement('style'); s.id = 'spStyle'; s.textContent = CSS; doc.head.appendChild(s); }
@@ -398,11 +398,11 @@ function zsprite(ht) { var s = new T.Sprite(new T.SpriteMaterial({ transparent: 
 function zsetTex(s, tx) { if (s.material.map) s.material.map.dispose(); s.material.map = tx.t; s.material.needsUpdate = true; s.scale.set(s.userData.h * tx.a, s.userData.h, 1); }
 function zodObjs(sc) {
   var g = new T.Group(), pos = new Float32Array(360 * 6), lg = new T.BufferGeometry(); lg.setAttribute('position', new T.BufferAttribute(pos, 3));
-  var line = new T.LineSegments(lg, new T.LineBasicMaterial({ color: 0xffd98a, transparent: true, opacity: .22, depthWrite: false })); line.frustumCulled = false; g.add(line);
-  var Z = { g: g, line: line, pos: pos, signs: [], nk: [zsprite(2.1), zsprite(2.1)], nki: [-1, -1], nkl: '' };
-  for (var i = 0; i < 12; i++) { var sp = zsprite(3.2); Z.signs.push(sp); g.add(sp); }
+  var line = new T.LineSegments(lg, new T.LineBasicMaterial({ color: 0xffd98a, transparent: true, opacity: .5, depthWrite: false })); line.frustumCulled = false; g.add(line);
+  var Z = { g: g, line: line, pos: pos, signs: [], nk: [zsprite(2.8), zsprite(2.8)], nki: [-1, -1], nkl: '' };
+  for (var i = 0; i < 12; i++) { var sp = zsprite(4.4); Z.signs.push(sp); g.add(sp); }
   g.add(Z.nk[0]); g.add(Z.nk[1]);
-  var draw = function () { Z.signs.forEach(function (sp, i) { zsetTex(sp, txtTex(ZG[i] + '\uFE0E', "56px 'BE Zodiac','Noto Sans Symbols',serif", 56)); }); if (RC && RC.r && P && P.open) upd(true); };
+  var draw = function () { Z.signs.forEach(function (sp, i) { zsetTex(sp, txtTex(ZG[i] + '\uFE0E', "64px 'BE Zodiac','Noto Sans Symbols',serif", 64)); }); if (RC && RC.r && P && P.open) upd(true); };
   try { doc.fonts.load("56px 'BE Zodiac'", ZG.join('')).then(draw, draw); } catch (e) { draw(); }
   sc.add(g); return Z; }
 function zvec(h, k) { var a = h.altitude * D, z = h.azimuth * D; return new T.Vector3(-Math.cos(a) * Math.sin(z) * k, Math.sin(a) * k, Math.cos(a) * Math.cos(z) * k * .3); }
@@ -416,12 +416,12 @@ function zplace(d, l, hs, hm) {
   Z.line.geometry.attributes.position.needsUpdate = true;
   var ss = Math.floor(sidLon('Sun', d) / 30), ms = Math.floor(sidLon('Moon', d) / 30);
   Z.signs.forEach(function (sp, n) { var h = eclHor(n * 30 + 15, d, l); sp.visible = h.altitude > 2 && !!sp.material.map;
-    if (sp.visible) { var v = zvec(h, k); sp.position.set(v.x, v.y + 1.7, v.z); sp.material.opacity = (n === ss || n === ms) ? .75 : .32; } });
+    if (sp.visible) { var v = zvec(h, k); sp.position.set(v.x, v.y + 2.3, v.z); sp.material.opacity = (n === ss || n === ms) ? 1 : .62; } });
   ['Sun', 'Moon'].forEach(function (b, q) { var ni = Math.floor(sidLon(b, d) / NAKW), sp = Z.nk[q], key = ni + lang();
     if (Z.nki[q] !== key) { Z.nki[q] = key; zsetTex(sp, txtTex(nName(ni), "600 40px 'Noto Sans Sinhala','Noto Sans','Noto Sans Devanagari','Noto Sans Thai',sans-serif", 40, '#cfe3ff')); }
     /* නැකත් නම ඉර / සඳ අසලින් (ඒවා ක්ෂිතිජයට ඉහළින් ඇති විට) */
     var hb = q ? hm : hs; sp.visible = !!hb && hb.altitude > 0;
-    if (sp.visible) { var v = vec(hb, q ? MD : SD, q ? 2.2 : 4); sp.position.set(v.x, v.y - (q ? 3.9 : 6.4), v.z); sp.material.opacity = .6; } }); }
+    if (sp.visible) { var v = vec(hb, q ? MD : SD, q ? 2.2 : 4); sp.position.set(v.x, v.y - (q ? 4.3 : 6.8), v.z); sp.material.opacity = .95; } }); }
 function kill3d() { if (!R) return; if (R.ro) { R.ro.disconnect(); R.ro = null; } if (R.r.domElement.parentNode) R.r.domElement.parentNode.removeChild(R.r.domElement); R = null; } // keep RC for the next open
 function drop3d() { if (!RC) return; try { RC.r.dispose(); RC.r.forceContextLoss(); } catch (e) {} RC = null; }
 
@@ -447,7 +447,12 @@ function open() {
 function afterPaint(f) { var done = false, go = function () { if (!done) { done = true; f(); } }; requestAnimationFrame(function () { setTimeout(go, 0); }); setTimeout(go, 250); } // run f once the opened page has been drawn
 function wrap(n, f) { var o = W[n]; if (typeof o !== 'function') return; W[n] = function () { var r = o.apply(this, arguments); try { f.apply(this, arguments); } catch (e) {} return r; }; }
 var oOpen = W.openSunModal;
-W.openSunModal = function () { try { open(); } catch (e) { console.error('sunpage:', e); if (P) hide(); if (typeof oOpen === 'function') return oOpen.apply(this, arguments); } };
+/* පැරණි කාඩ්පත් පිටුව (#sunModal) තවදුරටත් නොපෙන්වයි (එහි අංග වෙලාවන් ගණනයට පමණක් භාවිත වේ).
+   දෝෂයක් වුවහොත් නැවත වරක් උත්සාහ කරයි. */
+W.openSunModal = function () {
+  try { open(); }
+  catch (e) { console.error('sunpage:', e); try { if (P) hide(); } catch (x) {} setTimeout(function () { try { open(); } catch (x) { console.error('sunpage:', x); } }, 400); } };
+if (W.__spPending) { W.__spPending = false; setTimeout(W.openSunModal, 0); }   // sunpage.js load වීමට පෙර "අරුණ" එබූ විට
 wrap('closeSunModal', function () { if (P && P.open) close(); });
 wrap('updateSunTimes', function () { if (P && P.open) refresh(); });
 wrap('toggleLanguage', function () { if (P && P.open) { P.tlk = ''; refresh(); } });

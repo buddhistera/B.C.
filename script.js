@@ -1884,11 +1884,11 @@ function updateSunTimes() {
 }
 
 function openSunModal() {
-    const sunModal = document.getElementById("sunModal");
-    if (sunModal) sunModal.style.display = "flex";
+    // නව "අරුණ" පිටුව sunpage.js මගින් (එය load වූ පසු මෙම ශ්‍රිතය ප්‍රතිස්ථාපනය වේ).
+    // ඊට පෙර එබුවොත් පැරණි කාඩ්පත් පිටුව නොපෙන්වා, ඉල්ලීම මතක තබා sunpage.js load වූ විගස විවෘත කරයි.
+    window.__spPending = true;
     const myDropdown = document.getElementById("myDropdown");
     if (myDropdown) myDropdown.style.display = "none";
-    
     updateSunTimes();
 }
 

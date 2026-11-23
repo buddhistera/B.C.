@@ -362,6 +362,8 @@ body {
 /* ============================================================
    SUN TIMES MODAL — scrollable, only shown via inline style
    ============================================================ */
+/* පැරණි අරුණ කාඩ්පත් පිටුව — දැන් sunpage.js (#spOverlay) පෙන්වයි; මෙහි අංග ගණනයට පමණි */
+#sunModal { display: none !important; }
 .modal-sun {
     display: none;
     position: fixed;

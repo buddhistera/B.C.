@@ -23,17 +23,17 @@ const RESET = 1;
 const CORE_FILES = {
   '/': 'fcb052843e',                              // index.html
   '/manifest.json': '469ab2e27b',
-  '/style.css': 'd6e62adcec',
+  '/style.css': '3c7a2bb320',
   '/theme.css': '448ec1646a',
   '/theme.js': '9ffb92099c',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
-  '/script.js': 'bb39df606f',
+  '/script.js': 'b57494bbff',
   '/calculation.js': 'cbf6fd8a69',
   '/info.js': '9bba8c1193',
   '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': 'd3e1603d91',
+  '/sunpage.js': 'b5be8ccb68',
   '/uposatha.js': '98811edd85',
   '/calendar.js': '39f5bc2d85'
 };
