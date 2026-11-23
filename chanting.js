@@ -536,6 +536,8 @@ body.dark-mode #chOverlay .pm-vh b{color:var(--g400)}\
 body.dark-mode #chOverlay .pm-cat span{color:var(--g400)}\
 #chOverlay .ch-lbl.ch-cat{background:transparent;color:var(--muted);border-left:2px dotted var(--m600);border-radius:0;margin-left:6px}\
 #chOverlay .pm-row{display:flex;justify-content:flex-end;margin:2px 0 4px}\
+#chOverlay .ch-pali{display:flow-root}\
+#chOverlay .ch-mbtn{float:right;margin:.4em 0 0 12px;text-indent:0;line-height:1.6;white-space:nowrap;text-align:center}\
 #chOverlay .pm-more{background:none;border:1.3px solid var(--m700);color:var(--m700);padding:2px 12px;border-radius:30px;font-family:var(--sans);font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;line-height:1.7}\
 #chOverlay .pm-more .pm-arr{font-size:.62em;display:inline-block;transition:transform .2s}\
 #chOverlay .pm-more[aria-expanded=true] .pm-arr{transform:rotate(180deg)}\
@@ -605,17 +607,21 @@ body.ch-open::before,body.ch-open .app-container::before{animation-play-state:pa
     var main = PAL(it.pali, it.translit);
     var mean = MEAN(it.sinhala, it.english, it.hindi);
     var body = '';
+    /* "තේරුම" බොත්තම: පාළි කොටුවේ අවසාන පේළියේ දකුණු කෙළවරේ (float) — එම පේළියේ ඉඩ නැත්නම් ඊට යටින්.
+       ඒ නිසා කොටුව සහ ඊළඟ කාඩ්පත අතර වෙනම පේළියක් අවශ්‍ය නොවේ. */
+    var mbtn = (mean && mod.meaningToggle) ? '<button type="button" class="pm-more ch-mbtn" aria-expanded="false" onclick="chPmToggle(this)">' +
+      T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button>' : '';
     if (main) {
       var lblAttr = mod.hidePaliLabel ? '' : ' data-l="' + esc(T('📜 පාළි', '📜 Pāḷi')) + '"';
       var lblCls = mod.hidePaliLabel ? ' no-lbl' : '';
-      body += '<div class="ch-box ch-pali' + lblCls + '"' + lblAttr + '>' + splitParasHtml(main) + '</div>';
+      var ph = splitParasHtml(main), cut = ph.lastIndexOf('</p>');
+      if (mbtn && cut >= 0) { ph = ph.slice(0, cut) + mbtn + ph.slice(cut); mbtn = ''; }
+      body += '<div class="ch-box ch-pali' + lblCls + '"' + lblAttr + '>' + ph + '</div>';
     }
     if (mean) {
       var meanBox = '<div class="ch-box ch-mean ' + (si ? 'si' : 'en') + '" data-l="' + esc(T('🇱🇰 සිංහල අර්ථය', '🌐 Meaning')) + '">' + splitParasHtml(mean) + '</div>';
       if (mod.meaningToggle) {
-        body += '<div class="pm-row"><button type="button" class="pm-more" aria-expanded="false" onclick="chPmToggle(this)">' +
-          T('තේරුම', 'Meaning') + ' <span class="pm-arr">&#9660;</span></button></div>' +
-          '<div class="ch-mean-wrap">' + meanBox + '</div>';
+        body += (mbtn ? '<div class="pm-row">' + mbtn + '</div>' : '') + '<div class="ch-mean-wrap">' + meanBox + '</div>';
       } else body += meanBox;
     }
     var gt = PAL(it.gatha, it.gathaTr);

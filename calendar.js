@@ -1,9 +1,9 @@
 /* =====================================================================
    calendar.js — දින දර්ශනය (මාසික / වාර්ෂික)
    ---------------------------------------------------------------------
-   • ප්‍රධාන පිටුවේ දිනය තෝරන කොටුවට යටින් ඇති බොත්තම් දෙකෙන් විවෘත වේ:
-       openCalendar('month')  — මාසික දින දර්ශනය
-       openCalendar('year')   — වාර්ෂික දින දර්ශනය (මාසයක් ඔබන විට එම මාසයට)
+   • ප්‍රධාන පිටුවේ දිනය තෝරන කොටුවට ඉදිරියෙන් ඇති කුඩා 📅 සලකුණෙන් මාසික දර්ශනය විවෘත වේ;
+     එහි ඉහළ ▦ සලකුණෙන් වාර්ෂික දර්ශනය (මාසයක් ඔබන විට එම මාසයට).
+       openCalendar('month') / openCalendar('year')
    • පසළොස්වක පෝය = කහ, අමාවක පෝය = කළු, අද දිනය = වළල්ලක්, තෝරාගත් දිනය = ලා පසුබිම.
      පෝය දින poyaList (script.js) වෙතින් — ප්‍රධාන පිටුවේ කලාපය (ශ්‍රී ලංකා / තායි / මියන්මාර්) අනුව.
    • ඊතල (‹ ›) හෝ ඇඟිල්ලෙන් වමට / දකුණට ඇදීමෙන් මාස / වර්ෂ මාරු වේ.
@@ -17,8 +17,6 @@
   var TX = {
     month:  { si: 'මාසික දින දර්ශනය', en: 'Monthly calendar', hi: 'मासिक कैलेंडर', my: 'လစဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายเดือน', zh: '月历' },
     year:   { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历' },
-    btnM:   { si: 'මාසික', en: 'Month', hi: 'मासिक', my: 'လစဉ်', th: 'รายเดือน', zh: '月历' },
-    btnY:   { si: 'වාර්ෂික', en: 'Year', hi: 'वार्षिक', my: 'နှစ်စဉ်', th: 'รายปี', zh: '年历' },
     full:   { si: 'පසළොස්වක පෝය', en: 'Full-moon Uposatha', hi: 'पूर्णिमा उपोसथ', my: 'လပြည့် ဥပုသ်', th: 'วันพระ จันทร์เต็มดวง', zh: '满月布萨' },
     nw:     { si: 'අමාවක පෝය', en: 'New-moon Uposatha', hi: 'अमावस्या उपोसथ', my: 'လကွယ် ဥပုသ်', th: 'วันพระ จันทร์ดับ', zh: '新月布萨' },
     today:  { si: 'අද', en: 'Today', hi: 'आज', my: 'ယနေ့', th: 'วันนี้', zh: '今天' },
@@ -143,12 +141,11 @@ html.theme-dark #calOverlay .cl-m.su{color:#ff8a80}\
 @media (min-width:600px){#calOverlay .cl-yr{grid-template-columns:repeat(3,minmax(0,1fr))}}\
 @media (orientation:landscape) and (max-height:600px){#calOverlay .cl-sheet{top:8px;width:min(760px,calc(100% - 20px));max-height:calc(100% - 16px)}\
 #calOverlay .cl-yr{grid-template-columns:repeat(4,minmax(0,1fr))}#calOverlay .cl-d{max-width:34px;font-size:.9rem}#calOverlay .cl-grid{gap:2px}}\
-/* ප්‍රධාන පිටුවේ බොත්තම් */\
-.cal-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}\
-.cal-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px 6px 10px;border-radius:999px;border:1px solid var(--t-chip-bd,rgba(180,128,28,.45));background:var(--t-chip-bg,rgba(255,255,255,.55));color:var(--t-chip-tx,var(--t-hero-lb,#7a5210));font:inherit;font-size:.82rem;font-weight:800;cursor:pointer;line-height:1.3}\
-.cal-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}\
-.cal-btn:active{transform:scale(.96)}\
-body.dark-mode .cal-btn{background:var(--t-chip-bg,rgba(255,255,255,.07));color:var(--t-chip-tx,var(--t-hero-lb,#f2d478));border-color:var(--t-chip-bd,rgba(242,212,120,.4))}';
+/* ප්‍රධාන පිටුවේ කුඩා දින දර්ශන බොත්තම (දිනය තෝරන කොටුව අසලින්) */\
+.date-row .cal-ico{flex:none;width:48px;height:48px;margin-right:auto;border-radius:12px;border:1px solid var(--t-in-bd,#c8991f);background:var(--t-in-bg,linear-gradient(180deg,#fffaf0,#f4e6c4));color:var(--t-in-tx,#4a2d0a);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;box-shadow:0 1px 0 rgba(255,255,255,.6)}\
+.date-row .cal-ico svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}\
+.date-row .cal-ico:active{transform:scale(.94)}\
+body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07));border-color:var(--t-in-bd,rgba(242,212,120,.4));color:var(--t-in-tx,#f2d478)}';
 
   var IC = {
     cal: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></svg>',
@@ -307,24 +304,21 @@ body.dark-mode .cal-btn{background:var(--t-chip-bg,rgba(255,255,255,.07));color:
   W.closeCalendar = function () { if (pushed) history.back(); else hide(); };
   W.addEventListener('popstate', onPop);
 
-  /* ---- ප්‍රධාන පිටුවේ බොත්තම් (දිනය තෝරන කොටුවට යටින්) ---- */
+  /* ---- ප්‍රධාන පිටුවේ කුඩා දින දර්ශන සලකුණ (දිනය තෝරන කොටුවට ඉදිරියෙන්) → මාසික දර්ශනය;
+         වාර්ෂික දර්ශනය එහි ඉහළ ▦ සලකුණෙන් ---- */
   function labelButtons() {
-    var m = doc.getElementById('calBtnM'), y = doc.getElementById('calBtnY');
-    if (m) { m.querySelector('span').textContent = L(TX.btnM); m.setAttribute('aria-label', L(TX.month)); m.title = L(TX.month); }
-    if (y) { y.querySelector('span').textContent = L(TX.btnY); y.setAttribute('aria-label', L(TX.year)); y.title = L(TX.year); }
+    var b = doc.getElementById('calBtn');
+    if (b) { b.setAttribute('aria-label', L(TX.month)); b.title = L(TX.month); }
   }
   function addButtons() {
     injectCss();
-    if (doc.getElementById('calBtnM')) { labelButtons(); return; }
-    var row = doc.querySelector('.date-section-wrapper .date-row');
-    if (!row) return;
-    var box = doc.createElement('div');
-    box.className = 'cal-row';
-    box.innerHTML = '<button type="button" class="cal-btn" id="calBtnM">' + IC.cal + '<span></span></button>' +
-      '<button type="button" class="cal-btn" id="calBtnY">' + IC.year + '<span></span></button>';
-    row.parentNode.insertBefore(box, row.nextSibling);
-    doc.getElementById('calBtnM').addEventListener('click', function () { W.openCalendar('month'); });
-    doc.getElementById('calBtnY').addEventListener('click', function () { W.openCalendar('year'); });
+    if (doc.getElementById('calBtn')) { labelButtons(); return; }
+    var box = doc.querySelector('.date-section-wrapper .date-row .custom-date-container');
+    if (!box) return;
+    var b = doc.createElement('button');
+    b.type = 'button'; b.className = 'cal-ico'; b.id = 'calBtn'; b.innerHTML = IC.cal;
+    box.parentNode.insertBefore(b, box.nextSibling);
+    b.addEventListener('click', function () { W.openCalendar('month'); });
     labelButtons();
   }
   function init() {

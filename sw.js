@@ -31,11 +31,11 @@ const CORE_FILES = {
   '/script.js': 'bb39df606f',
   '/calculation.js': 'cbf6fd8a69',
   '/info.js': '9bba8c1193',
-  '/chanting.js': '385638fdb3',
+  '/chanting.js': '5b76b8a4f9',
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'f942fc69e2',
   '/uposatha.js': '98811edd85',
-  '/calendar.js': '83ef8b11cc'
+  '/calendar.js': '39f5bc2d85'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
