@@ -16,3 +16,6 @@ License text: OFL.txt
 Abhaya Libre (AbhayaLibre-Regular / Medium / SemiBold / Bold .woff2)
   Copyright 2013-2016 The Abhaya Libre Project Authors (https://github.com/mooniak/abhaya-libre-font)
   SIL Open Font License 1.1. Source: Google Fonts (ofl/abhayalibre), subset to Sinhala + Latin, WOFF2.
+
+NotoSansSymbols-Zodiac.woff2 — zodiac signs ♈–♓ only (font-family "BE Zodiac" in style.css)
+  Copyright The Noto Project Authors — SIL Open Font License 1.1 (subset of Noto Sans Symbols).

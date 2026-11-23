@@ -81,7 +81,11 @@ var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6
 '#spSl{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:8px;border:1px solid var(--bd);background:#0b1230;outline:none;margin:0;display:block}' +
 '#spSl::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:4px solid #d4a017;box-shadow:0 2px 8px rgba(0,0,0,.4)}#spSl::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:4px solid #d4a017}' +
 '.sp-read{display:grid;gap:8px;margin:14px 0 0}.sp-rd{display:flex;align-items:center;gap:9px;border-radius:14px;padding:9px 12px;font-size:.86rem;background:var(--tl);border:1px solid var(--bd)}.sp-rd .ic{color:var(--ac)}' +
-'.sp-note{font-size:.74rem;color:var(--mu);margin-top:10px;text-align:center}';
+'.sp-note{font-size:.74rem;color:var(--mu);margin-top:10px;text-align:center}' +
+'.sp-rd{flex-wrap:wrap}.sp-zd{flex-basis:100%;display:grid;grid-template-columns:minmax(0,1.3fr) auto auto;gap:2px 8px;margin:6px 0 1px;padding-top:7px;border-top:1px dashed var(--bd);font-size:.8rem;line-height:1.45;align-items:baseline}' +
+'.sp-zd .h{font-size:.7rem;font-weight:700;color:var(--mu)}.sp-zd .n{font-weight:700;display:flex;align-items:baseline;gap:5px;min-width:0}.sp-zd .n span{min-width:0;overflow-wrap:anywhere}' +
+'.sp-zd .g{font-family:"BE Zodiac",serif;font-size:1.05rem;line-height:1;color:var(--ac);flex:none;width:1.1em;text-align:center}.sp-zd .k{flex:none;width:1.1em;text-align:center;color:var(--ac);font-size:.85rem}' +
+'.sp-zd .t{font-variant-numeric:tabular-nums;white-space:nowrap}.sp-zd .t.on{font-weight:800;color:var(--ac)}.sp-zd .x{grid-column:1/-1;font-size:.68rem;color:var(--mu)}';
 
 function css() { if ($('spStyle')) return; var s = doc.createElement('style'); s.id = 'spStyle'; s.textContent = CSS; doc.head.appendChild(s); }
 function g(i) { var e = $(i); return e ? e.textContent.trim() : ''; }
@@ -263,9 +267,76 @@ function upd(light) {
     $('spP1').innerHTML = sa > .8 ? ic('sun', 17) + '<span>' + (en() ? F('Daytime — Sun altitude {0}°', a1) : 'දිවා කාලය — ඉරේ උන්නතාංශය ' + a1 + '°') + '</span>'
       : sa > -6 ? ic('dawn', 17) + '<span>' + (en() ? F('Twilight — Sun {0}° below horizon', a1) : 'සන්ධ්‍යා / අරුණ ආලෝක කාලය — ඉර ක්ෂිතිජයට පහළින් ' + a1 + '°') + '</span>'
       : ic('moon', 17) + '<span>' + (en() ? F('Night — Sun {0}° below horizon', a1) : 'රාත්‍රී කාලය — ඉර ක්ෂිතිජයට පහළින් ' + a1 + '°') + '</span>';
+    try { $('spP1').innerHTML += zodHtml('Sun', d, l); } catch (e) {}
     $('spP2').innerHTML = ic('moon', 17) + '<span>' + (ma > 0 ? tr('සඳ ක්ෂිතිජයට ඉහළින් — උන්නතාංශය ', 'Moon above the horizon — altitude ') + a2 + '°' : tr('සඳ ක්ෂිතිජයට පහළින් (', 'Moon below the horizon (') + a2 + '°)') + '</span>';
+    try { $('spP2').innerHTML += zodHtml('Moon', d, l); } catch (e) {}
   } catch (e) {}
 }
+
+/* ---------- රාශි සහ නැකැත් (නිරයන — ලාහිරි / චිත්‍රපක්ෂ අයනාංශය) ----------
+   • ඉරේ / සඳෙහි නිරයන ස්ඵුටය = සායන (ඍතු) දේශාංශය − අයනාංශය; රාශිය = 30°, නැකත = 13°20′.
+   • රාශියක / නැකතක "උදාව" = එහි ආරම්භය නැගෙනහිර ක්ෂිතිජයට පැමිණීමේ (ලග්නය එයට පැමිණීමේ) සිට අවසානය
+     පැමිණීම දක්වා; "බැසීම" = එසේම බටහිර ක්ෂිතිජයේ (සප්තම / අස්ත ලග්නය). තෝරාගත් දිනයට, ඔබේ ස්ථානයට. */
+var ZSI = ['මේෂ', 'වෘෂභ', 'මිථුන', 'කටක', 'සිංහ', 'කන්‍යා', 'තුලා', 'වෘශ්චික', 'ධනු', 'මකර', 'කුම්භ', 'මීන'];
+var ZEN = ['Mesha (Aries)', 'Vṛṣabha (Taurus)', 'Mithuna (Gemini)', 'Karka (Cancer)', 'Siṃha (Leo)', 'Kanyā (Virgo)', 'Tulā (Libra)', 'Vṛścika (Scorpio)', 'Dhanu (Sagittarius)', 'Makara (Capricorn)', 'Kumbha (Aquarius)', 'Mīna (Pisces)'];
+var ZL = { hi: ['मेष', 'वृषभ', 'मिथुन', 'कर्क', 'सिंह', 'कन्या', 'तुला', 'वृश्चिक', 'धनु', 'मकर', 'कुंभ', 'मीन'],
+  th: ['ราศีเมษ', 'ราศีพฤษภ', 'ราศีเมถุน', 'ราศีกรกฎ', 'ราศีสิงห์', 'ราศีกันย์', 'ราศีตุลย์', 'ราศีพิจิก', 'ราศีธนู', 'ราศีมังกร', 'ราศีกุมภ์', 'ราศีมีน'],
+  zh: ['白羊', '金牛', '双子', '巨蟹', '狮子', '处女', '天秤', '天蝎', '射手', '摩羯', '水瓶', '双鱼'],
+  my: ['မိဿ', 'ပြိဿ', 'မေထုန်', 'ကရကဋ်', 'သိဟ်', 'ကန်', 'တူ', 'ဗြိစ္ဆာ', 'ဓနု', 'မကာရ', 'ကုံ', 'မိန်'] };
+var NSI = ['අස්විද', 'බෙරණ', 'කැති', 'රෙහෙණ', 'මුවසිරස', 'අද', 'පුනාවස', 'පුස', 'අස්ලිස', 'මා', 'පුවපල්', 'උතුරුපල්', 'හත', 'සිත', 'සා', 'විසා', 'අනුර', 'දෙට', 'මුල', 'පුවසල', 'උතුරුසල', 'සුවණ', 'දෙනට', 'සියාවස', 'පුවපුටුප', 'උතුරුපුටුප', 'රේවතී'];
+var NEN = ['Aśvinī', 'Bharaṇī', 'Kṛttikā', 'Rohiṇī', 'Mṛgaśirā', 'Ārdrā', 'Punarvasu', 'Puṣya', 'Āśleṣā', 'Maghā', 'Pūrva Phalgunī', 'Uttara Phalgunī', 'Hasta', 'Citrā', 'Svātī', 'Viśākhā', 'Anurādhā', 'Jyeṣṭhā', 'Mūla', 'Pūrva Āṣāḍhā', 'Uttara Āṣāḍhā', 'Śravaṇa', 'Dhaniṣṭhā', 'Śatabhiṣā', 'Pūrva Bhādrapadā', 'Uttara Bhādrapadā', 'Revatī'];
+var NL = { hi: ['अश्विनी', 'भरणी', 'कृत्तिका', 'रोहिणी', 'मृगशिरा', 'आर्द्रा', 'पुनर्वसु', 'पुष्य', 'आश्लेषा', 'मघा', 'पूर्वाफाल्गुनी', 'उत्तराफाल्गुनी', 'हस्त', 'चित्रा', 'स्वाति', 'विशाखा', 'अनुराधा', 'ज्येष्ठा', 'मूल', 'पूर्वाषाढ़ा', 'उत्तराषाढ़ा', 'श्रवण', 'धनिष्ठा', 'शतभिषा', 'पूर्वाभाद्रपदा', 'उत्तराभाद्रपदा', 'रेवती'],
+  th: ['อัศวินี', 'ภรณี', 'กฤติกา', 'โรหิณี', 'มฤคศิระ', 'อารทรา', 'ปุนัพสุ', 'ปุษยะ', 'อาศเลษา', 'มฆา', 'บุรพผลคุนี', 'อุตรผลคุนี', 'หัสตะ', 'จิตรา', 'สวาตี', 'วิศาขา', 'อนุราธา', 'เชษฐา', 'มูละ', 'บุรพาษาฒ', 'อุตราษาฒ', 'ศรวณะ', 'ธนิษฐา', 'ศตภิษัช', 'บุรพภัทรบท', 'อุตรภัทรบท', 'เรวดี'] };
+var ZG = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+var NAKW = 360 / 27;
+function lang() { try { return typeof currentLang !== 'undefined' ? currentLang : 'si'; } catch (e) { return 'si'; } }
+function rName(i) { var l = lang(); return l === 'si' ? ZSI[i] : (ZL[l] || ZEN)[i]; }
+function nName(i) { var l = lang(); return l === 'si' ? NSI[i] : (NL[l] || NEN)[i]; }
+function nrm(x) { return (x % 360 + 360) % 360; }
+function jdT(d) { return (d.getTime() / 864e5 + 2440587.5 - 2451545) / 36525; }
+function ayan(d) { var t = jdT(d); return 23.85308 + (5028.796195 * t + 1.1054348 * t * t) / 3600; }     // ලාහිරි (J2000 = 23°51′11″) + අයන චලනය
+function obl(d) { return 23.439291 - 0.0130042 * jdT(d); }
+function lstDeg(d, l) { return nrm(Astronomy.SiderealTime(d) * 15 + l.lng); }
+function ascTrop(d, l) { var th = lstDeg(d, l) * D, e = obl(d) * D, f = cl(l.lat, -66, 66) * D;
+  return nrm(Math.atan2(Math.cos(th), -(Math.sin(th) * Math.cos(e) + Math.tan(f) * Math.sin(e))) / D); }
+function sidLon(body, d) { var t = body === 'Sun' ? Astronomy.SunPosition(d).elon : Astronomy.EclipticGeoMoon(d).lon; return nrm(t - ayan(d)); }
+/* ක්ෂිතිජයට ඉහළින් නිරයන දේශාංශය λ හි ක්‍රාන්තිවෘත්ත ලක්ෂ්‍යය: { altitude, azimuth } (වර්තනය නොසලකා) */
+function eclHor(lam, d, l) { var lt = nrm(lam + ayan(d)) * D, e = obl(d) * D, f = l.lat * D;
+  var dec = Math.asin(Math.sin(e) * Math.sin(lt)), ra = Math.atan2(Math.cos(e) * Math.sin(lt), Math.cos(lt)), H = lstDeg(d, l) * D - ra;
+  var alt = Math.asin(Math.sin(f) * Math.sin(dec) + Math.cos(f) * Math.cos(dec) * Math.cos(H));
+  var az = Math.atan2(-Math.cos(dec) * Math.sin(H), Math.sin(dec) * Math.cos(f) - Math.cos(dec) * Math.cos(H) * Math.sin(f));
+  return { altitude: alt / D, azimuth: nrm(az / D) }; }
+/* side 0 = නැගෙනහිර (ලග්නය), 1 = බටහිර; target (නිරයන) ලග්නයට පැමිණෙන පළමු වේලාව t0 ට පසු */
+function crossAt(target, side, t0, l) {
+  var f = function (t) { var d = new Date(t); return nrm(ascTrop(d, l) - ayan(d) + side * 180 - target + 180) - 180; };
+  var st = 120e3, a = t0, fa = f(a);
+  for (var i = 0; i < 760; i++) { var b = a + st, fb = f(b);
+    if (fa < 0 && fb >= 0 && fb - fa < 90) { for (var k = 0; k < 14; k++) { var m = (a + b) / 2, fm = f(m); if (fm < 0) { a = m; fa = fm; } else b = m; } return new Date(b); }
+    a = b; fa = fb; }
+  return null; }
+var ZC = {};
+/* [start, end) ඛණ්ඩයේ උදාව / බැසීම — තෝරාගත් දිනය හා අතිච්ඡාදනය වන පළමු අවස්ථාව */
+function riseSet(a, w, l) {
+  var key = ymd() + '|' + l.lat.toFixed(3) + '|' + l.lng.toFixed(3) + '|' + a.toFixed(3); if (ZC[key]) return ZC[key];
+  var d0 = dayStart().getTime(), out = [];
+  [0, 1].forEach(function (side) {
+    var t = d0 - 4 * 36e5, s = null, e = null;
+    for (var n = 0; n < 3; n++) { s = crossAt(a, side, t, l); if (!s) break; e = crossAt(nrm(a + w), side, s.getTime() + 6e4, l); if (!e || e.getTime() > d0) break; t = e.getTime() + 6e4; }
+    out.push([s, e]);
+  });
+  var ks = Object.keys(ZC); if (ks.length > 80) ZC = {};
+  return (ZC[key] = out); }
+function fmtR(s, e, now) {
+  if (!s || !e) return '<span class="t">—</span>';
+  var a = fmtD(s), b = fmtD(e), on = now >= s && now < e, sa = a.slice(-2), sb = b.slice(-2);
+  return '<span class="t' + (on ? ' on' : '') + '">' + (sa === sb ? a.slice(0, -3) : a) + '–' + b + '</span>'; }
+function zodHtml(body, d, l) {
+  var lam = sidLon(body, d), ri = Math.floor(lam / 30), ni = Math.floor(lam / NAKW);
+  var r1 = riseSet(ri * 30, 30, l), r2 = riseSet(ni * NAKW, NAKW, l);
+  return '<div class="sp-zd"><span class="h"></span><span class="h">' + es(tr('උදාව', 'Rising')) + '</span><span class="h">' + es(tr('බැසීම', 'Setting')) + '</span>' +
+    '<span class="n"><b class="g" aria-hidden="true">' + ZG[ri] + '︎</b><span>' + es(rName(ri) + (lang() === 'si' ? ' රාශිය' : '')) + '</span></span>' + fmtR(r1[0][0], r1[0][1], d) + fmtR(r1[1][0], r1[1][1], d) +
+    '<span class="n"><b class="k" aria-hidden="true">✦</b><span>' + es(nName(ni) + (lang() === 'si' ? ' නැකත' : '')) + '</span></span>' + fmtR(r2[0][0], r2[0][1], d) + fmtR(r2[1][0], r2[1][1], d) +
+    '</div>'; }
 
 /* ---------- 3D: Earth fixed in the middle, you on top; Sun & Moon move around it (as we see them) ---------- */
 function need(cb) { if (W.THREE) { T = W.THREE; return cb(); } var s = doc.querySelector('script[src="three.min.js"]'), nw = !s; if (nw) { s = doc.createElement('script'); s.src = 'three.min.js'; } // one download/parse even if visuals3d.js is loading it too
@@ -289,7 +360,7 @@ function init3d() {
   var ml = new T.DirectionalLight(0xffe6a0, 0); sc.add(ml);
   var n = 700, Pp = new Float32Array(n * 3); for (i = 0; i < n; i++) { var u = Math.random(), b = Math.random() * 6.283, q = Math.sqrt(1 - u * u), RR = 900 + Math.random() * 600; Pp[i * 3] = RR * q * Math.cos(b); Pp[i * 3 + 1] = RR * u; Pp[i * 3 + 2] = RR * q * Math.sin(b); }
   var sg = new T.BufferGeometry(); sg.setAttribute('position', new T.BufferAttribute(Pp, 3)); var stars = new T.Points(sg, new T.PointsMaterial({ color: 0xffffff, size: 1.3, sizeAttenuation: false, transparent: true, opacity: 0, depthWrite: false })); sc.add(stars);
-  RC = { r: r, sc: sc, cam: cam, sun: sun, sgl: gl, dl: dl, hl: hl, moon: moon, mg: mg, ml: ml, stars: stars };
+  RC = { r: r, sc: sc, cam: cam, sun: sun, sgl: gl, dl: dl, hl: hl, moon: moon, mg: mg, ml: ml, stars: stars, zd: zodObjs(sc) };
   r.domElement.addEventListener('webglcontextlost', function () { if (RC && RC.r === r) RC.lost = true; }, false);
   attach3d();
 }
@@ -314,8 +385,43 @@ function place(hs, hm, d, l) {
   R.moon.material.color.copy(tint(MTINT, Math.max(0, ma))); R.mg.material.opacity = (.18 + .55 * il) * cl((ma + 4) / 8, 0, 1) * cl(1 - sa / 25, .35, 1);
   R.ml.position.copy(mpos).normalize().multiplyScalar(100); R.ml.intensity = .8 * il * cl((ma + 4) / 10, 0, 1); // pale-yellow moonlight on the Earth
   R.stars.material.opacity = cl((-sa - 3) / 10, 0, 1);
+  try { zplace(d, l, hs, hm); } catch (e) {}
   R.r.render(R.sc, R.cam);
 }
+/* රූපයේ යාන්තමින්: ක්‍රාන්තිවෘත්තය (ඉර ගමන් කරන මාර්ගය), රාශි සලකුණු 12, ඉරේ හා සඳෙහි නැකත් නම් — ක්ෂිතිජයට ඉහළින් පමණි */
+function txtTex(txt, font, px, col) {
+  var cv = doc.createElement('canvas'), x = cv.getContext('2d'); x.font = font;
+  var w = Math.ceil(x.measureText(txt).width) + 12, h = Math.ceil(px * 1.5); cv.width = w; cv.height = h;
+  x.font = font; x.fillStyle = col || '#ffe3a0'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(txt, w / 2, h / 2);
+  var t = new T.CanvasTexture(cv); t.minFilter = T.LinearFilter; return { t: t, a: w / h }; }
+function zsprite(ht) { var s = new T.Sprite(new T.SpriteMaterial({ transparent: true, depthWrite: false, opacity: 0 })); s.userData.h = ht; s.visible = false; return s; }
+function zsetTex(s, tx) { if (s.material.map) s.material.map.dispose(); s.material.map = tx.t; s.material.needsUpdate = true; s.scale.set(s.userData.h * tx.a, s.userData.h, 1); }
+function zodObjs(sc) {
+  var g = new T.Group(), pos = new Float32Array(360 * 6), lg = new T.BufferGeometry(); lg.setAttribute('position', new T.BufferAttribute(pos, 3));
+  var line = new T.LineSegments(lg, new T.LineBasicMaterial({ color: 0xffd98a, transparent: true, opacity: .22, depthWrite: false })); line.frustumCulled = false; g.add(line);
+  var Z = { g: g, line: line, pos: pos, signs: [], nk: [zsprite(2.1), zsprite(2.1)], nki: [-1, -1], nkl: '' };
+  for (var i = 0; i < 12; i++) { var sp = zsprite(3.2); Z.signs.push(sp); g.add(sp); }
+  g.add(Z.nk[0]); g.add(Z.nk[1]);
+  var draw = function () { Z.signs.forEach(function (sp, i) { zsetTex(sp, txtTex(ZG[i] + '\uFE0E', "56px 'BE Zodiac','Noto Sans Symbols',serif", 56)); }); if (RC && RC.r && P && P.open) upd(true); };
+  try { doc.fonts.load("56px 'BE Zodiac'", ZG.join('')).then(draw, draw); } catch (e) { draw(); }
+  sc.add(g); return Z; }
+function zvec(h, k) { var a = h.altitude * D, z = h.azimuth * D; return new T.Vector3(-Math.cos(a) * Math.sin(z) * k, Math.sin(a) * k, Math.cos(a) * Math.cos(z) * k * .3); }
+function zplace(d, l, hs, hm) {
+  var Z = R && R.zd; if (!Z) return;
+  var pos = Z.pos, k = SD, prev = eclHor(0, d, l), i, j;
+  for (i = 0; i < 360; i++) { var nx = eclHor(i + 1, d, l), o = i * 6;
+    if (prev.altitude > 0 && nx.altitude > 0) { var A = zvec(prev, k), B = zvec(nx, k); pos[o] = A.x; pos[o + 1] = A.y; pos[o + 2] = A.z; pos[o + 3] = B.x; pos[o + 4] = B.y; pos[o + 5] = B.z; }
+    else for (j = 0; j < 6; j++) pos[o + j] = 0;
+    prev = nx; }
+  Z.line.geometry.attributes.position.needsUpdate = true;
+  var ss = Math.floor(sidLon('Sun', d) / 30), ms = Math.floor(sidLon('Moon', d) / 30);
+  Z.signs.forEach(function (sp, n) { var h = eclHor(n * 30 + 15, d, l); sp.visible = h.altitude > 2 && !!sp.material.map;
+    if (sp.visible) { var v = zvec(h, k); sp.position.set(v.x, v.y + 1.7, v.z); sp.material.opacity = (n === ss || n === ms) ? .75 : .32; } });
+  ['Sun', 'Moon'].forEach(function (b, q) { var ni = Math.floor(sidLon(b, d) / NAKW), sp = Z.nk[q], key = ni + lang();
+    if (Z.nki[q] !== key) { Z.nki[q] = key; zsetTex(sp, txtTex(nName(ni), "600 40px 'Noto Sans Sinhala','Noto Sans','Noto Sans Devanagari','Noto Sans Thai',sans-serif", 40, '#cfe3ff')); }
+    /* නැකත් නම ඉර / සඳ අසලින් (ඒවා ක්ෂිතිජයට ඉහළින් ඇති විට) */
+    var hb = q ? hm : hs; sp.visible = !!hb && hb.altitude > 0;
+    if (sp.visible) { var v = vec(hb, q ? MD : SD, q ? 2.2 : 4); sp.position.set(v.x, v.y - (q ? 3.9 : 6.4), v.z); sp.material.opacity = .6; } }); }
 function kill3d() { if (!R) return; if (R.ro) { R.ro.disconnect(); R.ro = null; } if (R.r.domElement.parentNode) R.r.domElement.parentNode.removeChild(R.r.domElement); R = null; } // keep RC for the next open
 function drop3d() { if (!RC) return; try { RC.r.dispose(); RC.r.forceContextLoss(); } catch (e) {} RC = null; }
 

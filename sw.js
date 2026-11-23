@@ -23,7 +23,7 @@ const RESET = 1;
 const CORE_FILES = {
   '/': 'fcb052843e',                              // index.html
   '/manifest.json': '469ab2e27b',
-  '/style.css': '08a74db2a3',
+  '/style.css': 'd6e62adcec',
   '/theme.css': '448ec1646a',
   '/theme.js': '9ffb92099c',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
@@ -33,7 +33,7 @@ const CORE_FILES = {
   '/info.js': '9bba8c1193',
   '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': 'f942fc69e2',
+  '/sunpage.js': 'd3e1603d91',
   '/uposatha.js': '98811edd85',
   '/calendar.js': '39f5bc2d85'
 };
@@ -85,11 +85,12 @@ const LAZY_FILES = {
   '/fonts/NotoSerifDevanagari.woff2': '9e390641a8',
   '/fonts/NotoSerifMyanmar.woff2': 'd0e883e7ae',
   '/fonts/NotoSerifThai.woff2': '54702dc224',
-  '/fonts/README.txt': 'd283dca42a',
+  '/fonts/README.txt': '7a41200b1c',
   '/fonts/AbhayaLibre-Bold.woff2': '9d422027d2',
   '/fonts/AbhayaLibre-Medium.woff2': '33e9d0d1d1',
   '/fonts/AbhayaLibre-Regular.woff2': '5022b0b4d0',
-  '/fonts/AbhayaLibre-SemiBold.woff2': '720e121809'
+  '/fonts/AbhayaLibre-SemiBold.woff2': '720e121809',
+  '/fonts/NotoSansSymbols-Zodiac.woff2': '18ff4d0330'
 };
 
 // ------------------------------------------------------------

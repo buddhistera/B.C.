@@ -1,5 +1,6 @@
 /* ---- අකුරු: ඇප් එක සමඟම ඇති ඒවා (fonts/) — Google Fonts / අන්තර්ජාලය අවශ්‍ය නැත.
    unicode-range නිසා එක් එක් ගොනුව බාගත / load වන්නේ එම අකුරු පිටුවේ ඇති විට පමණි. ---- */
+@font-face{font-family:'BE Zodiac';src:url(fonts/NotoSansSymbols-Zodiac.woff2) format('woff2');font-display:swap;unicode-range:U+2648-2653,U+FE0E}   /* රාශි සලකුණු ♈–♓ (Noto Sans Symbols, OFL) */
 @font-face{font-family:'Noto Sans';src:url(fonts/NotoSans-Latin.woff2) format('woff2');font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+0000-024F,U+0300-036F,U+1E00-1EFF,U+2000-206F,U+20A0-20CF,U+2100-214F,U+2190-21FF,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Noto Serif';src:url(fonts/NotoSerif-Latin.woff2) format('woff2');font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+0000-024F,U+0300-036F,U+1E00-1EFF,U+2000-206F,U+20A0-20CF,U+2100-214F,U+2190-21FF,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Noto Sans Sinhala';src:url(fonts/NotoSansSinhala.woff2) format('woff2');font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+0D80-0DFF,U+111E1-111F4,U+200C-200D,U+25CC}
