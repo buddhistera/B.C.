@@ -6,7 +6,7 @@
        openCalendar('month') / openCalendar('year')
    • උපෝසථ දින: පසළොස්වක = කහ, අමාවක = කළු. අද දිනය = වළල්ලක්, තෝරාගත් දිනය = ලා පසුබිම.
    • තාරකා විද්‍යාත්මක පෝය (සැබෑ පූර්ණ / නව චන්ද්‍ර මොහොත) = දිනය වටා කොටුවක් (පසළොස්වක කහ, අමාවක කළු).
-   • සිල් සමාදන් වන දින (ශ්‍රී ලංකා පෝය කමිටු ක්‍රමයට ගණනය) = ඉලක්කම යටින් නිල් ඉරක් — පසළොස්වක / අමාවක: අඛණ්ඩ ඉර,
+   • සිල් සමාදන් වන දින (ශ්‍රී ලංකා පෝය කමිටු ක්‍රමයට ගණනය; සිංහල භාෂාවෙන් පමණි) = ඉලක්කම යටින් නිල් ඉරක් — පසළොස්වක / අමාවක: අඛණ්ඩ ඉර,
      පුර අටවක: කැඩි ඉර, අව අටවක: තිත් පේළිය — silOf() බලන්න.
      ලොව පිළිගත් ක්‍රමය: එම මොහොත (Astronomy Engine) උපාංගයේ දේශීය වේලාවෙන් වැටෙන දින දර්ශන දිනය —
      මොහොතක් නිසා එක් කලාපයක එය සැමවිටම එක් දිනයක් පමණි (මැදියම අසල නම් කලාප අනුව දිනය වෙනස් විය හැක).
@@ -28,10 +28,10 @@
     astro:  { si: 'තාරකා විද්‍යාත්මක පෝය දින', en: 'Astronomical full & new moon', hi: 'खगोलीय पूर्णिमा व अमावस्या', my: 'နက္ခတ္တဗေဒ လပြည့်/လကွယ်', th: 'จันทร์เต็มดวง/จันทร์ดับ ทางดาราศาสตร์', zh: '天文满月与新月' },
     fullS:  { si: 'පසළොස්වක', en: 'Full moon', hi: 'पूर्णिमा', my: 'လပြည့်', th: 'จันทร์เต็มดวง', zh: '满月' },
     newS:   { si: 'අමාවක', en: 'New moon', hi: 'अमावस्या', my: 'လကွယ်', th: 'จันทร์ดับ', zh: '新月' },
-    sil:    { si: 'සිල් සමාදන් වන දින', en: 'Sil observance days', hi: 'शील पालन दिवस', my: 'သီလဆောက်တည်ရန်နေ့', th: 'วันถือศีล', zh: '持戒日' },
-    silFN:  { si: 'පසළොස්වක / අමාවක', en: 'Full / new moon', hi: 'पूर्णिमा / अमावस्या', my: 'လပြည့် / လကွယ်', th: 'เพ็ญ / ดับ', zh: '满月／新月' },
-    silQ1:  { si: 'පුර අටවක', en: 'Waxing 8th (first quarter)', hi: 'शुक्ल अष्टमी', my: 'လဆန်း ၈ ရက်', th: 'ขึ้น ๘ ค่ำ', zh: '上弦（初八）' },
-    silQ3:  { si: 'අව අටවක', en: 'Waning 8th (last quarter)', hi: 'कृष्ण अष्टमी', my: 'လဆုတ် ၈ ရက်', th: 'แรม ๘ ค่ำ', zh: '下弦（廿三）' },
+    sil:    { si: 'සිල් සමාදන් වන දින', en: 'Sil observance days' },
+    silFN:  { si: 'පසළොස්වක / අමාවක', en: 'Full / new moon' },
+    silQ1:  { si: 'පුර අටවක', en: 'Waxing 8th (first quarter)' },
+    silQ3:  { si: 'අව අටවක', en: 'Waning 8th (last quarter)' },
     noteT:  { si: 'සලකුණු පිළිබඳ', en: 'About the marks', hi: 'चिह्नों के बारे में', my: 'အမှတ်အသားများအကြောင်း', th: 'เกี่ยวกับสัญลักษณ์', zh: '标记说明' },
     noteU:  { si: 'උපෝසථ දින — ත්‍රිපිටකය, අටුවා සහ ටීකාවල දැක්වෙන ක්‍රමයට අනුව ගණනය කළ උපෝසථ දින.',
               en: 'Uposatha days — calculated according to the method given in the Tipiṭaka, its Aṭṭhakathā commentaries and Ṭīkā sub-commentaries.',
@@ -46,17 +46,19 @@
               th: 'จันทร์เต็มดวง/จันทร์ดับทางดาราศาสตร์ — ขณะที่ดวงจันทร์อยู่ตรงข้าม (เต็มดวง) หรืออยู่แนวเดียวกับดวงอาทิตย์ (ดับ) พอดี ตามวันที่ในเขตเวลาของอุปกรณ์',
               zh: '天文满月／新月——月亮与太阳恰好相对（满月）或同向（新月）的时刻，按您设备时区所在的日期。' },
     noteS:  { si: 'සිල් සමාදන් වන දින — ශ්‍රී ලංකා පෝය කමිටුව භාවිත කරන ක්‍රමයට ගණනය කළ පසළොස්වක, අමාවක, පුර අටවක සහ අව අටවක දින.',
-              en: 'Sil observance days — full-moon, new-moon, waxing-8th and waning-8th days, calculated by the method used by Sri Lanka’s Poya Committee.',
-              hi: 'शील पालन दिवस — श्रीलंका की पोया समिति की विधि से गणना की गई पूर्णिमा, अमावस्या, शुक्ल अष्टमी और कृष्ण अष्टमी।',
-              my: 'သီလဆောက်တည်ရန်နေ့ — သီရိလင်္ကာ ပိုယာကော်မတီ၏ နည်းဖြင့် တွက်ချက်ထားသော လပြည့်၊ လကွယ်၊ လဆန်း ၈ ရက်နှင့် လဆုတ် ၈ ရက်။',
-              th: 'วันถือศีล — วันเพ็ญ วันดับ ขึ้น ๘ ค่ำ และแรม ๘ ค่ำ คำนวณตามวิธีของคณะกรรมการโปยาแห่งศรีลังกา',
-              zh: '持戒日——按斯里兰卡布萨（Poya）委员会的方法推算的满月、新月、上弦（初八）与下弦（廿三）日。' },
+              en: 'Sil observance days — full-moon, new-moon, waxing-8th and waning-8th days, calculated by the method used by Sri Lanka’s Poya Committee.' },
     noteD:  { si: 'මෙම ක්‍රම තුන එකිනෙකට වෙනස් නිසා දින එකිනෙකට දවසකින් පමණ වෙනස් විය හැක. සිල් සමාදන් වන දින ගණනය කිරීමෙන් ලබාගන්නා බැවින්, පෝය කමිටුවේ තීරණය අනුව ඇතැම් විට වෙනස් විය හැක — නිල දින දර්ශනයද බලන්න.',
               en: 'Because the three methods differ, their dates can differ by about a day. Sil observance days are calculated, so they may occasionally differ from the Poya Committee’s decision — please also check the official calendar.',
               hi: 'तीनों विधियाँ भिन्न हैं, इसलिए तिथियाँ लगभग एक दिन आगे-पीछे हो सकती हैं। शील पालन दिवस गणना से निकाले गए हैं, अतः पोया समिति के निर्णय से कभी-कभी भिन्न हो सकते हैं — आधिकारिक कैलेंडर भी देखें।',
               my: 'နည်းလမ်းသုံးမျိုး ကွဲပြားသဖြင့် ရက်များ တစ်ရက်ခန့် ကွာနိုင်သည်။ သီလနေ့များကို တွက်ချက်၍ ရယူထားသဖြင့် ပိုယာကော်မတီ၏ ဆုံးဖြတ်ချက်နှင့် တစ်ခါတစ်ရံ ကွဲလွဲနိုင်သည် — တရားဝင်ပြက္ခဒိန်ကိုလည်း ကြည့်ပါ။',
               th: 'เนื่องจากทั้งสามวิธีต่างกัน วันที่จึงอาจคลาดกันราวหนึ่งวัน วันถือศีลได้จากการคำนวณ จึงอาจต่างจากมติของคณะกรรมการโปยาบ้างในบางครั้ง — โปรดตรวจสอบปฏิทินทางการด้วย',
               zh: '三种方法各不相同，日期可能相差约一天。持戒日由推算得出，偶尔可能与布萨委员会的决定不同——请同时参阅官方日历。' },
+    noteD2: { si: 'මෙම ක්‍රම දෙක එකිනෙකට වෙනස් නිසා දින එකිනෙකට දවසකින් පමණ වෙනස් විය හැක.',
+              en: 'Because the two methods differ, their dates can differ by about a day.',
+              hi: 'दोनों विधियाँ भिन्न हैं, इसलिए तिथियाँ लगभग एक दिन आगे-पीछे हो सकती हैं।',
+              my: 'နည်းလမ်းနှစ်မျိုး ကွဲပြားသဖြင့် ရက်များ တစ်ရက်ခန့် ကွာနိုင်သည်။',
+              th: 'เนื่องจากทั้งสองวิธีต่างกัน วันที่จึงอาจคลาดกันราวหนึ่งวัน',
+              zh: '两种方法不同，日期可能相差约一天。' },
     today:  { si: 'අද', en: 'Today', hi: 'आज', my: 'ယနေ့', th: 'วันนี้', zh: '今天' },
     close:  { si: 'වසන්න', en: 'Close', hi: 'बंद करें', my: 'ပိတ်ရန်', th: 'ปิด', zh: '关闭' },
     toYear: { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历' },
@@ -153,6 +155,7 @@
   function slISO(t) { return new Date(t + SLO).toISOString().slice(0, 10); }
   function six(isoD) { return Date.parse(isoD + 'T18:00:00Z') - SLO; }
   function silOf(y) {
+    if (lang() !== 'si') return {};        // සිල් සමාදන් වන දින ශ්‍රී ලංකාවට පමණක් අදාළ — සිංහල භාෂාවෙන් පමණි
     if (SC[y]) return SC[y];
     var out = {}, A = W.Astronomy;
     if (!A) return out;
@@ -307,10 +310,10 @@ body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07)
       '<div class="cl-lgg"><span class="cl-lgt">' + esc(L(TX.astro)) + '</span><div class="cl-lgr">' +
         '<span class="cl-lg"><i class="af"></i>' + esc(L(TX.fullS)) + '</span>' +
         '<span class="cl-lg"><i class="an"></i>' + esc(L(TX.newS)) + '</span></div></div>' +
-      '<div class="cl-lgg"><span class="cl-lgt">' + esc(L(TX.sil)) + '</span><div class="cl-lgr">' +
+      (lang() === 'si' ? '<div class="cl-lgg"><span class="cl-lgt">' + esc(L(TX.sil)) + '</span><div class="cl-lgr">' +
         '<span class="cl-lg"><i class="s1"></i>' + esc(L(TX.silFN)) + '</span>' +
         '<span class="cl-lg"><i class="s2"></i>' + esc(L(TX.silQ1)) + '</span>' +
-        '<span class="cl-lg"><i class="s3"></i>' + esc(L(TX.silQ3)) + '</span></div></div>' +
+        '<span class="cl-lg"><i class="s3"></i>' + esc(L(TX.silQ3)) + '</span></div></div>' : '') +
       '<span class="cl-lg"><i class="tdy"></i>' + esc(L(TX.today)) + '</span>' +
       '<button type="button" class="cl-today" data-today="1">' + esc(L(TX.today)) + '</button></div>';
   }
@@ -319,8 +322,8 @@ body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07)
     return '<div class="cl-note"><b>' + esc(L(TX.noteT)) + '</b>' +
       '<p><i class="u"></i><span>' + esc(L(TX.noteU)) + '</span></p>' +
       '<p><i class="a"></i><span>' + esc(L(TX.noteA)) + '</span></p>' +
-      '<p><i class="s1"></i><span>' + esc(L(TX.noteS)) + '</span></p>' +
-      '<p><i class="x"></i><span>' + esc(L(TX.noteD)) + '</span></p></div>';
+      (lang() === 'si' ? '<p><i class="s1"></i><span>' + esc(L(TX.noteS)) + '</span></p>' : '') +
+      '<p><i class="x"></i><span>' + esc(L(lang() === 'si' ? TX.noteD : TX.noteD2)) + '</span></p></div>';
   }
 
   function monthHtml() {
