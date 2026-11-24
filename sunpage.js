@@ -43,7 +43,7 @@ var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6
 '.sp-back{position:absolute;left:12px;top:12px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fcd34d;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}.sp-back:active{transform:scale(.93)}' +
 '.sp-hero h1{margin:2px 52px 0;font-size:1.35rem;font-weight:800;color:#fcd34d;line-height:1.3}' +
 '.sp-hero h1::after{content:"";display:block;height:2px;width:74%;margin:9px auto 0;border-radius:2px;background:linear-gradient(90deg,transparent,#d4a017 28%,#fde68a 50%,#d4a017 72%,transparent)}' +
-'.sp-hero p{margin:10px 6px 0;font-size:.88rem;color:rgba(255,255,255,.9)}' +
+'.sp-hero p{margin:10px 6px 0;font-size:1.1rem;font-weight:700;line-height:1.5;color:rgba(255,255,255,.95)}' +
 '.sp-pl{display:inline-flex;align-items:center;gap:9px;margin:13px auto 0;padding:8px 15px;border-radius:18px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);font-size:.84rem;line-height:1.5;text-align:left;max-width:100%;white-space:pre-line}' +
 '.sp-pl .dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.25)}.sp-pl.off .dot{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.25)}.sp-co{opacity:.72;font-size:.76rem}' +
 '.sp-brow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}' +

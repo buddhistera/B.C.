@@ -28,12 +28,12 @@ const CORE_FILES = {
   '/theme.js': '9ffb92099c',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
-  '/script.js': '9946788516',
+  '/script.js': '5cf5a6ff6f',
   '/calculation.js': 'cbf6fd8a69',
   '/info.js': '8368644fe3',
   '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': 'b5be8ccb68',
+  '/sunpage.js': '6932d7d0d5',
   '/uposatha.js': '98811edd85',
   '/calendar.js': '17edbdb649'
 };
