@@ -35,7 +35,7 @@ const CORE_FILES = {
   '/visuals3d.js': 'b1aa31c929',
   '/sunpage.js': 'b5be8ccb68',
   '/uposatha.js': '98811edd85',
-  '/calendar.js': '1e5ace313d'
+  '/calendar.js': '8a90767ecc'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
