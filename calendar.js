@@ -6,6 +6,7 @@
        openCalendar('month') / openCalendar('year')
    • උපෝසථ දින: පසළොස්වක = කහ, අමාවක = කළු. අද දිනය = වළල්ලක්, තෝරාගත් දිනය = ලා පසුබිම.
    • තාරකා විද්‍යාත්මක පෝය (සැබෑ පූර්ණ / නව චන්ද්‍ර මොහොත) = දිනය වටා කොටුවක් (පසළොස්වක කහ, අමාවක කළු).
+   • සිල් සමාදන් වන දින (ශ්‍රී ලංකා පෝය කමිටු ක්‍රමයට ගණනය) = ඉලක්කම වටා ත්‍රිකෝණයක් — silOf() බලන්න.
      ලොව පිළිගත් ක්‍රමය: එම මොහොත (Astronomy Engine) උපාංගයේ දේශීය වේලාවෙන් වැටෙන දින දර්ශන දිනය —
      මොහොතක් නිසා එක් කලාපයක එය සැමවිටම එක් දිනයක් පමණි (මැදියම අසල නම් කලාප අනුව දිනය වෙනස් විය හැක).
      පෝය දින poyaList (script.js) වෙතින් — ප්‍රධාන පිටුවේ කලාපය (ශ්‍රී ලංකා / තායි / මියන්මාර්) අනුව.
@@ -26,6 +27,34 @@
     astro:  { si: 'තාරකා විද්‍යාත්මක පෝය දින', en: 'Astronomical full & new moon', hi: 'खगोलीय पूर्णिमा व अमावस्या', my: 'နက္ခတ္တဗေဒ လပြည့်/လကွယ်', th: 'จันทร์เต็มดวง/จันทร์ดับ ทางดาราศาสตร์', zh: '天文满月与新月' },
     fullS:  { si: 'පසළොස්වක', en: 'Full moon', hi: 'पूर्णिमा', my: 'လပြည့်', th: 'จันทร์เต็มดวง', zh: '满月' },
     newS:   { si: 'අමාවක', en: 'New moon', hi: 'अमावस्या', my: 'လကွယ်', th: 'จันทร์ดับ', zh: '新月' },
+    sil:    { si: 'සිල් සමාදන් වන දින', en: 'Sil observance days', hi: 'शील पालन दिवस', my: 'သီလဆောက်တည်ရန်နေ့', th: 'วันถือศีล', zh: '持戒日' },
+    silF:   { si: 'සිල් සමාදන් වන දිනය (පසළොස්වක)', en: 'Sil observance day (full moon)', hi: 'शील पालन दिवस (पूर्णिमा)', my: 'သီလဆောက်တည်ရန်နေ့ (လပြည့်)', th: 'วันถือศีล (จันทร์เต็มดวง)', zh: '持戒日（满月）' },
+    silN:   { si: 'සිල් සමාදන් වන දිනය (අමාවක)', en: 'Sil observance day (new moon)', hi: 'शील पालन दिवस (अमावस्या)', my: 'သီလဆောက်တည်ရန်နေ့ (လကွယ်)', th: 'วันถือศีล (จันทร์ดับ)', zh: '持戒日（新月）' },
+    noteT:  { si: 'සලකුණු පිළිබඳ', en: 'About the marks', hi: 'चिह्नों के बारे में', my: 'အမှတ်အသားများအကြောင်း', th: 'เกี่ยวกับสัญลักษณ์', zh: '标记说明' },
+    noteU:  { si: 'උපෝසථ දින — ත්‍රිපිටකය, අටුවා සහ ටීකාවල දැක්වෙන ක්‍රමයට අනුව ගණනය කළ උපෝසථ දින.',
+              en: 'Uposatha days — calculated according to the method given in the Tipiṭaka, its Aṭṭhakathā commentaries and Ṭīkā sub-commentaries.',
+              hi: 'उपोसथ दिवस — त्रिपिटक, अट्ठकथा और टीका में बताई गई विधि के अनुसार गणना।',
+              my: 'ဥပုသ်နေ့ — တိပိဋက၊ အဋ္ဌကထာနှင့် ဋီကာများပါ နည်းလမ်းအတိုင်း တွက်ချက်ထားသည်။',
+              th: 'วันอุโบสถ — คำนวณตามวิธีในพระไตรปิฎก อรรถกถา และฎีกา',
+              zh: '布萨日——依三藏、义注与复注所载方法推算。' },
+    noteA:  { si: 'තාරකා විද්‍යාත්මක පෝය — සඳ හිරුට හරියටම ප්‍රතිවිරුද්ධ (පසළොස්වක) හෝ හිරු දිශාවටම (අමාවක) වන මොහොත (Astronomy Engine); එම මොහොත දුරකථනයේ වේලාවෙන් වැටෙන දිනය.',
+              en: 'Astronomical full / new moon — the exact moment the Moon is opposite to (full) or in line with (new) the Sun (Astronomy Engine), on the date that moment falls in your device’s time zone.',
+              hi: 'खगोलीय पूर्णिमा / अमावस्या — जिस क्षण चंद्रमा सूर्य के ठीक विपरीत (पूर्णिमा) या उसी दिशा में (अमावस्या) होता है; आपके डिवाइस के समय क्षेत्र में उस क्षण की तिथि।',
+              my: 'နက္ခတ္တဗေဒ လပြည့်/လကွယ် — လသည် နေနှင့် တိတိကျကျ ဆန့်ကျင်ဘက် (လပြည့်) သို့မဟုတ် တစ်တန်းတည်း (လကွယ်) ဖြစ်သည့်အချိန်၏ သင့်ဖုန်းအချိန်ဇုန်ရှိ ရက်။',
+              th: 'จันทร์เต็มดวง/จันทร์ดับทางดาราศาสตร์ — ขณะที่ดวงจันทร์อยู่ตรงข้าม (เต็มดวง) หรืออยู่แนวเดียวกับดวงอาทิตย์ (ดับ) พอดี ตามวันที่ในเขตเวลาของอุปกรณ์',
+              zh: '天文满月／新月——月亮与太阳恰好相对（满月）或同向（新月）的时刻，按您设备时区所在的日期。' },
+    noteS:  { si: 'සිල් සමාදන් වන දින — ශ්‍රී ලංකා පෝය කමිටුව භාවිත කරන ක්‍රමයට ගණනය කළ දින: පසළොස්වක / අමාවක තිථිය ලංකා වේලාවෙන් සවස 6 ට පවතින දිනය (සවස 6 දෙකකට දිව යයි නම් පළමු දිනය; කිසිදු සවස 6 කට නොවැටේ නම් තිථිය අවසන් වන දිනය).',
+              en: 'Sil observance days — calculated by the method used by Sri Lanka’s Poya Committee: the day on which the full- / new-moon tithi is current at 6 PM Sri Lanka time (if it covers two 6 PMs, the first; if none, the day the tithi ends).',
+              hi: 'शील पालन दिवस — श्रीलंका की पोया समिति की विधि से गणना: जिस दिन श्रीलंका समय शाम 6 बजे पूर्णिमा / अमावस्या तिथि रहती है (दो बार हो तो पहला दिन; एक बार भी न हो तो तिथि समाप्ति का दिन)।',
+              my: 'သီလဆောက်တည်ရန်နေ့ — သီရိလင်္ကာ ပိုယာကော်မတီ၏ နည်းဖြင့် တွက်ချက်သည်- သီရိလင်္ကာ ညနေ ၆ နာရီတွင် လပြည့်/လကွယ် တိထိ ရှိနေသည့်နေ့ (ညနေ ၆ နာရီ နှစ်ကြိမ်ဆိုလျှင် ပထမနေ့၊ မရှိလျှင် တိထိ ပြီးဆုံးသည့်နေ့)။',
+              th: 'วันถือศีล — คำนวณตามวิธีของคณะกรรมการโปยาแห่งศรีลังกา: วันที่ดิถีเพ็ญ/ดับยังคงอยู่เวลา 18:00 น. ตามเวลาศรีลังกา (ถ้าครอบคลุมสองวัน ใช้วันแรก ถ้าไม่ครอบคลุมเลย ใช้วันที่ดิถีสิ้นสุด)',
+              zh: '持戒日——按斯里兰卡布萨（Poya）委员会的方法推算：斯里兰卡时间下午6时满月／新月提提（tithi）所在之日（跨两个下午6时取第一天；一个也不跨则取提提结束之日）。' },
+    noteD:  { si: 'මෙම ක්‍රම තුන එකිනෙකට වෙනස් නිසා දින එකිනෙකට දවසකින් පමණ වෙනස් විය හැක. සිල් සමාදන් වන දින ගණනය කිරීමෙන් ලබාගන්නා බැවින්, පෝය කමිටුවේ තීරණය අනුව ඇතැම් විට වෙනස් විය හැක — නිල දින දර්ශනයද බලන්න.',
+              en: 'Because the three methods differ, their dates can differ by about a day. Sil observance days are calculated, so they may occasionally differ from the Poya Committee’s decision — please also check the official calendar.',
+              hi: 'तीनों विधियाँ भिन्न हैं, इसलिए तिथियाँ लगभग एक दिन आगे-पीछे हो सकती हैं। शील पालन दिवस गणना से निकाले गए हैं, अतः पोया समिति के निर्णय से कभी-कभी भिन्न हो सकते हैं — आधिकारिक कैलेंडर भी देखें।',
+              my: 'နည်းလမ်းသုံးမျိုး ကွဲပြားသဖြင့် ရက်များ တစ်ရက်ခန့် ကွာနိုင်သည်။ သီလနေ့များကို တွက်ချက်၍ ရယူထားသဖြင့် ပိုယာကော်မတီ၏ ဆုံးဖြတ်ချက်နှင့် တစ်ခါတစ်ရံ ကွဲလွဲနိုင်သည် — တရားဝင်ပြက္ခဒိန်ကိုလည်း ကြည့်ပါ။',
+              th: 'เนื่องจากทั้งสามวิธีต่างกัน วันที่จึงอาจคลาดกันราวหนึ่งวัน วันถือศีลได้จากการคำนวณ จึงอาจต่างจากมติของคณะกรรมการโปยาบ้างในบางครั้ง — โปรดตรวจสอบปฏิทินทางการด้วย',
+              zh: '三种方法各不相同，日期可能相差约一天。持戒日由推算得出，偶尔可能与布萨委员会的决定不同——请同时参阅官方日历。' },
     today:  { si: 'අද', en: 'Today', hi: 'आज', my: 'ယနေ့', th: 'วันนี้', zh: '今天' },
     close:  { si: 'වසන්න', en: 'Close', hi: 'बंद करें', my: 'ပိတ်ရန်', th: 'ปิด', zh: '关闭' },
     toYear: { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历' },
@@ -113,6 +142,37 @@
     AC[y] = out;
     return out;
   }
+  /* ---- සිල් සමාදන් වන දින: { 'YYYY-MM-DD' (ලංකා දිනය): 'full' | 'new' } ----
+     ශ්‍රී ලංකා පෝය කමිටු ක්‍රමය (2003–2026 නිල පෝය දින 295 න් 294 ක් සමඟ ගැළපේ — script.js updateSunTimes හි එම රීතියමයි):
+       1. පසළොස්වක (168°–180°) / අමාවක (348°–360°) තිථිය ලංකා වේලාවෙන් සවස 6 ට පවතින දිනය;
+       2. සවස 6 දෙකක් හරහා දිව යයි නම් පළමු දිනය; 3. කිසිදු සවස 6 ක් නැත්නම් (ක්ෂය) තිථිය අවසන් වන දිනය. */
+  var SC = {}, SLO = 5.5 * 3600e3;
+  function slISO(t) { return new Date(t + SLO).toISOString().slice(0, 10); }
+  function six(isoD) { return Date.parse(isoD + 'T18:00:00Z') - SLO; }
+  function silOf(y) {
+    if (SC[y]) return SC[y];
+    var out = {}, A = W.Astronomy;
+    if (!A) return out;
+    try {
+      [[180, 168, 'full'], [0, 348, 'new']].forEach(function (q) {
+        var t = A.MakeTime(new Date(Date.UTC(y - 1, 11, 15))), g = 0;
+        while (g++ < 16) {
+          var ev = A.SearchMoonPhase(q[0], t, 40); if (!ev) break;
+          var end = ev.date.getTime(); if (end > Date.UTC(y + 1, 0, 20)) break;
+          var bg = A.SearchMoonPhase(q[1], A.MakeTime(new Date(end - 3 * 864e5)), 4), st = bg ? bg.date.getTime() : end - 864e5;
+          var day = null, d0 = slISO(st);
+          for (var k = 0; k < 3 && !day; k++) { var dk = slISO(Date.parse(d0 + 'T12:00:00Z') + k * 864e5 - SLO), t6 = six(dk); if (t6 >= st - 60e3 && t6 < end) day = dk; }
+          day = day || slISO(end);
+          if (+day.slice(0, 4) === y) out[day] = q[2];
+          t = A.MakeTime(new Date(end + 20 * 864e5));
+        }
+      });
+    } catch (e) { return out; }
+    SC[y] = out;
+    return out;
+  }
+  var TRI = '<svg class="cl-tri" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="h" points="50,4 3,96 97,96"/><polygon class="l" points="50,4 3,96 97,96"/></svg>';
+
   function hm(dt) { return p2(dt.getHours()) + ':' + p2(dt.getMinutes()); }
 
   /* ---------------------------- CSS ---------------------------- */
@@ -153,6 +213,28 @@ html.theme-dark #calOverlay .cl-d.an::before{border-color:#e6e6e6}\
 #calOverlay .cl-m.af::before,#calOverlay .cl-m.an::before{content:"";position:absolute;inset:-1px;border:1.6px solid #f2b705;border-radius:5px;pointer-events:none}\
 #calOverlay .cl-m.an::before{border-color:#1a1a1a}\
 html.theme-dark #calOverlay .cl-m.an::before{border-color:#e6e6e6}\
+#calOverlay .cl-tri{position:absolute;left:-5px;right:-5px;top:-7px;bottom:-3px;width:calc(100% + 10px);height:calc(100% + 10px);pointer-events:none;overflow:visible;z-index:1}\
+#calOverlay .cl-tri polygon{fill:none;stroke-linejoin:round;vector-effect:non-scaling-stroke}\
+#calOverlay .cl-tri .h{stroke:var(--t-card,#fffdf6);stroke-width:5}\
+#calOverlay .cl-tri .l{stroke:#1e63d6;stroke-width:2.4}\
+html.theme-dark #calOverlay .cl-tri .h{stroke:#000}\
+html.theme-dark #calOverlay .cl-tri .l{stroke:#8fbaff}\
+#calOverlay .cl-d .dn,#calOverlay .cl-m .dn{position:relative;z-index:2}\
+#calOverlay .cl-d.sil .dn{transform:translateY(3px)}\
+#calOverlay .cl-m .cl-tri{left:-2px;right:-2px;top:-3px;bottom:-1px;width:calc(100% + 4px);height:calc(100% + 4px)}\
+#calOverlay .cl-m .cl-tri .h{stroke-width:3}#calOverlay .cl-m .cl-tri .l{stroke-width:1.5}\
+#calOverlay .cl-m.sil .dn{transform:translateY(1.5px)}\
+#calOverlay .cl-lg i.sil{width:18px;height:17px;border-radius:0;background:none;position:relative}\
+#calOverlay .cl-lg i.sil .cl-tri{left:0;top:0;width:100%;height:100%}\
+#calOverlay .cl-note{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--t-elev,#fdf9f0);border:1px solid var(--t-bd,#eed8ab);font-size:.74rem;line-height:1.6;color:var(--t-mu,#816741)}\
+#calOverlay .cl-note b{display:block;font-size:.8rem;color:var(--t-ac2,#6b4410);margin-bottom:4px}\
+html.theme-dark #calOverlay .cl-note b{color:var(--t-ac,#f2d478)}\
+#calOverlay .cl-note p{margin:0 0 5px;display:flex;gap:7px}#calOverlay .cl-note p:last-child{margin:0}\
+#calOverlay .cl-note p i{flex:none;width:14px;height:14px;margin-top:3px;display:inline-block;position:relative}\
+#calOverlay .cl-note i.u{border-radius:50%;background:#f7c948;box-shadow:inset 0 0 0 2px #e0a800}\
+#calOverlay .cl-note i.a{border-radius:4px;border:2.2px solid #f2b705}\
+#calOverlay .cl-note i.s .cl-tri{left:0;top:0;width:100%;height:100%}\
+#calOverlay .cl-note i.x{width:0}\
 #calOverlay .cl-d.tdy::after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:currentColor}\
 #calOverlay .cl-foot{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 18px;margin-top:12px;padding-top:10px;border-top:1px solid var(--t-bd,#eed8ab);font-size:.8rem;color:var(--t-mu,#816741)}\
 #calOverlay .cl-lg{display:inline-flex;align-items:center;gap:6px}\
@@ -225,12 +307,21 @@ body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07)
       '<div class="cl-lgg"><span class="cl-lgt">' + esc(L(TX.astro)) + '</span><div class="cl-lgr">' +
         '<span class="cl-lg"><i class="af"></i>' + esc(L(TX.fullS)) + '</span>' +
         '<span class="cl-lg"><i class="an"></i>' + esc(L(TX.newS)) + '</span></div></div>' +
+      '<span class="cl-lg"><i class="sil">' + TRI + '</i>' + esc(L(TX.sil)) + '</span>' +
       '<span class="cl-lg"><i class="tdy"></i>' + esc(L(TX.today)) + '</span>' +
       '<button type="button" class="cl-today" data-today="1">' + esc(L(TX.today)) + '</button></div>';
   }
 
+  function noteHtml() {     // මාසික දර්ශනයට යටින් — සලකුණු තුනේ වෙනස
+    return '<div class="cl-note"><b>' + esc(L(TX.noteT)) + '</b>' +
+      '<p><i class="u"></i><span>' + esc(L(TX.noteU)) + '</span></p>' +
+      '<p><i class="a"></i><span>' + esc(L(TX.noteA)) + '</span></p>' +
+      '<p><i class="s">' + TRI + '</i><span>' + esc(L(TX.noteS)) + '</span></p>' +
+      '<p><i class="x"></i><span>' + esc(L(TX.noteD)) + '</span></p></div>';
+  }
+
   function monthHtml() {
-    var pm = poyaOf(Y), am = astroOf(Y), td = todayISO(), sel = mainISO(), wd = wdNames();
+    var sm = silOf(Y), pm = poyaOf(Y), am = astroOf(Y), td = todayISO(), sel = mainISO(), wd = wdNames();
     var first = new Date(Y, M, 1).getDay(), n = new Date(Y, M + 1, 0).getDate();
     var h = navRow('y', yearText(Y), 'y-1', 'y+1', Y <= YMIN, Y >= YMAX, L(TX.prevY), L(TX.nextY)) +
       navRow('m', monName(Y, M), 'm-1', 'm+1', Y <= YMIN && M === 0, Y >= YMAX && M === 11, L(TX.prevM), L(TX.nextM)) +
@@ -243,17 +334,20 @@ body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07)
       if (k) c += ' ' + k;
       var a = am[s];
       if (a) c += a.k === 'full' ? ' af' : ' an';
+      var sv = sm[s];
+      if (sv) c += ' sil';
       if (s === td) c += ' tdy';
       if (s === sel && !k) c += ' sel';
       var t = k ? L(k === 'full' ? TX.full : TX.nw) : '';
       if (a) t += (t ? ' · ' : '') + L(TX.astro) + ': ' + L(a.k === 'full' ? TX.fullS : TX.newS) + ' ' + hm(a.t);
-      h += '<button type="button" class="' + c + '" data-d="' + s + '"' + (t ? ' title="' + esc(t) + '"' : '') + ' aria-label="' + esc(d + ' ' + monName(Y, M) + (t ? ' — ' + t : '')) + '">' + d + '</button>';
+      if (sv) t += (t ? ' · ' : '') + L(sv === 'full' ? TX.silF : TX.silN);
+      h += '<button type="button" class="' + c + '" data-d="' + s + '"' + (t ? ' title="' + esc(t) + '"' : '') + ' aria-label="' + esc(d + ' ' + monName(Y, M) + (t ? ' — ' + t : '')) + '">' + (sv ? TRI : '') + '<span class="dn">' + d + '</span></button>';
     }
-    return h + '</div>' + foot();
+    return h + '</div>' + foot() + noteHtml();
   }
 
   function yearHtml() {
-    var pm = poyaOf(Y), am = astroOf(Y), td = todayISO(), wd = wdMini(), cm = new Date().getFullYear() === Y ? new Date().getMonth() : -1;
+    var sm = silOf(Y), pm = poyaOf(Y), am = astroOf(Y), td = todayISO(), wd = wdMini(), cm = new Date().getFullYear() === Y ? new Date().getMonth() : -1;
     var h = navRow('m', yearText(Y), 'y-1', 'y+1', Y <= YMIN, Y >= YMAX, L(TX.prevY), L(TX.nextY)) + '<div class="cl-yr">';
     for (var m = 0; m < 12; m++) {
       var first = new Date(Y, m, 1).getDay(), n = new Date(Y, m + 1, 0).getDate();
@@ -265,8 +359,9 @@ body.dark-mode .date-row .cal-ico{background:var(--t-in-bg,rgba(255,255,255,.07)
         if ((first + d - 1) % 7 === 0) c += ' su';
         if (k) c += ' ' + k;
         if (am[s]) c += am[s].k === 'full' ? ' af' : ' an';
+        if (sm[s]) c += ' sil';
         if (s === td) c += ' tdy';
-        h += '<span class="' + c + '">' + d + '</span>';
+        h += '<span class="' + c + '">' + (sm[s] ? TRI + '<span class="dn">' + d + '</span>' : d) + '</span>';
       }
       h += '</div></button>';
     }
