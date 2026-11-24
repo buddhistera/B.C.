@@ -43,7 +43,7 @@ var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6
 '.sp-back{position:absolute;left:12px;top:12px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fcd34d;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}.sp-back:active{transform:scale(.93)}' +
 '.sp-hero h1{margin:2px 52px 0;font-size:1.35rem;font-weight:800;color:#fcd34d;line-height:1.3}' +
 '.sp-hero h1::after{content:"";display:block;height:2px;width:74%;margin:9px auto 0;border-radius:2px;background:linear-gradient(90deg,transparent,#d4a017 28%,#fde68a 50%,#d4a017 72%,transparent)}' +
-'.sp-hero p{margin:10px 6px 0;font-size:.88rem;color:rgba(255,255,255,.9)}' +
+'.sp-hero p{margin:10px 6px 0;font-size:1.1rem;font-weight:700;line-height:1.5;color:rgba(255,255,255,.95)}' +
 '.sp-pl{display:inline-flex;align-items:center;gap:9px;margin:13px auto 0;padding:8px 15px;border-radius:18px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);font-size:.84rem;line-height:1.5;text-align:left;max-width:100%;white-space:pre-line}' +
 '.sp-pl .dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.25)}.sp-pl.off .dot{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.25)}.sp-co{opacity:.72;font-size:.76rem}' +
 '.sp-brow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}' +
@@ -84,7 +84,7 @@ var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6
 '.sp-note{font-size:.74rem;color:var(--mu);margin-top:10px;text-align:center}' +
 '.sp-rd{flex-wrap:wrap}.sp-zd{flex-basis:100%;display:grid;grid-template-columns:minmax(0,1.3fr) auto auto;gap:2px 8px;margin:6px 0 1px;padding-top:7px;border-top:1px dashed var(--bd);font-size:.8rem;line-height:1.45;align-items:baseline}' +
 '.sp-zd .h{font-size:.7rem;font-weight:700;color:var(--mu)}.sp-zd .n{font-weight:700;display:flex;align-items:baseline;gap:5px;min-width:0}.sp-zd .n span{min-width:0;overflow-wrap:anywhere}' +
-'.sp-zd .g{font-family:"BE Zodiac",serif;font-size:1.45rem;font-weight:400;line-height:1;color:var(--ac);flex:none;width:1.2em;text-align:center;align-self:center}.sp-zd .k{flex:none;width:1.2em;text-align:center;color:var(--ac);font-size:1.15rem;line-height:1;align-self:center}' +
+'.sp-zd .g{font-size:1.45rem;font-weight:400;line-height:1;color:var(--ac);flex:none;width:1.2em;text-align:center;display:inline-flex;align-items:center;justify-content:center}.sp-zd .g svg{width:1.25em;height:1.25em;display:block}.sp-zd .g{align-self:center}.sp-zd .k{flex:none;width:1.2em;text-align:center;color:var(--ac);font-size:1.15rem;line-height:1;align-self:center}' +
 '.sp-zd .t{font-variant-numeric:tabular-nums;white-space:nowrap}.sp-zd .t.on{font-weight:800;color:var(--ac)}.sp-zd .x{grid-column:1/-1;font-size:.68rem;color:var(--mu)}';
 
 function css() { if ($('spStyle')) return; var s = doc.createElement('style'); s.id = 'spStyle'; s.textContent = CSS; doc.head.appendChild(s); }
@@ -283,11 +283,15 @@ var ZL = { hi: ['मेष', 'वृषभ', 'मिथुन', 'कर्क', 
   th: ['ราศีเมษ', 'ราศีพฤษภ', 'ราศีเมถุน', 'ราศีกรกฎ', 'ราศีสิงห์', 'ราศีกันย์', 'ราศีตุลย์', 'ราศีพิจิก', 'ราศีธนู', 'ราศีมังกร', 'ราศีกุมภ์', 'ราศีมีน'],
   zh: ['白羊', '金牛', '双子', '巨蟹', '狮子', '处女', '天秤', '天蝎', '射手', '摩羯', '水瓶', '双鱼'],
   my: ['မိဿ', 'ပြိဿ', 'မေထုန်', 'ကရကဋ်', 'သိဟ်', 'ကန်', 'တူ', 'ဗြိစ္ဆာ', 'ဓနု', 'မကာရ', 'ကုံ', 'မိန်'] };
-var NSI = ['අස්විද', 'බෙරණ', 'කැති', 'රෙහෙණ', 'මුවසිරස', 'අද', 'පුනාවස', 'පුස', 'අස්ලිස', 'මා', 'පුවපල්', 'උතුරුපල්', 'හත', 'සිත', 'සා', 'විසා', 'අනුර', 'දෙට', 'මුල', 'පුවසල', 'උතුරුසල', 'සුවණ', 'දෙනට', 'සියාවස', 'පුවපුටුප', 'උතුරුපුටුප', 'රේවතී'];
+var NSI = ['අස්විද', 'බෙරණ', 'කැති', 'රෙහෙණ', 'මුවසිරස', 'අද', 'පුනාවස', 'පුෂ', 'අස්ලිස', 'මා', 'පුවපල්', 'උත්‍රපල්', 'හත', 'සිත', 'සා', 'විසා', 'අනුර', 'දෙට', 'මුල', 'පුවසල', 'උත්‍රසල', 'සුවණ', 'දෙනට', 'සියාවස', 'පුවපුටුප', 'උත්‍රපුටුප', 'රේවතී'];
 var NEN = ['Aśvinī', 'Bharaṇī', 'Kṛttikā', 'Rohiṇī', 'Mṛgaśirā', 'Ārdrā', 'Punarvasu', 'Puṣya', 'Āśleṣā', 'Maghā', 'Pūrva Phalgunī', 'Uttara Phalgunī', 'Hasta', 'Citrā', 'Svātī', 'Viśākhā', 'Anurādhā', 'Jyeṣṭhā', 'Mūla', 'Pūrva Āṣāḍhā', 'Uttara Āṣāḍhā', 'Śravaṇa', 'Dhaniṣṭhā', 'Śatabhiṣā', 'Pūrva Bhādrapadā', 'Uttara Bhādrapadā', 'Revatī'];
 var NL = { hi: ['अश्विनी', 'भरणी', 'कृत्तिका', 'रोहिणी', 'मृगशिरा', 'आर्द्रा', 'पुनर्वसु', 'पुष्य', 'आश्लेषा', 'मघा', 'पूर्वाफाल्गुनी', 'उत्तराफाल्गुनी', 'हस्त', 'चित्रा', 'स्वाति', 'विशाखा', 'अनुराधा', 'ज्येष्ठा', 'मूल', 'पूर्वाषाढ़ा', 'उत्तराषाढ़ा', 'श्रवण', 'धनिष्ठा', 'शतभिषा', 'पूर्वाभाद्रपदा', 'उत्तराभाद्रपदा', 'रेवती'],
   th: ['อัศวินี', 'ภรณี', 'กฤติกา', 'โรหิณี', 'มฤคศิระ', 'อารทรา', 'ปุนัพสุ', 'ปุษยะ', 'อาศเลษา', 'มฆา', 'บุรพผลคุนี', 'อุตรผลคุนี', 'หัสตะ', 'จิตรา', 'สวาตี', 'วิศาขา', 'อนุราธา', 'เชษฐา', 'มูละ', 'บุรพาษาฒ', 'อุตราษาฒ', 'ศรวณะ', 'ธนิษฐา', 'ศตภิษัช', 'บุรพภัทรบท', 'อุตรภัทรบท', 'เรวดี'] };
-var ZG = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+/* රාශි සලකුණු — චිත්‍ර රූප (බැටළුවා, ගවයා, යුවළ, කකුළුවා, සිංහයා, කන්‍යාව, තරාදිය, ගෝනුස්සා, දුන්න, මකරා, කලය, මසුන් දෙදෙනා).
+   64×64 SVG path: [d, 's' = රේඛා | 'f' = පිරවූ | 'b' = දෙකම, රේඛා ඝනකම?] — 3D වේදිකාවේ (canvas) සහ ලැයිස්තුවේ (SVG) එකම රූප. */
+var ZICO = [ /* 0 මේෂ ram head (profile, facing right) */ [['M24 25C25 19 31 16 37 18L47 26C52 30 53 36 49 39L44 41C42 46 37 50 31 48C26 46 23 40 23 33Z','s'], ['M30 21C25 12 12 14 10 25C8 36 20 41 26 35C30 31 26 25 21 27C18 28 18 32 21 33','s',5.2], ['M39 27.5a1.8 1.8 0 1 0 .1 0Z','f'], ['M45 39L47 36','s']], /* 1 වෘෂභ bull head (front) */ [['M12 12C10 22 16 27 24 27M52 12C54 22 48 27 40 27','s'], ['M24 27C21 27 18 25 15 27C17 31 21 31 23 31M40 27C43 27 46 25 49 27C47 31 43 31 41 31','s'], ['M24 27C30 25 34 25 40 27L41 42C41 50 37 54 32 54C27 54 23 50 23 42Z','s'], ['M28.5 47a1.6 1.6 0 1 0 .1 0ZM35.5 47a1.6 1.6 0 1 0 .1 0Z','f'], ['M27.5 35.5a1.6 1.6 0 1 0 .1 0ZM36.5 35.5a1.6 1.6 0 1 0 .1 0Z','f']], /* 2 මිථුන couple */ [['M21 10.5a5 5 0 1 0 .1 0ZM43 10.5a5 5 0 1 0 .1 0Z','f'], ['M21 21C16 21 14 25 14 30L13 52H29L28 30C28 25 26 21 21 21ZM43 21C38 21 36 25 36 30L35 52H51L50 30C50 25 48 21 43 21Z','f'], ['M27 31C30 34 34 34 37 31','s']], /* 3 කටක crab */ [['M32 26C22 26 15 32 15 38C15 44 22 48 32 48C42 48 49 44 49 38C49 32 42 26 32 26Z','f'], ['M20 29C14 24 12 18 15 12M44 29C50 24 52 18 49 12','s'], ['M15 12C11 11 9 15 11 18L16 16M49 12C53 11 55 15 53 18L48 16','b'], ['M17 41L8 43L5 48M17 44L10 49L9 54M47 41L56 43L59 48M47 44L54 49L55 54','s'], ['M28 26V21M36 26V21','s']], /* 4 සිංහ lion face with mane */ [['M32 6L37 11L44 9L46 16L53 18L51 25L57 30L52 35L55 42L48 44L47 51L40 50L36 57L32 52L28 57L24 50L17 51L16 44L9 42L12 35L7 30L13 25L11 18L18 16L20 9L27 11Z','s'], ['M32 17C24 17 19 23 19 31C19 40 25 46 32 46C39 46 45 40 45 31C45 23 40 17 32 17Z','s'], ['M26.5 28a2 2 0 1 0 .1 0ZM37.5 28a2 2 0 1 0 .1 0Z','f'], ['M28.5 35L35.5 35L32 39Z','f'], ['M32 39V41M28 42C30 44 34 44 36 42','s']], /* 5 කන්‍යා maiden with grain */ [['M30 8.5a5.5 5.5 0 1 0 .1 0Z','f'], ['M35 9C38 8 40 10 39 13','s'], ['M30 20C25 20 23 24 23 29L18 56H42L37 29C37 24 35 20 30 20Z','f'], ['M36 30L44 24M44 24L48 8M48 8C45 10 45 14 47 16M48 8C51 10 51 14 49 16M47 15C44 17 44 21 46 22M49 15C52 17 52 21 50 22','s']], /* 6 තුලා scales */ [['M32 8V52M20 54H44M14 16H50','s'], ['M32 7.5a2.5 2.5 0 1 0 .1 0Z','f'], ['M14 16L7 33M14 16L21 33M50 16L43 33M50 16L57 33','s'], ['M5 33H23C23 38 19 41 14 41C9 41 5 38 5 33ZM41 33H59C59 38 55 41 50 41C45 41 41 38 41 33Z','f']], /* 7 වෘශ්චික scorpion */ [['M25 38C25 34 28 32 32 32C36 32 39 34 39 38C39 43 36 46 32 46C28 46 25 43 25 38Z','f'], ['M32 46V51M32 51C32 56 36 59 41 58C47 57 50 52 49 46C48 42 45 41 43 43','s'], ['M43 43L46 39L40 41Z','f'], ['M27 33C21 28 17 22 18 14M37 33C43 28 47 22 46 14','s'], ['M18 14C14 13 12 17 14 20L19 18M46 14C50 13 52 17 50 20L45 18','b'], ['M26 37L16 36L12 40M26 41L17 43L14 48M38 37L48 36L52 40M38 41L47 43L50 48','s']], /* 8 ධනු bow & arrow */ [['M16 8C40 14 50 34 44 58','s'], ['M16 8L44 58','s'], ['M8 44L52 18','s'], ['M52 18L44 18.5L48 25Z','f'], ['M8 44L5 40M8 44L5.5 48M11 42.2L8 38M11 42.2L8.5 46','s']], /* 9 මකර goat-fish */ [['M8 23C8 18 12 15 17 16L24 19C27 21 27 25 24 27L19 28C15 28 11 27 8 23Z','s'], ['M17 16C15 10 18 5 24 4C22 8 22 12 24 18','b'], ['M17 20.5a1.6 1.6 0 1 0 .1 0Z','f'], ['M24 19C34 20 42 26 46 34C48 39 51 41 55 40M21 28C26 37 34 42 44 44C48 45 51 44 55 40','s'], ['M55 40L62 33L61 47Z','f'], ['M26 33L21 42L25 44M33 38L31 48L35 48','s'], ['M36 31C38 34 40 35 43 35','s']], /* 10 කුම්භ water pot */ [['M21 11H43','s',4.5],['M25 11V18C16 22 12 31 14 40C16 50 24 56 32 56C40 56 48 50 50 40C52 31 48 22 39 18V11','s'], ['M19 34C24 31 28 37 32 34C36 31 40 37 45 34','s'], ['M17 42C22 39 27 45 32 42C37 39 42 45 47 42','s']], /* 11 මීන two fish */ [['M12 22C18 12 34 12 42 20L48 14L48 30L42 24C34 32 18 32 12 22Z','f'], ['M52 44C46 54 30 54 22 46L16 52L16 36L22 42C30 34 46 34 52 44Z','f']] ];
+function zSvg(i) { return '<svg viewBox="0 0 64 64" aria-hidden="true">' + ZICO[i].map(function (q) {
+  return '<path d="' + q[0] + '" fill="' + (q[1] === 's' ? 'none' : 'currentColor') + '"' + (q[1] === 'f' ? '' : ' stroke="currentColor" stroke-width="' + (q[2] || 3.6) + '" stroke-linecap="round" stroke-linejoin="round"') + '/>'; }).join('') + '</svg>'; }
 var NAKW = 360 / 27;
 function lang() { try { return typeof currentLang !== 'undefined' ? currentLang : 'si'; } catch (e) { return 'si'; } }
 function rName(i) { var l = lang(); return l === 'si' ? ZSI[i] : (ZL[l] || ZEN)[i]; }
@@ -334,7 +338,7 @@ function zodHtml(body, d, l) {
   var lam = sidLon(body, d), ri = Math.floor(lam / 30), ni = Math.floor(lam / NAKW);
   var r1 = riseSet(ri * 30, 30, l), r2 = riseSet(ni * NAKW, NAKW, l);
   return '<div class="sp-zd"><span class="h"></span><span class="h">' + es(tr('උදාව', 'Rising')) + '</span><span class="h">' + es(tr('බැසීම', 'Setting')) + '</span>' +
-    '<span class="n"><b class="g" aria-hidden="true">' + ZG[ri] + '︎</b><span>' + es(rName(ri) + (lang() === 'si' ? ' රාශිය' : '')) + '</span></span>' + fmtR(r1[0][0], r1[0][1], d) + fmtR(r1[1][0], r1[1][1], d) +
+    '<span class="n"><b class="g" aria-hidden="true">' + zSvg(ri) + '</b><span>' + es(rName(ri) + (lang() === 'si' ? ' රාශිය' : '')) + '</span></span>' + fmtR(r1[0][0], r1[0][1], d) + fmtR(r1[1][0], r1[1][1], d) +
     '<span class="n"><b class="k" aria-hidden="true">✦</b><span>' + es(nName(ni) + (lang() === 'si' ? ' නැකත' : '')) + '</span></span>' + fmtR(r2[0][0], r2[0][1], d) + fmtR(r2[1][0], r2[1][1], d) +
     '</div>'; }
 
@@ -394,34 +398,43 @@ function txtTex(txt, font, px, col) {
   var w = Math.ceil(x.measureText(txt).width) + 12, h = Math.ceil(px * 1.5); cv.width = w; cv.height = h;
   x.font = font; x.fillStyle = col || '#ffe3a0'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(txt, w / 2, h / 2);
   var t = new T.CanvasTexture(cv); t.minFilter = T.LinearFilter; return { t: t, a: w / h }; }
+function icoTex(i) { var n = 144, cv = doc.createElement('canvas'); cv.width = cv.height = n; var x = cv.getContext('2d');
+  x.translate(8, 8); x.scale(2, 2); x.strokeStyle = x.fillStyle = '#ffe3a0'; x.lineCap = x.lineJoin = 'round';
+  x.shadowColor = 'rgba(0,0,0,.65)'; x.shadowBlur = 3;
+  ZICO[i].forEach(function (q) { var pa = new Path2D(q[0]); x.lineWidth = q[2] || 3.6; if (q[1] !== 's') x.fill(pa); if (q[1] !== 'f') x.stroke(pa); });
+  var t = new T.CanvasTexture(cv); t.minFilter = T.LinearFilter; return { t: t, a: 1 }; }
 function zsprite(ht) { var s = new T.Sprite(new T.SpriteMaterial({ transparent: true, depthWrite: false, opacity: 0 })); s.userData.h = ht; s.visible = false; return s; }
 function zsetTex(s, tx) { if (s.material.map) s.material.map.dispose(); s.material.map = tx.t; s.material.needsUpdate = true; s.scale.set(s.userData.h * tx.a, s.userData.h, 1); }
 function zodObjs(sc) {
   var g = new T.Group(), pos = new Float32Array(360 * 6), lg = new T.BufferGeometry(); lg.setAttribute('position', new T.BufferAttribute(pos, 3));
   var line = new T.LineSegments(lg, new T.LineBasicMaterial({ color: 0xffd98a, transparent: true, opacity: .5, depthWrite: false })); line.frustumCulled = false; g.add(line);
-  var Z = { g: g, line: line, pos: pos, signs: [], nk: [zsprite(2.8), zsprite(2.8)], nki: [-1, -1], nkl: '' };
-  for (var i = 0; i < 12; i++) { var sp = zsprite(4.4); Z.signs.push(sp); g.add(sp); }
+  /* ක්ෂිතිජයට පහළ (යටි අර්ධ ගෝලය) කොටස — මදක් අඳුරු රේඛාවකින් */
+  var pos2 = new Float32Array(360 * 6), lg2 = new T.BufferGeometry(); lg2.setAttribute('position', new T.BufferAttribute(pos2, 3));
+  var line2 = new T.LineSegments(lg2, new T.LineBasicMaterial({ color: 0xffd98a, transparent: true, opacity: .3, depthWrite: false })); line2.frustumCulled = false; g.add(line2);
+  var Z = { g: g, line: line, pos: pos, line2: line2, pos2: pos2, signs: [], nk: [zsprite(2.8), zsprite(2.8)], nki: [-1, -1], nkl: '' };
+  for (var i = 0; i < 12; i++) { var sp = zsprite(5.2); Z.signs.push(sp); g.add(sp); }
   g.add(Z.nk[0]); g.add(Z.nk[1]);
-  var draw = function () { Z.signs.forEach(function (sp, i) { zsetTex(sp, txtTex(ZG[i] + '\uFE0E', "64px 'BE Zodiac','Noto Sans Symbols',serif", 64)); }); if (RC && RC.r && P && P.open) upd(true); };
-  try { doc.fonts.load("56px 'BE Zodiac'", ZG.join('')).then(draw, draw); } catch (e) { draw(); }
+  Z.signs.forEach(function (sp, i) { zsetTex(sp, icoTex(i)); });
   sc.add(g); return Z; }
 function zvec(h, k) { var a = h.altitude * D, z = h.azimuth * D; return new T.Vector3(-Math.cos(a) * Math.sin(z) * k, Math.sin(a) * k, Math.cos(a) * Math.cos(z) * k * .3); }
 function zplace(d, l, hs, hm) {
   var Z = R && R.zd; if (!Z) return;
-  var pos = Z.pos, k = SD, prev = eclHor(0, d, l), i, j;
-  for (i = 0; i < 360; i++) { var nx = eclHor(i + 1, d, l), o = i * 6;
-    if (prev.altitude > 0 && nx.altitude > 0) { var A = zvec(prev, k), B = zvec(nx, k); pos[o] = A.x; pos[o + 1] = A.y; pos[o + 2] = A.z; pos[o + 3] = B.x; pos[o + 4] = B.y; pos[o + 5] = B.z; }
-    else for (j = 0; j < 6; j++) pos[o + j] = 0;
+  var pos = Z.pos, pos2 = Z.pos2, k = SD, prev = eclHor(0, d, l), i, j;
+  for (i = 0; i < 360; i++) { var nx = eclHor(i + 1, d, l), o = i * 6, up = prev.altitude + nx.altitude >= 0, A = zvec(prev, k), B = zvec(nx, k),
+      a = up ? pos : pos2, b = up ? pos2 : pos;     // ඉහළ කොටස දීප්තිමත් රේඛාවට, පහළ කොටස අඳුරු රේඛාවට
+    a[o] = A.x; a[o + 1] = A.y; a[o + 2] = A.z; a[o + 3] = B.x; a[o + 4] = B.y; a[o + 5] = B.z;
+    for (j = 0; j < 6; j++) b[o + j] = 0;
     prev = nx; }
-  Z.line.geometry.attributes.position.needsUpdate = true;
+  Z.line.geometry.attributes.position.needsUpdate = true; Z.line2.geometry.attributes.position.needsUpdate = true;
   var ss = Math.floor(sidLon('Sun', d) / 30), ms = Math.floor(sidLon('Moon', d) / 30);
-  Z.signs.forEach(function (sp, n) { var h = eclHor(n * 30 + 15, d, l); sp.visible = h.altitude > 2 && !!sp.material.map;
-    if (sp.visible) { var v = zvec(h, k); sp.position.set(v.x, v.y + 2.3, v.z); sp.material.opacity = (n === ss || n === ms) ? 1 : .62; } });
+  Z.signs.forEach(function (sp, n) { var h = eclHor(n * 30 + 15, d, l), cur = n === ss || n === ms; sp.visible = !!sp.material.map;
+    /* ක්ෂිතිජයට පහළ රාශිද පෙන්වයි (මදක් අඳුරුව); ලේබලය රේඛාවෙන් පිටතට — ඉහළදී උඩට, පහළදී යටට */
+    if (sp.visible) { var v = zvec(h, k), up = h.altitude >= 0; sp.position.set(v.x, v.y + (up ? 2.3 : -2.3), v.z); sp.material.opacity = up ? (cur ? 1 : .62) : (cur ? .78 : .4); } });
   ['Sun', 'Moon'].forEach(function (b, q) { var ni = Math.floor(sidLon(b, d) / NAKW), sp = Z.nk[q], key = ni + lang();
     if (Z.nki[q] !== key) { Z.nki[q] = key; zsetTex(sp, txtTex(nName(ni), "600 40px 'Noto Sans Sinhala','Noto Sans','Noto Sans Devanagari','Noto Sans Thai',sans-serif", 40, '#cfe3ff')); }
-    /* නැකත් නම ඉර / සඳ අසලින් (ඒවා ක්ෂිතිජයට ඉහළින් ඇති විට) */
-    var hb = q ? hm : hs; sp.visible = !!hb && hb.altitude > 0;
-    if (sp.visible) { var v = vec(hb, q ? MD : SD, q ? 2.2 : 4); sp.position.set(v.x, v.y - (q ? 4.3 : 6.8), v.z); sp.material.opacity = .95; } }); }
+    /* නැකත් නම ඉර / සඳ අසලින් (ක්ෂිතිජයට පහළ විටද — මදක් අඳුරුව) */
+    var hb = q ? hm : hs; sp.visible = !!hb;
+    if (sp.visible) { var v = vec(hb, q ? MD : SD, q ? 2.2 : 4); sp.position.set(v.x, v.y - (q ? 4.3 : 6.8), v.z); sp.material.opacity = hb.altitude > 0 ? .95 : .7; } }); }
 function kill3d() { if (!R) return; if (R.ro) { R.ro.disconnect(); R.ro = null; } if (R.r.domElement.parentNode) R.r.domElement.parentNode.removeChild(R.r.domElement); R = null; } // keep RC for the next open
 function drop3d() { if (!RC) return; try { RC.r.dispose(); RC.r.forceContextLoss(); } catch (e) {} RC = null; }
 

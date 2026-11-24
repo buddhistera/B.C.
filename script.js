@@ -1694,12 +1694,6 @@ function updateSunTimes() {
             }
             const selectedYMD = dateInput.value;
             const sixPmToday = sixPmSLST(selectedYMD);
-            const tomorrowYMD = (() => {
-                const [yy, mm, dd] = selectedYMD.split('-').map(Number);
-                const t = new Date(Date.UTC(yy, mm - 1, dd + 1));
-                return `${t.getUTCFullYear()}-${String(t.getUTCMonth() + 1).padStart(2, '0')}-${String(t.getUTCDate()).padStart(2, '0')}`;
-            })();
-            const sixPmTomorrow = sixPmSLST(tomorrowYMD);
 
             const astroTithiAnchor = Astronomy.MakeTime(sixPmToday);
 
@@ -1709,26 +1703,32 @@ function updateSunTimes() {
             fraction = (1 - Math.cos(phaseAngle * Math.PI / 180)) / 2;
 
             // -------------------------------------------------------------
-            // ස්ථායීතා පරීක්ෂාව: "ක්ෂය" (kshaya) එකක් නිසා පසළොස්වක (14) හෝ
-            // අමාවක (29) - වැදගත්ම තිථි දෙකම - කිසිම දිනකට නොපෙනී යාම වළක්වයි.
-            // එදින (සවස 6 සිට ඊළඟ දිනයේ සවස 6 දක්වා) තුළදී 180° (පසළොස්වක)
-            // හෝ 0°/360° (අමාවක) මොහොතම සැබවින්ම සිදුවී ඇත්නම්, 6pm-sample
-            // එකෙන් ලැබෙන idx එක කුමක් වුවත්, එදිනටම පසළොස්වක/අමාවක නාමයම
-            // ස්ථිරව යොදයි.
+            // පසළොස්වක (14) / අමාවක (29) — ශ්‍රී ලංකා පෝය කමිටුවේ රීතිය
+            // (2003–2026 නිල පෝය දින 295 න් 293 ක් සමඟ ගැළපේ):
+            //   1. තිථිය (පසළොස්වක 168°–180°, අමාවක 348°–360°) ලංකා වේලාවෙන් සවස 6 ට පවතින දිනය.
+            //   2. තිථිය සවස 6 දෙකක් හරහා දිව යයි නම් (වෘද්ධි) — පළමු දිනය; දෙවන දිනයට ඊළඟ තිථිය.
+            //   3. කිසිදු සවස 6 ක් හරහා නොයයි නම් (ක්ෂය) — තිථිය අවසන් වන (පූර්ණ / නව චන්ද්‍ර මොහොත) දිනය.
             // -------------------------------------------------------------
             let baseIdx = Math.floor(((phaseAngle % 360) + 360) % 360 / 12);
-
-            const fmEvent = Astronomy.SearchMoonPhase(180, Astronomy.MakeTime(sixPmToday), 2);
-            const fmDate = fmEvent ? fmEvent.date : null;
-            if (fmDate && fmDate >= sixPmToday && fmDate < sixPmTomorrow) {
-                baseIdx = 14; // පසළොස්වක
-            }
-
-            const nmEvent = Astronomy.SearchMoonPhase(0, Astronomy.MakeTime(sixPmToday), 2);
-            const nmDate = nmEvent ? nmEvent.date : null;
-            if (nmDate && nmDate >= sixPmToday && nmDate < sixPmTomorrow) {
-                baseIdx = 29; // අමාවක
-            }
+            const slYMD = t => new Date(t.getTime() + SLST_OFFSET_MS).toISOString().slice(0, 10);
+            const addDay = (ymd, n) => { const [yy, mm, dd] = ymd.split('-').map(Number); return new Date(Date.UTC(yy, mm - 1, dd + n)).toISOString().slice(0, 10); };
+            const poyaDayOf = (endAngle, beginAngle) => {
+                const ev = Astronomy.SearchMoonPhase(endAngle % 360, Astronomy.MakeTime(new Date(sixPmToday.getTime() - 2 * 864e5)), 4);
+                if (!ev) return null;
+                const end = ev.date;
+                const bg = Astronomy.SearchMoonPhase(beginAngle, Astronomy.MakeTime(new Date(end.getTime() - 3 * 864e5)), 4);
+                const start = bg ? bg.date : new Date(end.getTime() - 864e5);
+                for (let k = 0, d0 = slYMD(start); k < 3; k++) {
+                    const d = addDay(d0, k), t6 = sixPmSLST(d);
+                    if (t6 >= start.getTime() - 60e3 && t6 < end) return d;   // රීතිය 1 / 2 (පළමු සවස 6; පංචාංග මෙන් විනාඩියේ නිරවද්‍යතාව)
+                }
+                return slYMD(end);                                  // රීතිය 3 (ක්ෂය)
+            };
+            [[180, 168, 14], [360, 348, 29]].forEach(([endA, beginA, idx]) => {
+                const pd = poyaDayOf(endA, beginA);
+                if (pd === selectedYMD) baseIdx = idx;
+                else if (baseIdx === idx) baseIdx = (idx + 1) % 30;  // වෘද්ධි දෙවන දිනය / කමිටු දිනය නොවන දිනය
+            });
 
             stableTithiIndex = baseIdx;
         }
