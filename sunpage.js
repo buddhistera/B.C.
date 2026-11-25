@@ -74,6 +74,7 @@ var CSS = '#spOverlay{--cd:#fffdf9;--bd:rgba(120,80,30,.14);--tx:#2b1a0e;--mu:#6
 '.sp-stage{position:relative;width:100%;margin:0;aspect-ratio:8/7;border-radius:20px;overflow:hidden;background:#04061a;border:1px solid rgba(242,212,120,.45)}' +
 '.sp-zt{position:absolute;left:0;top:0;right:0;height:50%}.sp-zb{position:absolute;left:0;bottom:0;right:0;height:50%;background:#000}' +
 '.sp-stage canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block}.sp-stage::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed rgba(255,255,255,.55);pointer-events:none}' +
+'.sp-cn{position:absolute;z-index:3;display:none;align-items:center;gap:8px;padding:7px 12px;border-radius:14px;background:rgba(8,12,34,.86);border:1px solid rgba(255,214,120,.7);color:#ffe3a0;font-weight:800;font-size:.95rem;line-height:1.3;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.5);white-space:nowrap}.sp-cn .g{display:inline-flex;width:30px;height:30px;color:#ffd98a}.sp-cn .g svg{width:100%;height:100%}.sp-cn i{display:block;font-style:normal;font-weight:500;font-size:.72rem;color:#c9d6ff}' +
 '.sp-ew{position:absolute;top:50%;z-index:2;margin-top:-26px;font-size:1rem;font-weight:800;color:#fff;text-shadow:0 1px 4px #000}.sp-ew.l{left:10px}.sp-ew.r{right:10px}' +
 '.sp-clk{position:absolute;left:10px;bottom:10px;z-index:2;padding:7px 12px;border-radius:14px;background:rgba(0,0,0,.6);border:1px solid rgba(255,233,168,.35);color:#fff;line-height:1.35}.sp-clk .d{font-size:.7rem;opacity:.8}.sp-clk .t{font-size:1.08rem;font-weight:800;font-variant-numeric:tabular-nums}.sp-tm{position:absolute;right:10px;bottom:10px;z-index:2;padding:8px 11px;border-radius:14px;background:rgba(0,0,0,.6);border:1px solid rgba(255,233,168,.35);font-size:.74rem;line-height:1.6;color:#fff;min-width:150px}.sp-tm div{display:flex;justify-content:space-between;gap:14px}.sp-tm b{font-variant-numeric:tabular-nums}' +
 '.sp-live{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:6px;vertical-align:middle;animation:spPulse 1.2s ease-in-out infinite}@keyframes spPulse{50%{opacity:.25}}' +
@@ -173,7 +174,7 @@ function build() {
   '<section class="sp-card">' + sh('rise', 'hTimes') + '<div class="sp-tiles">' + tile('dawn', 'dawn', 'dawn') + tile('sunrise', 'rise', 'sunrise') + tile('noon', 'sun', 'noon') + tile('sunset', 'set', 'sunset') + '</div>' +
   '<div class="sp-bar" id="spBar"><div class="sp-need" id="spNeed"></div></div><div class="sp-ax"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>12 AM</span></div></section>' +
   '<section class="sp-card">' + sh('globe', 'hSys', '<button class="sp-now" id="spNow" type="button" aria-label="Now" title="Now">' + ic('clock', 22) + '</button>') + '<div class="sp-stage" id="spStage"><div class="sp-zt" id="spZt"></div><div class="sp-zb"></div>' +
-  '<span class="sp-ew l">E</span><span class="sp-ew r">W</span><div class="sp-clk" id="spClk"></div><div class="sp-tm" id="spTm" style="display:none"></div></div>' +
+  '<span class="sp-ew l">E</span><span class="sp-ew r">W</span><div class="sp-cn" id="spCn"></div><div class="sp-clk" id="spClk"></div><div class="sp-tm" id="spTm" style="display:none"></div></div>' +
   '<div class="sp-ctl2"><div><input type="range" id="spSl" min="0" max="86399" step="1" value="43200"><div class="sp-ax"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>12 AM</span></div></div></div>' +
   '<div class="sp-read"><div class="sp-rd" id="spP1"></div><div class="sp-rd" id="spP2"></div></div><div class="sp-note" data-k="note"></div></section>' +
   '<section class="sp-card">' + sh('moon', 'hMoon') + '<div class="sp-moonrow"><canvas id="spMoonCv" width="240" height="240"></canvas><div class="sp-mi"><div class="ph" id="spPh"></div><div class="il" id="spIl"></div>' +
@@ -370,6 +371,7 @@ function init3d() {
 }
 function attach3d() { // reuse the same renderer/scene (no new WebGL context, no shader recompiling, no texture redrawing)
   var box = $('spStage'), r = RC.r, sc = RC.sc, cam = RC.cam; R = RC;
+  if (!r.domElement.__tap) { r.domElement.__tap = 1; r.domElement.addEventListener('click', function (e) { try { skyTap(e); } catch (x) {} }); }
   r.setPixelRatio(Math.min(W.devicePixelRatio || 1, 2)); box.insertBefore(r.domElement, box.querySelector('.sp-ew'));
   function fit() { var w = box.clientWidth, h = box.clientHeight; if (!w || !h) return; r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); r.render(sc, cam); }
   if (W.ResizeObserver) { R.ro = new ResizeObserver(fit); R.ro.observe(box); } fit(); upd(true); go3d();
@@ -379,7 +381,14 @@ function dispAlt(al, r, k) { // drawn altitude. Upper edge touches the line at t
   if (al <= a0) return al - rd;
   if (al < a0 + w) return -rd + (al - a0) / w * 2 * rd;
   var t = cl((al - a0 - w) / 25, 0, 1); t = t * t * (3 - 2 * t); return al + (rd - a0 - w) * (1 - t); }
-function vec(h, k, r) { var a = dispAlt(h.altitude, r, k) * D, z = h.azimuth * D; return new T.Vector3(-Math.cos(a) * Math.sin(z) * k, Math.sin(a) * k, Math.cos(a) * Math.cos(z) * k * .3); } // east = left, west = right, looking south (depth compressed)
+/* අහසේ ප්‍රක්ෂේපණය: දකුණු ක්ෂිතිජ ලක්ෂ්‍යය මධ්‍යයේ ඇති සමදුර (azimuthal equidistant) — නැගෙනහිර වමට, බටහිර දකුණට,
+   ශීර්ෂය උඩට; දකුණු අර්ධ ගෝලය අර්ධ වෘත්තය තුළ, උතුරු අහස ඉන් පිටත (ශීර්ෂයෙන් ඔබ්බට) — තරු එකිනෙක මතට නොවැටේ.
+   N = උතුර, E = නැගෙනහිර, U = ඉහළ (ඒකක දෛශිකය); ගැඹුර (z) පෙර පරිදිම — පෘථිවිය පිටුපස / ඉදිරිපස. */
+function hpXYZ(N, E, U, k, out, o) { var rho = Math.acos(cl(-N, -1, 1)), s = Math.sqrt(E * E + U * U), f = s > 1e-9 ? rho / (Math.PI / 2) / s * k : 0;
+  out[o] = -E * f; out[o + 1] = U * f; out[o + 2] = N * k * .3; }
+var HPT = [0, 0, 0];
+function hp(a, z, k) { var ca = Math.cos(a); hpXYZ(ca * Math.cos(z), ca * Math.sin(z), Math.sin(a), k, HPT, 0); return new T.Vector3(HPT[0], HPT[1], HPT[2]); }
+function vec(h, k, r) { return hp(dispAlt(h.altitude, r, k) * D, h.azimuth * D, k); } // east = left, west = right, looking south (depth compressed)
 function place(hs, hm, d, l) {
   if (!R) return; var sp = vec(hs, SD, 4), mpos = vec(hm, MD, 2.2);
   R.sun.position.copy(sp); R.dl.position.copy(sp).normalize().multiplyScalar(100); R.moon.position.copy(mpos);
@@ -405,57 +414,81 @@ function icoTex(i) { var n = 144, cv = doc.createElement('canvas'); cv.width = c
   var t = new T.CanvasTexture(cv); t.minFilter = T.LinearFilter; return { t: t, a: 1 }; }
 function zsprite(ht) { var s = new T.Sprite(new T.SpriteMaterial({ transparent: true, depthWrite: false, opacity: 0 })); s.userData.h = ht; s.visible = false; return s; }
 function zsetTex(s, tx) { if (s.material.map) s.material.map.dispose(); s.material.map = tx.t; s.material.needsUpdate = true; s.scale.set(s.userData.h * tx.a, s.userData.h, 1); }
-/* ---------- රාත්‍රී අහසේ සැබෑ තරු සහ තාරකා රටා (sky-data.js — d3-celestial / HYG, mag ≤ 4.3) ----------
-   • J2000 තරු දිශා → Astronomy.Rotation_EQJ_HOR (අයන චලනය, නුටේෂන් සහිතව) → ක්ෂිතිජ (උන්නතාංශ / දිගංශ) → ඉර / සඳ / රාශි
-     මෙන්ම එකම ප්‍රක්ෂේපණයට (නැගෙනහිර වමට, බටහිර දකුණට, දකුණු දෙසට බලා). එබැවින් රාශි / ක්‍රාන්තිවෘත්තය සමඟ හරියටම ගැළපේ.
-   • ක්ෂිතිජයට පහළ තරු නොපෙන්වයි. වේදිකාව දකුණු දෙසට බලන දසුනක් නිසා, දකුණු අර්ධයේ (ඉදිරියේ) අහස පමණක් පෙන්වයි —
-     නැතිනම් උතුරු සහ දකුණු තරු එකම තැනට වැටී රටා අවුල් වේ.
-   • ඉර ක්ෂිතිජයට 3° ට වඩා පහළට යන විට ක්‍රමයෙන් දිස්වේ (සන්ධ්‍යාවේදී මැකී යයි). */
-var SKYB = [[-9, 0.5, 7.5], [0.5, 1.5, 6], [1.5, 2.5, 4.6], [2.5, 3.5, 3.4], [3.5, 4.3, 2.5]];   // [mag සිට, දක්වා, පික්සල ප්‍රමාණය] — දීප්තිමත් තරු විශාලව
+/* ---------- රාත්‍රී අහසේ සැබෑ තරු සහ තාරකා රටා (sky-data.js — d3-celestial / HYG) ----------
+   • J2000 තරු දිශා → Astronomy.Rotation_EQJ_HOR (අයන චලනය, නුටේෂන් සහිතව) → ක්ෂිතිජ → hp() (ඉර / සඳ / රාශි හා එකම ප්‍රක්ෂේපණය)
+     — එබැවින් ක්‍රාන්තිවෘත්තය සමඟ හරියටම ගැළපේ; වේලාව අනුව චලනය වේ. ඉහළ අර්ධ ගෝලය පුරාම (උතුරු අහසද) පෙන්වයි.
+   • තාරකා රටාවල තරු දීප්තිමත්ව / විශාලව; අනෙක් තරු (mag ≤ 4.2) කුඩාවට, අඳුරුව. දීප්තිමත්ම තරුවලට කිරණ (✦).
+   • තාරකා රටාවක් ඔබූ විට එහි නම (රාශි මණ්ඩලවලට රාශි නාමය සහ සලකුණ) පෙන්වයි; රටාව රන්වන් පැහැයෙන් ඉස්මතු වේ.
+   • ක්ෂිතිජයට පහළ තරු නොපෙන්වයි; ඉර ක්ෂිතිජයට 3° ට වඩා පහළට යන විට ක්‍රමයෙන් දිස්වේ. */
+var SKYB = [[1, -9, 1.5, 11, 1], [1, 1.5, 2.5, 5.6, 0], [1, 2.5, 3.5, 4.3, 0], [1, 3.5, 9, 3.2, 0], [0, -9, 9, 2.2, 0]];   // [රටාවේද, mag සිට, දක්වා, පික්සල, කිරණ]
+var ZIAU = { Ari: 0, Tau: 1, Gem: 2, Cnc: 3, Leo: 4, Vir: 5, Lib: 6, Sco: 7, Sgr: 8, Cap: 9, Aqr: 10, Psc: 11 };   // රාශි මණ්ඩල → රාශි අංකය
+var DOT = {};
+function dotTex(spk) { if (DOT[spk]) return DOT[spk]; var n = spk ? 64 : 32, h = n / 2, cv = doc.createElement('canvas'); cv.width = cv.height = n; var x = cv.getContext('2d');
+  var gr = x.createRadialGradient(h, h, 0, h, h, spk ? h * .45 : h); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.35, 'rgba(255,255,255,.9)'); gr.addColorStop(.6, 'rgba(255,255,255,.25)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = gr; x.fillRect(0, 0, n, n);
+  if (spk) { [[1, 0], [0, 1]].forEach(function (q) { var g2 = q[0] ? x.createLinearGradient(0, h, n, h) : x.createLinearGradient(h, 0, h, n);
+      g2.addColorStop(0, 'rgba(255,255,255,0)'); g2.addColorStop(.5, 'rgba(255,255,255,.95)'); g2.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g2;
+      if (q[0]) x.fillRect(0, h - 1, n, 2); else x.fillRect(h - 1, 0, 2, n); }); }   // ✦ කිරණ
+  return (DOT[spk] = new T.CanvasTexture(cv)); }
 function bvCol(bv) { var t = cl((bv + .3) / 2.2, 0, 1); return [cl(.72 + .5 * t, 0, 1), cl(.82 + .12 * (1 - Math.abs(t - .35) * 2), 0, 1), cl(1.1 - .75 * t, 0, 1)]; } // නිල්-සුදු → කහ → තැඹිලි
-var DOT = null;
-function dotTex() { if (DOT) return DOT; var cv = doc.createElement('canvas'); cv.width = cv.height = 32; var x = cv.getContext('2d'), gr = x.createRadialGradient(16, 16, 0, 16, 16, 16);
-  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.35, 'rgba(255,255,255,.9)'); gr.addColorStop(.6, 'rgba(255,255,255,.25)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
-  x.fillStyle = gr; x.fillRect(0, 0, 32, 32); DOT = new T.CanvasTexture(cv); return DOT; }   // රවුම්, මෘදු දාරය සහිත තරු
 function skyObjs(sc) {
   var K = W.SKY; if (!K || !T) return null;
   var S = K.S, L = K.L, g = new T.Group(), bins = [], i, j;
   SKYB.forEach(function (b) {
-    var idx = []; for (i = 0; i < S.length; i += 4) if (S[i + 2] >= b[0] && S[i + 2] < b[1]) idx.push(i);
-    var n = idx.length, pos = new Float32Array(n * 3), col = new Float32Array(n * 3), base = new Float32Array(n * 3), uv = new Float32Array(n * 3);
+    var idx = []; for (i = 0; i < S.length; i += 5) if (S[i + 4] === b[0] && S[i + 2] >= b[1] && S[i + 2] < b[2]) idx.push(i);
+    var n = idx.length, pos = new Float32Array(n * 3), col = new Float32Array(n * 3), base = new Float32Array(n * 3), uv = new Float32Array(n * 3), dim = b[0] ? 1 : .5;
     idx.forEach(function (k, q) { var ra = S[k] * D, de = S[k + 1] * D, c = bvCol(S[k + 3]);
-      uv[q * 3] = Math.cos(de) * Math.cos(ra); uv[q * 3 + 1] = Math.cos(de) * Math.sin(ra); uv[q * 3 + 2] = Math.sin(de); base[q * 3] = c[0]; base[q * 3 + 1] = c[1]; base[q * 3 + 2] = c[2]; });
+      uv[q * 3] = Math.cos(de) * Math.cos(ra); uv[q * 3 + 1] = Math.cos(de) * Math.sin(ra); uv[q * 3 + 2] = Math.sin(de);
+      base[q * 3] = c[0] * dim; base[q * 3 + 1] = c[1] * dim; base[q * 3 + 2] = c[2] * dim; });
     var geo = new T.BufferGeometry(); geo.setAttribute('position', new T.BufferAttribute(pos, 3)); geo.setAttribute('color', new T.BufferAttribute(col, 3));
-    var pts = new T.Points(geo, new T.PointsMaterial({ size: b[2], sizeAttenuation: false, vertexColors: true, map: dotTex(), transparent: true, opacity: 0, depthWrite: false }));
+    var pts = new T.Points(geo, new T.PointsMaterial({ size: b[3], sizeAttenuation: false, vertexColors: true, map: dotTex(b[4]), transparent: true, opacity: 0, depthWrite: false }));
     pts.frustumCulled = false; g.add(pts); bins.push({ p: pts, pos: pos, col: col, base: base, uv: uv, n: n });
   });
-  var m = L.length / 4, lp = new Float32Array(m * 6), lc = new Float32Array(m * 6), lu = new Float32Array(m * 6);
+  var m = L.length / 4, lp = new Float32Array(m * 6), lc = new Float32Array(m * 6), lu = new Float32Array(m * 6), cs = new Int16Array(m), c0 = 0;
+  K.C.forEach(function (c, ci) { for (j = 0; j < c[3]; j++) cs[c0 + j] = ci; c0 += c[3]; });   // රේඛාව → තාරකා මණ්ඩලය
   for (i = 0; i < m; i++) for (j = 0; j < 2; j++) { var ra2 = L[i * 4 + j * 2] * D, de2 = L[i * 4 + j * 2 + 1] * D, o = i * 6 + j * 3;
     lu[o] = Math.cos(de2) * Math.cos(ra2); lu[o + 1] = Math.cos(de2) * Math.sin(ra2); lu[o + 2] = Math.sin(de2); }
   var lg = new T.BufferGeometry(); lg.setAttribute('position', new T.BufferAttribute(lp, 3)); lg.setAttribute('color', new T.BufferAttribute(lc, 3));
   var lines = new T.LineSegments(lg, new T.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0, depthWrite: false })); lines.frustumCulled = false; g.add(lines);
-  sc.add(g); return { g: g, bins: bins, lines: lines, lp: lp, lc: lc, lu: lu, m: m };
+  var hp2 = new Float32Array(m * 6), hg = new T.BufferGeometry(); hg.setAttribute('position', new T.BufferAttribute(hp2, 3));
+  var hl = new T.LineSegments(hg, new T.LineBasicMaterial({ color: 0xffd36b, transparent: true, opacity: 0, depthWrite: false })); hl.frustumCulled = false; g.add(hl);   // ඔබූ රටාව — රන්වන්
+  sc.add(g); return { g: g, bins: bins, lines: lines, lp: lp, lc: lc, lu: lu, cs: cs, m: m, hl: hl, hp: hp2, sel: -1, op: 0 };
 }
-function skyHor(r, x, y, z, out, o, col, base, cb) { // J2000 ඒකක දෛශිකය → වේදිකාවේ පිහිටීම; ක්ෂිතිජයට පහළ නම් false
-  var X = r[0][0] * x + r[1][0] * y + r[2][0] * z, Y = r[0][1] * x + r[1][1] * y + r[2][1] * z, Z = r[0][2] * x + r[1][2] * y + r[2][2] * z;
-  var ca = Math.sqrt(X * X + Y * Y), sz = ca ? -Y / ca : 0, cz = ca ? X / ca : 1, k = SD;   // HOR: x = උතුර, y = බටහිර, z = ශීර්ෂය
-  var fr = cl((.12 - X) / .24, 0, 1);   // ඉදිරිය (දකුණු අර්ධය) = 1; උතුරු දෙසට (පසුපස) ක්‍රමයෙන් 0 — ප්‍රක්ෂේපණයේදී උතුරු / දකුණු තරු එකට වැටීම වළක්වයි
-  if (Z <= 0 || fr <= 0) { out[o] = 0; out[o + 1] = -9999; out[o + 2] = 0; return false; }
-  out[o] = -ca * sz * k; out[o + 1] = Z * k; out[o + 2] = ca * cz * k * .3;
-  var f = fr * cl(Z * 12, .35, 1);   // ක්ෂිතිජය අසල මදක් අඳුරු
-  if (col) { col[o] = base[cb] * f; col[o + 1] = base[cb + 1] * f; col[o + 2] = base[cb + 2] * f; }
-  return f; }
+function skyHor(r, x, y, z, out, o) { // J2000 ඒකක දෛශිකය → වේදිකාවේ පිහිටීම; ක්ෂිතිජයට පහළ නම් 0, නැතිනම් දීප්තියේ සාධකය
+  var X = r[0][0] * x + r[1][0] * y + r[2][0] * z, Y = r[0][1] * x + r[1][1] * y + r[2][1] * z, Z = r[0][2] * x + r[1][2] * y + r[2][2] * z;   // HOR: x = උතුර, y = බටහිර, z = ශීර්ෂය
+  if (Z <= 0) { out[o] = 0; out[o + 1] = -9999; out[o + 2] = 0; return 0; }
+  hpXYZ(X, -Y, Z, SD, out, o); return cl(Z * 12, .35, 1); }   // ක්ෂිතිජය අසල මදක් අඳුරු
 function skyPlace(d, l, op) {
   var K = R && R.sky; if (!K && W.SKY && R) K = R.sky = RC.sky = skyObjs(R.sc); if (!K) return;
-  K.g.visible = op > 0.01; if (!K.g.visible) return;
-  var r = Astronomy.Rotation_EQJ_HOR(Astronomy.MakeTime(d), new Astronomy.Observer(l.lat, l.lng, 0)).rot, i;
-  K.bins.forEach(function (b) { for (i = 0; i < b.n; i++) skyHor(r, b.uv[i * 3], b.uv[i * 3 + 1], b.uv[i * 3 + 2], b.pos, i * 3, b.col, b.base, i * 3);
+  K.op = op; K.g.visible = op > 0.01; if (!K.g.visible) return;
+  var r = Astronomy.Rotation_EQJ_HOR(Astronomy.MakeTime(d), new Astronomy.Observer(l.lat, l.lng, 0)).rot, i, j;
+  K.bins.forEach(function (b) { for (i = 0; i < b.n; i++) { var o = i * 3, f = skyHor(r, b.uv[o], b.uv[o + 1], b.uv[o + 2], b.pos, o); b.col[o] = b.base[o] * f; b.col[o + 1] = b.base[o + 1] * f; b.col[o + 2] = b.base[o + 2] * f; }
     b.p.geometry.attributes.position.needsUpdate = true; b.p.geometry.attributes.color.needsUpdate = true; b.p.material.opacity = op; });
-  var lp = K.lp, lc = K.lc, lu = K.lu, tmp = [0, 0, 0, 0, 0, 0];
-  for (i = 0; i < K.m; i++) { var o = i * 6, a = skyHor(r, lu[o], lu[o + 1], lu[o + 2], tmp, 0), b2 = skyHor(r, lu[o + 3], lu[o + 4], lu[o + 5], tmp, 3), f = a && b2 ? Math.min(a, b2) : 0;
-    for (var j = 0; j < 6; j++) lp[o + j] = f ? tmp[j] : 0;
-    for (j = 0; j < 6; j += 3) { lc[o + j] = .55 * f; lc[o + j + 1] = .7 * f; lc[o + j + 2] = .95 * f; } }
-  K.lines.geometry.attributes.position.needsUpdate = true; K.lines.geometry.attributes.color.needsUpdate = true; K.lines.material.opacity = op * .32; }
+  var lp = K.lp, lc = K.lc, lu = K.lu, tmp = [0, 0, 0, 0, 0, 0], lim = SD * .6;
+  for (i = 0; i < K.m; i++) { var o2 = i * 6, a = skyHor(r, lu[o2], lu[o2 + 1], lu[o2 + 2], tmp, 0), b2 = skyHor(r, lu[o2 + 3], lu[o2 + 4], lu[o2 + 5], tmp, 3), f2 = a && b2 ? Math.min(a, b2) : 0;
+    if (f2 && Math.hypot(tmp[0] - tmp[3], tmp[1] - tmp[4]) > lim) f2 = 0;   // උතුරු ක්ෂිතිජ දාරය හරහා පනින රේඛා නොඅඳියි
+    var sel = K.cs[i] === K.sel;
+    for (j = 0; j < 6; j++) { lp[o2 + j] = f2 ? tmp[j] : 0; K.hp[o2 + j] = f2 && sel ? tmp[j] : 0; }
+    for (j = 0; j < 6; j += 3) { lc[o2 + j] = .55 * f2; lc[o2 + j + 1] = .7 * f2; lc[o2 + j + 2] = .95 * f2; } }
+  K.lines.geometry.attributes.position.needsUpdate = true; K.lines.geometry.attributes.color.needsUpdate = true; K.lines.material.opacity = op * .38;
+  K.hl.geometry.attributes.position.needsUpdate = true; K.hl.material.opacity = K.sel >= 0 ? op * .95 : 0; }
+/* තාරකා රටාවක් ඔබූ විට: තිරයේ ළඟම රේඛාව සොයා එහි නම පෙන්වයි */
+function skyTap(e) {
+  var K = R && R.sky, box = $('spStage'), tip = $('spCn'); if (!K || !box || !tip) return;
+  var rc = R.r.domElement.getBoundingClientRect(), px = e.clientX - rc.left, py = e.clientY - rc.top, best = -1, bd = 22, v = new T.Vector3(), w = new T.Vector3(), i;
+  function scr(o, out) { out.set(K.lp[o], K.lp[o + 1], K.lp[o + 2]).project(R.cam); out.x = (out.x + 1) / 2 * rc.width; out.y = (1 - out.y) / 2 * rc.height; }
+  if (K.op > .05) for (i = 0; i < K.m; i++) { var o = i * 6; if (!K.lp[o] && !K.lp[o + 1] && !K.lp[o + 3] && !K.lp[o + 4]) continue;
+    scr(o, v); scr(o + 3, w); var dx = w.x - v.x, dy = w.y - v.y, t = cl(((px - v.x) * dx + (py - v.y) * dy) / ((dx * dx + dy * dy) || 1), 0, 1), dd = Math.hypot(px - v.x - t * dx, py - v.y - t * dy);
+    if (dd < bd) { bd = dd; best = K.cs[i]; } }
+  K.sel = best; clearTimeout(K.tt);
+  if (best < 0) { tip.style.display = 'none'; upd(true); return; }
+  var c = W.SKY.C[best], zi = ZIAU[c[0]], nm = zi != null ? rName(zi) + (lang() === 'si' ? ' රාශිය' : '') : c[1];
+  tip.innerHTML = (zi != null ? '<b class="g">' + zSvg(zi) + '</b>' : '') + '<span>' + es(nm) + (zi != null && lang() === 'si' ? '<i>' + es(c[1]) + '</i>' : '') + '</span>';
+  tip.style.display = 'flex'; var tw = tip.offsetWidth, th = tip.offsetHeight;
+  var ty = py - th - 46 >= 6 ? py - th - 46 : py + 46;   // රටාව වසා නොදමන්න ඔබූ තැනින් මදක් ඈතින්
+  tip.style.left = cl(px - tw / 2, 6, rc.width - tw - 6) + 'px'; tip.style.top = cl(ty, 6, rc.height - th - 6) + 'px';
+  K.tt = setTimeout(function () { if (R && R.sky) { R.sky.sel = -1; tip.style.display = 'none'; upd(true); } }, 6000);
+  upd(true); }
 function zodObjs(sc) {
   var g = new T.Group(), pos = new Float32Array(360 * 6), lg = new T.BufferGeometry(); lg.setAttribute('position', new T.BufferAttribute(pos, 3));
   var line = new T.LineSegments(lg, new T.LineBasicMaterial({ color: 0xffd98a, transparent: true, opacity: .5, depthWrite: false })); line.frustumCulled = false; g.add(line);
@@ -467,25 +500,19 @@ function zodObjs(sc) {
   g.add(Z.nk[0]); g.add(Z.nk[1]);
   Z.signs.forEach(function (sp, i) { zsetTex(sp, icoTex(i)); });
   sc.add(g); return Z; }
-function zvec(h, k) { var a = h.altitude * D, z = h.azimuth * D; return new T.Vector3(-Math.cos(a) * Math.sin(z) * k, Math.sin(a) * k, Math.cos(a) * Math.cos(z) * k * .3); }
+function zvec(h, k) { return hp(h.altitude * D, h.azimuth * D, k); }
 function zplace(d, l, hs, hm) {
   var Z = R && R.zd; if (!Z) return;
   var pos = Z.pos, pos2 = Z.pos2, k = SD, prev = eclHor(0, d, l), i, j;
   for (i = 0; i < 360; i++) { var nx = eclHor(i + 1, d, l), o = i * 6, up = prev.altitude + nx.altitude >= 0, A = zvec(prev, k), B = zvec(nx, k),
       a = up ? pos : pos2, b = up ? pos2 : pos;     // ඉහළ කොටස දීප්තිමත් රේඛාවට, පහළ කොටස අඳුරු රේඛාවට
+    if (A.distanceTo(B) > k * .6) a = b;           // ප්‍රක්ෂේපණයේ දාරය හරහා පනින කොටස නොඅඳියි
     a[o] = A.x; a[o + 1] = A.y; a[o + 2] = A.z; a[o + 3] = B.x; a[o + 4] = B.y; a[o + 5] = B.z;
     for (j = 0; j < 6; j++) b[o + j] = 0;
     prev = nx; }
   Z.line.geometry.attributes.position.needsUpdate = true; Z.line2.geometry.attributes.position.needsUpdate = true;
-  var ss = Math.floor(sidLon('Sun', d) / 30), ms = Math.floor(sidLon('Moon', d) / 30);
-  Z.signs.forEach(function (sp, n) { var h = eclHor(n * 30 + 15, d, l), cur = n === ss || n === ms; sp.visible = !!sp.material.map;
-    /* ක්ෂිතිජයට පහළ රාශිද පෙන්වයි (මදක් අඳුරුව); ලේබලය රේඛාවෙන් පිටතට — ඉහළදී උඩට, පහළදී යටට */
-    if (sp.visible) { var v = zvec(h, k), up = h.altitude >= 0; sp.position.set(v.x, v.y + (up ? 2.3 : -2.3), v.z); sp.material.opacity = up ? (cur ? 1 : .62) : (cur ? .78 : .4); } });
-  ['Sun', 'Moon'].forEach(function (b, q) { var ni = Math.floor(sidLon(b, d) / NAKW), sp = Z.nk[q], key = ni + lang();
-    if (Z.nki[q] !== key) { Z.nki[q] = key; zsetTex(sp, txtTex(nName(ni), "600 40px 'Noto Sans Sinhala','Noto Sans','Noto Sans Devanagari','Noto Sans Thai',sans-serif", 40, '#cfe3ff')); }
-    /* නැකත් නම ඉර / සඳ අසලින් (ක්ෂිතිජයට පහළ විටද — මදක් අඳුරුව) */
-    var hb = q ? hm : hs; sp.visible = !!hb;
-    if (sp.visible) { var v = vec(hb, q ? MD : SD, q ? 2.2 : 4); sp.position.set(v.x, v.y - (q ? 4.3 : 6.8), v.z); sp.material.opacity = hb.altitude > 0 ? .95 : .7; } }); }
+  /* රාශි සලකුණු සහ ඉර / සඳ අසල නැකත් නම් තවදුරටත් ස්ථිරව නොපෙන්වයි — රාශි මණ්ඩලයක් (තාරකා රටාව) ඔබූ විට skyTap() නම සහ සලකුණ පෙන්වයි */
+  Z.signs.forEach(function (sp) { sp.visible = false; }); Z.nk[0].visible = Z.nk[1].visible = false; }
 function kill3d() { if (!R) return; if (R.ro) { R.ro.disconnect(); R.ro = null; } if (R.r.domElement.parentNode) R.r.domElement.parentNode.removeChild(R.r.domElement); R = null; } // keep RC for the next open
 function drop3d() { if (!RC) return; try { RC.r.dispose(); RC.r.forceContextLoss(); } catch (e) {} RC = null; }
 

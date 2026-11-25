@@ -33,7 +33,7 @@ const CORE_FILES = {
   '/info.js': '8368644fe3',
   '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': '615756ffec',
+  '/sunpage.js': 'de628bf37e',
   '/uposatha.js': '98811edd85',
   '/calendar.js': 'd7d60ebd0f'
 };
@@ -47,7 +47,7 @@ const OPTIONAL_FILES = {
   '/satipatthana-data.js': '17cf3675fd',
   '/patimokkha-data.js': '2f271186af',
   '/three.min.js': 'a9d81ea63f',
-  '/sky-data.js': 'ff882fb42a',
+  '/sky-data.js': 'e29afaa4ef',
   '/moon.jpg': 'b246064f21',
   '/bg/waves.webp': 'c471013b4f',
   '/bg/flowers.webp': '4b29026c8c',
