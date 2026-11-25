@@ -33,7 +33,7 @@ const CORE_FILES = {
   '/info.js': '8368644fe3',
   '/chanting.js': 'e845323596',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': 'de628bf37e',
+  '/sunpage.js': 'e0be788601',
   '/uposatha.js': '98811edd85',
   '/calendar.js': 'd7d60ebd0f'
 };

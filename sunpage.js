@@ -418,7 +418,8 @@ function zsetTex(s, tx) { if (s.material.map) s.material.map.dispose(); s.materi
    • J2000 තරු දිශා → Astronomy.Rotation_EQJ_HOR (අයන චලනය, නුටේෂන් සහිතව) → ක්ෂිතිජ → hp() (ඉර / සඳ / රාශි හා එකම ප්‍රක්ෂේපණය)
      — එබැවින් ක්‍රාන්තිවෘත්තය සමඟ හරියටම ගැළපේ; වේලාව අනුව චලනය වේ. ඉහළ අර්ධ ගෝලය පුරාම (උතුරු අහසද) පෙන්වයි.
    • තාරකා රටාවල තරු දීප්තිමත්ව / විශාලව; අනෙක් තරු (mag ≤ 4.2) කුඩාවට, අඳුරුව. දීප්තිමත්ම තරුවලට කිරණ (✦).
-   • තාරකා රටාවක් ඔබූ විට එහි නම (රාශි මණ්ඩලවලට රාශි නාමය සහ සලකුණ) පෙන්වයි; රටාව රන්වන් පැහැයෙන් ඉස්මතු වේ.
+   • රටා රේඛා සාමාන්‍යයෙන් නොපෙන්වයි (සැබෑ අහසක මෙන් තරු පමණි). තරු රටාවක් ඔබූ විට පමණක් එහි රේඛා රන්වන් පැහැයෙන් ඇඳ,
+     නම (රාශි මණ්ඩලවලට රාශි නාමය සහ සලකුණ) පෙන්වයි.
    • ක්ෂිතිජයට පහළ තරු නොපෙන්වයි; ඉර ක්ෂිතිජයට 3° ට වඩා පහළට යන විට ක්‍රමයෙන් දිස්වේ. */
 var SKYB = [[1, -9, 1.5, 11, 1], [1, 1.5, 2.5, 5.6, 0], [1, 2.5, 3.5, 4.3, 0], [1, 3.5, 9, 3.2, 0], [0, -9, 9, 2.2, 0]];   // [රටාවේද, mag සිට, දක්වා, පික්සල, කිරණ]
 var ZIAU = { Ari: 0, Tau: 1, Gem: 2, Cnc: 3, Leo: 4, Vir: 5, Lib: 6, Sco: 7, Sgr: 8, Cap: 9, Aqr: 10, Psc: 11 };   // රාශි මණ්ඩල → රාශි අංකය
@@ -470,7 +471,7 @@ function skyPlace(d, l, op) {
     var sel = K.cs[i] === K.sel;
     for (j = 0; j < 6; j++) { lp[o2 + j] = f2 ? tmp[j] : 0; K.hp[o2 + j] = f2 && sel ? tmp[j] : 0; }
     for (j = 0; j < 6; j += 3) { lc[o2 + j] = .55 * f2; lc[o2 + j + 1] = .7 * f2; lc[o2 + j + 2] = .95 * f2; } }
-  K.lines.geometry.attributes.position.needsUpdate = true; K.lines.geometry.attributes.color.needsUpdate = true; K.lines.material.opacity = op * .38;
+  K.lines.geometry.attributes.position.needsUpdate = true; K.lines.geometry.attributes.color.needsUpdate = true; K.lines.material.opacity = 0;   // රටා රේඛා සාමාන්‍යයෙන් නොපෙන්වයි — සැබෑ අහසක මෙන් තරු පමණි (ඔබූ රටාව පමණක් hl මගින්)
   K.hl.geometry.attributes.position.needsUpdate = true; K.hl.material.opacity = K.sel >= 0 ? op * .95 : 0; }
 /* තාරකා රටාවක් ඔබූ විට: තිරයේ ළඟම රේඛාව සොයා එහි නම පෙන්වයි */
 function skyTap(e) {
