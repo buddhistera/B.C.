@@ -343,7 +343,9 @@ function zodHtml(body, d, l) {
     '</div>'; }
 
 /* ---------- 3D: Earth fixed in the middle, you on top; Sun & Moon move around it (as we see them) ---------- */
-function need(cb) { if (W.THREE) { T = W.THREE; return cb(); } var s = doc.querySelector('script[src="three.min.js"]'), nw = !s; if (nw) { s = doc.createElement('script'); s.src = 'three.min.js'; } // one download/parse even if visuals3d.js is loading it too
+function needSky() { if (W.SKY || doc.querySelector('script[src="sky-data.js"]')) return; var s = doc.createElement('script'); s.src = 'sky-data.js';
+  s.addEventListener('load', function () { if (RC && RC.sc && !RC.sky) RC.sky = skyObjs(RC.sc); if (R && P && P.open) upd(true); }); doc.head.appendChild(s); }
+function need(cb) { needSky(); if (W.THREE) { T = W.THREE; return cb(); } var s = doc.querySelector('script[src="three.min.js"]'), nw = !s; if (nw) { s = doc.createElement('script'); s.src = 'three.min.js'; } // one download/parse even if visuals3d.js is loading it too
   s.addEventListener('load', function () { T = W.THREE; cb(); }); s.addEventListener('error', function () { var b = $('spStage'); if (b) b.style.display = 'none'; }); if (nw) doc.head.appendChild(s); }
 function start3d() { if (R) return go3d(); need(function () { if (!P || !P.open || R) return; try { if (RC && !RC.lost) attach3d(); else { drop3d(); init3d(); } } catch (e) { go3d(); console.error(e); var b = $('spStage'); if (b) b.style.display = 'none'; } }); }
 function glowTex(c) { var cv = doc.createElement('canvas'); cv.width = cv.height = 128; var x = cv.getContext('2d'), gr = x.createRadialGradient(64, 64, 0, 64, 64, 64);
@@ -362,9 +364,7 @@ function init3d() {
   var moon = new T.Mesh(new T.SphereGeometry(2.2, 32, 24), new T.MeshStandardMaterial({ map: tm, color: 0xffe08a, roughness: 1, metalness: 0 })); moon.rotation.y = -Math.PI / 2; sc.add(moon); // real map: near side (lon 0) towards us
   var mg = new T.Sprite(new T.SpriteMaterial({ map: glowTex('255,226,140'), blending: T.AdditiveBlending, transparent: true, depthWrite: false, opacity: 0 })); mg.scale.set(11, 11, 1); moon.add(mg);
   var ml = new T.DirectionalLight(0xffe6a0, 0); sc.add(ml);
-  var n = 700, Pp = new Float32Array(n * 3); for (i = 0; i < n; i++) { var u = Math.random(), b = Math.random() * 6.283, q = Math.sqrt(1 - u * u), RR = 900 + Math.random() * 600; Pp[i * 3] = RR * q * Math.cos(b); Pp[i * 3 + 1] = RR * u; Pp[i * 3 + 2] = RR * q * Math.sin(b); }
-  var sg = new T.BufferGeometry(); sg.setAttribute('position', new T.BufferAttribute(Pp, 3)); var stars = new T.Points(sg, new T.PointsMaterial({ color: 0xffffff, size: 1.3, sizeAttenuation: false, transparent: true, opacity: 0, depthWrite: false })); sc.add(stars);
-  RC = { r: r, sc: sc, cam: cam, sun: sun, sgl: gl, dl: dl, hl: hl, moon: moon, mg: mg, ml: ml, stars: stars, zd: zodObjs(sc) };
+  RC = { r: r, sc: sc, cam: cam, sun: sun, sgl: gl, dl: dl, hl: hl, moon: moon, mg: mg, ml: ml, zd: zodObjs(sc), sky: skyObjs(sc) };
   r.domElement.addEventListener('webglcontextlost', function () { if (RC && RC.r === r) RC.lost = true; }, false);
   attach3d();
 }
@@ -388,7 +388,7 @@ function place(hs, hm, d, l) {
   R.sun.material.color.copy(tc); R.sgl.material.color.copy(tc); R.dl.color.copy(tc).lerp(new T.Color(0xffffff), .25); R.hl.color.copy(tc).lerp(new T.Color(0xffffff), .4); R.hl.intensity = 1.1 * cl(Math.sin(sa * D) * 1.3, 0, 1); // daytime: whole upper half lit
   R.moon.material.color.copy(tint(MTINT, Math.max(0, ma))); R.mg.material.opacity = (.18 + .55 * il) * cl((ma + 4) / 8, 0, 1) * cl(1 - sa / 25, .35, 1);
   R.ml.position.copy(mpos).normalize().multiplyScalar(100); R.ml.intensity = .8 * il * cl((ma + 4) / 10, 0, 1); // pale-yellow moonlight on the Earth
-  R.stars.material.opacity = cl((-sa - 3) / 10, 0, 1);
+  try { skyPlace(d, l, cl((-sa - 3) / 10, 0, 1)); } catch (e) {}
   try { zplace(d, l, hs, hm); } catch (e) {}
   R.r.render(R.sc, R.cam);
 }
@@ -405,6 +405,57 @@ function icoTex(i) { var n = 144, cv = doc.createElement('canvas'); cv.width = c
   var t = new T.CanvasTexture(cv); t.minFilter = T.LinearFilter; return { t: t, a: 1 }; }
 function zsprite(ht) { var s = new T.Sprite(new T.SpriteMaterial({ transparent: true, depthWrite: false, opacity: 0 })); s.userData.h = ht; s.visible = false; return s; }
 function zsetTex(s, tx) { if (s.material.map) s.material.map.dispose(); s.material.map = tx.t; s.material.needsUpdate = true; s.scale.set(s.userData.h * tx.a, s.userData.h, 1); }
+/* ---------- රාත්‍රී අහසේ සැබෑ තරු සහ තාරකා රටා (sky-data.js — d3-celestial / HYG, mag ≤ 4.3) ----------
+   • J2000 තරු දිශා → Astronomy.Rotation_EQJ_HOR (අයන චලනය, නුටේෂන් සහිතව) → ක්ෂිතිජ (උන්නතාංශ / දිගංශ) → ඉර / සඳ / රාශි
+     මෙන්ම එකම ප්‍රක්ෂේපණයට (නැගෙනහිර වමට, බටහිර දකුණට, දකුණු දෙසට බලා). එබැවින් රාශි / ක්‍රාන්තිවෘත්තය සමඟ හරියටම ගැළපේ.
+   • ක්ෂිතිජයට පහළ තරු නොපෙන්වයි. වේදිකාව දකුණු දෙසට බලන දසුනක් නිසා, දකුණු අර්ධයේ (ඉදිරියේ) අහස පමණක් පෙන්වයි —
+     නැතිනම් උතුරු සහ දකුණු තරු එකම තැනට වැටී රටා අවුල් වේ.
+   • ඉර ක්ෂිතිජයට 3° ට වඩා පහළට යන විට ක්‍රමයෙන් දිස්වේ (සන්ධ්‍යාවේදී මැකී යයි). */
+var SKYB = [[-9, 0.5, 7.5], [0.5, 1.5, 6], [1.5, 2.5, 4.6], [2.5, 3.5, 3.4], [3.5, 4.3, 2.5]];   // [mag සිට, දක්වා, පික්සල ප්‍රමාණය] — දීප්තිමත් තරු විශාලව
+function bvCol(bv) { var t = cl((bv + .3) / 2.2, 0, 1); return [cl(.72 + .5 * t, 0, 1), cl(.82 + .12 * (1 - Math.abs(t - .35) * 2), 0, 1), cl(1.1 - .75 * t, 0, 1)]; } // නිල්-සුදු → කහ → තැඹිලි
+var DOT = null;
+function dotTex() { if (DOT) return DOT; var cv = doc.createElement('canvas'); cv.width = cv.height = 32; var x = cv.getContext('2d'), gr = x.createRadialGradient(16, 16, 0, 16, 16, 16);
+  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.35, 'rgba(255,255,255,.9)'); gr.addColorStop(.6, 'rgba(255,255,255,.25)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = gr; x.fillRect(0, 0, 32, 32); DOT = new T.CanvasTexture(cv); return DOT; }   // රවුම්, මෘදු දාරය සහිත තරු
+function skyObjs(sc) {
+  var K = W.SKY; if (!K || !T) return null;
+  var S = K.S, L = K.L, g = new T.Group(), bins = [], i, j;
+  SKYB.forEach(function (b) {
+    var idx = []; for (i = 0; i < S.length; i += 4) if (S[i + 2] >= b[0] && S[i + 2] < b[1]) idx.push(i);
+    var n = idx.length, pos = new Float32Array(n * 3), col = new Float32Array(n * 3), base = new Float32Array(n * 3), uv = new Float32Array(n * 3);
+    idx.forEach(function (k, q) { var ra = S[k] * D, de = S[k + 1] * D, c = bvCol(S[k + 3]);
+      uv[q * 3] = Math.cos(de) * Math.cos(ra); uv[q * 3 + 1] = Math.cos(de) * Math.sin(ra); uv[q * 3 + 2] = Math.sin(de); base[q * 3] = c[0]; base[q * 3 + 1] = c[1]; base[q * 3 + 2] = c[2]; });
+    var geo = new T.BufferGeometry(); geo.setAttribute('position', new T.BufferAttribute(pos, 3)); geo.setAttribute('color', new T.BufferAttribute(col, 3));
+    var pts = new T.Points(geo, new T.PointsMaterial({ size: b[2], sizeAttenuation: false, vertexColors: true, map: dotTex(), transparent: true, opacity: 0, depthWrite: false }));
+    pts.frustumCulled = false; g.add(pts); bins.push({ p: pts, pos: pos, col: col, base: base, uv: uv, n: n });
+  });
+  var m = L.length / 4, lp = new Float32Array(m * 6), lc = new Float32Array(m * 6), lu = new Float32Array(m * 6);
+  for (i = 0; i < m; i++) for (j = 0; j < 2; j++) { var ra2 = L[i * 4 + j * 2] * D, de2 = L[i * 4 + j * 2 + 1] * D, o = i * 6 + j * 3;
+    lu[o] = Math.cos(de2) * Math.cos(ra2); lu[o + 1] = Math.cos(de2) * Math.sin(ra2); lu[o + 2] = Math.sin(de2); }
+  var lg = new T.BufferGeometry(); lg.setAttribute('position', new T.BufferAttribute(lp, 3)); lg.setAttribute('color', new T.BufferAttribute(lc, 3));
+  var lines = new T.LineSegments(lg, new T.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0, depthWrite: false })); lines.frustumCulled = false; g.add(lines);
+  sc.add(g); return { g: g, bins: bins, lines: lines, lp: lp, lc: lc, lu: lu, m: m };
+}
+function skyHor(r, x, y, z, out, o, col, base, cb) { // J2000 ඒකක දෛශිකය → වේදිකාවේ පිහිටීම; ක්ෂිතිජයට පහළ නම් false
+  var X = r[0][0] * x + r[1][0] * y + r[2][0] * z, Y = r[0][1] * x + r[1][1] * y + r[2][1] * z, Z = r[0][2] * x + r[1][2] * y + r[2][2] * z;
+  var ca = Math.sqrt(X * X + Y * Y), sz = ca ? -Y / ca : 0, cz = ca ? X / ca : 1, k = SD;   // HOR: x = උතුර, y = බටහිර, z = ශීර්ෂය
+  var fr = cl((.12 - X) / .24, 0, 1);   // ඉදිරිය (දකුණු අර්ධය) = 1; උතුරු දෙසට (පසුපස) ක්‍රමයෙන් 0 — ප්‍රක්ෂේපණයේදී උතුරු / දකුණු තරු එකට වැටීම වළක්වයි
+  if (Z <= 0 || fr <= 0) { out[o] = 0; out[o + 1] = -9999; out[o + 2] = 0; return false; }
+  out[o] = -ca * sz * k; out[o + 1] = Z * k; out[o + 2] = ca * cz * k * .3;
+  var f = fr * cl(Z * 12, .35, 1);   // ක්ෂිතිජය අසල මදක් අඳුරු
+  if (col) { col[o] = base[cb] * f; col[o + 1] = base[cb + 1] * f; col[o + 2] = base[cb + 2] * f; }
+  return f; }
+function skyPlace(d, l, op) {
+  var K = R && R.sky; if (!K && W.SKY && R) K = R.sky = RC.sky = skyObjs(R.sc); if (!K) return;
+  K.g.visible = op > 0.01; if (!K.g.visible) return;
+  var r = Astronomy.Rotation_EQJ_HOR(Astronomy.MakeTime(d), new Astronomy.Observer(l.lat, l.lng, 0)).rot, i;
+  K.bins.forEach(function (b) { for (i = 0; i < b.n; i++) skyHor(r, b.uv[i * 3], b.uv[i * 3 + 1], b.uv[i * 3 + 2], b.pos, i * 3, b.col, b.base, i * 3);
+    b.p.geometry.attributes.position.needsUpdate = true; b.p.geometry.attributes.color.needsUpdate = true; b.p.material.opacity = op; });
+  var lp = K.lp, lc = K.lc, lu = K.lu, tmp = [0, 0, 0, 0, 0, 0];
+  for (i = 0; i < K.m; i++) { var o = i * 6, a = skyHor(r, lu[o], lu[o + 1], lu[o + 2], tmp, 0), b2 = skyHor(r, lu[o + 3], lu[o + 4], lu[o + 5], tmp, 3), f = a && b2 ? Math.min(a, b2) : 0;
+    for (var j = 0; j < 6; j++) lp[o + j] = f ? tmp[j] : 0;
+    for (j = 0; j < 6; j += 3) { lc[o + j] = .55 * f; lc[o + j + 1] = .7 * f; lc[o + j + 2] = .95 * f; } }
+  K.lines.geometry.attributes.position.needsUpdate = true; K.lines.geometry.attributes.color.needsUpdate = true; K.lines.material.opacity = op * .32; }
 function zodObjs(sc) {
   var g = new T.Group(), pos = new Float32Array(360 * 6), lg = new T.BufferGeometry(); lg.setAttribute('position', new T.BufferAttribute(pos, 3));
   var line = new T.LineSegments(lg, new T.LineBasicMaterial({ color: 0xffd98a, transparent: true, opacity: .5, depthWrite: false })); line.frustumCulled = false; g.add(line);
