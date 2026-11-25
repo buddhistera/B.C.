@@ -483,8 +483,9 @@ function skyTap(e) {
     if (dd < bd) { bd = dd; best = K.cs[i]; } }
   K.sel = best; clearTimeout(K.tt);
   if (best < 0) { tip.style.display = 'none'; upd(true); return; }
-  var c = W.SKY.C[best], zi = ZIAU[c[0]], nm = zi != null ? rName(zi) + (lang() === 'si' ? ' රාශිය' : '') : c[1];
-  tip.innerHTML = (zi != null ? '<b class="g">' + zSvg(zi) + '</b>' : '') + '<span>' + es(nm) + (zi != null && lang() === 'si' ? '<i>' + es(c[1]) + '</i>' : '') + '</span>';
+  /* සිංහලෙන්: සිංහල නම (රාශි මණ්ඩලවලට රාශි නාමය + සලකුණ) සහ යටින් ලතින් (IAU) නම; අනෙක් භාෂාවලින්: රාශි නාමය හෝ ලතින් නම */
+  var c = W.SKY.C[best], zi = ZIAU[c[0]], si = lang() === 'si', nm = zi != null ? rName(zi) + (si ? ' රාශිය' : '') : (si && c[2] ? c[2] : c[1]);
+  tip.innerHTML = (zi != null ? '<b class="g">' + zSvg(zi) + '</b>' : '') + '<span>' + es(nm) + ((zi != null || (si && c[2])) && nm !== c[1] ? '<i>' + es(c[1]) + '</i>' : '') + '</span>';
   tip.style.display = 'flex'; var tw = tip.offsetWidth, th = tip.offsetHeight;
   var ty = py - th - 46 >= 6 ? py - th - 46 : py + 46;   // රටාව වසා නොදමන්න ඔබූ තැනින් මදක් ඈතින්
   tip.style.left = cl(px - tw / 2, 6, rc.width - tw - 6) + 'px'; tip.style.top = cl(ty, 6, rc.height - th - 6) + 'px';
