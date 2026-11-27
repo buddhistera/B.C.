@@ -62,9 +62,10 @@ function ld(s) { var a = s.split('-'); return new Date(+a[0], +a[1] - 1, +a[2]);
 function ds(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 function mon(d) { return en() ? T(EMO[d.getMonth()]) : SIM[d.getMonth()]; }
 var ZH = function () { return typeof currentLang !== 'undefined' && currentLang === 'zh'; };   // චීන: 11月18日 / 2026年11月18日
-function md(d) { return ZH() ? (d.getMonth() + 1) + '月' + d.getDate() + '日' : en() ? d.getDate() + ' ' + mon(d) : mon(d) + ' ' + d.getDate(); }
+var VI = function () { return typeof currentLang !== 'undefined' && currentLang === 'vi'; };   // වියට්නාම්: 18 tháng 11 / 18 tháng 11, 2026
+function md(d) { return ZH() ? (d.getMonth() + 1) + '月' + d.getDate() + '日' : VI() ? d.getDate() + ' tháng ' + (d.getMonth() + 1) : en() ? d.getDate() + ' ' + mon(d) : mon(d) + ' ' + d.getDate(); }
 function wd(d) { return en() ? SWD(d.getDay()) : SID[d.getDay()]; }
-function fdt(d) { return ZH() ? d.getFullYear() + '年' + md(d) : en() ? d.getDate() + ' ' + mon(d) + ' ' + d.getFullYear() : d.getFullYear() + ' ' + mon(d) + ' ' + d.getDate(); }
+function fdt(d) { return ZH() ? d.getFullYear() + '年' + md(d) : VI() ? md(d) + ', ' + d.getFullYear() : en() ? d.getDate() + ' ' + mon(d) + ' ' + d.getFullYear() : d.getFullYear() + ' ' + mon(d) + ' ' + d.getDate(); }
 function days(a, b) { return Math.round((b - a) / 864e5); }
 function today0() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
 
@@ -330,6 +331,7 @@ function drawSheet(y, list, v, color, rgn) {
   function plabel(r) { return r.c + ' ' + (r.typ === 'Error' ? '-' : r.typ); }
   var pw = 0; list.forEach(function (r) { if (r.d) pw = Math.max(pw, tw(plabel(r), u * .44, 700)); }); pw += u * .9;
   var hd = en() ? ['Month', 'Date', 'Day', 'Uposatha'].map(T) : ['මාසය', 'දිනය', 'දවස', 'පෝය'];
+  if (en()) { var dw = T('Day (weekday)'); if (dw !== 'Day (weekday)') hd[2] = dw; }   // සතියේ දිනය: "Day" යතුර "දින ගණන" ලෙසද යෙදෙන භාෂාවල (වියට්නාම් Ngày ↔ Thứ) වෙනම යතුරකින්
 
   function grp(g, X, Y) {
     var gp = u * .06, h0 = u * uB;

@@ -186,7 +186,8 @@
     hi: 'सर्वाधिकार सुरक्षित। चूँकि इसमें अज्ञात त्रुटियाँ हो सकती हैं, यहाँ के कोड के किसी भी भाग को बिना अनुमति के किसी भी रूप में कॉपी करना या पुनः प्रकाशित करना सख़्त वर्जित है।',
     my: 'မူပိုင်ခွင့်အားလုံး ရယူထားသည်။ မသိရှိရသေးသော အမှားများ ရှိနိုင်သောကြောင့် ဤနေရာရှိ ကုဒ်အစိတ်အပိုင်းများကို ခွင့်ပြုချက်မရှိဘဲ မည်သည့်ပုံစံဖြင့်မဆို ကူးယူခြင်း၊ ပြန်လည်ထုတ်ဝေခြင်းကို လုံးဝ တားမြစ်သည်။',
     th: 'สงวนลิขสิทธิ์ทั้งหมด เนื่องจากอาจมีข้อผิดพลาดที่ยังตรวจไม่พบ ห้ามคัดลอกหรือเผยแพร่ซ้ำส่วนใดส่วนหนึ่งของโค้ดในที่นี้ไม่ว่าในรูปแบบใด โดยไม่ได้รับอนุญาตโดยเด็ดขาด',
-    zh: '版权所有。由于可能存在尚未发现的错误，未经许可，严禁以任何形式复制或转载此处的任何代码部分。'
+    zh: '版权所有。由于可能存在尚未发现的错误，未经许可，严禁以任何形式复制或转载此处的任何代码部分。',
+    vi: 'Bảo lưu mọi quyền. Vì có thể còn những lỗi chưa được phát hiện, nghiêm cấm sao chép hoặc tái bản bất kỳ phần nào của mã nguồn tại đây, dưới bất kỳ hình thức nào, khi chưa được phép.'
   };
   var CSS  = `#infoOverlay{--mint-bg: #F1FBF6;
     --mint-card: #FFFFFF;
@@ -1086,12 +1087,12 @@ body.dark-mode #infoOverlay .rate-btn{background:linear-gradient(180deg,#ffd54f,
 
   var pushed = false;
 
-  /* හින්දි / බුරුම / තායි / චීන පිටු lang/hi.js, lang/my.js, lang/th.js, lang/zh.js හි (HI_ / MY_ / TH_ / ZH_ INFO_HTML, QM_STR) */
-  var TRP = { hi: 'HI', my: 'MY', th: 'TH', zh: 'ZH' }, TRCLOSE = { hi: 'बंद करें', my: 'ပိတ်ရန်', th: 'ปิด', zh: '关闭' };
+  /* හින්දි / බුරුම / තායි / චීන / වියට්නාම් පිටු lang/hi.js, lang/my.js, lang/th.js, lang/zh.js, lang/vi.js හි (HI_ / MY_ / TH_ / ZH_ / VI_ INFO_HTML, QM_STR) */
+  var TRP = { hi: 'HI', my: 'MY', th: 'TH', zh: 'ZH', vi: 'VI' }, TRCLOSE = { hi: 'बंद करें', my: 'ပိတ်ရန်', th: 'ปิด', zh: '关闭', vi: 'Đóng' };
   function lang() {
     var l = typeof currentLang !== 'undefined' ? currentLang : 'si';
     if (TRP[l] && window[TRP[l] + '_INFO_HTML']) return l;
-    return (l === 'en' || l === 'hi' || l === 'my' || l === 'th' || l === 'zh') ? 'en' : 'si';
+    return (l === 'en' || l === 'hi' || l === 'my' || l === 'th' || l === 'zh' || l === 'vi') ? 'en' : 'si';
   }
 
   function injectStyle() {

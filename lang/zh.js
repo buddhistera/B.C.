@@ -152,6 +152,7 @@ window.ZH_DICT = {
   "Sun & Moon around the Earth": "绕地球的日与月",
   "Drag the timeline to change the time": "拖动时间轴以更改时间",
   "Real directions of the Sun and Moon for your location. Distances and sizes are not to scale.": "以您所在位置显示太阳与月亮的真实方向。距离与大小未按比例。",
+  "Tap the stars to see the constellations and the names of the zodiac signs (rāśi).": "轻触星星，即可查看星座连线与黄道十二宫的名称。",
   "Location not set — showing Colombo": "未设置位置 — 显示科伦坡",
   "Location request timed out. Make sure Location is ON and try again, preferably outdoors.": "定位请求超时。请确认已开启定位后重试，最好在户外。",
   "Unable to retrieve location.": "无法获取位置。",

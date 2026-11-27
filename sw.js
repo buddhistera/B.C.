@@ -21,28 +21,28 @@ const RESET = 1;
 
 // අනිවාර්ය ගොනු — එකක් හෝ නොලැබුණොත් update එක අත්හැර පැරණි අනුවාදයම දිගටම ක්‍රියා කරයි
 const CORE_FILES = {
-  '/': 'fcb052843e',                              // index.html
+  '/': '2ed6b2582f',                              // index.html
   '/manifest.json': '469ab2e27b',
   '/style.css': '033fab1213',
   '/theme.css': '448ec1646a',
-  '/theme.js': '9ffb92099c',
+  '/theme.js': '028179ac61',
   '/astronomy.browser.min.js': 'd1b3ab4b86',
   '/mm-poya.js': 'f67d310aa6',
-  '/script.js': '5cf5a6ff6f',
-  '/calculation.js': 'cbf6fd8a69',
-  '/info.js': '8368644fe3',
-  '/chanting.js': 'e845323596',
+  '/script.js': '721a069a78',
+  '/calculation.js': '8d27a903c8',
+  '/info.js': '69721954cc',
+  '/chanting.js': '54b2674930',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': 'f51878e45d',
-  '/uposatha.js': '98811edd85',
-  '/calendar.js': 'd7d60ebd0f'
+  '/sunpage.js': 'f05d9d0162',
+  '/uposatha.js': 'd0e88ab5a3',
+  '/calendar.js': '47e8a02d3a'
 };
 
 // අමතර ගොනු — install එකේදී ගනී, නොලැබුණත් update එක නවතින්නේ නැත
 const OPTIONAL_FILES = {
   '/patthana-data.js': '7093f05955',
   '/pirith-data.js': '5886c3d8be',
-  '/buddha-recitation.js': 'c680957a85',
+  '/buddha-recitation.js': 'cc5f00f346',
   '/buddha-vandana-data.js': '88a1586430',
   '/satipatthana-data.js': '17cf3675fd',
   '/patimokkha-data.js': '2f271186af',
@@ -66,18 +66,18 @@ const OPTIONAL_FILES = {
   '/fonts/NotoSerifSinhala.woff2': '3ab31d7d4b'
 };
 
-// හින්දි / බුරුම / තායි / චීන තෝරාගත් අයට පමණක් — පළමු භාවිතයේදී cache වේ.
+// හින්දි / බුරුම / තායි / චීන / වියට්නාම් තෝරාගත් අයට පමණක් — පළමු භාවිතයේදී cache වේ.
 // update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
   '/pali-script.js': '6f33d6f815',
-  '/lang/hi.js': '1e5c5ebe26',
-  '/lang/my.js': 'e2b659f4bc',
-  '/lang/th.js': 'd08de20e07',
+  '/lang/hi.js': '7603b86398',
+  '/lang/my.js': '93aa449297',
+  '/lang/th.js': '0e126e380a',
   '/lang/hi-calc.js': '39cf96b451',
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc',
   '/lang/zh-calc.js': '72607c06a9',
-  '/lang/zh.js': '2aeac89442',
+  '/lang/zh.js': '6b82977db1',
   '/fonts/AbhayaUni-Variable.woff2': '07a454c27a',
   '/fonts/OFL.txt': '72c71eb683',
   '/fonts/NotoSansDevanagari.woff2': 'dbec927017',
@@ -90,7 +90,9 @@ const LAZY_FILES = {
   '/fonts/AbhayaLibre-Bold.woff2': '9d422027d2',
   '/fonts/AbhayaLibre-Medium.woff2': '33e9d0d1d1',
   '/fonts/AbhayaLibre-Regular.woff2': '5022b0b4d0',
-  '/fonts/AbhayaLibre-SemiBold.woff2': '720e121809'
+  '/fonts/AbhayaLibre-SemiBold.woff2': '720e121809',
+  '/lang/vi-calc.js': '940144ed00',
+  '/lang/vi.js': '8c1c760598'
 };
 
 // ------------------------------------------------------------
