@@ -20,31 +20,33 @@
   var W = window, doc = document;
 
   var TX = {
-    month:  { si: 'මාසික දින දර්ශනය', en: 'Monthly calendar', hi: 'मासिक कैलेंडर', my: 'လစဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายเดือน', zh: '月历' },
-    year:   { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历' },
-    full:   { si: 'පසළොස්වක පෝය', en: 'Full-moon Uposatha', hi: 'पूर्णिमा उपोसथ', my: 'လပြည့် ဥပုသ်', th: 'วันพระ จันทร์เต็มดวง', zh: '满月布萨' },
-    nw:     { si: 'අමාවක පෝය', en: 'New-moon Uposatha', hi: 'अमावस्या उपोसथ', my: 'လကွယ် ဥပုသ်', th: 'วันพระ จันทร์ดับ', zh: '新月布萨' },
-    upo:    { si: 'උපෝසථ දින', en: 'Uposatha days', hi: 'उपोसथ दिवस', my: 'ဥပုသ်နေ့များ', th: 'วันพระ', zh: '布萨日' },
-    astro:  { si: 'තාරකා විද්‍යාත්මක පෝය දින', en: 'Astronomical full & new moon', hi: 'खगोलीय पूर्णिमा व अमावस्या', my: 'နက္ခတ္တဗေဒ လပြည့်/လကွယ်', th: 'จันทร์เต็มดวง/จันทร์ดับ ทางดาราศาสตร์', zh: '天文满月与新月' },
-    fullS:  { si: 'පසළොස්වක', en: 'Full moon', hi: 'पूर्णिमा', my: 'လပြည့်', th: 'จันทร์เต็มดวง', zh: '满月' },
-    newS:   { si: 'අමාවක', en: 'New moon', hi: 'अमावस्या', my: 'လကွယ်', th: 'จันทร์ดับ', zh: '新月' },
+    month:  { si: 'මාසික දින දර්ශනය', en: 'Monthly calendar', hi: 'मासिक कैलेंडर', my: 'လစဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายเดือน', zh: '月历', vi: 'Lịch tháng' },
+    year:   { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历', vi: 'Lịch năm' },
+    full:   { si: 'පසළොස්වක පෝය', en: 'Full-moon Uposatha', hi: 'पूर्णिमा उपोसथ', my: 'လပြည့် ဥပုသ်', th: 'วันพระ จันทร์เต็มดวง', zh: '满月布萨', vi: 'Uposatha trăng tròn' },
+    nw:     { si: 'අමාවක පෝය', en: 'New-moon Uposatha', hi: 'अमावस्या उपोसथ', my: 'လကွယ် ဥပုသ်', th: 'วันพระ จันทร์ดับ', zh: '新月布萨', vi: 'Uposatha trăng mới' },
+    upo:    { si: 'උපෝසථ දින', en: 'Uposatha days', hi: 'उपोसथ दिवस', my: 'ဥပုသ်နေ့များ', th: 'วันพระ', zh: '布萨日', vi: 'Ngày Uposatha' },
+    astro:  { si: 'තාරකා විද්‍යාත්මක පෝය දින', en: 'Astronomical full & new moon', hi: 'खगोलीय पूर्णिमा व अमावस्या', my: 'နက္ခတ္တဗေဒ လပြည့်/လကွယ်', th: 'จันทร์เต็มดวง/จันทร์ดับ ทางดาราศาสตร์', zh: '天文满月与新月', vi: 'Trăng tròn & trăng mới theo thiên văn' },
+    fullS:  { si: 'පසළොස්වක', en: 'Full moon', hi: 'पूर्णिमा', my: 'လပြည့်', th: 'จันทร์เต็มดวง', zh: '满月', vi: 'Trăng tròn' },
+    newS:   { si: 'අමාවක', en: 'New moon', hi: 'अमावस्या', my: 'လကွယ်', th: 'จันทร์ดับ', zh: '新月', vi: 'Trăng mới' },
     sil:    { si: 'සිල් සමාදන් වන දින', en: 'Sil observance days' },
     silFN:  { si: 'පසළොස්වක / අමාවක', en: 'Full / new moon' },
     silQ1:  { si: 'පුර අටවක', en: 'Waxing 8th (first quarter)' },
     silQ3:  { si: 'අව අටවක', en: 'Waning 8th (last quarter)' },
-    noteT:  { si: 'සලකුණු පිළිබඳ', en: 'About the marks', hi: 'चिह्नों के बारे में', my: 'အမှတ်အသားများအကြောင်း', th: 'เกี่ยวกับสัญลักษณ์', zh: '标记说明' },
+    noteT:  { si: 'සලකුණු පිළිබඳ', en: 'About the marks', hi: 'चिह्नों के बारे में', my: 'အမှတ်အသားများအကြောင်း', th: 'เกี่ยวกับสัญลักษณ์', zh: '标记说明', vi: 'Giải thích các ký hiệu' },
     noteU:  { si: 'උපෝසථ දින — ත්‍රිපිටකය, අටුවා සහ ටීකාවල දැක්වෙන ක්‍රමයට අනුව ගණනය කළ උපෝසථ දින.',
               en: 'Uposatha days — calculated according to the method given in the Tipiṭaka, its Aṭṭhakathā commentaries and Ṭīkā sub-commentaries.',
               hi: 'उपोसथ दिवस — त्रिपिटक, अट्ठकथा और टीका में बताई गई विधि के अनुसार गणना।',
               my: 'ဥပုသ်နေ့ — တိပိဋက၊ အဋ္ဌကထာနှင့် ဋီကာများပါ နည်းလမ်းအတိုင်း တွက်ချက်ထားသည်။',
               th: 'วันอุโบสถ — คำนวณตามวิธีในพระไตรปิฎก อรรถกถา และฎีกา',
-              zh: '布萨日——依三藏、义注与复注所载方法推算。' },
+              zh: '布萨日——依三藏、义注与复注所载方法推算。',
+              vi: 'Ngày Uposatha — được tính theo phương pháp nêu trong Tam Tạng (Tipiṭaka), các bộ Chú giải (Aṭṭhakathā) và Phụ chú giải (Ṭīkā).' },
     noteA:  { si: 'තාරකා විද්‍යාත්මක පෝය — සඳ හිරුට හරියටම ප්‍රතිවිරුද්ධ (පසළොස්වක) හෝ හිරු දිශාවටම (අමාවක) වන මොහොත (Astronomy Engine); එම මොහොත දුරකථනයේ වේලාවෙන් වැටෙන දිනය.',
               en: 'Astronomical full / new moon — the exact moment the Moon is opposite to (full) or in line with (new) the Sun (Astronomy Engine), on the date that moment falls in your device’s time zone.',
               hi: 'खगोलीय पूर्णिमा / अमावस्या — जिस क्षण चंद्रमा सूर्य के ठीक विपरीत (पूर्णिमा) या उसी दिशा में (अमावस्या) होता है; आपके डिवाइस के समय क्षेत्र में उस क्षण की तिथि।',
               my: 'နက္ခတ္တဗေဒ လပြည့်/လကွယ် — လသည် နေနှင့် တိတိကျကျ ဆန့်ကျင်ဘက် (လပြည့်) သို့မဟုတ် တစ်တန်းတည်း (လကွယ်) ဖြစ်သည့်အချိန်၏ သင့်ဖုန်းအချိန်ဇုန်ရှိ ရက်။',
               th: 'จันทร์เต็มดวง/จันทร์ดับทางดาราศาสตร์ — ขณะที่ดวงจันทร์อยู่ตรงข้าม (เต็มดวง) หรืออยู่แนวเดียวกับดวงอาทิตย์ (ดับ) พอดี ตามวันที่ในเขตเวลาของอุปกรณ์',
-              zh: '天文满月／新月——月亮与太阳恰好相对（满月）或同向（新月）的时刻，按您设备时区所在的日期。' },
+              zh: '天文满月／新月——月亮与太阳恰好相对（满月）或同向（新月）的时刻，按您设备时区所在的日期。',
+              vi: 'Trăng tròn / trăng mới theo thiên văn — thời điểm chính xác Mặt Trăng đối diện (trăng tròn) hoặc thẳng hàng (trăng mới) với Mặt Trời (Astronomy Engine), tính theo ngày rơi vào múi giờ của thiết bị bạn.' },
     noteS:  { si: 'සිල් සමාදන් වන දින — ශ්‍රී ලංකා පෝය කමිටුව භාවිත කරන ක්‍රමයට ගණනය කළ පසළොස්වක, අමාවක, පුර අටවක සහ අව අටවක දින.',
               en: 'Sil observance days — full-moon, new-moon, waxing-8th and waning-8th days, calculated by the method used by Sri Lanka’s Poya Committee.' },
     noteD:  { si: 'මෙම ක්‍රම තුන එකිනෙකට වෙනස් නිසා දින එකිනෙකට දවසකින් පමණ වෙනස් විය හැක. සිල් සමාදන් වන දින ගණනය කිරීමෙන් ලබාගන්නා බැවින්, පෝය කමිටුවේ තීරණය අනුව ඇතැම් විට වෙනස් විය හැක — නිල දින දර්ශනයද බලන්න.',
@@ -52,26 +54,29 @@
               hi: 'तीनों विधियाँ भिन्न हैं, इसलिए तिथियाँ लगभग एक दिन आगे-पीछे हो सकती हैं। शील पालन दिवस गणना से निकाले गए हैं, अतः पोया समिति के निर्णय से कभी-कभी भिन्न हो सकते हैं — आधिकारिक कैलेंडर भी देखें।',
               my: 'နည်းလမ်းသုံးမျိုး ကွဲပြားသဖြင့် ရက်များ တစ်ရက်ခန့် ကွာနိုင်သည်။ သီလနေ့များကို တွက်ချက်၍ ရယူထားသဖြင့် ပိုယာကော်မတီ၏ ဆုံးဖြတ်ချက်နှင့် တစ်ခါတစ်ရံ ကွဲလွဲနိုင်သည် — တရားဝင်ပြက္ခဒိန်ကိုလည်း ကြည့်ပါ။',
               th: 'เนื่องจากทั้งสามวิธีต่างกัน วันที่จึงอาจคลาดกันราวหนึ่งวัน วันถือศีลได้จากการคำนวณ จึงอาจต่างจากมติของคณะกรรมการโปยาบ้างในบางครั้ง — โปรดตรวจสอบปฏิทินทางการด้วย',
-              zh: '三种方法各不相同，日期可能相差约一天。持戒日由推算得出，偶尔可能与布萨委员会的决定不同——请同时参阅官方日历。' },
+              zh: '三种方法各不相同，日期可能相差约一天。持戒日由推算得出，偶尔可能与布萨委员会的决定不同——请同时参阅官方日历。',
+              vi: 'Vì ba phương pháp khác nhau nên ngày có thể chênh nhau khoảng một ngày. Các ngày thọ giới (Sil) được tính toán nên đôi khi có thể khác với quyết định của Ủy ban Poya — vui lòng xem thêm lịch chính thức.' },
     noteD2: { si: 'මෙම ක්‍රම දෙක එකිනෙකට වෙනස් නිසා දින එකිනෙකට දවසකින් පමණ වෙනස් විය හැක.',
               en: 'Because the two methods differ, their dates can differ by about a day.',
               hi: 'दोनों विधियाँ भिन्न हैं, इसलिए तिथियाँ लगभग एक दिन आगे-पीछे हो सकती हैं।',
               my: 'နည်းလမ်းနှစ်မျိုး ကွဲပြားသဖြင့် ရက်များ တစ်ရက်ခန့် ကွာနိုင်သည်။',
               th: 'เนื่องจากทั้งสองวิธีต่างกัน วันที่จึงอาจคลาดกันราวหนึ่งวัน',
-              zh: '两种方法不同，日期可能相差约一天。' },
-    today:  { si: 'අද', en: 'Today', hi: 'आज', my: 'ယနေ့', th: 'วันนี้', zh: '今天' },
-    close:  { si: 'වසන්න', en: 'Close', hi: 'बंद करें', my: 'ပိတ်ရန်', th: 'ปิด', zh: '关闭' },
-    toYear: { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历' },
-    toMon:  { si: 'මාසික දින දර්ශනය', en: 'Monthly calendar', hi: 'मासिक कैलेंडर', my: 'လစဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายเดือน', zh: '月历' },
-    prevY:  { si: 'පෙර වර්ෂය', en: 'Previous year', hi: 'पिछला वर्ष', my: 'ယခင်နှစ်', th: 'ปีก่อน', zh: '上一年' },
-    nextY:  { si: 'ඊළඟ වර්ෂය', en: 'Next year', hi: 'अगला वर्ष', my: 'နောက်နှစ်', th: 'ปีถัดไป', zh: '下一年' },
-    prevM:  { si: 'පෙර මාසය', en: 'Previous month', hi: 'पिछला माह', my: 'ယခင်လ', th: 'เดือนก่อน', zh: '上个月' },
-    nextM:  { si: 'ඊළඟ මාසය', en: 'Next month', hi: 'अगला माह', my: 'နောက်လ', th: 'เดือนถัดไป', zh: '下个月' }
+              zh: '两种方法不同，日期可能相差约一天。',
+              vi: 'Vì hai phương pháp khác nhau nên ngày có thể chênh nhau khoảng một ngày.' },
+    today:  { si: 'අද', en: 'Today', hi: 'आज', my: 'ယနေ့', th: 'วันนี้', zh: '今天', vi: 'Hôm nay' },
+    close:  { si: 'වසන්න', en: 'Close', hi: 'बंद करें', my: 'ပိတ်ရန်', th: 'ปิด', zh: '关闭', vi: 'Đóng' },
+    toYear: { si: 'වාර්ෂික දින දර්ශනය', en: 'Yearly calendar', hi: 'वार्षिक कैलेंडर', my: 'နှစ်စဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายปี', zh: '年历', vi: 'Lịch năm' },
+    toMon:  { si: 'මාසික දින දර්ශනය', en: 'Monthly calendar', hi: 'मासिक कैलेंडर', my: 'လစဉ် ပြက္ခဒိန်', th: 'ปฏิทินรายเดือน', zh: '月历', vi: 'Lịch tháng' },
+    prevY:  { si: 'පෙර වර්ෂය', en: 'Previous year', hi: 'पिछला वर्ष', my: 'ယခင်နှစ်', th: 'ปีก่อน', zh: '上一年', vi: 'Năm trước' },
+    nextY:  { si: 'ඊළඟ වර්ෂය', en: 'Next year', hi: 'अगला वर्ष', my: 'နောက်နှစ်', th: 'ปีถัดไป', zh: '下一年', vi: 'Năm sau' },
+    prevM:  { si: 'පෙර මාසය', en: 'Previous month', hi: 'पिछला माह', my: 'ယခင်လ', th: 'เดือนก่อน', zh: '上个月', vi: 'Tháng trước' },
+    nextM:  { si: 'ඊළඟ මාසය', en: 'Next month', hi: 'अगला माह', my: 'နောက်လ', th: 'เดือนถัดไป', zh: '下个月', vi: 'Tháng sau' }
   };
   var SIM = ['ජනවාරි', 'පෙබරවාරි', 'මාර්තු', 'අප්‍රේල්', 'මැයි', 'ජූනි', 'ජූලි', 'අගෝස්තු', 'සැප්තැම්බර්', 'ඔක්තෝබර්', 'නොවැම්බර්', 'දෙසැම්බර්'];
   var SIW = ['ඉරි', 'සඳු', 'අඟ', 'බදා', 'බ්‍රහ', 'සිකු', 'සෙන'];
   var ENM = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var ENW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var VIW = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];     // වියට්නාම්: Chủ nhật, Thứ hai … Thứ bảy (කෙටි රූප)
   var YMIN = 1900, YMAX = 3000;
 
   function lang() { try { return (typeof currentLang !== 'undefined' && currentLang) || 'en'; } catch (e) { return 'en'; } }
@@ -84,12 +89,14 @@
     var l = lang();
     if (l === 'si') return SIM[m];
     if (l === 'en') return ENM[m];
+    if (l === 'vi') return 'Tháng ' + (m + 1);
     try { return new Intl.DateTimeFormat(loc(), { month: 'long' }).format(new Date(y, m, 15)); } catch (e) { return ENM[m]; }
   }
   function wdNames() {
     var l = lang();
     if (l === 'si') return SIW;
     if (l === 'en') return ENW;
+    if (l === 'vi') return VIW;
     try { var f = new Intl.DateTimeFormat(loc(), { weekday: 'short' }); return [0, 1, 2, 3, 4, 5, 6].map(function (i) { return f.format(new Date(2023, 0, 1 + i)); }); }
     catch (e) { return ENW; }
   }
@@ -97,6 +104,7 @@
     var l = lang();
     if (l === 'si') return ['ඉ', 'ස', 'අ', 'බ', 'බ්‍ර', 'සි', 'සෙ'];
     if (l === 'en') return ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    if (l === 'vi') return VIW;
     try { var f = new Intl.DateTimeFormat(loc(), { weekday: 'narrow' }); return [0, 1, 2, 3, 4, 5, 6].map(function (i) { return f.format(new Date(2023, 0, 1 + i)); }); }
     catch (e) { return ['S', 'M', 'T', 'W', 'T', 'F', 'S']; }
   }

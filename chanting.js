@@ -26,9 +26,9 @@
   var spy = null;
 
   /* ---------------------------- helpers ---------------------------- */
-  function lang() { var l = typeof currentLang !== 'undefined' ? currentLang : 'si'; return (l === 'en' || l === 'hi' || l === 'my' || l === 'th' || l === 'zh') ? l : 'si'; }
+  function lang() { var l = typeof currentLang !== 'undefined' ? currentLang : 'si'; return (l === 'en' || l === 'hi' || l === 'my' || l === 'th' || l === 'zh' || l === 'vi') ? l : 'si'; }
   /* හින්දි / බුරුම: ඉංග්‍රීසි පෙළ → lang/hi.js / lang/my.js (නැත්නම් ඉංග්‍රීසියම);  රෝම පාළිය → දේවනාගරී / බුරුම අකුරු (pali-script.js) */
-  var SCRS = { hi: 'deva', my: 'mymr', th: 'thai', zh: 'iast' };   /* zh = චීන: පාළිය රෝම අකුරින්ම */
+  var SCRS = { hi: 'deva', my: 'mymr', th: 'thai', zh: 'iast', vi: 'iast' };   /* zh = චීන, vi = වියට්නාම්: පාළිය රෝම අකුරින්ම */
   function TRL() { return !!SCRS[lang()]; }          /* ඉංග්‍රීසි වගුව + අක්ෂරාන්තරිත පාළිය (හින්දි / බුරුම / තායි) */
   function SCR() { return SCRS[lang()] || 'deva'; }
   function X(s) { return (typeof tx === 'function') ? tx(s) : s; }
@@ -37,7 +37,7 @@
   function L(o) {
     if (!o) return ''; if (typeof o === 'string') return o;
     var l = lang(); if (l === 'hi') return o.hi || (o.en ? X(o.en) : '') || o.si || '';
-    if (l === 'my' || l === 'th' || l === 'zh') return o[l] || (o.en ? X(o.en) : '') || o.si || '';
+    if (l === 'my' || l === 'th' || l === 'zh' || l === 'vi') return o[l] || (o.en ? X(o.en) : '') || o.si || '';
     return o[l] || o.si || '';
   }
   function LP(o) { if (!o || typeof o === 'string') return o || ''; return TRL() ? (o[lang()] || XP(o.en || '') || o.si || '') : L(o); }

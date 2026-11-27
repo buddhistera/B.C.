@@ -2893,7 +2893,7 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
 
   function lang() {
     var l = typeof currentLang !== 'undefined' ? currentLang : 'si';
-    return (l === 'en' || l === 'hi' || l === 'my' || l === 'th' || l === 'zh') ? l : 'si';
+    return (l === 'en' || l === 'hi' || l === 'my' || l === 'th' || l === 'zh' || l === 'vi') ? l : 'si';
   }
 
   /* ---------- හින්දි: ඉංග්‍රීසි පිටුවම සාදා, එහි පෙළ කොටස් lang/hi-calc.js හි හින්දි පෙළින් ප්‍රතිස්ථාපනය කරයි ----------
@@ -2906,7 +2906,8 @@ body.dark-mode #gnOverlay.lang-en em.pali{color:var(--gold-300)}
   var TR_CALC = { hi: { v: 'HI_CALC', src: HI_CALC_SRC, sc: 'deva', close: 'बंद करें' },
                   my: { v: 'MY_CALC', src: 'lang/my-calc.js', sc: 'mymr', close: 'ပိတ်ရန်' },
                   th: { v: 'TH_CALC', src: 'lang/th-calc.js', sc: 'thai', close: 'ปิด' },
-                  zh: { v: 'ZH_CALC', src: 'lang/zh-calc.js', sc: 'iast', close: '关闭' } };   /* චීන: පාළිය රෝම අකුරින්ම */
+                  zh: { v: 'ZH_CALC', src: 'lang/zh-calc.js', sc: 'iast', close: '关闭' },     /* චීන: පාළිය රෝම අකුරින්ම */
+                  vi: { v: 'VI_CALC', src: 'lang/vi-calc.js', sc: 'iast', close: 'Đóng' } };   /* වියට්නාම්: පාළිය රෝම අකුරින්ම */
   function hashKey(str) { var h = 0x811c9dc5; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); } return (h >>> 0).toString(36); }
   function segKey(el) { return el.innerHTML.replace(/\s+/g, ' ').trim(); }
   function isPaliEl(el) { return el.classList && el.classList.contains('pali'); }

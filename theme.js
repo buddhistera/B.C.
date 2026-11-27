@@ -15,42 +15,43 @@
   // sw = සැකසුම් පුවරුවේ පෙන්වන වර්ණ කවය ; meta = බ්‍රවුසර/ඇප් තීරුවේ වර්ණය
   // ලා පැහැ 5 · තද පැහැ 5 (අඳුරු 2 ඇතුළුව) · දීප්ත පැහැ 5
   var THEMES = [
-    { id: 'cream',     dark: 0, sw: '#e9d6ab',           meta: '#fbf4e4', n: { si: 'ක්‍රීම්',     en: 'Cream',        hi: 'क्रीम',       my: 'ခရင်မ်',        th: 'ครีม', zh: '奶油色' } },
-    { id: 'yellow',    dark: 0, sw: '#f3dc6b',           meta: '#fffbe6', n: { si: 'ලා කහ',     en: 'Light yellow', hi: 'हल्का पीला',  my: 'အဝါဖျော့',      th: 'เหลืองอ่อน', zh: '浅黄' } },
-    { id: 'lightblue', dark: 0, sw: '#86b8ea',           meta: '#eef5fd', n: { si: 'ලා නිල්',    en: 'Light blue',   hi: 'हल्का नीला',  my: 'အပြာဖျော့',     th: 'ฟ้าอ่อน', zh: '浅蓝' } },
-    { id: 'mint',      dark: 0, sw: '#8fdcbe',           meta: '#eefaf4', n: { si: 'ලා කොළ',    en: 'Mint',         hi: 'मिंट',        my: 'မင့်',           th: 'มินต์', zh: '薄荷绿' } },
-    { id: 'lavender',  dark: 0, sw: '#bba6e6',           meta: '#f5f2fc', n: { si: 'ලා දම්',     en: 'Lavender',     hi: 'लैवेंडर',     my: 'ခရမ်းဖျော့',    th: 'ลาเวนเดอร์', zh: '薰衣草紫' } },
-    { id: 'forest',    dark: 0, sw: '#1f5a3a', deep: 1,  meta: '#1b4d33', n: { si: 'තද කොළ',    en: 'Forest',       hi: 'वन हरा',      my: 'တောစိမ်း',      th: 'เขียวป่า', zh: '森林绿' } },
-    { id: 'lotus',     dark: 0, sw: '#952141', deep: 1,  meta: '#86183a', n: { si: 'නෙළුම්',    en: 'Lotus',        hi: 'कमल',         my: 'ကြာ',            th: 'บัว', zh: '莲花红' } },
-    { id: 'rose',      dark: 0, sw: '#ff005f', bright: 1, meta: '#ff005f', n: { si: 'රෝස',       en: 'Rose',         hi: 'गुलाबी',      my: 'ပန်းရောင်',      th: 'ชมพู', zh: '玫瑰红' } },
-    { id: 'teal',      dark: 0, sw: '#00c2ae', bright: 1, meta: '#00c2ae', n: { si: 'කොළ නිල්',   en: 'Teal',         hi: 'टील',         my: 'စိမ်းပြာ',       th: 'เขียวหัวเป็ด', zh: '青绿' } },
-    { id: 'olive',     dark: 0, sw: '#b2ac11', bright: 1, meta: '#b2ac11', n: { si: 'ඔලිව්',      en: 'Olive',        hi: 'जैतूनी',      my: 'သံလွင်ရောင်',    th: 'เขียวมะกอก', zh: '橄榄绿' } },
-    { id: 'coral',     dark: 0, sw: '#ffafa8', bright: 1, meta: '#ffafa8', n: { si: 'කොරල්',      en: 'Coral',        hi: 'मूंगा',       my: 'သန္တာ',           th: 'ปะการัง', zh: '珊瑚色' } },
-    { id: 'seafoam',   dark: 0, sw: '#b0ebd2', bright: 1, meta: '#b0ebd2', n: { si: 'මුහුදු පෙණ', en: 'Seafoam',      hi: 'समुद्री झाग', my: 'ပင်လယ်အမြှုပ်',  th: 'ฟองทะเล', zh: '海沫绿' } },
-    { id: 'dark',      dark: 1, sw: ['#0b1510', '#4fc796'], meta: '#06100c', n: { si: 'අඳුරු',     en: 'Dark',         hi: 'डार्क',       my: 'အမှောင်',        th: 'มืด', zh: '深色' } },
-    { id: 'midnight',  dark: 1, sw: ['#0b1030', '#e6c260'], meta: '#0b1030', n: { si: 'රාත්‍රී නිල්', en: 'Midnight',     hi: 'मध्यरात्रि',  my: 'သန်းခေါင်',      th: 'เที่ยงคืน', zh: '午夜蓝' } },
-    { id: 'charcoal',  dark: 1, sw: ['#000000', '#d97757'], meta: '#000000', n: { si: 'කළු',        en: 'Black',        hi: 'काला',        my: 'အနက်',           th: 'ดำ', zh: '纯黑' } }
+    { id: 'cream',     dark: 0, sw: '#e9d6ab',           meta: '#fbf4e4', n: { si: 'ක්‍රීම්',     en: 'Cream',        hi: 'क्रीम',       my: 'ခရင်မ်',        th: 'ครีม', zh: '奶油色', vi: 'Kem' } },
+    { id: 'yellow',    dark: 0, sw: '#f3dc6b',           meta: '#fffbe6', n: { si: 'ලා කහ',     en: 'Light yellow', hi: 'हल्का पीला',  my: 'အဝါဖျော့',      th: 'เหลืองอ่อน', zh: '浅黄', vi: 'Vàng nhạt' } },
+    { id: 'lightblue', dark: 0, sw: '#86b8ea',           meta: '#eef5fd', n: { si: 'ලා නිල්',    en: 'Light blue',   hi: 'हल्का नीला',  my: 'အပြာဖျော့',     th: 'ฟ้าอ่อน', zh: '浅蓝', vi: 'Xanh dương nhạt' } },
+    { id: 'mint',      dark: 0, sw: '#8fdcbe',           meta: '#eefaf4', n: { si: 'ලා කොළ',    en: 'Mint',         hi: 'मिंट',        my: 'မင့်',           th: 'มินต์', zh: '薄荷绿', vi: 'Xanh bạc hà' } },
+    { id: 'lavender',  dark: 0, sw: '#bba6e6',           meta: '#f5f2fc', n: { si: 'ලා දම්',     en: 'Lavender',     hi: 'लैवेंडर',     my: 'ခရမ်းဖျော့',    th: 'ลาเวนเดอร์', zh: '薰衣草紫', vi: 'Tím oải hương' } },
+    { id: 'forest',    dark: 0, sw: '#1f5a3a', deep: 1,  meta: '#1b4d33', n: { si: 'තද කොළ',    en: 'Forest',       hi: 'वन हरा',      my: 'တောစိမ်း',      th: 'เขียวป่า', zh: '森林绿', vi: 'Xanh lá rừng' } },
+    { id: 'lotus',     dark: 0, sw: '#952141', deep: 1,  meta: '#86183a', n: { si: 'නෙළුම්',    en: 'Lotus',        hi: 'कमल',         my: 'ကြာ',            th: 'บัว', zh: '莲花红', vi: 'Đỏ sen' } },
+    { id: 'rose',      dark: 0, sw: '#ff005f', bright: 1, meta: '#ff005f', n: { si: 'රෝස',       en: 'Rose',         hi: 'गुलाबी',      my: 'ပန်းရောင်',      th: 'ชมพู', zh: '玫瑰红', vi: 'Hồng' } },
+    { id: 'teal',      dark: 0, sw: '#00c2ae', bright: 1, meta: '#00c2ae', n: { si: 'කොළ නිල්',   en: 'Teal',         hi: 'टील',         my: 'စိမ်းပြာ',       th: 'เขียวหัวเป็ด', zh: '青绿', vi: 'Xanh mòng két' } },
+    { id: 'olive',     dark: 0, sw: '#b2ac11', bright: 1, meta: '#b2ac11', n: { si: 'ඔලිව්',      en: 'Olive',        hi: 'जैतूनी',      my: 'သံလွင်ရောင်',    th: 'เขียวมะกอก', zh: '橄榄绿', vi: 'Ô liu' } },
+    { id: 'coral',     dark: 0, sw: '#ffafa8', bright: 1, meta: '#ffafa8', n: { si: 'කොරල්',      en: 'Coral',        hi: 'मूंगा',       my: 'သန္တာ',           th: 'ปะการัง', zh: '珊瑚色', vi: 'San hô' } },
+    { id: 'seafoam',   dark: 0, sw: '#b0ebd2', bright: 1, meta: '#b0ebd2', n: { si: 'මුහුදු පෙණ', en: 'Seafoam',      hi: 'समुद्री झाग', my: 'ပင်လယ်အမြှုပ်',  th: 'ฟองทะเล', zh: '海沫绿', vi: 'Xanh bọt biển' } },
+    { id: 'dark',      dark: 1, sw: ['#0b1510', '#4fc796'], meta: '#06100c', n: { si: 'අඳුරු',     en: 'Dark',         hi: 'डार्क',       my: 'အမှောင်',        th: 'มืด', zh: '深色', vi: 'Tối' } },
+    { id: 'midnight',  dark: 1, sw: ['#0b1030', '#e6c260'], meta: '#0b1030', n: { si: 'රාත්‍රී නිල්', en: 'Midnight',     hi: 'मध्यरात्रि',  my: 'သန်းခေါင်',      th: 'เที่ยงคืน', zh: '午夜蓝', vi: 'Nửa đêm' } },
+    { id: 'charcoal',  dark: 1, sw: ['#000000', '#d97757'], meta: '#000000', n: { si: 'කළු',        en: 'Black',        hi: 'काला',        my: 'အနက်',           th: 'ดำ', zh: '纯黑', vi: 'Đen' } }
   ];
   var BY = {}; THEMES.forEach(function (t) { BY[t.id] = t; });
   var DEFAULT_LIGHT = 'cream', DEFAULT_DARK = 'midnight';
 
   var TX = {
-    title:  { si: 'සැකසුම්',      en: 'Settings',     hi: 'सेटिंग्स',    my: 'ဆက်တင်များ',     th: 'การตั้งค่า', zh: '设置' },
-    lang:   { si: 'භාෂාව',        en: 'Language',     hi: 'भाषा',        my: 'ဘာသာစကား',       th: 'ภาษา', zh: '语言' },
-    theme:  { si: 'වර්ණ තේමාව',   en: 'Colour theme', hi: 'रंग थीम',      my: 'အရောင်',          th: 'ธีมสี', zh: '颜色主题' },
-    light:  { si: 'ලා පැහැ',      en: 'Light',        hi: 'हल्के रंग',    my: 'အဖျော့ရောင်',    th: 'สีอ่อน', zh: '浅色系' },
-    deep:   { si: 'තද පැහැ',      en: 'Deep',         hi: 'गहरे रंग',     my: 'အရင့်ရောင်',     th: 'สีเข้ม', zh: '深色系' },
-    bright: { si: 'දීප්ත පැහැ',    en: 'Bright',       hi: 'चटक रंग',      my: 'တောက်ပရောင်',    th: 'สีสด', zh: '亮色系' },
-    font:   { si: 'අකුරු',        en: 'Font',         hi: 'फ़ॉन्ट',       my: 'ဖောင့်',          th: 'แบบอักษร', zh: '字体' },
-    fdef:   { si: 'පෙරනිමි',      en: 'Default',      hi: 'डिफ़ॉल्ट',     my: 'မူလ',             th: 'ค่าเริ่มต้น', zh: '默认' },
+    title:  { si: 'සැකසුම්',      en: 'Settings',     hi: 'सेटिंग्स',    my: 'ဆက်တင်များ',     th: 'การตั้งค่า', zh: '设置', vi: 'Cài đặt' },
+    lang:   { si: 'භාෂාව',        en: 'Language',     hi: 'भाषा',        my: 'ဘာသာစကား',       th: 'ภาษา', zh: '语言', vi: 'Ngôn ngữ' },
+    theme:  { si: 'වර්ණ තේමාව',   en: 'Colour theme', hi: 'रंग थीम',      my: 'အရောင်',          th: 'ธีมสี', zh: '颜色主题', vi: 'Chủ đề màu' },
+    light:  { si: 'ලා පැහැ',      en: 'Light',        hi: 'हल्के रंग',    my: 'အဖျော့ရောင်',    th: 'สีอ่อน', zh: '浅色系', vi: 'Màu nhạt' },
+    deep:   { si: 'තද පැහැ',      en: 'Deep',         hi: 'गहरे रंग',     my: 'အရင့်ရောင်',     th: 'สีเข้ม', zh: '深色系', vi: 'Màu đậm' },
+    bright: { si: 'දීප්ත පැහැ',    en: 'Bright',       hi: 'चटक रंग',      my: 'တောက်ပရောင်',    th: 'สีสด', zh: '亮色系', vi: 'Màu tươi' },
+    font:   { si: 'අකුරු',        en: 'Font',         hi: 'फ़ॉन्ट',       my: 'ဖောင့်',          th: 'แบบอักษร', zh: '字体', vi: 'Phông chữ' },
+    fdef:   { si: 'පෙරනිමි',      en: 'Default',      hi: 'डिफ़ॉल्ट',     my: 'မူလ',             th: 'ค่าเริ่มต้น', zh: '默认', vi: 'Mặc định' },
     fnote:  { si: 'සියලු අකුරු ඇප් එක සමඟම ඇත — අන්තර්ජාලය අවශ්‍ය නැත.',
               en: 'All fonts come with the app — no internet needed.',
               hi: 'सभी फ़ॉन्ट ऐप के साथ ही हैं — इंटरनेट की आवश्यकता नहीं।',
               my: 'ဖောင့်အားလုံး အက်ပ်နှင့်အတူ ပါဝင်သည် — အင်တာနက် မလိုပါ။',
               th: 'แบบอักษรทั้งหมดมาพร้อมแอป — ไม่ต้องใช้อินเทอร์เน็ต',
-              zh: '所有字体均随应用附带，无需联网。' },
-    close:  { si: 'වසන්න',        en: 'Close',        hi: 'बंद करें',     my: 'ပိတ်ရန်',         th: 'ปิด', zh: '关闭' },
-    loading:{ si: 'පූරණය වෙමින්…', en: 'Loading…',     hi: 'लोड हो रहा है…', my: 'ဖွင့်နေသည်…',  th: 'กำลังโหลด…', zh: '加载中…' }
+              zh: '所有字体均随应用附带，无需联网。',
+              vi: 'Tất cả phông chữ đều đi kèm ứng dụng — không cần Internet.' },
+    close:  { si: 'වසන්න',        en: 'Close',        hi: 'बंद करें',     my: 'ပိတ်ရန်',         th: 'ปิด', zh: '关闭', vi: 'Đóng' },
+    loading:{ si: 'පූරණය වෙමින්…', en: 'Loading…',     hi: 'लोड हो रहा है…', my: 'ဖွင့်နေသည်…',  th: 'กำลังโหลด…', zh: '加载中…', vi: 'Đang tải…' }
   };
 
   function lang() { try { return (typeof currentLang !== 'undefined' && currentLang) || 'en'; } catch (e) { return 'en'; } }
@@ -98,10 +99,15 @@
     zh: [   // චීන: උපාංගයේම ඇති අකුරු (බාගත කිරීමක් නැත)
       { id: 'def',        base: 'Noto Sans SC', d0: '系统黑体' },
       { id: 'serif',      fam: 'Noto Serif CJK SC', stack: "'Noto Serif CJK SC','Noto Serif SC','Source Han Serif SC','Songti SC','STSong','SimSun',serif", n: '宋体', d: '系统宋体' }
+    ],
+    vi: [   // වියට්නාම්: ලතින් අකුරු — ඇප් එක සමඟම ඇති Noto Sans / Serif (Latin) සියලු වියට්නාම් අකුරු (ă â đ ê ô ơ ư + ස්වර ලකුණු) ආවරණය කරයි
+      { id: 'def',        base: 'Noto Sans' },
+      { id: 'notoserif',  fam: 'Noto Serif', n: 'Noto Serif', d: 'Có chân' }
     ]
   };
   var FSAMPLE = { si: 'නමො තස්ස භගවතො අරහතො', en: 'Namo tassa · Saṃyutta Nikāya', hi: 'नमो तस्स भगवतो अरहतो',
-                  my: 'နမော တဿ ဘဂဝတော အရဟတော', th: 'นะโม ตัสสะ ภะคะวะโต', zh: '南无本师释迦牟尼佛' };
+                  my: 'နမော တဿ ဘဂဝတော အရဟတော', th: 'นะโม ตัสสะ ภะคะวะโต', zh: '南无本师释迦牟尼佛',
+                  vi: 'Namo tassa · Đức Phật Thích Ca' };
   var FBACK = "'Noto Sans','Noto Sans Sinhala','Noto Sans Devanagari','Noto Sans Myanmar','Noto Sans Thai','Noto Sans SC',sans-serif";
 
   function fontLang() {
