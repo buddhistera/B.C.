@@ -33,7 +33,7 @@ const CORE_FILES = {
   '/info.js': '69721954cc',
   '/chanting.js': '54b2674930',
   '/visuals3d.js': 'b1aa31c929',
-  '/sunpage.js': 'fdab01bb10',
+  '/sunpage.js': 'f05d9d0162',
   '/uposatha.js': 'd0e88ab5a3',
   '/calendar.js': '47e8a02d3a'
 };
@@ -70,14 +70,14 @@ const OPTIONAL_FILES = {
 // update එකේදී: hash එක නොවෙනස් නම් පිටපත් කරයි; වෙනස් නම් (එය භාවිත කළ අයට පමණක්) අලුතින් ගනී.
 const LAZY_FILES = {
   '/pali-script.js': '6f33d6f815',
-  '/lang/hi.js': '1e5c5ebe26',
-  '/lang/my.js': 'e2b659f4bc',
-  '/lang/th.js': 'd08de20e07',
+  '/lang/hi.js': '7603b86398',
+  '/lang/my.js': '93aa449297',
+  '/lang/th.js': '0e126e380a',
   '/lang/hi-calc.js': '39cf96b451',
   '/lang/my-calc.js': '28da8427e6',
   '/lang/th-calc.js': '7e3a144cbc',
   '/lang/zh-calc.js': '72607c06a9',
-  '/lang/zh.js': '2aeac89442',
+  '/lang/zh.js': '6b82977db1',
   '/fonts/AbhayaUni-Variable.woff2': '07a454c27a',
   '/fonts/OFL.txt': '72c71eb683',
   '/fonts/NotoSansDevanagari.woff2': 'dbec927017',
@@ -92,7 +92,7 @@ const LAZY_FILES = {
   '/fonts/AbhayaLibre-Regular.woff2': '5022b0b4d0',
   '/fonts/AbhayaLibre-SemiBold.woff2': '720e121809',
   '/lang/vi-calc.js': '940144ed00',
-  '/lang/vi.js': 'f1f3d5fd11'
+  '/lang/vi.js': '8c1c760598'
 };
 
 // ------------------------------------------------------------

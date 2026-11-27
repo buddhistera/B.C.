@@ -92,6 +92,7 @@ window.HI_DICT = {
   "Sun & Moon around the Earth": "पृथ्वी के चारों ओर सूर्य और चंद्रमा",
   "Drag the timeline to change the time": "समय बदलने के लिए समय-रेखा खिसकाएँ",
   "Real directions of the Sun and Moon for your location. Distances and sizes are not to scale.": "आपके स्थान के अनुसार सूर्य और चंद्रमा की वास्तविक दिशाएँ। दूरियाँ और आकार पैमाने पर नहीं हैं।",
+  "Tap the stars to see the constellations and the names of the zodiac signs (rāśi).": "तारामंडल और राशियों के नाम देखने के लिए तारों पर उँगली रखें।",
   "Location not set — showing Colombo": "स्थान निर्धारित नहीं — कोलंबो के अनुसार दिखाया जा रहा है",
   "Permission denied. Allow Location for this site/app in browser or phone settings, then try again.": "अनुमति नहीं मिली। ब्राउज़र या फ़ोन की सेटिंग्स में इस साइट/ऐप के लिए Location की अनुमति दें और फिर प्रयास करें।",
   "(Android Settings → Apps → this app / Chrome → Permissions → Location)": "(Android Settings → Apps → यह ऐप / Chrome → Permissions → Location)",

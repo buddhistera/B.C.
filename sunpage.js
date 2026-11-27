@@ -20,7 +20,8 @@ var TX = { title: ['ඉර හා සඳෙහි පිහිටීම සහ �
   tlT: ['චන්ද්‍ර කලාවන්', 'Moon Phase Timeline'], cr: ['සඳ සිතියම: NASA Scientific Visualization Studio (LROC)', "Moon map: NASA's Scientific Visualization Studio (LROC)"], lg1: ['පුර පසළොස්වක', 'Full moon'], lg2: ['අමාවක', 'New moon'],
   hSys: ['ඉර හා සඳෙහි තාත්වික පිහිටීම', 'Sun & Moon around the Earth'], hSysD: ['කාල රේඛාව ඇදීමෙන් වෙලාව වෙනස් කරන්න', 'Drag the timeline to change the time'],
 
-  note: ['ඉර හා සඳෙහි සැබෑ දිශාවන් (ඔබේ ස්ථානයට අනුව). දුරවල් සහ ප්‍රමාණ සංකේතාත්මකයි.', 'Real directions of the Sun and Moon for your location. Distances and sizes are not to scale.'] };
+  note: ['ඉර හා සඳෙහි සැබෑ දිශාවන් (ඔබේ ස්ථානයට අනුව). දුරවල් සහ ප්‍රමාණ සංකේතාත්මකයි.', 'Real directions of the Sun and Moon for your location. Distances and sizes are not to scale.'],
+  tap: ['තරු රටා සහ රාශි වල නම් බලාගැනීමට තරු මත ඇඟිල්ල තබන්න.', 'Tap the stars to see the constellations and the names of the zodiac signs (rāśi).'] };
 
 var IC = { sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.9 1.9M16.8 16.8l1.9 1.9M18.7 5.3l-1.9 1.9M7.2 16.8l-1.9 1.9"/>',
   rise: '<path d="M3 19h18M7 19a5 5 0 0 1 10 0M5.5 11.5l1.6 1.6M18.5 11.5l-1.6 1.6M3 15h1.8M19.2 15H21M12 3.5V9M9.7 5.8 12 3.5l2.3 2.3"/>',
@@ -176,7 +177,7 @@ function build() {
   '<section class="sp-card">' + sh('globe', 'hSys', '<button class="sp-now" id="spNow" type="button" aria-label="Now" title="Now">' + ic('clock', 22) + '</button>') + '<div class="sp-stage" id="spStage"><div class="sp-zt" id="spZt"></div><div class="sp-zb"></div>' +
   '<span class="sp-ew l">E</span><span class="sp-ew r">W</span><div class="sp-cn" id="spCn"></div><div class="sp-clk" id="spClk"></div><div class="sp-tm" id="spTm" style="display:none"></div></div>' +
   '<div class="sp-ctl2"><div><input type="range" id="spSl" min="0" max="86399" step="1" value="43200"><div class="sp-ax"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>12 AM</span></div></div></div>' +
-  '<div class="sp-read"><div class="sp-rd" id="spP1"></div><div class="sp-rd" id="spP2"></div></div><div class="sp-note" data-k="note"></div></section>' +
+  '<div class="sp-read"><div class="sp-rd" id="spP1"></div><div class="sp-rd" id="spP2"></div></div><div class="sp-note" data-k="note"></div><div class="sp-note" data-k="tap" style="margin-top:3px"></div></section>' +
   '<section class="sp-card">' + sh('moon', 'hMoon') + '<div class="sp-moonrow"><canvas id="spMoonCv" width="240" height="240"></canvas><div class="sp-mi"><div class="ph" id="spPh"></div><div class="il" id="spIl"></div>' +
   '<div class="sp-kv"><span data-k="mrise"></span><b id="sp_mrise">--</b></div><div class="sp-kv"><span data-k="mset"></span><b id="sp_mset">--</b></div>' +
   '<div class="sp-kv" id="spPbL"><span data-k="pb"></span><b id="sp_pb"></b></div><div class="sp-kv" id="spPeL"><span data-k="pe"></span><b id="sp_pe"></b></div></div></div>' +

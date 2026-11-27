@@ -145,6 +145,7 @@ window.TH_DICT = {
   "Sun & Moon around the Earth": "ดวงอาทิตย์และดวงจันทร์รอบโลก",
   "Drag the timeline to change the time": "ลากเส้นเวลาเพื่อเปลี่ยนเวลา",
   "Real directions of the Sun and Moon for your location. Distances and sizes are not to scale.": "ทิศทางจริงของดวงอาทิตย์และดวงจันทร์ ณ ตำแหน่งของคุณ ระยะทางและขนาดไม่ได้เป็นไปตามสัดส่วน",
+  "Tap the stars to see the constellations and the names of the zodiac signs (rāśi).": "แตะที่ดวงดาวเพื่อดูกลุ่มดาวและชื่อราศี",
   "Location not set — showing Colombo": "ยังไม่ได้ตั้งตำแหน่ง — แสดงโคลัมโบ",
   "Location request timed out. Make sure Location is ON and try again, preferably outdoors.": "การขอตำแหน่งหมดเวลา ตรวจสอบว่าเปิด Location แล้วลองอีกครั้ง ควรอยู่กลางแจ้ง",
   "Unable to retrieve location.": "ไม่สามารถระบุตำแหน่งได้",

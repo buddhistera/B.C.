@@ -699,7 +699,8 @@ window.VI_DICT = {
   /* ---------- අමතර (sunpage.js රාශි උදාව/බැසීම; uposatha.js JPG වගුවේ සතියේ දිනය) ---------- */
   "Rising": "Mọc",
   "Setting": "Lặn",
-  "Day (weekday)": "Thứ"
+  "Day (weekday)": "Thứ",
+  "Tap the stars to see the constellations and the names of the zodiac signs (rāśi).": "Chạm vào các ngôi sao để xem hình các chòm sao và tên các cung hoàng đạo (rāśi)."
 };
 
 /* ---------- Info පිටුව (info.js) — lang/hi.js හි HI_INFO_HTML / HI_QM_STR ආකාරයමයි ---------- */

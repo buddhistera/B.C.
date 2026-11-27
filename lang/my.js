@@ -397,6 +397,7 @@ window.MY_DICT = {
   "Mūlāya Paṭikassana (during mānatta)": "မူလာယပဋိကဿန (မာနတ်အတွင်း)",
   "Tap \"Save / Share\" and choose \"Save Image\", or long-press the image and choose \"Save to Photos\".": "\"သိမ်းရန် / မျှဝေရန်\" ကို နှိပ်၍ \"Save Image\" ကို ရွေးပါ၊ သို့မဟုတ် ပုံကို ကြာကြာဖိ၍ \"Save to Photos\" ကို ရွေးပါ။",
   "Real directions of the Sun and Moon for your location. Distances and sizes are not to scale.": "သင့်တည်နေရာမှ နေ နှင့် လ ၏ အမှန်တကယ် ဦးတည်ရာများ။ အကွာအဝေး နှင့် အရွယ်အစားများ စကေးအတိုင်း မဟုတ်ပါ။",
+  "Tap the stars to see the constellations and the names of the zodiac signs (rāśi).": "ကြယ်စုပုံများနှင့် ရာသီခွင်အမည်များကို ကြည့်ရန် ကြယ်များပေါ်တွင် လက်ဖြင့် ထိပါ။",
   "{0} min before sunrise": "နေမထွက်မီ {0} မိနစ်",
   "Civil twilight (Sun 6° below horizon)": "အရုဏ်ဦး (နေသည် မိုးကုပ်စက်ဝိုင်းအောက် 6°)",
   /* ---------- සජ්ඣායනය (buddha-recitation.js): අර්ථය ---------- */
